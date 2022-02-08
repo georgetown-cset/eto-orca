@@ -97,3 +97,53 @@ Push Event Sample
    'url': 'https://api.github.com/repos/simpledotorg/simple-server/commits/c93a79f403ac9669d971a089354b362d5a861df7'}]}
 ```
 
+
+## Task 3 GitGeo
+
+Also need to write a wrapper script around it (python? bash?) 
+
+What's weird is that there is a CLI tool but no native python one
+
+The function in github.py is `get_contributor_location`
+
+Majority do not have that data. So it's not doing anything special, just going through the api...
+
+
+Python Example
+
+```
+In [11]: js.raw_data
+Out[11]:
+{'login': 'Jerodsun',
+ 'id': 46911616,
+ 'node_id': 'MDQ6VXNlcjQ2OTExNjE2',
+ 'avatar_url': 'https://avatars.githubusercontent.com/u/46911616?v=4',
+ 'gravatar_id': '',
+ 'url': 'https://api.github.com/users/Jerodsun',
+ 'html_url': 'https://github.com/Jerodsun',
+ 'followers_url': 'https://api.github.com/users/Jerodsun/followers',
+ 'following_url': 'https://api.github.com/users/Jerodsun/following{/other_user}',
+ 'gists_url': 'https://api.github.com/users/Jerodsun/gists{/gist_id}',
+ 'starred_url': 'https://api.github.com/users/Jerodsun/starred{/owner}{/repo}',
+ 'subscriptions_url': 'https://api.github.com/users/Jerodsun/subscriptions',
+ 'organizations_url': 'https://api.github.com/users/Jerodsun/orgs',
+ 'repos_url': 'https://api.github.com/users/Jerodsun/repos',
+ 'events_url': 'https://api.github.com/users/Jerodsun/events{/privacy}',
+ 'received_events_url': 'https://api.github.com/users/Jerodsun/received_events',
+ 'type': 'User',
+ 'site_admin': False,
+ 'name': None,
+ 'company': '@georgetown-cset',
+ 'blog': 'jerodsun.github.io',
+ 'location': None,
+ 'email': None,
+ 'hireable': None,
+ 'bio': None,
+ 'twitter_username': None,
+ 'public_repos': 42,
+ 'public_gists': 1,
+ 'followers': 0,
+ 'following': 1,
+ 'created_at': '2019-01-22T02:12:24Z',
+ 'updated_at': '2022-02-08T04:37:57Z'}
+```
