@@ -1,17 +1,19 @@
 # github-metrics
 
 
-### Task 1: Explore Methods of Classifying Repos
+## Task 1: Explore Methods of Classifying Repos
 
 
 ## Task 2: Explore methods for linking committers to their current employers
 
 The ultimate goal is not to get data only from here, but also through the API.
 
+[Documentation](https://pygithub.readthedocs.io/en/latest/introduction.html#very-short-tutorial)
+
 __PyGithub exploration:__
-Instantiate object: g = github
-g.search_users is not a good function because simple names will hit the rate limit.
-js = g.get_user("Jerodsun") will work.
+Instantiate object: g = github(os.environ["GITHUB_ACCESS_KEY"])
+<!-- g.search_users is not a good function because simple names will hit the rate limit. -->
+js = g.get_user("Jerodsun")
 jm = g.get_user("jmelot")
 
 cset = g.get_organization("georgetown-cset")
@@ -98,18 +100,85 @@ Push Event Sample
 ```
 
 
-## Task 3 GitGeo
+## Task 3 GitGeo and Perceval
 
-Also need to write a wrapper script around it (python? bash?) 
+Summary: GitGeo and Perceval do the same things. Majority do not have location data, which is a field the user needs to manually specify inside the Github interface. Neither location extractor is doing anything special, just going through the API. Github rate limits bottleneck testing.
 
-What's weird is that there is a CLI tool but no native python one
+Perceval: No native Python implementation for Perceval - only bash. API `fetch` function is in line 178 of `grimoirelab-perceval/perceval/backends/core/github.py`. 
+[Link](https://github.com/chaoss/grimoirelab-perceval/blob/master/perceval/backends/core/github.py)
 
-The function in github.py is `get_contributor_location`
+GitGeo: API function `get_contributor_location` is in line 120 of `github.py`.
+[Link](https://github.com/Open-Source-Software-Neighborhood-Watch/GitGeo/blob/main/gitgeo/github.py)
 
-Majority do not have that data. So it's not doing anything special, just going through the api...
+```
+def get_contributor_location(user):
+    """Return geographic location, if present on github page, of user.
+    Args:
+        user: the GitHub user name
+    Return:
+        str: a geographic location
+    """
+    # cycle through GitHub tokens
+    github_token = next(GITHUB_TOKENS)
+    response = requests.get(
+        "https://api.github.com/users/" + user,
+        # convert username and token to strings per requests's specifications
+        auth=(str(GITHUB_USERNAME), str(github_token)),
+    )
+
+    user_location = ""
+    if response.ok:
+        user_info = json.loads(response.text or response.content)
+        user_location = user_info["location"]
+
+    return user_location
+```
 
 
-Python Example
+There is a low API rate limit, so it is hard to get batch data at once.
+
+Sample Perceval response.
+
+```
+"user_data": {
+            "avatar_url": "https://avatars.githubusercontent.com/u/438000?v=4",
+            "bio": null,
+            "blog": "",
+            "company": null,
+            "created_at": "2010-10-13T13:42:37Z",
+            "email": null,
+            "events_url": "https://api.github.com/users/camillem/events{/privacy}",
+            "followers": 9,
+            "followers_url": "https://api.github.com/users/camillem/followers",
+            "following": 3,
+            "following_url": "https://api.github.com/users/camillem/following{/other_user}",
+            "gists_url": "https://api.github.com/users/camillem/gists{/gist_id}",
+            "gravatar_id": "",
+            "hireable": null,
+            "html_url": "https://github.com/camillem",
+            "id": 438000,
+            "location": null,
+            "login": "camillem",
+            "name": "camillem",
+            "node_id": "MDQ6VXNlcjQzODAwMA==",
+            "organizations": [],
+            "organizations_url": "https://api.github.com/users/camillem/orgs",
+            "public_gists": 1,
+            "public_repos": 29,
+            "received_events_url": "https://api.github.com/users/camillem/received_events",
+            "repos_url": "https://api.github.com/users/camillem/repos",
+            "site_admin": false,
+            "starred_url": "https://api.github.com/users/camillem/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/camillem/subscriptions",
+            "twitter_username": null,
+            "type": "User",
+            "updated_at": "2021-07-26T11:19:38Z",
+            "url": "https://api.github.com/users/camillem"
+        }
+```
+
+
+Sample GitGeo response
 
 ```
 In [11]: js.raw_data
@@ -147,3 +216,5 @@ Out[11]:
  'created_at': '2019-01-22T02:12:24Z',
  'updated_at': '2022-02-08T04:37:57Z'}
 ```
+
+<!-- test it out on a few repos, and if it seems to be working well write (or better yet, find in their code) a function that takes a repo and outputs a jsonl of contributors and locations? -->
