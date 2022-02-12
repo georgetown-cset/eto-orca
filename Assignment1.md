@@ -11,7 +11,7 @@ The ultimate goal is not to get data only from here, but also through the API.
 [Documentation](https://pygithub.readthedocs.io/en/latest/introduction.html#very-short-tutorial)
 
 __PyGithub exploration:__
-Instantiate object: g = github(os.environ["GITHUB_ACCESS_KEY"])
+Instantiate object: g = Github(os.environ["GITHUB_ACCESS_KEY"])
 <!-- g.search_users is not a good function because simple names will hit the rate limit. -->
 js = g.get_user("Jerodsun")
 jm = g.get_user("jmelot")
@@ -218,3 +218,7 @@ Out[11]:
 ```
 
 <!-- test it out on a few repos, and if it seems to be working well write (or better yet, find in their code) a function that takes a repo and outputs a jsonl of contributors and locations? -->
+
+### Other Notes:
+
+In searching for prebuilt parsers to extract company names et al, I found a cool [repo](https://github.com/psolin/cleanco) that does can clean and infer locations for company names, albeit it mostly works on older legacy companies that include things like LLC.
