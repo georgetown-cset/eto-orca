@@ -13,11 +13,16 @@ The ultimate goal is not to get data only from here, but also through the API.
 __PyGithub exploration:__
 Instantiate object: g = Github(os.environ["GITHUB_ACCESS_KEY"])
 <!-- g.search_users is not a good function because simple names will hit the rate limit. -->
+
 js = g.get_user("Jerodsun")
+
 jm = g.get_user("jmelot")
 
 cset = g.get_organization("georgetown-cset")
+
 The website is `cset.blog`, see everything in `cset.raw_data`
+
+Note: when the company link is referenced in `user.blog` then add a cycle to go to the org link and get `org.blog`.
 
 For a lot of private orgs: `This organization has no public members. You must be a member to see who’s a part of this organization.`
 
@@ -98,6 +103,9 @@ Push Event Sample
    'distinct': True,
    'url': 'https://api.github.com/repos/simpledotorg/simple-server/commits/c93a79f403ac9669d971a089354b362d5a861df7'}]}
 ```
+
+This `pushEvent` has some email metadata in between.
+
 
 
 ## Task 3 GitGeo and Perceval

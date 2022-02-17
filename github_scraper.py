@@ -4,6 +4,7 @@ import re
 from github import Github
 import os
 import pprint
+
 pp = pprint.PrettyPrinter()
 
 # github login
@@ -14,9 +15,11 @@ g = Github(os.environ["GITHUB_ACCESS_KEY"])
 # Output data: inferred data
 # There is some more stuff we can do with the pushEvent, but it's rare in practice
 
+
 def process_payload(pushEvent):
     """ Input: a commit (PushEvent) from BigQuery
-        Output:
+        Output: 
+        calls the process_user function
     """
     username = pushEvent["actor"]["login"]
     payload = json.loads(pushEvent["payload"])
@@ -24,11 +27,14 @@ def process_payload(pushEvent):
     email = payload["commits"][0]["author"]["email"]
     authorname = payload["commits"][0]["author"]["name"]
 
-    return (username, email, authorname, process_user(username))
+    username, company, inferredcompany, website, location, bio = process_user(
+        username)
+
+    return username, email, authorname, username, company, inferredcompany, website, location, bio
 
 
 def process_user(username):
-
+    """ Pings the Github API for the user and extracts user data, including bio from the Github API """
     userdata = g.get_user(username)
 
     if userdata.location:
@@ -48,11 +54,11 @@ def process_user(username):
 
     inferredcompany = extract_company(userdata)
 
-    return (username, company, inferredcompany, website, location, userdata.bio)
+    return username, company, inferredcompany, website, location, userdata.bio
 
 
 def extract_company(userdata):
-    """ Multi-step process to extract possible company names, if possible. """
+    """ Multi-step process to extract possible company names, if possible from the Github API user data. """
 
     possiblities = []
 
@@ -62,7 +68,8 @@ def extract_company(userdata):
 
     if userdata.bio:
         # before end of line
-        possiblities.extend(re.findall("\@\s?(.*?)\s", userdata.bio + " ")) # add whitespace for match
+        # add whitespace for match
+        possiblities.extend(re.findall("\@\s?(.*?)\s", userdata.bio + " "))
 
         # repeat process with "at"
         possiblities.extend(re.findall("(?=at\s.*?(\w+))", userdata.bio))
