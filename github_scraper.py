@@ -4,6 +4,7 @@ import re
 from github import Github
 import os
 import pprint
+import time
 
 pp = pprint.PrettyPrinter()
 
@@ -77,15 +78,39 @@ def extract_company(userdata):
     # Attempt to extract from the email domain
 
     if userdata.email:
-        possiblities.extend(re.findall("\@(.*)", userdata.email))
+        possiblities.extend(re.findall("\@(.*)", userdata.email)) # probably filter out email
 
     return possiblities
 
+# add: from company name userdata.company -> ping API again, get full/real company name
 
 if __name__ == "__main__":
     df = pd.read_hdf("light_archive.hdf", key="a")
     filtered = df.loc[df["type"] == "PushEvent"]
     filtered = filtered.drop_duplicates(subset=["other"])
-    for i, row in filtered.iloc[:10].iterrows():
+
+    a = time.time()
+    for i, row in filtered.iloc[0:100].iterrows():
         result = process_payload(row)
         print(result)
+    b = time.time()
+
+    print("Time elapsed: ", b-a)
+
+
+    # find out rate limit for Github API
+    # Initial (I think): 5,000 requests per hour
+    # pipeline from ArXiv, aggregator repositories, etc.
+
+    # ArXiv full text extraction that needs improvement.
+    # 
+    # repository to committer 
+    # list of interesting repositories -> committers for each repository
+    # see if there is a `repo` in the df archive
+
+    # connecting to company - brainstorm
+    # after perceval: find something to match user-provided locations to actual countries
+    # or cannibalize what GitGeo did.
+
+    # write tests
+    
