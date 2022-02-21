@@ -29,10 +29,33 @@ def process_payload(pushEvent):
     authorname = payload["commits"][0]["author"]["name"]
 
     username, company, inferredcompany, website, location, bio = process_user(
-        username)
+        username) # duplicate username
 
-    return username, email, authorname, username, company, inferredcompany, website, location, bio
 
+
+    return username, email, authorname, company, inferredcompany, website, location, bio
+
+
+def process_company(company):
+    """ Pings the Github API for the linked @company and return the full name """
+    companydata = g.get_organization(company)
+
+    if companydata.location:
+        location = companydata.location
+    else:
+        location = None
+
+    if companydata.blog:
+        website = companydata.blog
+    else:
+        website = None
+    
+    if companydata.name:
+        name = companydata.name
+    else:
+        name = None
+
+    return company, website, location, companydata.description
 
 def process_user(username):
     """ Pings the Github API for the user and extracts user data, including bio from the Github API """
@@ -57,6 +80,7 @@ def process_user(username):
 
     return username, company, inferredcompany, website, location, userdata.bio
 
+# Option A: if the @ reference is correct, probably easier to embed in extract_company.
 
 def extract_company(userdata):
     """ Multi-step process to extract possible company names, if possible from the Github API user data. """
@@ -100,6 +124,9 @@ if __name__ == "__main__":
 
     # find out rate limit for Github API
     # Initial (I think): 5,000 requests per hour
+    # https://docs.github.com/en/developers/apps/building-github-apps/rate-limits-for-github-apps
+
+    # Purpose:
     # pipeline from ArXiv, aggregator repositories, etc.
 
     # ArXiv full text extraction that needs improvement.
