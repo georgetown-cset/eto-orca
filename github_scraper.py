@@ -57,6 +57,7 @@ def process_company(company):
 
     return company, website, location, companydata.description
 
+
 def process_user(username):
     """ Pings the Github API for the user and extracts user data, including bio from the Github API """
     userdata = g.get_user(username)
@@ -80,7 +81,8 @@ def process_user(username):
 
     return username, company, inferredcompany, website, location, userdata.bio
 
-# Option A: if the @ reference is correct, probably easier to embed in extract_company.
+
+
 
 def extract_company(userdata):
     """ Multi-step process to extract possible company names, if possible from the Github API user data. """
@@ -94,19 +96,50 @@ def extract_company(userdata):
     if userdata.bio:
         # before end of line
         # add whitespace for match
-        possiblities.extend(re.findall("\@\s?(.*?)\s", userdata.bio + " "))
+        
+        companies = re.findall("\@\s?(.*?)\s", userdata.bio + " ")
+        possiblities.extend(companies)
 
         # repeat process with "at"
         possiblities.extend(re.findall("(?=at\s.*?(\w+))", userdata.bio))
 
-    # Attempt to extract from the email domain
 
+    # if the @ reference is correct, embed in extract_company
+    if companies:
+
+        companyname = g.get_organization(companies[0]).name
+
+        if companyname:
+            possiblities.extend(companyname)
+
+    # add names public orgs
+    orgs = userdata.get_orgs()
+    if orgs:
+        for org in list(orgs):
+            companyname = org.name
+            possiblities.extend(companyname)
+
+
+    # Attempt to extract from the email domain
     if userdata.email:
         possiblities.extend(re.findall("\@(.*)", userdata.email)) # probably filter out email
 
     return possiblities
 
 # add: from company name userdata.company -> ping API again, get full/real company name
+
+# add public org from get_orgs()
+# link github orgs to a subset of companies
+# list of repositories from ArXiv, to get actual information rather than samples.
+
+# Priority: understand geolocation/GitGeo format (and fix it too)
+# Understand tasks first.
+# Explore tasks for deduplication - try to get to the second task - reference prev.
+# Add user github orgs to this code
+
+# Make sure to document progress/questions in Github issues
+
+
 
 if __name__ == "__main__":
     df = pd.read_hdf("light_archive.hdf", key="a")
