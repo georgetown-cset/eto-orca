@@ -117,7 +117,11 @@ def extract_company(userdata):
     if orgs:
         for org in list(orgs):
             companyname = org.name
+            website = org.blog
             possiblities.extend(companyname)
+
+            if website:
+                possiblities.extend(website)
 
 
     # Attempt to extract from the email domain
