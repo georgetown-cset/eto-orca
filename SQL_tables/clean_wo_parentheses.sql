@@ -1,6 +1,6 @@
 SELECT
-  funder AS original,
-  country,
+  DISTINCT funder AS original,
+  --   country,
   REGEXP_REPLACE(final_cleaned, r'[^a-zA-Z0-9\s\-]', '') AS funder,
   count,
 FROM (
@@ -34,4 +34,3 @@ WHERE
 ORDER BY
   funder ASC,
   count DESC -- most common one among acronyms
-  
