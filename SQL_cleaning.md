@@ -13,7 +13,7 @@ This process was optimized based on common matches, not sparse funders for which
 `funders` for `science_map` is based on `gcp-cset-projects.science_map_v2.dc5_funder_latest`.
 The table has 17 million rows for a total of 1.71GB.
 
-Without taking the sum over `NP_funder`, and instead counting by cluster appearances, I select unique `funder` values with their respective counts into a new table `cset_intern_jms727.dc5_funder_distinct`. This table has 4,783,566 distinct rows.
+Without taking the sum over `NP_funder`, and instead counting by cluster appearances, I select unique `funder` and `country` values with their respective counts into a new table `cset_intern_jms727.dc5_funder_distinct`. This table has 4,783,566 distinct rows. Of these, 4,761,359 are distinct when not filtered by `country`.
 
 The top 10k rows are put in `cset_intern_jms727.dc5_funder_distinct_small` for experimentation.
 
