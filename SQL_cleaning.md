@@ -144,7 +144,7 @@ are all normalized to `100 TALENTS PLAN OF HEBEI PROVINCE`.
 
 `preliminary_results.sql`
 
-Applies the above process into columns and adds the most rudimentary cleaning process described earlier.
+Applies the above process into columns and the rudimentary cleaning process described earlier.
 
 ### Final Results
 
@@ -153,12 +153,16 @@ Applies the above process into columns and adds the most rudimentary cleaning pr
 Takes the first match by order of importance: acronym_match, parentheses_match, otherwise_cleaned.
 
 
+(need to add exact counts at each step)
+
 ### Limitations
 
 MINISTRY OF HIGHER EDUCATION, for example, not aggregated by country.
+This can be resolved with the `country` parameter - we are not losing any specificity because the original was not aggregated either.
+
 Unfortunately no way to fix while keeping heuristics unless done manually
-But still achieves the main point of normalizing the string only section
-  
+But still achieves the main point of normalizing the string only section.
+
 
 ### Potential Further Steps
 
@@ -173,4 +177,4 @@ There are two potential issues: the possible combinations of millions of unique 
 
 The main problem is strings with levenshtein distance that are close to each other but functionally different.
 
-Further exploration is needed to address these issues.
+Further exploration can address these issues.
