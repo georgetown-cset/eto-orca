@@ -31,7 +31,7 @@ ORDER BY
   count DESC
 ```
 
-Looking at the top 10k funder rows in order, we see commmon patterns emerge.
+Looking at the top 10k funder rows in order, we see common patterns emerge.
 
 __Capitalization error:__
 ```
@@ -61,7 +61,7 @@ Agencia Nacional de Promocion Cientifica y Tecnologica (ANPCyT)
 
 Note that non-unique rows are still filtered separately by the presence or nonpresence of `country` values.
 
-Based on this initial review and an exploration of selections of the complete dataset (`LIKE 'B%'`, etc), I decided to start with seom basic cleaning.
+Based on this initial review and an exploration of selections of the complete dataset (`LIKE 'B%'`, etc), I decided to start with some basic cleaning.
 
 ### Basic Cleaning
 
@@ -169,9 +169,9 @@ But still achieves the main point of normalizing the string only section.
 More manual replacements can be made by adding into the final cleaning process a matcher from Chinese strings to their appropriate English translations - ideally, before the rest of the cleaning process to further cut down on duplicates.
 
 
-A package like `fuzzywuzzy` _may_ be able to correctly resolve these issues.
+A package like `fuzzywuzzy` (now renamed `thefuzz`) _may_ be able to correctly resolve these issues.
 
-There are many, many good examples for why two strings may be mismatched and resolvable using `fuzzywuzzy`: from typos to translation quirks such as center and centre. Doing so requires introducing very strict rules: minimum string length, word count, etc.
+There are many, many good examples for why two strings may be mismatched and resolvable using `thefuzz`: from typos to translation quirks such as center and centre. Doing so requires introducing very strict rules: minimum string length, word count, etc.
 
 There are two potential issues: the possible combinations of millions of unique funders makes it difficult to run on resource constraints. Therefore, it would be best to go through the top funders by count first.
 
