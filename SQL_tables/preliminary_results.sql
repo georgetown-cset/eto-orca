@@ -1,9 +1,10 @@
 SELECT
-  c.funder,
+  DISTINCT c.funder,
   c.country,
   c.count,
   af.funder AS acronym_match,
   pr.funder AS parentheses_match,
+  tr.fundorg_en AS foreign_match,
   final_cleaned AS otherwise_cleaned
 FROM (
   SELECT
@@ -34,6 +35,10 @@ LEFT JOIN
   `gcp-cset-projects.cset_intern_jms727.clean_wo_parentheses` pr
 ON
   c.funder = pr.original
+LEFT JOIN
+  `gcp-cset-projects.cset_intern_jms727.foreign_funder_translations_tr` tr
+ON
+  c.funder = tr.fundorg_tr
 ORDER BY
   count DESC
   
