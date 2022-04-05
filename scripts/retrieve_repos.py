@@ -9,83 +9,37 @@ from itertools import chain
 from typing import Generator
 
 
-def read_awesome_ml_repos() -> Generator:
-    read_toc = False
-    curr_language, curr_category, curr_repo = None, None, None
-    readme_content = requests.get("https://raw.githubusercontent.com/josephmisiti/"
-                                  "awesome-machine-learning/master/README.md")
-    for line in readme_content.text.splitlines():
-        read_toc |= line.strip() == "<!-- /MarkdownTOC -->"
-        if not read_toc:
-            continue
-        if curr_repo and (line.startswith("##") or line.startswith("*") or (len(line.strip()) == 0)):
-            is_deprecated = "**[Deprecated]**" in curr_repo
-            record = parse_awesome_ml_line(curr_repo)
-            if record:
-                record["is_deprecated"] = is_deprecated
-                yield record
-            curr_repo = None
-        if line.startswith("## "):
-            curr_language = re.search(r"^##\s+(.*)\s*", line).group(1).strip()
-        elif line.startswith("#### "):
-            curr_category = re.search(r"^####\s+(.*)\s*", line).group(1).strip()
-        elif line.startswith("* "):
-            curr_repo = line.strip()
-        elif curr_repo and (len(line.strip()) > 0) and not ("<a" in line):
-            curr_repo += " "+line.strip()
-
-
-def parse_awesome_ml_line(line: str) -> dict:
-    match = re.search(r"^\* \[([^\]]+)\]\(([^\)]+)\) ?-? ?(.*)", line)
-    if not match:
-        print("Could not parse: "+line)
-        return
-    url = match.group(2)
-    org_name, repo_name, clean_url = get_owner_and_repo(url)
-    return {
-        "url": clean_url,
-        "repo_name": repo_name,
-        "owner_name": org_name,
-        "source": "awesome-machine-learning"
-    }
-
-
-def get_owner_and_repo(github_url: str):
+def get_repo_record(github_url: str):
     url_match = re.search(r"(?i)github.com/([A-Za-z0-9-_.]+)/([A-Za-z0-9-_]+)", github_url)
     if url_match:
         owner_name = url_match.group(1)
         repo_name = url_match.group(2)
-        return owner_name, repo_name, f"github.com/{owner_name}/{repo_name}"
+        return {
+            "url": f"github.com/{owner_name}/{repo_name}",
+            "repo_name": repo_name,
+            "owner_name": owner_name
+        }
     else:
-        print(f"Not a github url: {github_url}")
-        return None, None, None
+        return None
 
 
-def read_awesome_prod_ml_repos() -> Generator:
-    passed_intro = False
-    readme_content = requests.get("https://raw.githubusercontent.com/EthicalML/"
-                                  "awesome-production-machine-learning/master/README.md")
+def read_awesome_repos(url: str, toc_delim: str, source_name: str) -> Generator:
+    read_toc = False
+    readme_content = requests.get(url)
     for line in readme_content.text.splitlines():
-        passed_intro |= line.strip() == "# Main Content"
-        if not passed_intro:
+        line = line.strip()
+        read_toc |= line == toc_delim
+        if not read_toc:
             continue
-        if line.startswith("* "):
-            match = re.search(r"^\* \[([^\]]+)\]\(([^\)]+)\) ?(!\[\]\(([^\)]+)\))? ?-? ?(.*)", line)
-            if not match:
-                print("Could not parse: "+line)
-            url = match.group(2)
-            star_url = match.group(4)
-            if star_url and "github.com" not in url:
-                # e.g., (https://img.shields.io/github/stars/apache/airflow.svg?style=social
-                url_parts = star_url.replace(".svg?style=social", "").split("/")
-                url = f"https://github.com/{url_parts[5]}/{url_parts[6]}"
-            org_name, repo_name, clean_url = get_owner_and_repo(url)
-            yield {
-                "url": clean_url,
-                "repo_name": repo_name,
-                "owner_name": org_name,
-                "source": "awesome-production-machine-learning"
-            }
+        repo_record = get_repo_record(line)
+        if repo_record:
+            if line.startswith("*") or re.search(r"^[a-zA-Z0-9[]", line):
+                if not line.startswith("*"):
+                    print(f"Unusual line format, but collecting anyway: {line}")
+                repo_record["source"] = source_name
+                yield repo_record
+            else:
+                print(f"Repo occurred in unexpected place: {line}")
 
 
 def read_bq_repos() -> Generator:
@@ -94,13 +48,9 @@ def read_bq_repos() -> Generator:
     results = query_job.result()
     for row in results:
         for dataset in row["datasets"]:
-            org_name, repo_name, clean_url = get_owner_and_repo(row["repo"])
-            yield {
-                "url": clean_url,
-                "repo_name": repo_name,
-                "owner_name": org_name,
-                "source": dataset
-            }
+            repo_record = get_repo_record(row["repo"])
+            repo_record["source"] = dataset
+            yield repo_record
 
 
 def read_manually_collected_repos(links_path: str) -> Generator:
@@ -109,13 +59,9 @@ def read_manually_collected_repos(links_path: str) -> Generator:
             line = line.strip()
             if not line:
                 continue
-            org_name, repo_name, clean_url = get_owner_and_repo(line)
-            yield {
-                "url": clean_url,
-                "repo_name": repo_name,
-                "owner_name": org_name,
-                "source": "manual-collection"
-            }
+            repo_record = get_repo_record(line)
+            repo_record["source"] = "manual-collection"
+            yield repo_record
 
 
 def read_topic_repos(topics_path: str) -> Generator:
@@ -125,8 +71,12 @@ def read_topic_repos(topics_path: str) -> Generator:
 def get_repos(query_bq: bool, output_fi: str, access_token: str = None,
               manually_collected_path: str = os.path.join("input_data", "manually_collected_links.txt"),
               topics_path: str = os.path.join("input_data", "topics.txt")) -> None:
-    awesome_ml = read_awesome_ml_repos()
-    awesome_prod_ml = read_awesome_prod_ml_repos()
+    awesome_ml = read_awesome_repos("https://raw.githubusercontent.com/josephmisiti/"
+                                    "awesome-machine-learning/master/README.md", "<!-- /MarkdownTOC -->",
+                                    "awesome-machine-learning")
+    awesome_prod_ml = read_awesome_repos("https://raw.githubusercontent.com/EthicalML/"
+                                         "awesome-production-machine-learning/master/README.md",
+                                         "# Main Content", "awesome-production-machine-learning")
     bq_repos = [] if not query_bq else read_bq_repos()
     manually_collected = read_manually_collected_repos(manually_collected_path)
     topic = read_topic_repos(topics_path)
