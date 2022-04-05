@@ -2,22 +2,24 @@ import argparse
 import json
 import os
 import re
-import requests
-
-from google.cloud import bigquery
 from itertools import chain
 from typing import Generator
 
+import requests
+from google.cloud import bigquery
+
 
 def get_repo_record(github_url: str):
-    url_match = re.search(r"(?i)github.com/([A-Za-z0-9-_.]+)/([A-Za-z0-9-_]+)", github_url)
+    url_match = re.search(
+        r"(?i)github.com/([A-Za-z0-9-_.]+)/([A-Za-z0-9-_]+)", github_url
+    )
     if url_match:
         owner_name = url_match.group(1)
         repo_name = url_match.group(2)
         return {
             "url": f"github.com/{owner_name}/{repo_name}",
             "repo_name": repo_name,
-            "owner_name": owner_name
+            "owner_name": owner_name,
         }
     else:
         return None
@@ -44,7 +46,9 @@ def read_awesome_repos(url: str, toc_delim: str, source_name: str) -> Generator:
 
 def read_bq_repos() -> Generator:
     client = bigquery.Client()
-    query_job = client.query(f"SELECT repo, datasets, merged_ids from github_metrics.repos_in_papers")
+    query_job = client.query(
+        "SELECT repo, datasets, merged_ids from github_metrics.repos_in_papers"
+    )
     results = query_job.result()
     for row in results:
         for dataset in row["datasets"]:
@@ -65,23 +69,41 @@ def read_manually_collected_repos(links_path: str) -> Generator:
 
 
 def read_topic_repos(topics_path: str) -> Generator:
-   yield
+    yield
 
 
-def get_repos(query_bq: bool, output_fi: str, access_token: str = None,
-              manually_collected_path: str = os.path.join("input_data", "manually_collected_links.txt"),
-              topics_path: str = os.path.join("input_data", "topics.txt")) -> None:
-    awesome_ml = read_awesome_repos("https://raw.githubusercontent.com/josephmisiti/"
-                                    "awesome-machine-learning/master/README.md", "<!-- /MarkdownTOC -->",
-                                    "awesome-machine-learning")
-    awesome_prod_ml = read_awesome_repos("https://raw.githubusercontent.com/EthicalML/"
-                                         "awesome-production-machine-learning/master/README.md",
-                                         "# Main Content", "awesome-production-machine-learning")
+def get_repos(
+    query_bq: bool,
+    output_fi: str,
+    access_token: str = None,
+    manually_collected_path: str = os.path.join(
+        "input_data", "manually_collected_links.txt"
+    ),
+    topics_path: str = os.path.join("input_data", "topics.txt"),
+) -> None:
+    awesome_ml = read_awesome_repos(
+        "https://raw.githubusercontent.com/josephmisiti/"
+        "awesome-machine-learning/master/README.md",
+        "<!-- /MarkdownTOC -->",
+        "awesome-machine-learning",
+    )
+    awesome_prod_ml = read_awesome_repos(
+        "https://raw.githubusercontent.com/EthicalML/"
+        "awesome-production-machine-learning/master/README.md",
+        "# Main Content",
+        "awesome-production-machine-learning",
+    )
     bq_repos = [] if not query_bq else read_bq_repos()
     manually_collected = read_manually_collected_repos(manually_collected_path)
     topic = read_topic_repos(topics_path)
     with open(output_fi, mode="w") as f:
-        repos = [r for r in chain(bq_repos, manually_collected, topic, awesome_ml, awesome_prod_ml) if r and r["url"]]
+        repos = [
+            r
+            for r in chain(
+                bq_repos, manually_collected, topic, awesome_ml, awesome_prod_ml
+            )
+            if r and r["url"]
+        ]
         repo_to_meta = {}
         for repo in repos:
             url = repo["url"]
@@ -91,7 +113,7 @@ def get_repos(query_bq: bool, output_fi: str, access_token: str = None,
             else:
                 repo_to_meta[url] = repo
         for repo in repo_to_meta:
-            f.write(json.dumps(repo_to_meta[repo])+"\n")
+            f.write(json.dumps(repo_to_meta[repo]) + "\n")
 
 
 if __name__ == "__main__":

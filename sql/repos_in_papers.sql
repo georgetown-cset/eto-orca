@@ -1,66 +1,75 @@
 WITH
-  cnki_ft AS ((
+cnki_ft AS ((
     SELECT
-      a.cnki_document_id AS id,
-      b.full_text
+      cset_cnki_journals_id_mappings.cnki_document_id AS id,
+      cnki_journals_ft.full_text
     FROM
-      gcp_cset_cnki.cnki_journals_ft b
+      gcp_cset_cnki.cnki_journals_ft
     INNER JOIN
-      gcp_cset_cnki.cset_cnki_journals_id_mappings a
+      gcp_cset_cnki.cset_cnki_journals_id_mappings
       -- For uniqueness, match on both document_name and cnki_doi. Unlike cnki_doi, document_name is never null.
       -- Fall back to matching document name alone if cnki_doi is null
-    ON
-      (a.document_name = b.document_name)
-      AND ((a.cnki_doi = b.doi)
-        OR (a.cnki_doi IS NULL)
-        OR (TRIM(a.cnki_doi) = "")))
+      ON
+        (cset_cnki_journals_id_mappings.document_name = cnki_journals_ft.document_name)
+        AND ((cset_cnki_journals_id_mappings.cnki_doi = cnki_journals_ft.doi)
+          OR (cset_cnki_journals_id_mappings.cnki_doi IS NULL)
+          OR (TRIM(cset_cnki_journals_id_mappings.cnki_doi) = "")))
   UNION ALL (
     SELECT
-      a.cnki_document_id AS id,
-      b.full_text
+      cset_cnki_dissertations_id_mappings.cnki_document_id AS id,
+      cnki_dissertations_ft.full_text
     FROM
-      gcp_cset_cnki.cnki_dissertations_ft b
+      gcp_cset_cnki.cnki_dissertations_ft
     INNER JOIN
-      gcp_cset_cnki.cset_cnki_dissertations_id_mappings a
+      gcp_cset_cnki.cset_cnki_dissertations_id_mappings
       -- For uniqueness, match on both document_name and cnki_doi. Unlike cnki_doi, document_name is never null.
       -- Fall back to matching document name alone if cnki_doi is null
-    ON
-      (a.document_name = b.document_name)
-      AND ((a.cnki_doi = b.doi)
-        OR (a.cnki_doi IS NULL)
-        OR (TRIM(a.cnki_doi) = "")))
+      ON
+        (
+          cset_cnki_dissertations_id_mappings.document_name =
+          cnki_dissertations_ft.document_name
+        )
+        AND ((cset_cnki_dissertations_id_mappings.cnki_doi = cnki_dissertations_ft.doi)
+          OR (cset_cnki_dissertations_id_mappings.cnki_doi IS NULL)
+          OR (TRIM(cset_cnki_dissertations_id_mappings.cnki_doi) = "")))
   UNION ALL (
     SELECT
-      a.cnki_document_id AS id,
-      b.full_text
+      cset_cnki_conferences_id_mappings.cnki_document_id AS id,
+      cnki_conferences_ft.full_text
     FROM
-      gcp_cset_cnki.cnki_conferences_ft b
+      gcp_cset_cnki.cnki_conferences_ft
     INNER JOIN
-      gcp_cset_cnki.cset_cnki_conferences_id_mappings a
+      gcp_cset_cnki.cset_cnki_conferences_id_mappings
       -- For uniqueness, match on both document_name and doi. Unlike doi, document_name is never null.
       -- Fall back to matching document name alone if doi is null
-    ON
-      (a.document_name = b.document_name)
-      AND ((a.cnki_doi = b.doi)
-        OR (a.cnki_doi IS NULL)
-        OR (TRIM(a.cnki_doi) = "")))),
-  arxiv_ft AS (
+      ON
+        (
+          cset_cnki_conferences_id_mappings.document_name =
+          cnki_conferences_ft.document_name
+        )
+        AND ((cset_cnki_conferences_id_mappings.cnki_doi = cnki_conferences_ft.doi)
+          OR (cset_cnki_conferences_id_mappings.cnki_doi IS NULL)
+          OR (TRIM(cset_cnki_conferences_id_mappings.cnki_doi) = "")))),
+
+arxiv_ft AS (
   SELECT
     id,
     joined_text AS full_text
   FROM
     gcp_cset_arxiv_full_text.fulltext),
-  pwc AS (
+
+pwc AS (
   SELECT
     paper_url AS id,
     repo_url AS full_text
   FROM
     papers_with_code.links_between_papers_and_code),
-  agg_repos AS (
+
+agg_repos AS (
   SELECT
     merged_id,
-    REGEXP_EXTRACT_ALL(full_text, r"(?i)(github.com/[A-Za-z0-9-_.]+/[A-Za-z0-9-_]+)") AS repos,
-    dataset
+    dataset,
+    REGEXP_EXTRACT_ALL(full_text, r"(?i)(github.com/[A-Za-z0-9-_.]+/[A-Za-z0-9-_]+)") AS repos
   FROM (
     SELECT
       id,
@@ -84,8 +93,9 @@ WITH
       pwc) AS ft
   LEFT JOIN
     gcp_cset_links_v2.article_links
-  ON
-    ft.id = article_links.orig_id )
+    ON
+      ft.id = article_links.orig_id )
+
 SELECT
   repo,
   ARRAY_AGG(DISTINCT(dataset)) AS datasets,
