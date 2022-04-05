@@ -18,7 +18,7 @@ FROM (
       count
     FROM (
       SELECT
-        TRIM(TRIM(REPLACE(REPLACE(REPLACE(stage_1, r"^supported\sby\s", ""), r"^the\s", ""), r"(.*?)supported\sby\sthe\s", "")), r'"') AS stage_2,
+        TRIM(TRIM(stage_1, r'"')) AS stage_2,
         *
       FROM (
         SELECT
