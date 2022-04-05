@@ -2,10 +2,10 @@ SELECT
   DISTINCT c.funder,
   c.country,
   c.count,
-  af.funder AS acronym_match,
-  pr.funder AS parentheses_match,
-  tr.fundorg_en AS foreign_match,
-  final_cleaned AS otherwise_cleaned
+  TRIM(af.funder, r'"') AS acronym_match,
+  TRIM(pr.funder, r'"') AS parentheses_match,
+  TRIM(tr.fundorg_en, r'"') AS foreign_match,
+  TRIM(final_cleaned, r'"') AS otherwise_cleaned
 FROM (
   SELECT
     funder,
