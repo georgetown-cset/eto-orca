@@ -59,23 +59,27 @@ WITH
   agg_repos AS (
   SELECT
     merged_id,
-    REGEXP_EXTRACT_ALL(full_text, r"(?i)(github.com/[A-Za-z0-9-_.]+/[A-Za-z0-9-_]+)") AS repos
+    REGEXP_EXTRACT_ALL(full_text, r"(?i)(github.com/[A-Za-z0-9-_.]+/[A-Za-z0-9-_]+)") AS repos,
+    dataset
   FROM (
     SELECT
       id,
-      full_text
+      full_text,
+      "cnki" as dataset
     FROM
       cnki_ft
     UNION ALL
     SELECT
       id,
-      full_text
+      full_text,
+      "arxiv" as dataset
     FROM
       arxiv_ft
     UNION ALL
     SELECT
       id,
-      full_text
+      full_text,
+      "pwc" as dataset
     FROM
       pwc) AS ft
   LEFT JOIN
@@ -83,11 +87,12 @@ WITH
   ON
     ft.id = article_links.orig_id )
 SELECT
-  merged_id,
-  ARRAY_AGG(DISTINCT(repo)) AS github_repos
+  repo,
+  ARRAY_AGG(DISTINCT(dataset)) as datasets,
+  ARRAY_AGG(DISTINCT(merged_id)) as merged_ids
 FROM
   agg_repos
 CROSS JOIN
   UNNEST(repos) AS repo
 GROUP BY
-  merged_id
+  repo
