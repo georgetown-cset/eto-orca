@@ -36,7 +36,7 @@ def read_awesome_repos(url: str, toc_delim: str, source_name: str) -> Generator:
             if line.startswith("*") or re.search(r"^[a-zA-Z0-9[]", line):
                 if not line.startswith("*"):
                     print(f"Unusual line format, but collecting anyway: {line}")
-                repo_record["source"] = source_name
+                repo_record["sources"] = [source_name]
                 yield repo_record
             else:
                 print(f"Repo occurred in unexpected place: {line}")
@@ -49,7 +49,7 @@ def read_bq_repos() -> Generator:
     for row in results:
         for dataset in row["datasets"]:
             repo_record = get_repo_record(row["repo"])
-            repo_record["source"] = dataset
+            repo_record["sources"] = [dataset]
             yield repo_record
 
 
@@ -60,7 +60,7 @@ def read_manually_collected_repos(links_path: str) -> Generator:
             if not line:
                 continue
             repo_record = get_repo_record(line)
-            repo_record["source"] = "manual-collection"
+            repo_record["sources"] = ["manual-collection"]
             yield repo_record
 
 
@@ -81,9 +81,17 @@ def get_repos(query_bq: bool, output_fi: str, access_token: str = None,
     manually_collected = read_manually_collected_repos(manually_collected_path)
     topic = read_topic_repos(topics_path)
     with open(output_fi, mode="w") as f:
-        for repo in chain(bq_repos, manually_collected, topic, awesome_ml, awesome_prod_ml):
-            if repo:
-                f.write(json.dumps(repo)+"\n")
+        repos = [r for r in chain(bq_repos, manually_collected, topic, awesome_ml, awesome_prod_ml) if r and r["url"]]
+        repo_to_meta = {}
+        for repo in repos:
+            url = repo["url"]
+            prev_meta = repo_to_meta.get(url)
+            if prev_meta and repo["sources"][0] not in prev_meta["sources"]:
+                prev_meta["sources"].extend(repo["sources"])
+            else:
+                repo_to_meta[url] = repo
+        for repo in repo_to_meta:
+            f.write(json.dumps(repo_to_meta[repo])+"\n")
 
 
 if __name__ == "__main__":
