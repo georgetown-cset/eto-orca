@@ -8,11 +8,31 @@ from typing import Generator
 import requests
 from google.cloud import bigquery
 
+"""
+Retrieves repos from:
 
-def get_repo_record(github_url: str):
-    url_match = re.search(
-        r"(?i)github.com/([A-Za-z0-9-_.]+)/([A-Za-z0-9-_]+)", github_url
-    )
+- awesome-machine-learning
+- awesome-production-machine-learning
+- papers with code
+- arxiv fulltext
+- cnki fulltext
+- manually collected list of repos
+- manually collected list of topics
+
+Todo:
+- add repos from title/abstract search
+- implement repo retrieval from topic
+- pull all repos in line
+"""
+
+
+def get_repo_record(text: str) -> dict:
+    """
+    Parses a github url out of some text, and returns a dict of its components
+    :param text: Text that may contain a github url
+    :return: A dict of the github url's components, or None if no repo was found
+    """
+    url_match = re.search(r"(?i)github.com/([A-Za-z0-9-_.]+)/([A-Za-z0-9-_]+)", text)
     if url_match:
         owner_name = url_match.group(1)
         repo_name = url_match.group(2)
@@ -26,6 +46,13 @@ def get_repo_record(github_url: str):
 
 
 def read_awesome_repos(url: str, toc_delim: str, source_name: str) -> Generator:
+    """
+    Retrieve repos mentioned in an "awesome-" aggregator repo readme
+    :param url: URL of the readme
+    :param toc_delim: Delimiter that indicates the end of the table of contents
+    :param source_name: name of the aggregator repo
+    :return: a generator containing dicts of information from get_repo_record, plus the source name, for each repo
+    """
     read_toc = False
     readme_content = requests.get(url)
     for line in readme_content.text.splitlines():
@@ -45,6 +72,10 @@ def read_awesome_repos(url: str, toc_delim: str, source_name: str) -> Generator:
 
 
 def read_bq_repos() -> Generator:
+    """
+    Retrieves repos pulled from our scholarly literature - see sql/repos_in_papers.sql for table definition
+    :return: a generator of information from get_repo_record, plus the dataset name, for each repo
+    """
     client = bigquery.Client()
     query_job = client.query(
         "SELECT repo, datasets, merged_ids from github_metrics.repos_in_papers"
@@ -58,6 +89,11 @@ def read_bq_repos() -> Generator:
 
 
 def read_manually_collected_repos(links_path: str) -> Generator:
+    """
+    Retrieves repos that were manually collected into a file at `links_path`
+    :param links_path: Location of manually collected repos
+    :return: a generator of information from get_repo_record, plus the source name, for each repo
+    """
     with open(links_path) as f:
         for line in f:
             line = line.strip()
@@ -76,11 +112,16 @@ def get_repos(
     query_bq: bool,
     output_fi: str,
     access_token: str = None,
-    manually_collected_path: str = os.path.join(
-        "input_data", "manually_collected_links.txt"
-    ),
-    topics_path: str = os.path.join("input_data", "topics.txt"),
 ) -> None:
+    """
+    Aggregates repos from multiple sources, and deduplicates
+    :param query_bq: If true, will retrieve repos from BQ (takes longer)
+    :param output_fi: Location where repos should be written
+    :param access_token: Github access token
+    :return:
+    """
+    manually_collected_path = os.path.join("input_data", "manually_collected_links.txt")
+    topics_path = os.path.join("input_data", "topics.txt")
     awesome_ml = read_awesome_repos(
         "https://raw.githubusercontent.com/josephmisiti/"
         "awesome-machine-learning/master/README.md",
