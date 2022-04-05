@@ -65,21 +65,21 @@ WITH
     SELECT
       id,
       full_text,
-      "cnki" as dataset
+      "cnki" AS dataset
     FROM
       cnki_ft
     UNION ALL
     SELECT
       id,
       full_text,
-      "arxiv" as dataset
+      "arxiv" AS dataset
     FROM
       arxiv_ft
     UNION ALL
     SELECT
       id,
       full_text,
-      "pwc" as dataset
+      "pwc" AS dataset
     FROM
       pwc) AS ft
   LEFT JOIN
@@ -88,11 +88,13 @@ WITH
     ft.id = article_links.orig_id )
 SELECT
   repo,
-  ARRAY_AGG(DISTINCT(dataset)) as datasets,
-  ARRAY_AGG(DISTINCT(merged_id)) as merged_ids
+  ARRAY_AGG(DISTINCT(dataset)) AS datasets,
+  ARRAY_AGG(DISTINCT(merged_id)) AS merged_ids
 FROM
   agg_repos
 CROSS JOIN
   UNNEST(repos) AS repo
+WHERE
+  merged_id IS NOT NULL
 GROUP BY
   repo
