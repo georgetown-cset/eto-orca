@@ -22,7 +22,6 @@ FROM (
         *
       FROM (
         SELECT
-          --   LOWER(funder) AS funder,
           funder,
           REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(funder, "&", "and"), "Chinese", "China"), r"UK ", r"United Kingdom "), "U.S.", "United States"), r"US ", r"United States ") AS stage_1,
           country,

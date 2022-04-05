@@ -1,8 +1,9 @@
 SELECT
   funder,
-  IFNULL(acronym_match,
-    IFNULL(parentheses_match,
-      otherwise_cleaned)) AS final_match,
+  IFNULL(foreign_match,
+    IFNULL(acronym_match,
+      IFNULL(parentheses_match,
+        otherwise_cleaned))) AS final_match,
   --   *
 FROM (
   SELECT
@@ -15,7 +16,5 @@ WHERE
 ORDER BY
   count DESC
   -- dedupe process is necessary as there are still multiple possible matches
-  -- MINISTRY OF HIGHER EDUCATION, for example, not aggregated by country.
-  -- Unfortunately no way to fix while keeping heuristics unless done manually
-  -- But still achieves the main point of normalizing the string only section
-  
+  -- for example, MINISTRY OF HIGHER EDUCATION not aggregated by country.
+  -- achieves the main point of normalizing the string only section
