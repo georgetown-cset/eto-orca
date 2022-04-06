@@ -22,7 +22,6 @@ Retrieves repos from:
 - manually collected list of topics
 
 Todo:
-- add repos from title/abstract search
 - pull all repos in line
 """
 

@@ -25,10 +25,7 @@ cnki_ft AS ((
       -- For uniqueness, match on both document_name and cnki_doi. Unlike cnki_doi, document_name is never null.
       -- Fall back to matching document name alone if cnki_doi is null
       ON
-        (
-          cset_cnki_dissertations_id_mappings.document_name =
-          cnki_dissertations_ft.document_name
-        )
+        ( cset_cnki_dissertations_id_mappings.document_name = cnki_dissertations_ft.document_name )
         AND ((cset_cnki_dissertations_id_mappings.cnki_doi = cnki_dissertations_ft.doi)
           OR (cset_cnki_dissertations_id_mappings.cnki_doi IS NULL)
           OR (TRIM(cset_cnki_dissertations_id_mappings.cnki_doi) = "")))
@@ -43,10 +40,7 @@ cnki_ft AS ((
       -- For uniqueness, match on both document_name and doi. Unlike doi, document_name is never null.
       -- Fall back to matching document name alone if doi is null
       ON
-        (
-          cset_cnki_conferences_id_mappings.document_name =
-          cnki_conferences_ft.document_name
-        )
+        ( cset_cnki_conferences_id_mappings.document_name = cnki_conferences_ft.document_name )
         AND ((cset_cnki_conferences_id_mappings.cnki_doi = cnki_conferences_ft.doi)
           OR (cset_cnki_conferences_id_mappings.cnki_doi IS NULL)
           OR (TRIM(cset_cnki_conferences_id_mappings.cnki_doi) = "")))),
@@ -65,11 +59,11 @@ pwc AS (
   FROM
     papers_with_code.links_between_papers_and_code),
 
-agg_repos AS (
+pwc_arxiv_cnki AS (
   SELECT
     merged_id,
     dataset,
-    REGEXP_EXTRACT_ALL(full_text, r"(?i)(github.com/[A-Za-z0-9-_.]+/[A-Za-z0-9-_]+)") AS repos
+    full_text
   FROM (
     SELECT
       id,
@@ -94,7 +88,31 @@ agg_repos AS (
   LEFT JOIN
     gcp_cset_links_v2.article_links
     ON
-      ft.id = article_links.orig_id )
+      ft.id = article_links.orig_id ),
+
+agg_repos AS (
+  SELECT
+    merged_id,
+    dataset,
+    REGEXP_EXTRACT_ALL(full_text, r"(?i)(github.com/[A-Za-z0-9-_.]+/[A-Za-z0-9-_]+)") AS repos
+  FROM (
+    SELECT
+      merged_id,
+      dataset,
+      full_text
+    FROM
+      pwc_arxiv_cnki
+    UNION ALL
+    SELECT
+      merged_id,
+      "title+abstract" AS dataset,
+      CONCAT(COALESCE(title_english,
+          ""), " ", COALESCE(title_foreign,
+          ""), " ", COALESCE(abstract_english,
+          ""), " ", COALESCE("abstract_foreign",
+          "")) AS full_text
+    FROM
+      gcp_cset_links_v2.corpus_merged))
 
 SELECT
   repo,
