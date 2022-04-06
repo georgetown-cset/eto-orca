@@ -2,6 +2,7 @@ import argparse
 import json
 import os
 import re
+import time
 from itertools import chain
 from typing import Generator
 
@@ -22,7 +23,6 @@ Retrieves repos from:
 
 Todo:
 - add repos from title/abstract search
-- implement repo retrieval from topic
 - pull all repos in line
 """
 
@@ -105,26 +105,69 @@ def read_manually_collected_repos(links_path: str) -> Generator:
             yield repo_record
 
 
-@sleep_and_retry
-@limits(calls=5000, period=60 * 60)
-def get_topic_page(headers: dict, topic: str, page: int = 1) -> list:
+def get_size_partitions(headers: dict, topic: str, size_range: list = None) -> list:
     """
-    Get a page of topic repos
+    Gets repo size partitions that will allow us to retrieve all repos for a topic
     :param headers: request headers
     :param topic: topic to retrieve repos for
-    :param page: page of topic results to retrieve
-    :return: list of repos
+    :param size_range: range of sizes (in kb) to include in the query - used to get around the 1000 search result cap
+    :return: list of formatted size ranges
     """
+    if not size_range:
+        gt = get_size_partitions(headers, topic, [0, 1000])
+        lt = get_size_partitions(headers, topic, [1001, None])
+        return gt + lt
+    fmt_size_range = (
+        f"{size_range[0]}..{size_range[1]}" if size_range[1] else f">={size_range[0]}"
+    )
     repo_resp = requests.get(
         "https://api.github.com/search/repositories?"
-        f"q=topic:{topic}&sort=stars&order=desc&page={page}&per_page=100",
+        f"q=topic:{topic} size:{fmt_size_range}&sort=stars&order=desc&per_page=1",
         headers=headers,
     )
     repo_resp_js = repo_resp.json()
     if repo_resp_js.get("incomplete_results"):
         print(f"Incomplete results for {topic}, {repo_resp_js['total_count']}")
+        time.sleep(5)
+        return get_size_partitions(headers, topic, size_range)
+    if repo_resp_js.get("total_count", 10000000000) > 1000:
+        gt = get_size_partitions(
+            headers, topic, [size_range[0], round(size_range[1] / 2)]
+        )
+        lt = get_size_partitions(
+            headers, topic, [round(size_range[1] / 2) + 1, size_range[1]]
+        )
+        return gt + lt
+    return [fmt_size_range]
+
+
+@sleep_and_retry
+@limits(calls=5000, period=60 * 60)
+def get_topic_page(headers: dict, topic: str, size_range: str, page: int = 1) -> list:
+    """
+    Get a page of topic repos
+    :param headers: request headers
+    :param topic: topic to retrieve repos for
+    :param size_range: range of sizes (in kb) to include in the query - used to get around the 1000 search result cap
+    :param page: page of topic results to retrieve
+    :return: list of repos
+    """
+    repo_resp = requests.get(
+        "https://api.github.com/search/repositories?"
+        f"q=topic:{topic} size:{size_range}&sort=stars&order=desc&page={page}&per_page=100",
+        headers=headers,
+    )
+    repo_resp_js = repo_resp.json()
+    if repo_resp_js.get("incomplete_results"):
+        print(f"Incomplete results for {topic}, {repo_resp_js['total_count']}")
+        time.sleep(10)
+        return get_topic_page(headers, topic, size_range, page)
+    if "items" not in repo_resp_js:
+        print(repo_resp_js)
     if page == 1:
-        print(f"Retrieving {repo_resp_js['total_count']} repos for {topic}")
+        print(
+            f"Retrieving {repo_resp_js['total_count']} repos for page {page} of {topic} in size range {size_range}"
+        )
     return repo_resp_js["items"]
 
 
@@ -139,22 +182,24 @@ def read_topic_repos() -> Generator:
     topics_path = os.path.join("input_data", "topics.txt")
     with open(topics_path) as f:
         for line in f:
-            line = line.strip()
-            if not line:
+            topic = line.strip()
+            if not topic:
                 continue
             page = 1
-            topic_repos = get_topic_page(headers, line, page)
-            while len(topic_repos) > 0:
-                for repo in topic_repos:
-                    owner_name, repo_name = repo["full_name"].split("/")
-                    yield {
-                        "url": f"github.com/{owner_name}/{repo_name}",
-                        "repo_name": repo_name,
-                        "owner_name": owner_name,
-                        "sources": [f"topic: {line}"],
-                    }
-                page += 1
-                topic_repos = get_topic_page(headers, line, page)
+            size_ranges = get_size_partitions(headers, topic)
+            for size_range in size_ranges:
+                topic_repos = get_topic_page(headers, topic, size_range, page)
+                while len(topic_repos):
+                    for repo in topic_repos:
+                        owner_name, repo_name = repo["full_name"].split("/")
+                        yield {
+                            "url": f"github.com/{owner_name}/{repo_name}",
+                            "repo_name": repo_name,
+                            "owner_name": owner_name,
+                            "sources": [f"topic: {topic}"],
+                        }
+                    page += 1
+                    topic_repos = get_topic_page(headers, topic, size_range, page)
 
 
 def get_repos(query_bq: bool, query_topics: bool) -> Generator:
