@@ -2,3 +2,4 @@ requests==2.27.1
 google-cloud-bigquery==3.0.1
 pytest==7.1.1
 pre-commit==2.18.1
+ratelimit==2.2.1

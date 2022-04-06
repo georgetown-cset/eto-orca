@@ -7,6 +7,7 @@ from typing import Generator
 
 import requests
 from google.cloud import bigquery
+from ratelimit import limits, sleep_and_retry
 
 """
 Retrieves repos from:
@@ -104,24 +105,66 @@ def read_manually_collected_repos(links_path: str) -> Generator:
             yield repo_record
 
 
-def read_topic_repos(topics_path: str) -> Generator:
-    yield
-
-
-def get_repos(
-    query_bq: bool,
-    output_fi: str,
-    access_token: str = None,
-) -> None:
+@sleep_and_retry
+@limits(calls=5000, period=60 * 60)
+def get_topic_page(headers: dict, topic: str, page: int = 1) -> list:
     """
-    Aggregates repos from multiple sources, and deduplicates
+    Get a page of topic repos
+    :param headers: request headers
+    :param topic: topic to retrieve repos for
+    :param page: page of topic results to retrieve
+    :return: list of repos
+    """
+    repo_resp = requests.get(
+        "https://api.github.com/search/repositories?"
+        f"q=topic:{topic}&sort=stars&order=desc&page={page}&per_page=100",
+        headers=headers,
+    )
+    repo_resp_js = repo_resp.json()
+    if repo_resp_js.get("incomplete_results"):
+        print(f"Incomplete results for {topic}, {repo_resp_js['total_count']}")
+    if page == 1:
+        print(f"Retrieving {repo_resp_js['total_count']} repos for {topic}")
+    return repo_resp_js["items"]
+
+
+def read_topic_repos() -> Generator:
+    """
+    Retrieves all repos matching a github topic
+    :return: generator of repo information for this topic
+    """
+    gh_tok = os.environ.get("GITHUB_ACCESS_TOKEN")
+    assert gh_tok, "Please set the GITHUB_ACCESS_TOKEN environment variable"
+    headers = {"Authorization": f"token {gh_tok}"}
+    topics_path = os.path.join("input_data", "topics.txt")
+    with open(topics_path) as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            page = 1
+            topic_repos = get_topic_page(headers, line, page)
+            while len(topic_repos) > 0:
+                for repo in topic_repos:
+                    owner_name, repo_name = repo["full_name"].split("/")
+                    yield {
+                        "url": f"github.com/{owner_name}/{repo_name}",
+                        "repo_name": repo_name,
+                        "owner_name": owner_name,
+                        "sources": [f"topic: {line}"],
+                    }
+                page += 1
+                topic_repos = get_topic_page(headers, line, page)
+
+
+def get_repos(query_bq: bool, query_topics: bool) -> Generator:
+    """
+    Retrieves repos from various sources and returns a generator of results (some of which are duplicates)
     :param query_bq: If true, will retrieve repos from BQ (takes longer)
-    :param output_fi: Location where repos should be written
-    :param access_token: Github access token
-    :return:
+    :param query_topics: If true, will retrieve all repos that match a list of topics (takes MUCH longer)
+    :return: a generator of dicts of repo information
     """
     manually_collected_path = os.path.join("input_data", "manually_collected_links.txt")
-    topics_path = os.path.join("input_data", "topics.txt")
     awesome_ml = read_awesome_repos(
         "https://raw.githubusercontent.com/josephmisiti/"
         "awesome-machine-learning/master/README.md",
@@ -135,16 +178,25 @@ def get_repos(
         "awesome-production-machine-learning",
     )
     bq_repos = [] if not query_bq else read_bq_repos()
+    topic_repos = [] if not query_topics else read_topic_repos()
     manually_collected = read_manually_collected_repos(manually_collected_path)
-    topic = read_topic_repos(topics_path)
+    topic = read_topic_repos()
+    return chain(
+        bq_repos, topic_repos, manually_collected, topic, awesome_ml, awesome_prod_ml
+    )
+
+
+def write_repos(query_bq: bool, query_topics: bool, output_fi: str) -> None:
+    """
+    Retrieves repos, deduplicates, and writes out
+    :param query_bq: If true, will retrieve repos from BQ (takes longer)
+    :param query_topics: If true, will retrieve all repos that match a list of topics (takes MUCH longer)
+    :param output_fi: Location where repos should be written
+    :return: None
+    """
+    repos = get_repos(query_bq, query_topics)
     with open(output_fi, mode="w") as f:
-        repos = [
-            r
-            for r in chain(
-                bq_repos, manually_collected, topic, awesome_ml, awesome_prod_ml
-            )
-            if r and r["url"]
-        ]
+        repos = [r for r in repos if r and r["url"]]
         repo_to_meta = {}
         for repo in repos:
             url = repo["url"]
@@ -160,7 +212,8 @@ def get_repos(
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--query_bq", default=False, action="store_true")
+    parser.add_argument("--query_topics", default=False, action="store_true")
     parser.add_argument("--output_fi", default="curr_repos.jsonl")
     args = parser.parse_args()
 
-    get_repos(args.query_bq, args.output_fi)
+    write_repos(args.query_bq, args.query_topics, args.output_fi)
