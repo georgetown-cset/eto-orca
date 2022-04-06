@@ -37,7 +37,7 @@ def get_repo_record(text: str) -> dict:
         owner_name = url_match.group(1)
         repo_name = url_match.group(2)
         return {
-            "url": f"github.com/{owner_name}/{repo_name}",
+            "url": f"{owner_name}/{repo_name}",
             "repo_name": repo_name,
             "owner_name": owner_name,
         }
@@ -83,7 +83,7 @@ def read_bq_repos() -> Generator:
     results = query_job.result()
     for row in results:
         for dataset in row["datasets"]:
-            repo_record = get_repo_record(row["repo"])
+            repo_record = get_repo_record("github.com/" + row["repo"])
             repo_record["sources"] = [dataset]
             yield repo_record
 
@@ -192,7 +192,7 @@ def read_topic_repos() -> Generator:
                     for repo in topic_repos:
                         owner_name, repo_name = repo["full_name"].split("/")
                         yield {
-                            "url": f"github.com/{owner_name}/{repo_name}",
+                            "url": f"{owner_name}/{repo_name}",
                             "repo_name": repo_name,
                             "owner_name": owner_name,
                             "sources": [f"topic: {topic}"],
@@ -224,10 +224,7 @@ def get_repos(query_bq: bool, query_topics: bool) -> Generator:
     bq_repos = [] if not query_bq else read_bq_repos()
     topic_repos = [] if not query_topics else read_topic_repos()
     manually_collected = read_manually_collected_repos(manually_collected_path)
-    topic = read_topic_repos()
-    return chain(
-        bq_repos, topic_repos, manually_collected, topic, awesome_ml, awesome_prod_ml
-    )
+    return chain(bq_repos, topic_repos, manually_collected, awesome_ml, awesome_prod_ml)
 
 
 def write_repos(query_bq: bool, query_topics: bool, output_fi: str) -> None:
