@@ -18,31 +18,27 @@ Retrieves repos from:
 - papers with code
 - arxiv fulltext
 - cnki fulltext
+- merged corpus titles+abstracts
 - manually collected list of repos
 - manually collected list of topics
-
-Todo:
-- pull all repos in line
 """
 
 
-def get_repo_record(text: str) -> dict:
+def get_repo_record(text: str) -> list:
     """
-    Parses a github url out of some text, and returns a dict of its components
-    :param text: Text that may contain a github url
-    :return: A dict of the github url's components, or None if no repo was found
+    Parses one or more github urls out of some text, and returns a dict of their components
+    :param text: Text that may contain github urls
+    :return: A list of dicts of the github urls' components, or None if no repo was found
     """
-    url_match = re.search(r"(?i)github.com/([A-Za-z0-9-_.]+)/([A-Za-z0-9-_]+)", text)
-    if url_match:
-        owner_name = url_match.group(1)
-        repo_name = url_match.group(2)
-        return {
+    url_matches = re.findall(r"(?i)github.com/([A-Za-z0-9-_.]+)/([A-Za-z0-9-_]+)", text)
+    return [
+        {
             "url": f"{owner_name}/{repo_name}",
             "repo_name": repo_name,
             "owner_name": owner_name,
         }
-    else:
-        return None
+        for owner_name, repo_name in url_matches
+    ]
 
 
 def read_awesome_repos(url: str, toc_delim: str, source_name: str) -> Generator:
@@ -60,8 +56,8 @@ def read_awesome_repos(url: str, toc_delim: str, source_name: str) -> Generator:
         read_toc |= line == toc_delim
         if not read_toc:
             continue
-        repo_record = get_repo_record(line)
-        if repo_record:
+        repo_records = get_repo_record(line)
+        for repo_record in repo_records:
             if line.startswith("*") or re.search(r"^[a-zA-Z0-9[]", line):
                 if not line.startswith("*"):
                     print(f"Unusual line format, but collecting anyway: {line}")
@@ -83,9 +79,10 @@ def read_bq_repos() -> Generator:
     results = query_job.result()
     for row in results:
         for dataset in row["datasets"]:
-            repo_record = get_repo_record("github.com/" + row["repo"])
-            repo_record["sources"] = [dataset]
-            yield repo_record
+            repo_records = get_repo_record("github.com/" + row["repo"])
+            for repo_record in repo_records:
+                repo_record["sources"] = [dataset]
+                yield repo_record
 
 
 def read_manually_collected_repos(links_path: str) -> Generator:
@@ -99,9 +96,10 @@ def read_manually_collected_repos(links_path: str) -> Generator:
             line = line.strip()
             if not line:
                 continue
-            repo_record = get_repo_record(line)
-            repo_record["sources"] = ["manual-collection"]
-            yield repo_record
+            repo_records = get_repo_record(line)
+            for repo_record in repo_records:
+                repo_record["sources"] = ["manual-collection"]
+                yield repo_record
 
 
 def get_size_partitions(headers: dict, topic: str, size_range: list = None) -> list:
