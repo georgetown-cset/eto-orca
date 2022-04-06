@@ -44,15 +44,15 @@ WITH
     a.funder,
     a.stage_1,
     CASE
-      WHEN REGEXP_REPLACE(a.stage_1, r'\(.*$', '') = '' THEN NULL
+      WHEN TRIM(REGEXP_REPLACE(a.stage_1, r'\(.*$', '')) = '' THEN NULL
     ELSE
-    REGEXP_REPLACE(a.stage_1, r'\(.*$', '')
+    TRIM(REGEXP_REPLACE(a.stage_1, r'\(.*$', ''))
   END
     AS stage_2,
     CASE
-      WHEN REGEXP_REPLACE(a.stage_1, r'[^a-zA-Z0-9\s\-]', '') = '' THEN NULL
+      WHEN TRIM(REGEXP_REPLACE(a.stage_1, r'[^a-zA-Z0-9\s\-]', '')) = '' THEN NULL
     ELSE
-    REGEXP_REPLACE(a.stage_1, r'[^a-zA-Z0-9\s\-]', '')
+    TRIM(REGEXP_REPLACE(a.stage_1, r'[^a-zA-Z0-9\s\-]', ''))
   END
     AS stage_3,
     a.country,
@@ -93,21 +93,23 @@ WITH
   topmatch AS (
   SELECT
     funder,
-    final_match
+    final_match,
+--     count
   FROM (
     SELECT
       *,
       ROW_NUMBER() OVER(PARTITION BY final_match ORDER BY count DESC) rn
     FROM
-      final_matcher)
+      final_matcher f)
   WHERE
     rn = 1 )
+  -- SELECT * FROM topmatch order by count desc
 SELECT
-  a.funder,
-  a.final_match,
+  f.funder,
+  f.final_match,
   topmatch.funder AS cleaned
 FROM
-  final_matcher a
+  final_matcher f
 LEFT JOIN
   topmatch
 USING
