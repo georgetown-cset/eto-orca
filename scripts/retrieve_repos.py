@@ -8,7 +8,6 @@ from typing import Generator
 
 import requests
 from google.cloud import bigquery
-from ratelimit import limits, sleep_and_retry
 
 """
 Retrieves repos from:
@@ -25,11 +24,15 @@ Retrieves repos from:
 
 
 class RepoRetriever:
+    rate_limit_interval = 60 * 60 / 5000 + 0.1
+
     def __init__(self):
         gh_tok = os.environ.get("GITHUB_ACCESS_TOKEN")
         assert gh_tok, "Please set the GITHUB_ACCESS_TOKEN environment variable"
-        headers = {"Authorization": f"token {gh_tok}"}
-        self.headers = headers
+        username = os.environ.get("GITHUB_USER")
+        assert username, "Please set the GITHUB_USER environment variable"
+        auth = (username, gh_tok)
+        self.auth = auth
 
     def get_repo_record(self, text: str) -> list:
         """
@@ -116,9 +119,11 @@ class RepoRetriever:
         :param size_range: range of sizes (in kb) to include in the query - used to get around the 1000 search result cap
         :return: list of formatted size ranges
         """
+        time.sleep(self.rate_limit_interval)
+        eleven_gb = 11000000000
         if not size_range:
             gt = self.get_size_partitions(topic, [0, 1000])
-            lt = self.get_size_partitions(topic, [1001, None])
+            lt = self.get_size_partitions(topic, [1001, eleven_gb])
             return gt + lt
         fmt_size_range = (
             f"{size_range[0]}..{size_range[1]}"
@@ -128,25 +133,22 @@ class RepoRetriever:
         repo_resp = requests.get(
             "https://api.github.com/search/repositories?"
             f"q=topic:{topic} size:{fmt_size_range}&sort=stars&order=desc&per_page=1",
-            headers=self.headers,
+            auth=self.auth,
         )
         repo_resp_js = repo_resp.json()
         if repo_resp_js.get("incomplete_results"):
             print(f"Incomplete results for {topic}, {repo_resp_js['total_count']}")
-            time.sleep(5)
             return self.get_size_partitions(topic, size_range)
-        if repo_resp_js.get("total_count", 10000000000) > 1000:
-            gt = self.get_size_partitions(
-                topic, [size_range[0], round(size_range[1] / 2)]
-            )
-            lt = self.get_size_partitions(
-                topic, [round(size_range[1] / 2) + 1, size_range[1]]
-            )
+        result_count = repo_resp_js.get("total_count", eleven_gb)
+        if result_count > 1000:
+            midpoint = size_range[0] + round((size_range[1] - size_range[0]) / 2)
+            gt = self.get_size_partitions(topic, [size_range[0], midpoint])
+            lt = self.get_size_partitions(topic, [midpoint + 1, size_range[1]])
             return gt + lt
-        return [fmt_size_range]
+        elif result_count == 0:
+            return []
+        return [(fmt_size_range, result_count)]
 
-    @sleep_and_retry
-    @limits(calls=5000, period=60 * 60)
     def get_topic_page(self, topic: str, size_range: str, page: int = 1) -> list:
         """
         Get a page of topic repos
@@ -155,22 +157,23 @@ class RepoRetriever:
         :param page: page of topic results to retrieve
         :return: list of repos
         """
+        time.sleep(self.rate_limit_interval)
         repo_resp = requests.get(
             "https://api.github.com/search/repositories?"
             f"q=topic:{topic} size:{size_range}&sort=stars&order=desc&page={page}&per_page=100",
-            headers=self.headers,
+            auth=self.auth,
         )
         repo_resp_js = repo_resp.json()
         if repo_resp_js.get("incomplete_results"):
             print(f"Incomplete results for {topic}, {repo_resp_js['total_count']}")
-            time.sleep(10)
             return self.get_topic_page(topic, size_range, page)
         if "items" not in repo_resp_js:
             print(repo_resp_js)
-        if page == 1:
-            print(
-                f"Retrieving {repo_resp_js['total_count']} repos for page {page} of {topic} in size range {size_range}"
-            )
+            return []
+        print(
+            f"Retrieved {len(repo_resp_js['items'])}/{repo_resp_js['total_count']} repos for page {page} of {topic} "
+            f"in size range {size_range}"
+        )
         return repo_resp_js["items"]
 
     def read_topic_repos(self) -> Generator:
@@ -184,11 +187,11 @@ class RepoRetriever:
                 topic = line.strip()
                 if not topic:
                     continue
-                page = 1
                 size_ranges = self.get_size_partitions(topic)
-                for size_range in size_ranges:
-                    topic_repos = self.get_topic_page(topic, size_range, page)
-                    while len(topic_repos):
+                for size_range, interval_count in size_ranges:
+                    page = 1
+                    while page <= int(interval_count / 100) + 1:
+                        topic_repos = self.get_topic_page(topic, size_range, page)
                         for repo in topic_repos:
                             owner_name, repo_name = repo["full_name"].split("/")
                             yield {
@@ -198,7 +201,6 @@ class RepoRetriever:
                                 "sources": [f"topic: {topic}"],
                             }
                         page += 1
-                        topic_repos = self.get_topic_page(topic, size_range, page)
 
     def get_repos(self, query_bq: bool, query_topics: bool) -> Generator:
         """
