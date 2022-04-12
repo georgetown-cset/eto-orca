@@ -24,7 +24,7 @@ Retrieves repos from:
 
 
 class RepoRetriever:
-    rate_limit_interval = 60 * 60 / 5000 + 0.1
+    rate_limit_interval = 60 * 60 / 5000 + 0.2
 
     def __init__(self):
         gh_tok = os.environ.get("GITHUB_ACCESS_TOKEN")
@@ -139,6 +139,10 @@ class RepoRetriever:
         if repo_resp_js.get("incomplete_results"):
             print(f"Incomplete results for {topic}, {repo_resp_js['total_count']}")
             return self.get_size_partitions(topic, size_range)
+        if "items" not in repo_resp_js:
+            print(f"{repo_resp_js}, retrying in 3 seconds")
+            time.sleep(3)
+            return self.get_size_partitions(topic, size_range)
         result_count = repo_resp_js.get("total_count", eleven_gb)
         if result_count > 1000:
             midpoint = size_range[0] + round((size_range[1] - size_range[0]) / 2)
@@ -168,8 +172,9 @@ class RepoRetriever:
             print(f"Incomplete results for {topic}, {repo_resp_js['total_count']}")
             return self.get_topic_page(topic, size_range, page)
         if "items" not in repo_resp_js:
-            print(repo_resp_js)
-            return []
+            print(f"{repo_resp_js}, retrying in 3 seconds")
+            time.sleep(3)
+            return self.get_topic_page(topic, size_range, page)
         print(
             f"Retrieved {len(repo_resp_js['items'])}/{repo_resp_js['total_count']} repos for page {page} of {topic} "
             f"in size range {size_range}"
