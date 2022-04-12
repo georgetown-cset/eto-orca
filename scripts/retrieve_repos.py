@@ -204,6 +204,7 @@ class RepoRetriever:
                                 "repo_name": repo_name,
                                 "owner_name": owner_name,
                                 "sources": [f"topic: {topic}"],
+                                "full_metadata": repo,
                             }
                         page += 1
 
