@@ -84,12 +84,12 @@ Chinese -> China
 ```
 
 After this process, the following secondary replacements were __deleted__:
-
+<!-- 
 ```
 "(.*?)supported\sby\sthe\s"
 "^supported\sby\s"
 "^the\s"
-```
+``` -->
 
 And leading/trailing whitespace and quotations were trimmed.
 
@@ -118,13 +118,14 @@ There are some acronyms which are clearly not matchable. For example, `Arachidon
 At this point, there are acronyms with multiple _correct_ matches. The purpose of matching acronyms to funders is to get the correct funder when the `funder` column has the acronym in question. The most common match is usually the correct one. Using `ROW_NUMBER()`, I chose to drop the rest which are often different spelling conventions or less common.
 
 
-(Do another query to get exact number of reduced matches)
+Update: There are 57,071 in total and 14,992 after dropping duplicates. This is slightly problematic.
 
 ### Clean without Parentheses
 
 `clean_wo_parentheses.sql -> gcp-cset-projects.cset_intern_jms727.clean_wo_parentheses`
 
-This process makes a moderately risky choice of clearing all characters not in `[^a-zA-Z0-9\s\-]` over all ASCII-only strings. Because of this, we only select the 
+This process makes a moderately risky choice of clearing all characters not in `[^a-zA-Z0-9\s\-]` over all ASCII-only strings. Because of this, we only select from strings without parentheses (and should do something else too...)
+ <!-- Not sure why this cut off the first time?  -->
 
 Additionally, this demonstrates the iterative process that can be used across overlapping strings, where we combine in the next step.
 
@@ -139,6 +140,17 @@ Example:
 
 are all normalized to `100 TALENTS PLAN OF HEBEI PROVINCE`.
 
+There are 645,595 distinct values out of 718,066 after running this operation.
+
+### Translations
+
+After removing non distinct values, there was an issue with the final dataset ballooning by a few thousand entries.
+2079826
+1948460
+2088070
+
+I didn't want to deal with that for now... so I just took the first one and hoped for the best. Update: well, that was not so good an idea. Need to go over this... basically right now with the `all` filter we get 2 values for 59 and 60. Why wouldn't a distinct work? Brain freeze moment...
+
 
 ### Combine
 
@@ -150,10 +162,32 @@ Applies the above process into columns and the rudimentary cleaning process desc
 
 `final_matcher.sql -> gcp-cset-projects.cset_intern_jms727.final_matcher`
 
-Takes the first match by order of importance: acronym_match, parentheses_match, otherwise_cleaned.
+Takes the first match by order of importance: foreign_match, acronym_match, parentheses_match, otherwise_cleaned.
 
 
-(need to add exact counts at each step)
+Exact counts:
+
+`otherwise_cleaned` only.
+4,007,076
+
+`acronym_match`, `parentheses_match`, `otherwise_cleaned`.
+3,988,654
+
+
+Also including `foreign_match`: 4,003,730 distinct values. Need to do a sanity check on this. Also fix whitespace when making `& -> and` replacements.
+
+
+So when we want the final name across all aggregated names, do another `ROW_COUNT` and get the top original result for each match.
+
+Also in the acronym to funder part, didn't trim trailing quotations, so need to fix that as well. 
+
+
+`KETEP` (page 4-5) example of something with massive duplication - did not catch that with the current process.
+
+
+But anyway for purposes of this... already cuts it down a lot, maybe work on the infrastructure a bit first s.t. final science map is no longer duplicated?
+
+`cset_intern_jms727.acronym_to_funder_all` lists all the acronym-funder relationships.
 
 ### Limitations
 
@@ -178,3 +212,6 @@ There are two potential issues: the possible combinations of millions of unique 
 The main problem is strings with levenshtein distance that are close to each other but functionally different.
 
 Further exploration can address these issues.
+
+
+Think more about various other characters - remove all hyphens/quotations/periods aggressive cleaning vs other approaches
