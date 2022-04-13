@@ -7,7 +7,7 @@ from itertools import chain
 from typing import Generator
 
 import requests
-from github_auth import mk_auth
+from github_config import RATE_LIMIT_INTERVAL, mk_auth
 from google.cloud import bigquery
 
 """
@@ -25,8 +25,6 @@ Retrieves repos from:
 
 
 class RepoRetriever:
-    rate_limit_interval = 60 * 60 / 5000 + 0.2
-
     def __init__(self):
         self.auth = mk_auth()
 
@@ -115,7 +113,7 @@ class RepoRetriever:
         :param size_range: range of sizes (in kb) to include in the query - used to get around the 1000 search result cap
         :return: list of formatted size ranges
         """
-        time.sleep(self.rate_limit_interval)
+        time.sleep(RATE_LIMIT_INTERVAL)
         eleven_gb = 11000000000
         if not size_range:
             gt = self.get_size_partitions(topic, [0, 1000])
@@ -157,7 +155,7 @@ class RepoRetriever:
         :param page: page of topic results to retrieve
         :return: list of repos
         """
-        time.sleep(self.rate_limit_interval)
+        time.sleep(RATE_LIMIT_INTERVAL)
         repo_resp = requests.get(
             "https://api.github.com/search/repositories?"
             f"q=topic:{topic} size:{size_range}&sort=stars&order=desc&page={page}&per_page=100",

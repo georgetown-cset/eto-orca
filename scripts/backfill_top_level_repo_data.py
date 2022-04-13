@@ -1,8 +1,9 @@
 import argparse
 import json
+import time
 
 import requests
-from github_auth import mk_auth
+from github_config import RATE_LIMIT_INTERVAL, mk_auth
 
 
 def get_meta(owner: str, repo: str) -> dict:
@@ -11,7 +12,11 @@ def get_meta(owner: str, repo: str) -> dict:
         f"https://api.github.com/repos/{owner}/{repo}",
         auth=auth,
     )
-    return repo_resp
+    if repo_resp.status_code != 200:
+        print(repo_resp.json())
+        time.sleep(3)
+        return get_meta(owner, repo)
+    return repo_resp.json()
 
 
 def backfill_meta(input_data: str, output_data: str) -> None:
@@ -21,6 +26,7 @@ def backfill_meta(input_data: str, output_data: str) -> None:
             js = json.loads(line)
             if not js.get("full_metadata"):
                 js["full_metadata"] = get_meta(js["owner_name"], js["repo_name"])
+                time.sleep(RATE_LIMIT_INTERVAL)
             out.write(json.dumps(js) + "\n")
     out.close()
 
