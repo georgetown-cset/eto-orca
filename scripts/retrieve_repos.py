@@ -254,6 +254,8 @@ class RepoRetriever:
                 prev_meta = repo_to_meta.get(url)
                 if prev_meta and repo["sources"][0] not in prev_meta["sources"]:
                     prev_meta["sources"].extend(repo["sources"])
+                    if repo.get("full_metadata"):
+                        prev_meta["full_metadata"] = repo["full_metadata"]
                 else:
                     repo_to_meta[url] = repo
             for repo in repo_to_meta:
