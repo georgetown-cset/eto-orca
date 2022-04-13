@@ -1,28 +1,21 @@
--- foreign_funder_translations_tr
-SELECT
-  *
-FROM (
+  -- Cleaned foreign funder matcher
+  -- 2,056,387 distinct on `fund_org` out of 2,109,833
+  (
   SELECT
-    *,
-    ROW_NUMBER() OVER(PARTITION BY fundorg_tr) rn
+    fund_org,
+    fund_org_en
   FROM (
     SELECT
-      DISTINCT fundorg_tr,
-      fundorg_en
-    FROM
-      -- there are duplicates
-      (
+      DISTINCT fund_org_en,
+      fund_org,
+      ROW_NUMBER() OVER(PARTITION BY fund_org) rn
+    FROM (
       SELECT
-        TRIM(UPPER(TRIM(TRIM(TRIM(TRIM(stage_1_en, r'"'), r'\''), r'$'), r'#'))) AS fundorg_en,
-        TRIM(UPPER(TRIM(TRIM(TRIM(TRIM(stage_1, r'"'), r'\''), r'$'), r'#'))) AS fundorg_tr,
-      FROM (
-        SELECT
-          REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(fund_org_en, "&", "and"), "Chinese", "China"), r"UK ", r"United Kingdom "), "U.S.", "United States"), r"US ", r"United States ") AS stage_1_en,
-          REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(fund_org, "&", "and"), "Chinese", "China"), r"UK ", r"United Kingdom "), "U.S.", "United States"), r"US ", r"United States ") AS stage_1
-        FROM
-          `gcp-cset-projects.cset_intern_jms727.fundorg_translations` a)
-        ) ))
-WHERE
-  rn = 1
-ORDER BY
-  fundorg_tr ASC
+        UPPER(TRIM(REGEXP_REPLACE(REPLACE(fund_org_en, "&", "and"), r'[+\-\[\]{}<>?*^%#@$"\':.,/-]', ''))) AS fund_org_en,
+        -- cleaning
+        UPPER(TRIM(REGEXP_REPLACE(REPLACE(fund_org, "&", "and"), r'[+\-\[\]{}<>?*^%#@$"\':.,/-]', ''))) AS fund_org,
+      FROM
+        `gcp-cset-projects.cset_intern_jms727.fundorg_translations` a ) )
+  WHERE
+    rn = 1 -- distinct on fund_org
+    )
