@@ -7,8 +7,9 @@ from itertools import chain
 from typing import Generator
 
 import requests
-from github_config import RATE_LIMIT_INTERVAL, mk_auth
 from google.cloud import bigquery
+
+from scripts.github_config import RATE_LIMIT_INTERVAL, mk_auth
 
 """
 Retrieves repos from:
@@ -25,8 +26,8 @@ Retrieves repos from:
 
 
 class RepoRetriever:
-    def __init__(self):
-        self.auth = mk_auth()
+    def __init__(self, is_test=False):
+        self.auth = () if is_test else mk_auth()
 
     def get_repo_record(self, text: str) -> list:
         """

@@ -3,7 +3,8 @@ import json
 import time
 
 import requests
-from github_config import RATE_LIMIT_INTERVAL, mk_auth
+
+from scripts.github_config import RATE_LIMIT_INTERVAL, mk_auth
 
 
 def get_meta(owner: str, repo: str) -> dict:
