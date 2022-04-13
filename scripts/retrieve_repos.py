@@ -7,6 +7,7 @@ from itertools import chain
 from typing import Generator
 
 import requests
+from github_auth import mk_auth
 from google.cloud import bigquery
 
 """
@@ -27,12 +28,7 @@ class RepoRetriever:
     rate_limit_interval = 60 * 60 / 5000 + 0.2
 
     def __init__(self):
-        gh_tok = os.environ.get("GITHUB_ACCESS_TOKEN")
-        assert gh_tok, "Please set the GITHUB_ACCESS_TOKEN environment variable"
-        username = os.environ.get("GITHUB_USER")
-        assert username, "Please set the GITHUB_USER environment variable"
-        auth = (username, gh_tok)
-        self.auth = auth
+        self.auth = mk_auth()
 
     def get_repo_record(self, text: str) -> list:
         """
