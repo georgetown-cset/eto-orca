@@ -38,7 +38,10 @@ def process_payload(pushEvent):
 
 def process_company(company):
     """ Pings the Github API for the linked @company and return the full name """
-    companydata = g.get_organization(company)
+    try:
+        companydata = g.get_organization(company)
+    except:
+        return None, None, None, None
 
     if companydata.location:
         location = companydata.location
@@ -60,8 +63,10 @@ def process_company(company):
 
 def process_user(username):
     """ Pings the Github API for the user and extracts user data, including bio from the Github API """
-    userdata = g.get_user(username)
-
+    try:
+        userdata = g.get_user(username)
+    except:
+        return None, None, None, None, None, None
     if userdata.location:
         location = userdata.location
     else:
@@ -87,7 +92,7 @@ def process_user(username):
 def extract_company(userdata):
     """ Multi-step process to extract possible company names, if possible from the Github API user data. """
 
-    possiblities = []
+    possibilities = []
 
     # Attempt to extract from the user bio. Common formats:
     # Lead engineer @ Simple.org; formerly @ GitHub, Cognitect, and others. Human centered software development.
@@ -98,19 +103,26 @@ def extract_company(userdata):
         # add whitespace for match
         
         companies = re.findall("\@\s?(.*?)\s", userdata.bio + " ")
-        possiblities.extend(companies)
+        for i in companies:
+            possibilities.append(companies)
 
         # repeat process with "at"
-        possiblities.extend(re.findall("(?=at\s.*?(\w+))", userdata.bio))
+        companies_at = re.findall("(?=at\s.*?(\w+))", userdata.bio)
 
+        for i in companies_at:
+            possibilities.append(companies_at)
+    else:
+        companies = None
 
     # if the @ reference is correct, embed in extract_company
     if companies:
-
-        companyname = g.get_organization(companies[0]).name
-
+        try:
+            companyname = g.get_organization(companies[0]).name
+        except:
+            companyname = None
+        
         if companyname:
-            possiblities.extend(companyname)
+            possibilities.append(companyname)
 
     # add names public orgs
     orgs = userdata.get_orgs()
@@ -118,17 +130,20 @@ def extract_company(userdata):
         for org in list(orgs):
             companyname = org.name
             website = org.blog
-            possiblities.extend(companyname)
+            possibilities.append(companyname)
 
             if website:
-                possiblities.extend(website)
+                possibilities.append(website)
 
 
     # Attempt to extract from the email domain
     if userdata.email:
-        possiblities.extend(re.findall("\@(.*)", userdata.email)) # probably filter out email
+        emails = re.findall("\@(.*)", userdata.email) # probably filter out email
+        for i in emails:
+            possibilities.append(emails)
+    # breakpoint()
 
-    return possiblities
+    return possibilities
 
 # add: from company name userdata.company -> ping API again, get full/real company name
 
