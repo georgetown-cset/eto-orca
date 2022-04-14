@@ -104,13 +104,15 @@ def extract_company(userdata):
         
         companies = re.findall("\@\s?(.*?)\s", userdata.bio + " ")
         for i in companies:
-            possibilities.append(companies)
+            # print(i)
+            possibilities.append(i)
 
         # repeat process with "at"
         companies_at = re.findall("(?=at\s.*?(\w+))", userdata.bio)
 
         for i in companies_at:
-            possibilities.append(companies_at)
+            # print(i)
+            possibilities.append(i)
     else:
         companies = None
 
@@ -122,6 +124,7 @@ def extract_company(userdata):
             companyname = None
         
         if companyname:
+            # print(companyname)
             possibilities.append(companyname)
 
     # add names public orgs
@@ -130,9 +133,11 @@ def extract_company(userdata):
         for org in list(orgs):
             companyname = org.name
             website = org.blog
+            # print(companyname)
             possibilities.append(companyname)
 
             if website:
+                # print(website)
                 possibilities.append(website)
 
 
@@ -140,7 +145,8 @@ def extract_company(userdata):
     if userdata.email:
         emails = re.findall("\@(.*)", userdata.email) # probably filter out email
         for i in emails:
-            possibilities.append(emails)
+            # print(i)
+            possibilities.append(i)
     # breakpoint()
 
     return possibilities
@@ -166,7 +172,7 @@ if __name__ == "__main__":
     filtered = filtered.drop_duplicates(subset=["other"])
 
     a = time.time()
-    for i, row in filtered.iloc[0:100].iterrows():
+    for i, row in filtered.iloc[0:10].iterrows():
         result = process_payload(row)
         print(result)
     b = time.time()
