@@ -14,9 +14,8 @@ def get_meta(owner: str, repo: str) -> dict:
         auth=auth,
     )
     if repo_resp.status_code != 200:
-        print(repo_resp.json())
-        time.sleep(3)
-        return get_meta(owner, repo)
+        print(f"{owner}/{repo}: {repo_resp.json()}")
+        return {}
     return repo_resp.json()
 
 
