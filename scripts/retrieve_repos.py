@@ -36,7 +36,7 @@ class RepoRetriever:
         :return: A list of dicts of the github urls' components, or None if no repo was found
         """
         url_matches = re.findall(
-            r"(?i)github.com/([A-Za-z0-9-_.]+)/([A-Za-z0-9-_]+)", text
+            r"(?i)github.com/([A-Za-z0-9-_.]+)/([A-Za-z0-9-_.]*[A-Za-z0-9-_])", text
         )
         return [
             {
