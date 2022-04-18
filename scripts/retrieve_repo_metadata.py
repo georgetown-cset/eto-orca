@@ -8,15 +8,12 @@ from ratelimit import limits, sleep_and_retry
 
 @sleep_and_retry
 @limits(calls=1, period=1)
-def add_scraped_meta(repo_record: dict, refresh: bool) -> None:
+def add_scraped_meta(repo_record: dict) -> None:
     """
     Augments repo metadata retrieved from gh API with scraped metadata
     :param repo_record: dict containing metadata scraped from gh API
-    :param refresh: if true, will refresh previously collected data
     :return: None (mutates `repo_record`)
     """
-    if repo_record.get("readme_text") and not refresh:
-        return
     owner_name = repo_record["owner_name"]
     repo_name = repo_record["repo_name"]
     try:
@@ -72,7 +69,8 @@ def add_metadata(input_fi: str, output_fi: str, refresh: bool) -> None:
                 continue
             else:
                 seen.add(js["url"])
-            add_scraped_meta(js, refresh)
+            if (not js.get("readme_text")) or refresh:
+                add_scraped_meta(js, refresh)
             out.write(json.dumps(js) + "\n")
     out.close()
 
