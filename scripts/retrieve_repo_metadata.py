@@ -70,7 +70,7 @@ def add_metadata(input_fi: str, output_fi: str, refresh: bool) -> None:
             else:
                 seen.add(js["url"])
             if (not js.get("readme_text")) or refresh:
-                add_scraped_meta(js, refresh)
+                add_scraped_meta(js)
             out.write(json.dumps(js) + "\n")
     out.close()
 
