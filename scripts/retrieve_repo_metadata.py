@@ -64,9 +64,14 @@ def add_metadata(input_fi: str, output_fi: str, refresh: bool) -> None:
     :return: None
     """
     out = open(output_fi, mode="w")
+    seen = set()
     with open(input_fi) as f:
         for line in f:
             js = json.loads(line)
+            if js["url"] in seen:
+                continue
+            else:
+                seen.add(js["url"])
             add_scraped_meta(js, refresh)
             out.write(json.dumps(js) + "\n")
     out.close()
