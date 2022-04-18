@@ -7,13 +7,16 @@ from ratelimit import limits, sleep_and_retry
 
 
 @sleep_and_retry
-@limits(calls=1, period=5)
-def add_scraped_meta(repo_record: dict) -> None:
+@limits(calls=1, period=1)
+def add_scraped_meta(repo_record: dict, refresh: bool) -> None:
     """
     Augments repo metadata retrieved from gh API with scraped metadata
     :param repo_record: dict containing metadata scraped from gh API
+    :param refresh: if true, will refresh previously collected data
     :return: None (mutates `repo_record`)
     """
+    if repo_record.get("readme_text") and not refresh:
+        return
     owner_name = repo_record["owner_name"]
     repo_name = repo_record["repo_name"]
     try:
@@ -52,18 +55,19 @@ def add_scraped_meta(repo_record: dict) -> None:
         print(e)
 
 
-def add_metadata(input_fi: str, output_fi: str) -> None:
+def add_metadata(input_fi: str, output_fi: str, refresh: bool) -> None:
     """
     Adds scraped metadata to each line of a jsonl input file of repo metadata from gh API
     :param input_fi: jsonl input file of repo metadata from gh API
     :param output_fi: file where augmented metadata outputs should be written
+    :param refresh: if true, will refresh previously collected data
     :return: None
     """
     out = open(output_fi, mode="w")
     with open(input_fi) as f:
         for line in f:
             js = json.loads(line)
-            add_scraped_meta(js)
+            add_scraped_meta(js, refresh)
             out.write(json.dumps(js) + "\n")
     out.close()
 
@@ -72,6 +76,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("input_repos")
     parser.add_argument("output_fi")
+    parser.add_argument("--refresh", default=False, action="store_true")
     args = parser.parse_args()
 
-    add_metadata(args.input_repos, args.output_fi)
+    add_metadata(args.input_repos, args.output_fi, args.refresh)
