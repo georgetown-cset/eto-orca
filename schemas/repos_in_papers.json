@@ -1,0 +1,17 @@
+[
+  {
+    "mode": "NULLABLE",
+    "name": "repo",
+    "type": "STRING"
+  },
+  {
+    "mode": "REPEATED",
+    "name": "datasets",
+    "type": "STRING"
+  },
+  {
+    "mode": "REPEATED",
+    "name": "merged_ids",
+    "type": "STRING"
+  }
+]

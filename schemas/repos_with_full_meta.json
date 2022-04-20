@@ -1,0 +1,1689 @@
+[
+  {
+    "mode": "NULLABLE",
+    "name": "readme_text",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "used_by",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "num_commits",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "owner_name",
+    "type": "STRING"
+  },
+  {
+    "fields": [
+      {
+        "fields": [
+          {
+            "mode": "NULLABLE",
+            "name": "forks",
+            "type": "INTEGER"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "allow_forking",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "watchers",
+            "type": "INTEGER"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "open_issues_count",
+            "type": "INTEGER"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "disabled",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "mirror_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "forks_count",
+            "type": "INTEGER"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "has_wiki",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "has_projects",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "language",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "watchers_count",
+            "type": "INTEGER"
+          },
+          {
+            "mode": "REPEATED",
+            "name": "topics",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "stargazers_count",
+            "type": "INTEGER"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "homepage",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "ssh_url",
+            "type": "STRING"
+          },
+          {
+            "description": "bq-datetime",
+            "mode": "NULLABLE",
+            "name": "updated_at",
+            "type": "TIMESTAMP"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "assignees_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "milestones_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "downloads_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "id",
+            "type": "INTEGER"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "stargazers_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "notifications_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "merges_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "issue_comment_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "has_pages",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "issues_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "license",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "comments_url",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "NULLABLE",
+                "name": "site_admin",
+                "type": "BOOLEAN"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "type",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "received_events_url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "events_url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "subscriptions_url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "gists_url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "id",
+                "type": "INTEGER"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "followers_url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "starred_url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "repos_url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "organizations_url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "login",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "html_url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "following_url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "gravatar_id",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "avatar_url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "node_id",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "owner",
+            "type": "RECORD"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "git_commits_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "size",
+            "type": "INTEGER"
+          },
+          {
+            "description": "bq-datetime",
+            "mode": "NULLABLE",
+            "name": "created_at",
+            "type": "TIMESTAMP"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "deployments_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "visibility",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "blobs_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "commits_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "releases_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "subscribers_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "archived",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "pulls_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "open_issues",
+            "type": "INTEGER"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "git_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "compare_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "archive_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "languages_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "keys_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "statuses_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "trees_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "git_tags_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "forks_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "branches_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "labels_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "subscription_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "svn_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "events_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "default_branch",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "hooks_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "teams_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "name",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "has_downloads",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "fork",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "is_template",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "contributors_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "description",
+            "type": "STRING"
+          },
+          {
+            "description": "bq-datetime",
+            "mode": "NULLABLE",
+            "name": "pushed_at",
+            "type": "TIMESTAMP"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "collaborators_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "node_id",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "contents_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "html_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "clone_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "issue_events_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "full_name",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "has_issues",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "tags_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "git_refs_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "private",
+            "type": "BOOLEAN"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "parent",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "network_count",
+        "type": "INTEGER"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "forks",
+        "type": "INTEGER"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "allow_forking",
+        "type": "BOOLEAN"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "watchers",
+        "type": "INTEGER"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "open_issues_count",
+        "type": "INTEGER"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "disabled",
+        "type": "BOOLEAN"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "mirror_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "forks_count",
+        "type": "INTEGER"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "has_wiki",
+        "type": "BOOLEAN"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "has_projects",
+        "type": "BOOLEAN"
+      },
+      {
+        "fields": [
+          {
+            "mode": "NULLABLE",
+            "name": "pull",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "triage",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "maintain",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "push",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "admin",
+            "type": "BOOLEAN"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "permissions",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "language",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "watchers_count",
+        "type": "INTEGER"
+      },
+      {
+        "mode": "REPEATED",
+        "name": "topics",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "stargazers_count",
+        "type": "INTEGER"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "homepage",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "ssh_url",
+        "type": "STRING"
+      },
+      {
+        "description": "bq-datetime",
+        "mode": "NULLABLE",
+        "name": "updated_at",
+        "type": "TIMESTAMP"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "assignees_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "milestones_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "downloads_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "id",
+        "type": "INTEGER"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "stargazers_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "notifications_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "merges_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "issue_comment_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "has_pages",
+        "type": "BOOLEAN"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "issues_url",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "NULLABLE",
+            "name": "node_id",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "spdx_id",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "name",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "key",
+            "type": "STRING"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "license",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "comments_url",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "NULLABLE",
+            "name": "site_admin",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "type",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "received_events_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "events_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "subscriptions_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "gists_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "id",
+            "type": "INTEGER"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "followers_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "starred_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "repos_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "organizations_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "login",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "html_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "following_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "gravatar_id",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "avatar_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "node_id",
+            "type": "STRING"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "owner",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "git_commits_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "size",
+        "type": "INTEGER"
+      },
+      {
+        "description": "bq-datetime",
+        "mode": "NULLABLE",
+        "name": "created_at",
+        "type": "TIMESTAMP"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "subscribers_count",
+        "type": "INTEGER"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deployments_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "visibility",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "blobs_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "commits_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "releases_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "subscribers_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "archived",
+        "type": "BOOLEAN"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "pulls_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "open_issues",
+        "type": "INTEGER"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "git_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "compare_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "archive_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "languages_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "keys_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "statuses_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "trees_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "git_tags_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "temp_clone_token",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "forks_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "branches_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "labels_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "subscription_url",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "NULLABLE",
+            "name": "site_admin",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "type",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "received_events_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "events_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "subscriptions_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "gists_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "id",
+            "type": "INTEGER"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "followers_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "starred_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "repos_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "organizations_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "login",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "html_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "following_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "gravatar_id",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "avatar_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "node_id",
+            "type": "STRING"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "organization",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "svn_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "events_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "default_branch",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "hooks_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "teams_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "name",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "has_downloads",
+        "type": "BOOLEAN"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "fork",
+        "type": "BOOLEAN"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "is_template",
+        "type": "BOOLEAN"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "contributors_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "description",
+        "type": "STRING"
+      },
+      {
+        "description": "bq-datetime",
+        "mode": "NULLABLE",
+        "name": "pushed_at",
+        "type": "TIMESTAMP"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "collaborators_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "node_id",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "contents_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "url",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "NULLABLE",
+            "name": "forks",
+            "type": "INTEGER"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "allow_forking",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "watchers",
+            "type": "INTEGER"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "open_issues_count",
+            "type": "INTEGER"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "disabled",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "mirror_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "forks_count",
+            "type": "INTEGER"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "has_wiki",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "has_projects",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "language",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "watchers_count",
+            "type": "INTEGER"
+          },
+          {
+            "mode": "REPEATED",
+            "name": "topics",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "stargazers_count",
+            "type": "INTEGER"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "homepage",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "ssh_url",
+            "type": "STRING"
+          },
+          {
+            "description": "bq-datetime",
+            "mode": "NULLABLE",
+            "name": "updated_at",
+            "type": "TIMESTAMP"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "assignees_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "milestones_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "downloads_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "id",
+            "type": "INTEGER"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "stargazers_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "notifications_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "merges_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "issue_comment_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "has_pages",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "issues_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "license",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "comments_url",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "NULLABLE",
+                "name": "site_admin",
+                "type": "BOOLEAN"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "type",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "received_events_url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "events_url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "subscriptions_url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "gists_url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "id",
+                "type": "INTEGER"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "followers_url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "starred_url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "repos_url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "organizations_url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "login",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "html_url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "following_url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "gravatar_id",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "avatar_url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "node_id",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "owner",
+            "type": "RECORD"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "git_commits_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "size",
+            "type": "INTEGER"
+          },
+          {
+            "description": "bq-datetime",
+            "mode": "NULLABLE",
+            "name": "created_at",
+            "type": "TIMESTAMP"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "deployments_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "visibility",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "blobs_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "commits_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "releases_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "subscribers_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "archived",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "pulls_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "open_issues",
+            "type": "INTEGER"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "git_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "compare_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "archive_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "languages_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "keys_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "statuses_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "trees_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "git_tags_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "forks_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "branches_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "labels_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "subscription_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "svn_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "events_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "default_branch",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "hooks_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "teams_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "name",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "has_downloads",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "fork",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "is_template",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "contributors_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "description",
+            "type": "STRING"
+          },
+          {
+            "description": "bq-datetime",
+            "mode": "NULLABLE",
+            "name": "pushed_at",
+            "type": "TIMESTAMP"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "collaborators_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "node_id",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "contents_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "html_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "clone_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "issue_events_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "full_name",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "has_issues",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "tags_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "git_refs_url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "private",
+            "type": "BOOLEAN"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "source",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "score",
+        "type": "FLOAT"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "html_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "clone_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "issue_events_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "full_name",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "has_issues",
+        "type": "BOOLEAN"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "tags_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "git_refs_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "private",
+        "type": "BOOLEAN"
+      }
+    ],
+    "mode": "NULLABLE",
+    "name": "full_metadata",
+    "type": "RECORD"
+  },
+  {
+    "mode": "REPEATED",
+    "name": "sources",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "num_releases",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "repo_name",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "homepage_text",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "num_contributors",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "url",
+    "type": "STRING"
+  }
+]
