@@ -2,149 +2,166 @@
   {
     "mode": "NULLABLE",
     "name": "owner_name",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "Repo owner name"
   },
   {
     "mode": "NULLABLE",
     "name": "matched_name",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "Repo name, as matched in search over CSET corpora (use to join on other tables)"
   },
   {
     "mode": "NULLABLE",
     "name": "current_name",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "Current repo name"
   },
   {
     "mode": "NULLABLE",
     "name": "used_by",
-    "type": "INTEGER"
+    "type": "INTEGER",
+    "description": "Number of projects that use this repo - this is self-reported, not always listed, and almost certainly an undercount in general"
   },
   {
     "mode": "NULLABLE",
     "name": "num_commits",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "Number of commits, as reported on the homepage of the repo. May be a range like 5000+"
   },
   {
     "mode": "NULLABLE",
     "name": "readme_text",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "Raw markdown of readme"
   },
   {
     "mode": "NULLABLE",
     "name": "network_count",
-    "type": "INTEGER"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "forks",
-    "type": "INTEGER"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "allow_forking",
-    "type": "BOOLEAN"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "watchers",
-    "type": "INTEGER"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "open_issues_count",
-    "type": "INTEGER"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "disabled",
-    "type": "BOOLEAN"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "mirror_url",
-    "type": "STRING"
+    "type": "INTEGER",
+    "description": "Number of forks in the network (e.g. of ancestor repos), example: https://github.com/mariru/dynamic_bernoulli_embeddings/network/members"
   },
   {
     "mode": "NULLABLE",
     "name": "forks_count",
-    "type": "INTEGER"
+    "type": "INTEGER",
+    "description": "Number of direct forks"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "allow_forking",
+    "type": "BOOLEAN",
+    "description": "If true, repo can be forked"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "open_issues_count",
+    "type": "INTEGER",
+    "description": "Number of open issues"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "disabled",
+    "type": "BOOLEAN",
+    "description": "True if repository is disabled"
   },
   {
     "mode": "NULLABLE",
     "name": "has_wiki",
-    "type": "BOOLEAN"
+    "type": "BOOLEAN",
+    "description": "True if repository has a wiki"
   },
   {
     "mode": "NULLABLE",
     "name": "has_projects",
-    "type": "BOOLEAN"
+    "type": "BOOLEAN",
+    "description": "True if repository has projects"
   },
   {
     "mode": "NULLABLE",
     "name": "primary_programming_language",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "Primary programming language of project, as reported on repo list views like https://github.com/georgetown-cset"
   },
   {
     "mode": "NULLABLE",
     "name": "watchers_count",
-    "type": "INTEGER"
+    "type": "INTEGER",
+    "description": "Number of watchers"
   },
   {
     "mode": "REPEATED",
     "name": "topics",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "Repo's topic tags"
   },
   {
     "mode": "NULLABLE",
     "name": "stargazers_count",
-    "type": "INTEGER"
+    "type": "INTEGER",
+    "description": "Number of stars"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "subscribers_count",
+    "type": "INTEGER",
+    "description": "Number of watchers"
   },
   {
     "mode": "NULLABLE",
     "name": "homepage",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "URL of external homepage"
   },
   {
     "mode": "NULLABLE",
     "name": "updated_at",
-    "type": "TIMESTAMP"
+    "type": "TIMESTAMP",
+    "description": "Time the repo was last updated (see: https://stackoverflow.com/questions/15918588/github-api-v3-what-is-the-difference-between-pushed-at-and-updated-at)"
   },
   {
     "mode": "NULLABLE",
     "name": "id",
-    "type": "INTEGER"
+    "type": "INTEGER",
+    "description": "Repo's github id"
   },
   {
     "mode": "NULLABLE",
     "name": "has_pages",
-    "type": "BOOLEAN"
+    "type": "BOOLEAN",
+    "description": "True if has github pages site"
   },
   {
     "fields": [
       {
         "mode": "NULLABLE",
         "name": "node_id",
-        "type": "STRING"
+        "type": "STRING",
+        "description": ""
       },
       {
         "mode": "NULLABLE",
         "name": "url",
-        "type": "STRING"
+        "type": "STRING",
+        "description": ""
       },
       {
         "mode": "NULLABLE",
         "name": "spdx_id",
-        "type": "STRING"
+        "type": "STRING",
+        "description": ""
       },
       {
         "mode": "NULLABLE",
         "name": "name",
-        "type": "STRING"
+        "type": "STRING",
+        "description": ""
       },
       {
         "mode": "NULLABLE",
         "name": "key",
-        "type": "STRING"
+        "type": "STRING",
+        "description": ""
       }
     ],
     "mode": "NULLABLE",
@@ -154,135 +171,125 @@
   {
     "mode": "NULLABLE",
     "name": "size",
-    "type": "INTEGER"
+    "type": "INTEGER",
+    "description": "Size of the repo, in kilobytes"
   },
   {
     "mode": "NULLABLE",
     "name": "created_at",
-    "type": "TIMESTAMP"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "subscribers_count",
-    "type": "INTEGER"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "visibility",
-    "type": "STRING"
+    "type": "TIMESTAMP",
+    "description": "Time when the repo was created (see: https://stackoverflow.com/questions/15918588/github-api-v3-what-is-the-difference-between-pushed-at-and-updated-at)"
   },
   {
     "mode": "NULLABLE",
     "name": "archived",
-    "type": "BOOLEAN"
+    "type": "BOOLEAN",
+    "description": "True if repo is archived"
   },
   {
     "mode": "NULLABLE",
     "name": "open_issues",
-    "type": "INTEGER"
+    "type": "INTEGER",
+    "description": "Number of open issues (open pull requests are included in this count)"
   },
   {
     "mode": "NULLABLE",
     "name": "default_branch",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "has_downloads",
-    "type": "BOOLEAN"
+    "type": "STRING",
+    "description": "Name of the default branch"
   },
   {
     "mode": "NULLABLE",
     "name": "fork",
-    "type": "BOOLEAN"
+    "type": "BOOLEAN",
+    "description": "True if this repo is a fork"
   },
   {
     "mode": "NULLABLE",
     "name": "is_template",
-    "type": "BOOLEAN"
+    "type": "BOOLEAN",
+    "description": "True if this repo is a template"
   },
   {
     "mode": "NULLABLE",
     "name": "description",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "User-provided short description of the repo"
   },
   {
     "mode": "NULLABLE",
     "name": "pushed_at",
-    "type": "TIMESTAMP"
+    "type": "TIMESTAMP",
+    "description": "Time of last pushed commit (see: https://stackoverflow.com/questions/15918588/github-api-v3-what-is-the-difference-between-pushed-at-and-updated-at)"
   },
   {
     "mode": "NULLABLE",
     "name": "node_id",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "score",
-    "type": "FLOAT"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "full_name",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "Github node id of repo"
   },
   {
     "mode": "NULLABLE",
     "name": "has_issues",
-    "type": "BOOLEAN"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "private",
-    "type": "BOOLEAN"
+    "type": "BOOLEAN",
+    "description": "False if repo does not have issues enabled"
   },
   {
     "mode": "REPEATED",
     "name": "sources",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "Where CSET found the repo. For scholarly lit, one of 'title+abstract' (of merged scholarly lit), 'pwc' (as extracted by pwc), 'cnki' (fulltext), 'arxiv' (fulltext); for topic queries, 'topic: <name of the topic>'"
   },
   {
     "mode": "NULLABLE",
     "name": "num_releases",
-    "type": "INTEGER"
+    "type": "INTEGER",
+    "description": "Number of releases"
   },
   {
     "mode": "NULLABLE",
     "name": "num_contributors",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "Number of contributors. May be a range, like 5,000+"
   },
   {
     "fields": [
       {
         "mode": "NULLABLE",
         "name": "owner_name",
-        "type": "STRING"
+        "type": "STRING",
+        "description": "Repo owner name"
       },
       {
         "mode": "NULLABLE",
         "name": "repo_name",
-        "type": "STRING"
+        "type": "STRING",
+        "description": "Current repo name"
       }
     ],
     "mode": "NULLABLE",
     "name": "fork_of",
-    "type": "RECORD"
+    "type": "RECORD",
+    "description": "Repo this repo was directly forked from, if forked"
   },
   {
     "fields": [
       {
         "mode": "NULLABLE",
         "name": "owner_name",
-        "type": "STRING"
+        "type": "STRING",
+        "description": "Repo owner name"
       },
       {
         "mode": "NULLABLE",
         "name": "repo_name",
-        "type": "STRING"
+        "type": "STRING",
+        "description": "Current repo name"
       }
     ],
     "mode": "NULLABLE",
     "name": "ultimate_fork_of",
-    "type": "RECORD"
+    "type": "RECORD",
+    "description": "Ultimate parent repo of this repo, if forked"
   }
 ]
