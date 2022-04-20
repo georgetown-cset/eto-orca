@@ -1,0 +1,125 @@
+[
+  {
+    "mode": "NULLABLE",
+    "name": "type",
+    "type": "STRING",
+    "description": "githubarchive event type"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "public",
+    "type": "BOOLEAN",
+    "description": "True if repo is public"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "payload",
+    "type": "STRING",
+    "description": "JSON of metadata describing the event"
+  },
+  {
+    "fields": [
+      {
+        "mode": "NULLABLE",
+        "name": "id",
+        "type": "INTEGER"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "name",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "url",
+        "type": "STRING"
+      }
+    ],
+    "mode": "NULLABLE",
+    "name": "repo",
+    "type": "RECORD",
+    "description": "Repository the action was taken on"
+  },
+  {
+    "fields": [
+      {
+        "mode": "NULLABLE",
+        "name": "id",
+        "type": "INTEGER"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "login",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "gravatar_id",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "avatar_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "url",
+        "type": "STRING"
+      }
+    ],
+    "mode": "NULLABLE",
+    "name": "actor",
+    "type": "RECORD",
+    "description": "Account that performed the action"
+  },
+  {
+    "fields": [
+      {
+        "mode": "NULLABLE",
+        "name": "id",
+        "type": "INTEGER"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "login",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "gravatar_id",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "avatar_url",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "url",
+        "type": "STRING"
+      }
+    ],
+    "mode": "NULLABLE",
+    "name": "org",
+    "type": "RECORD",
+    "description": "tk"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "created_at",
+    "type": "TIMESTAMP",
+    "description": "When the action happened"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "id",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "other",
+    "type": "STRING"
+  }
+]
