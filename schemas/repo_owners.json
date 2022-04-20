@@ -1,204 +1,122 @@
 [
   {
-    "mode": "NULLABLE",
-    "name": "has_repository_projects",
-    "type": "BOOLEAN"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "has_organization_projects",
-    "type": "BOOLEAN"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "description",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "public_members_url",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "issues_url",
-    "type": "STRING"
-  },
-  {
-    "description": "bq-datetime",
-    "mode": "NULLABLE",
-    "name": "created_at",
-    "type": "TIMESTAMP"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "members_url",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "followers",
-    "type": "INTEGER"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "is_verified",
-    "type": "BOOLEAN"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "public_repos",
-    "type": "INTEGER"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "twitter_username",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "email",
-    "type": "STRING"
-  },
-  {
-    "description": "bq-datetime",
-    "mode": "NULLABLE",
-    "name": "updated_at",
-    "type": "TIMESTAMP"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "site_admin",
-    "type": "BOOLEAN"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "type",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "received_events_url",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "hooks_url",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "company",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "following",
-    "type": "INTEGER"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "events_url",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "followers_url",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "subscriptions_url",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "hireable",
-    "type": "BOOLEAN"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "gists_url",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "public_gists",
-    "type": "INTEGER"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "bio",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "node_id",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "id",
-    "type": "INTEGER"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "starred_url",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "repos_url",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "organizations_url",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
+    "mode": "REQUIRED",
     "name": "login",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "html_url",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "blog",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "following_url",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "url",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "gravatar_id",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "location",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "Github login of owner (use to join on owner_name in other tables)"
   },
   {
     "mode": "NULLABLE",
     "name": "name",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "User-provided full name of the owner"
   },
   {
     "mode": "NULLABLE",
-    "name": "avatar_url",
-    "type": "STRING"
+    "name": "github_id",
+    "type": "INTEGER",
+    "description": "Numeric github id"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "description",
+    "type": "STRING",
+    "description": "User-provided bio or org description"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "location",
+    "type": "STRING",
+    "description": "Geographic location of owner"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "type",
+    "type": "STRING",
+    "description": "Type of owner - either 'User' or 'Organization'"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "blog",
+    "type": "STRING",
+    "description": "Link to owner's blog"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "public_gists_count",
+    "type": "INTEGER",
+    "description": "Count of public github gists: https://gist.github.com/"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "hireable",
+    "type": "BOOLEAN",
+    "description": "If owner is a user, is true if they have marked themselves as hireable"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "followers_count",
+    "type": "INTEGER",
+    "description": "Number of owner's followers. At the moment, this is only non-zero for users"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "following_count",
+    "type": "INTEGER",
+    "description": "Number of accounts owner is following. At the moment, this is only non-zero for users"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "company",
+    "type": "STRING",
+    "description": "Name or github login of owner's company. Mostly present for users"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "site_admin",
+    "type": "BOOLEAN",
+    "description": "True if user can manage enterprise users, organizations, and repositories"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "email",
+    "type": "STRING",
+    "description": "Owner's email"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "twitter_username",
+    "type": "STRING",
+    "description": "Owner's twitter username"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "is_verified",
+    "type": "BOOLEAN",
+    "description": "True if owner is an organization that has been verified (null for users)"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "has_organization_projects",
+    "type": "BOOLEAN",
+    "description": "True if owner is an organization that has organization-level projects"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "has_repository_projects",
+    "type": "BOOLEAN",
+    "description": "True if owner is an organization that has repository-level projects"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "created_at",
+    "type": "TIMESTAMP",
+    "description": "When the owner was created"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "updated_at",
+    "type": "TIMESTAMP",
+    "description": "When the owner was last updated"
   }
 ]

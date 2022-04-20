@@ -1,0 +1,204 @@
+[
+  {
+    "mode": "NULLABLE",
+    "name": "has_repository_projects",
+    "type": "BOOLEAN"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "has_organization_projects",
+    "type": "BOOLEAN"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "description",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "public_members_url",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "issues_url",
+    "type": "STRING"
+  },
+  {
+    "description": "bq-datetime",
+    "mode": "NULLABLE",
+    "name": "created_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "members_url",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "followers",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "is_verified",
+    "type": "BOOLEAN"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "public_repos",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "twitter_username",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "email",
+    "type": "STRING"
+  },
+  {
+    "description": "bq-datetime",
+    "mode": "NULLABLE",
+    "name": "updated_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "site_admin",
+    "type": "BOOLEAN"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "type",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "received_events_url",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "hooks_url",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "company",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "following",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "events_url",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "followers_url",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "subscriptions_url",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "hireable",
+    "type": "BOOLEAN"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "gists_url",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "public_gists",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "bio",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "node_id",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "id",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "starred_url",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "repos_url",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "organizations_url",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "login",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "html_url",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "blog",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "following_url",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "url",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "gravatar_id",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "location",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "name",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "avatar_url",
+    "type": "STRING"
+  }
+]
