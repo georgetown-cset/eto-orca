@@ -1,17 +1,20 @@
 [
   {
-    "mode": "NULLABLE",
+    "mode": "REQUIRED",
     "name": "repo",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "Name of repository as owner/repo_name"
   },
   {
     "mode": "REPEATED",
     "name": "datasets",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "Datasets where repository was found. 'pwc' = listed in papers with code; 'cnki' = found in CNKI fulltext; 'arxiv' = found in arXiv fulltext; 'title+abstract' = found in merged corpus titles or abstracts"
   },
   {
     "mode": "REPEATED",
     "name": "merged_ids",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "CSET ids of papers where the repository was mentioned"
   }
 ]
