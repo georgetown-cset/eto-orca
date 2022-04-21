@@ -1,0 +1,56 @@
+[
+  {
+    "mode": "NULLABLE",
+    "name": "owner_name",
+    "type": "STRING",
+    "description": "Name of repository owner"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "repo_name",
+    "type": "STRING",
+    "description": "Name of repository"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "push_id",
+    "type": "STRING",
+    "description": "Github push ID"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "owner_id",
+    "type": "INTEGER",
+    "description": "Github owner ID"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "push_created_at",
+    "type": "TIMESTAMP",
+    "description": "When push happened"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "author_email",
+    "type": "STRING",
+    "description": "Author email as reported in commit (username obfuscated)"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "author_name",
+    "type": "STRING",
+    "description": "Display name (i.e. not necessarily username) of the person who created the commit"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "commit_message",
+    "type": "STRING",
+    "description": "Text description of commit (created by `author_name`)"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "commit_sha",
+    "type": "STRING",
+    "description": "Commit hash"
+  }
+]
