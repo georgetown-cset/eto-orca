@@ -1,42 +1,60 @@
 [
   {
-    "mode": "NULLABLE",
+    "mode": "REQUIRED",
     "name": "owner_name",
     "type": "STRING",
     "description": "Name of repository owner"
   },
   {
-    "mode": "NULLABLE",
+    "mode": "REQUIRED",
     "name": "repo_name",
     "type": "STRING",
     "description": "Name of repository"
   },
   {
-    "mode": "NULLABLE",
+    "mode": "REQUIRED",
+    "name": "pusher_id",
+    "type": "INTEGER",
+    "description": "Github id of person who pushed (someone who has write access to the repo)"
+  },
+  {
+    "mode": "REQUIRED",
+    "name": "pusher_login",
+    "type": "STRING",
+    "description": "Github login of person who pushed (someone who has write access to the repo)"
+  },
+  {
+    "mode": "REQUIRED",
     "name": "push_id",
     "type": "STRING",
     "description": "Github push ID"
   },
   {
     "mode": "NULLABLE",
-    "name": "owner_id",
+    "name": "org_id",
     "type": "INTEGER",
-    "description": "Github owner ID"
+    "description": "Null for user owners, the organization's github id for github organization owners"
   },
   {
-    "mode": "NULLABLE",
+    "mode": "REQUIRED",
     "name": "push_created_at",
     "type": "TIMESTAMP",
     "description": "When push happened"
   },
   {
-    "mode": "NULLABLE",
+    "mode": "REQUIRED",
+    "name": "event_id",
+    "type": "INTEGER",
+    "description": "Event identifier (from githubarchive)"
+  },
+  {
+    "mode": "REQUIRED",
     "name": "author_email",
     "type": "STRING",
     "description": "Author email as reported in commit (username obfuscated)"
   },
   {
-    "mode": "NULLABLE",
+    "mode": "REQUIRED",
     "name": "author_name",
     "type": "STRING",
     "description": "Display name (i.e. not necessarily username) of the person who created the commit"
@@ -48,7 +66,7 @@
     "description": "Text description of commit (created by `author_name`)"
   },
   {
-    "mode": "NULLABLE",
+    "mode": "REQUIRED",
     "name": "commit_sha",
     "type": "STRING",
     "description": "Commit hash"

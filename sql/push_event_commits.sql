@@ -1,6 +1,9 @@
 SELECT DISTINCT
   org.id AS owner_id,
+  actor.id AS pusher_id,
+  actor.login AS pusher_login,
   created_at AS push_created_at,
+  id AS event_id,
   SPLIT(repo.name, "/")[
     OFFSET
     (0)] AS owner_name,
