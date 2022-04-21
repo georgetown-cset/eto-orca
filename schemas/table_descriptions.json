@@ -1,0 +1,7 @@
+{
+  "github_metrics.events": "All Github Archive (https://www.gharchive.org/) events for repositories in repos_with_full_meta",
+  "github_metrics.push_event_commits": "All commits involved in a Github Archive (https://www.gharchive.org/) push event",
+  "github_metrics.repo_owners": "Metadata for repo owners, who may be user accounts or organizations. URLs on github are in the format github.com/<owner name>/<repo name>",
+  "github_metrics.repos_in_papers": "Repositories that were extracted from the scholarly literature",
+  "github_metrics.repos_with_full_meta": "Repositories and metadata extracted from any source relevant to our analysis (a superset of the repos in `repos_in_papers`)"
+}
