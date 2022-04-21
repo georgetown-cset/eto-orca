@@ -28,7 +28,7 @@ SELECT DISTINCT
     '$.sha'),
     '$') AS commit_sha
 FROM
-  github_metrics.events
+  staging_github_metrics.events
 CROSS JOIN
   UNNEST(JSON_EXTRACT_ARRAY(payload,
       '$.commits')) AS
