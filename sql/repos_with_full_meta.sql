@@ -9,7 +9,6 @@ SELECT
   full_metadata.network_count AS network_count,
   full_metadata.forks_count AS forks_count,
   full_metadata.allow_forking AS allow_forking,
-  full_metadata.watchers AS watchers,
   full_metadata.open_issues_count AS open_issues_count,
   full_metadata.disabled AS disabled,
   full_metadata.has_wiki AS has_wiki,
