@@ -107,11 +107,14 @@ class RepoRetriever:
                     repo_record["sources"] = ["manual-collection"]
                     yield repo_record
 
-    def get_size_partitions(self, topic: str, size_range: list = None) -> list:
+    def get_size_partitions(
+        self, topic: str, size_range: list = None, num_retries: int = 0
+    ) -> list:
         """
         Gets repo size partitions that will allow us to retrieve all repos for a topic
         :param topic: topic to retrieve repos for
         :param size_range: range of sizes (in kb) to include in the query - used to get around the 1000 search result cap
+        :param num_retries: number of times we have retried the request so far
         :return: list of formatted size ranges
         """
         time.sleep(RATE_LIMIT_INTERVAL)
@@ -135,9 +138,10 @@ class RepoRetriever:
             print(f"Incomplete results for {topic}, {repo_resp_js['total_count']}")
             return self.get_size_partitions(topic, size_range)
         if "items" not in repo_resp_js:
-            print(f"{repo_resp_js}, retrying in 3 seconds")
-            time.sleep(3)
-            return self.get_size_partitions(topic, size_range)
+            num_retries += 1
+            print(f"{repo_resp_js}, retrying in {3*num_retries} seconds")
+            time.sleep(3 * num_retries)
+            return self.get_size_partitions(topic, size_range, num_retries=num_retries)
         result_count = repo_resp_js.get("total_count", eleven_gb)
         if result_count > 1000:
             midpoint = size_range[0] + round((size_range[1] - size_range[0]) / 2)
@@ -148,12 +152,15 @@ class RepoRetriever:
             return []
         return [(fmt_size_range, result_count)]
 
-    def get_topic_page(self, topic: str, size_range: str, page: int = 1) -> list:
+    def get_topic_page(
+        self, topic: str, size_range: str, page: int = 1, num_retries: int = 0
+    ) -> list:
         """
         Get a page of topic repos
         :param topic: topic to retrieve repos for
         :param size_range: range of sizes (in kb) to include in the query - used to get around the 1000 search result cap
         :param page: page of topic results to retrieve
+        :param num_retries: number of times we have retried the request so far
         :return: list of repos
         """
         time.sleep(RATE_LIMIT_INTERVAL)
@@ -167,8 +174,9 @@ class RepoRetriever:
             print(f"Incomplete results for {topic}, {repo_resp_js['total_count']}")
             return self.get_topic_page(topic, size_range, page)
         if "items" not in repo_resp_js:
-            print(f"{repo_resp_js}, retrying in 3 seconds")
-            time.sleep(3)
+            num_retries += 1
+            print(f"{repo_resp_js}, retrying in {3*num_retries} seconds")
+            time.sleep(3 * num_retries)
             return self.get_topic_page(topic, size_range, page)
         print(
             f"Retrieved {len(repo_resp_js['items'])}/{repo_resp_js['total_count']} repos for page {page} of {topic} "
