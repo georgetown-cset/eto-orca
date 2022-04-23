@@ -2,7 +2,7 @@ WITH
 cnki_ft AS ((
     SELECT
       cset_cnki_journals_id_mappings.cnki_document_id AS id,
-      cnki_journals_ft.full_text
+      regexp_replace(cnki_journals_ft.full_text, r"-\s*\n", "-") AS full_text
     FROM
       gcp_cset_cnki.cnki_journals_ft
     INNER JOIN
@@ -13,11 +13,11 @@ cnki_ft AS ((
         (cset_cnki_journals_id_mappings.document_name = cnki_journals_ft.document_name)
         AND ((cset_cnki_journals_id_mappings.cnki_doi = cnki_journals_ft.doi)
           OR (cset_cnki_journals_id_mappings.cnki_doi IS NULL)
-          OR (TRIM(cset_cnki_journals_id_mappings.cnki_doi) = "")))
+          OR (trim(cset_cnki_journals_id_mappings.cnki_doi) = "")))
   UNION ALL (
     SELECT
       cset_cnki_dissertations_id_mappings.cnki_document_id AS id,
-      cnki_dissertations_ft.full_text
+      regexp_replace(cnki_dissertations_ft.full_text, r"-\s*\n", "-") AS full_text
     FROM
       gcp_cset_cnki.cnki_dissertations_ft
     INNER JOIN
@@ -28,11 +28,11 @@ cnki_ft AS ((
         ( cset_cnki_dissertations_id_mappings.document_name = cnki_dissertations_ft.document_name )
         AND ((cset_cnki_dissertations_id_mappings.cnki_doi = cnki_dissertations_ft.doi)
           OR (cset_cnki_dissertations_id_mappings.cnki_doi IS NULL)
-          OR (TRIM(cset_cnki_dissertations_id_mappings.cnki_doi) = "")))
+          OR (trim(cset_cnki_dissertations_id_mappings.cnki_doi) = "")))
   UNION ALL (
     SELECT
       cset_cnki_conferences_id_mappings.cnki_document_id AS id,
-      cnki_conferences_ft.full_text
+      regexp_replace(cnki_conferences_ft.full_text, r"-\s*\n", "-") AS full_text
     FROM
       gcp_cset_cnki.cnki_conferences_ft
     INNER JOIN
@@ -43,12 +43,12 @@ cnki_ft AS ((
         ( cset_cnki_conferences_id_mappings.document_name = cnki_conferences_ft.document_name )
         AND ((cset_cnki_conferences_id_mappings.cnki_doi = cnki_conferences_ft.doi)
           OR (cset_cnki_conferences_id_mappings.cnki_doi IS NULL)
-          OR (TRIM(cset_cnki_conferences_id_mappings.cnki_doi) = "")))),
+          OR (trim(cset_cnki_conferences_id_mappings.cnki_doi) = "")))),
 
 arxiv_ft AS (
   SELECT
     id,
-    joined_text AS full_text
+    regexp_replace(joined_text, r"-\s*\n", "-") AS full_text
   FROM
     gcp_cset_arxiv_full_text.fulltext),
 
@@ -94,7 +94,7 @@ agg_repos AS (
   SELECT
     merged_id,
     dataset,
-    REGEXP_EXTRACT_ALL(full_text, r"(?i)github.com/([A-Za-z0-9-_.]+/[A-Za-z0-9-_.]*[A-Za-z0-9-_])") AS repos
+    regexp_extract_all(full_text, r"(?i)github.com/([A-Za-z0-9-_.]+/[A-Za-z0-9-_.]*[A-Za-z0-9-_])") AS repos
   FROM (
     SELECT
       merged_id,
@@ -106,22 +106,22 @@ agg_repos AS (
     SELECT
       merged_id,
       "title+abstract" AS dataset,
-      CONCAT(COALESCE(title_english,
-          ""), " ", COALESCE(title_foreign,
-          ""), " ", COALESCE(abstract_english,
-          ""), " ", COALESCE("abstract_foreign",
-          "")) AS full_text
+      regexp_replace(concat(coalesce(title_english,
+          ""), " ", coalesce(title_foreign,
+          ""), " ", coalesce(abstract_english,
+          ""), " ", coalesce(abstract_foreign,
+          "")), r"-\s*\n", "-") AS full_text
     FROM
       gcp_cset_links_v2.corpus_merged))
 
 SELECT
   repo,
-  ARRAY_AGG(DISTINCT(dataset)) AS datasets,
-  ARRAY_AGG(DISTINCT(merged_id)) AS merged_ids
+  array_agg(distinct(dataset)) AS datasets,
+  array_agg(distinct(merged_id)) AS merged_ids
 FROM
   agg_repos
 CROSS JOIN
-  UNNEST(repos) AS repo
+  unnest(repos) AS repo
 WHERE
   merged_id IS NOT NULL
 GROUP BY
