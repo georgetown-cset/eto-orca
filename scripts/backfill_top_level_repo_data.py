@@ -21,9 +21,14 @@ def get_meta(owner: str, repo: str) -> dict:
 
 def backfill_meta(input_data: str, output_data: str) -> None:
     out = open(output_data, mode="w")
+    seen_repos = set()
     with open(input_data) as f:
         for line in f:
             js = json.loads(line)
+            repo_fullname = js["owner_name"] + "/" + js["repo_name"]
+            if repo_fullname in seen_repos:
+                continue
+            seen_repos.add(repo_fullname)
             if not js.get("full_metadata"):
                 js["full_metadata"] = get_meta(js["owner_name"], js["repo_name"])
                 time.sleep(RATE_LIMIT_INTERVAL)
