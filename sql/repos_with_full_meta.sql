@@ -42,3 +42,5 @@ SELECT
     full_metadata.source.name AS repo_name) AS ultimate_fork_of
 FROM
   staging_github_metrics.repos_with_full_meta_raw
+WHERE
+  full_metadata.stargazers_count IS NOT NULL
