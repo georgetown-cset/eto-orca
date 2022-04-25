@@ -1,0 +1,44 @@
+[
+  {
+    "mode": "NULLABLE",
+    "name": "org_id",
+    "type": "INTEGER",
+    "description": "Null for user owners, the organization's github id for github organization owners"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "owner_name",
+    "type": "STRING",
+    "description": "Name of repository owner"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "repo_name",
+    "type": "STRING",
+    "description": "Name of repository"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "starring_user_id",
+    "type": "INTEGER",
+    "description": "Github id of starring user"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "starring_user_login",
+    "type": "STRING",
+    "description": "Username of starring user"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "event_id",
+    "type": "STRING",
+    "description": "Event identifier (from githubarchive)"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "star_date",
+    "type": "TIMESTAMP",
+    "description": "Datetime the user starred the repository"
+  }
+]
