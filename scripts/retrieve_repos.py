@@ -133,7 +133,6 @@ class RepoRetriever:
             auth=self.auth,
         )
         repo_resp_js = repo_resp.json()
-        print(repo_resp_js)
         if repo_resp_js.get("incomplete_results"):
             print(f"Incomplete results for {topic}, {repo_resp_js['total_count']}")
             return self.get_size_partitions(topic, size_range)
