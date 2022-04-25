@@ -28,8 +28,12 @@ In parallel, we will retrieve metadata about the repo "owner"s - github urls are
 
 Now, it's time to load everything into BigQuery and clean up the table structure:
 
-* `bq load --replace --source_format NEWLINE_DELIMITED_JSON staging_github_metrics.repos_with_full_meta_raw curr_repos_filled_wi_meta_part8.jsonl schemas/repos_with_full_meta_raw.json`
+* `bq load --replace --source_format NEWLINE_DELIMITED_JSON staging_github_metrics.repos_with_full_meta_raw curr_repos_final.jsonl schemas/repos_with_full_meta_raw.json`
+* `bq load --replace --source_format NEWLINE_DELIMITED_JSON staging_github_metrics.repo_owners_raw repo_owners.jsonl schemas/repo_owners_raw.json`
 * Run `sql/repos_with_full_meta.sql` and write the output to `github_metrics.repos_with_full_meta`
+* Run `sql/repo_owners.sql` and write the output to `github_metrics.repo_owners`
 * Run `sql/events.sql` and write the output to `staging_github_metrics.events`
 * Run `sql/push_event_commits.sql` and write the output to `github_metrics.push_event_commits`
 * Run `sql/star_events.sql` and write the output to `github_metrics.star_events`
+
+Optionally, also run `sql/lexisnexis_repos.sql` to get Lexis-Nexis repository references.
