@@ -107,86 +107,100 @@ class RepoRetriever:
                     repo_record["sources"] = ["manual-collection"]
                     yield repo_record
 
-    def get_size_partitions(
-        self, topic: str, size_range: list = None, num_retries: int = 0
-    ) -> list:
+    @staticmethod
+    def check_for_issue(topic: str, repo_resp_js: dict, num_retries: int) -> bool:
+        """
+        Checks a gh response json for issues and sleeps if so
+        :param topic:
+        :param repo_resp_js:
+        :param num_retries: Number of retries that have already been made
+        :return: A bool, true if there was an issue
+        """
+        has_an_issue = repo_resp_js.get("incomplete_results") or (
+            "items" not in repo_resp_js
+        )
+        time_to_sleep = 3 * (num_retries + 1)
+        if has_an_issue:
+            retrying = f"retrying in {time_to_sleep} seconds"
+            if "items" in repo_resp_js:
+                print(
+                    f"Incomplete results for {topic}, {repo_resp_js['total_count']} - {retrying}"
+                )
+            else:
+                print(f"{repo_resp_js}, {retrying}")
+            time.sleep(time_to_sleep)
+        return has_an_issue
+
+    def get_size_partitions(self, topic: str) -> list:
         """
         Gets repo size partitions that will allow us to retrieve all repos for a topic
         :param topic: topic to retrieve repos for
-        :param size_range: range of sizes (in kb) to include in the query - used to get around the 1000 search result cap
-        :param num_retries: number of times we have retried the request so far
         :return: list of formatted size ranges
         """
-        time.sleep(RATE_LIMIT_INTERVAL)
-        if not size_range:
-            gt = self.get_size_partitions(topic, [0, 1000])
-            lt = self.get_size_partitions(topic, [1001, None])
-            return gt + lt
-        fmt_size_range = (
-            f"{size_range[0]}..{size_range[1]}"
-            if size_range[1]
-            else f">={size_range[0]}"
-        )
-        repo_resp = requests.get(
-            "https://api.github.com/search/repositories?"
-            f"q=topic:{topic} size:{fmt_size_range}&sort=stars&order=desc&per_page=1",
-            auth=self.auth,
-        )
-        repo_resp_js = repo_resp.json()
-        if repo_resp_js.get("incomplete_results"):
-            print(f"Incomplete results for {topic}, {repo_resp_js['total_count']}")
-            return self.get_size_partitions(topic, size_range)
-        if "items" not in repo_resp_js:
-            num_retries += 1
-            print(f"{repo_resp_js}, retrying in {3*num_retries} seconds")
-            time.sleep(3 * num_retries)
-            return self.get_size_partitions(topic, size_range, num_retries=num_retries)
-        result_count = repo_resp_js.get("total_count", 0)
-        print(f"Found {result_count} repos in {fmt_size_range}")
-        if result_count > 1000:
-            eleven_gb = 11000000
-            upper_range_limit = size_range[1] if size_range[1] else eleven_gb
-            midpoint = size_range[0] + round((upper_range_limit - size_range[0]) / 2)
-            gt = self.get_size_partitions(topic, [size_range[0], midpoint])
-            lt = self.get_size_partitions(topic, [midpoint + 1, size_range[1]])
-            return gt + lt
-        elif result_count == 0:
-            return []
-        return [(fmt_size_range, result_count)]
+        size_ranges = [[0, 1000], [1001, None]]
+        valid_intervals = []
+        num_retries = 0
+        while len(size_ranges) > 0:
+            size_range = size_ranges.pop()
+            time.sleep(RATE_LIMIT_INTERVAL)
+            fmt_size_range = (
+                f"{size_range[0]}..{size_range[1]}"
+                if size_range[1]
+                else f">={size_range[0]}"
+            )
+            repo_resp = requests.get(
+                "https://api.github.com/search/repositories?"
+                f"q=topic:{topic} size:{fmt_size_range}&per_page=1",
+                auth=self.auth,
+            )
+            repo_resp_js = repo_resp.json()
+            has_an_issue = self.check_for_issue(topic, repo_resp_js, num_retries)
+            if has_an_issue:
+                num_retries += 1
+                # try again
+                size_ranges.append(size_range)
+            else:
+                result_count = repo_resp_js.get("total_count", 0)
+                print(f"Found {result_count} repos in {fmt_size_range}")
+                if result_count > 1000:
+                    eleven_gb = 11000000
+                    upper_range_limit = size_range[1] if size_range[1] else eleven_gb
+                    midpoint = size_range[0] + round(
+                        (upper_range_limit - size_range[0]) / 2
+                    )
+                    size_ranges.extend(
+                        [[size_range[0], midpoint], [midpoint + 1, size_range[1]]]
+                    )
+                elif result_count > 0:
+                    valid_intervals.append([fmt_size_range, result_count])
+        return valid_intervals
 
-    def get_topic_page(
-        self, topic: str, size_range: str, page: int = 1, num_retries: int = 0
-    ) -> list:
+    def get_topic_page(self, topic: str, size_range: str, page: int = 1) -> list:
         """
         Get a page of topic repos
         :param topic: topic to retrieve repos for
         :param size_range: range of sizes (in kb) to include in the query - used to get around the 1000 search result cap
         :param page: page of topic results to retrieve
-        :param num_retries: number of times we have retried the request so far
         :return: list of repos
         """
-        time.sleep(RATE_LIMIT_INTERVAL)
-        repo_resp = requests.get(
-            "https://api.github.com/search/repositories?"
-            f"q=topic:{topic} size:{size_range}&sort=stars&order=desc&page={page}&per_page=100",
-            auth=self.auth,
-        )
-        repo_resp_js = repo_resp.json()
-        if repo_resp_js.get("incomplete_results"):
-            print(f"Incomplete results for {topic}, {repo_resp_js['total_count']}")
-            return self.get_topic_page(
-                topic, size_range, page=page, num_retries=num_retries
+        num_retries = 0
+        while True:
+            time.sleep(RATE_LIMIT_INTERVAL)
+            repo_resp = requests.get(
+                "https://api.github.com/search/repositories?"
+                f"q=topic:{topic} size:{size_range}&page={page}&per_page=100",
+                auth=self.auth,
             )
-        if "items" not in repo_resp_js:
-            num_retries += 1
-            print(f"{repo_resp_js}, retrying in {3*num_retries} seconds")
-            time.sleep(3 * num_retries)
-            return self.get_topic_page(topic, size_range, page)
-        print(
-            f"Retrieved {len(repo_resp_js['items'])}/{repo_resp_js['total_count']} repos for page {page} of {topic} "
-            f"in size range {size_range}"
-        )
-        return repo_resp_js["items"]
+            repo_resp_js = repo_resp.json()
+            has_an_issue = self.check_for_issue(topic, repo_resp_js, num_retries)
+            if has_an_issue:
+                num_retries += 1
+            else:
+                print(
+                    f"Retrieved {len(repo_resp_js['items'])}/{repo_resp_js['total_count']} repos for page {page} of {topic} "
+                    f"in size range {size_range}"
+                )
+                return repo_resp_js["items"]
 
     def read_topic_repos(self) -> Generator:
         """
