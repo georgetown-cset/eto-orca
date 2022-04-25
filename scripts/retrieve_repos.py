@@ -142,8 +142,11 @@ class RepoRetriever:
             time.sleep(3 * num_retries)
             return self.get_size_partitions(topic, size_range, num_retries=num_retries)
         result_count = repo_resp_js.get("total_count", 0)
+        print(f"Found {result_count} repos in {fmt_size_range}")
         if result_count > 1000:
-            midpoint = size_range[0] + round((size_range[1] - size_range[0]) / 2)
+            eleven_gb = 11000000
+            upper_range_limit = size_range[1] if size_range[1] else eleven_gb
+            midpoint = size_range[0] + round((upper_range_limit - size_range[0]) / 2)
             gt = self.get_size_partitions(topic, [size_range[0], midpoint])
             lt = self.get_size_partitions(topic, [midpoint + 1, size_range[1]])
             return gt + lt
