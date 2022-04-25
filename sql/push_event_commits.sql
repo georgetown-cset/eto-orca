@@ -1,8 +1,9 @@
 SELECT DISTINCT
-  org.id AS owner_id,
-  actor.id AS pusher_id,
-  actor.login AS pusher_login,
+  org.id AS org_id,
+  actor.id AS committer_id,
+  actor.login AS committer_login,
   created_at AS push_created_at,
+  repo.id AS repo_id,
   id AS event_id,
   SPLIT(repo.name, "/")[
     OFFSET
@@ -14,11 +15,11 @@ SELECT DISTINCT
     '$.push_id') AS push_id,
   JSON_VALUE(JSON_EXTRACT(
     commit_elt, '$.author.email'),
-    '$') AS author_email,
+    '$') AS contributor_email,
   JSON_VALUE(JSON_EXTRACT(
     commit_elt,
     '$.author.name'),
-    '$') AS author_name,
+    '$') AS contributor_name,
   JSON_VALUE(JSON_EXTRACT(
     commit_elt,
     '$.message'),

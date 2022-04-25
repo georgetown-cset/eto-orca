@@ -13,15 +13,15 @@
   },
   {
     "mode": "REQUIRED",
-    "name": "pusher_id",
+    "name": "committer_id",
     "type": "INTEGER",
-    "description": "Github id of person who pushed (someone who has write access to the repo)"
+    "description": "Github id of the *push* committer (someone who has write access to the repo). A committer may push commits from contributor users who do not have write access."
   },
   {
     "mode": "REQUIRED",
-    "name": "pusher_login",
+    "name": "committer_login",
     "type": "STRING",
-    "description": "Github login of person who pushed (someone who has write access to the repo)"
+    "description": "Github login of the *push* committer (someone who has write access to the repo). A committer may push commits from contributor users who do not have write access."
   },
   {
     "mode": "REQUIRED",
@@ -33,13 +33,19 @@
     "mode": "NULLABLE",
     "name": "org_id",
     "type": "INTEGER",
-    "description": "Null for user owners, the organization's github id for github organization owners"
+    "description": "Null for user owners, the organization's github id if the owner is an organization"
   },
   {
     "mode": "REQUIRED",
     "name": "push_created_at",
     "type": "TIMESTAMP",
     "description": "When push happened"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "repo_id",
+    "type": "INTEGER",
+    "description": "Github id of repo"
   },
   {
     "mode": "REQUIRED",
@@ -49,21 +55,21 @@
   },
   {
     "mode": "REQUIRED",
-    "name": "author_email",
+    "name": "contributor_email",
     "type": "STRING",
-    "description": "Author email as reported in commit (username obfuscated)"
+    "description": "Contributor (commit author) email as reported in commit (username obfuscated)"
   },
   {
     "mode": "REQUIRED",
-    "name": "author_name",
+    "name": "contributor_name",
     "type": "STRING",
-    "description": "Display name (i.e. not necessarily username) of the person who created the commit"
+    "description": "Contributor (commit author) display name (i.e. not necessarily username)"
   },
   {
     "mode": "NULLABLE",
     "name": "commit_message",
     "type": "STRING",
-    "description": "Text description of commit (created by `author_name`)"
+    "description": "Text description of commit (created by `contributor_name`)"
   },
   {
     "mode": "REQUIRED",

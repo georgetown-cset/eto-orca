@@ -7,18 +7,6 @@
   },
   {
     "mode": "NULLABLE",
-    "name": "owner_name",
-    "type": "STRING",
-    "description": "Name of repository owner"
-  },
-  {
-    "mode": "NULLABLE",
-    "name": "repo_name",
-    "type": "STRING",
-    "description": "Name of repository"
-  },
-  {
-    "mode": "NULLABLE",
     "name": "starring_user_id",
     "type": "INTEGER",
     "description": "Github id of starring user"
@@ -31,6 +19,12 @@
   },
   {
     "mode": "NULLABLE",
+    "name": "repo_id",
+    "type": "INTEGER",
+    "description": "Github id of repo"
+  },
+  {
+    "mode": "NULLABLE",
     "name": "event_id",
     "type": "STRING",
     "description": "Event identifier (from githubarchive)"
@@ -40,5 +34,17 @@
     "name": "star_date",
     "type": "TIMESTAMP",
     "description": "Datetime the user starred the repository"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "owner_name",
+    "type": "STRING",
+    "description": "Name of repository owner"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "repo_name",
+    "type": "STRING",
+    "description": "Name of repository"
   }
 ]
