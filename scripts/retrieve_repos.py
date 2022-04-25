@@ -118,10 +118,9 @@ class RepoRetriever:
         :return: list of formatted size ranges
         """
         time.sleep(RATE_LIMIT_INTERVAL)
-        eleven_gb = 11000000000
         if not size_range:
             gt = self.get_size_partitions(topic, [0, 1000])
-            lt = self.get_size_partitions(topic, [1001, eleven_gb])
+            lt = self.get_size_partitions(topic, [1001, None])
             return gt + lt
         fmt_size_range = (
             f"{size_range[0]}..{size_range[1]}"
@@ -134,6 +133,7 @@ class RepoRetriever:
             auth=self.auth,
         )
         repo_resp_js = repo_resp.json()
+        print(repo_resp_js)
         if repo_resp_js.get("incomplete_results"):
             print(f"Incomplete results for {topic}, {repo_resp_js['total_count']}")
             return self.get_size_partitions(topic, size_range)
@@ -142,7 +142,7 @@ class RepoRetriever:
             print(f"{repo_resp_js}, retrying in {3*num_retries} seconds")
             time.sleep(3 * num_retries)
             return self.get_size_partitions(topic, size_range, num_retries=num_retries)
-        result_count = repo_resp_js.get("total_count", eleven_gb)
+        result_count = repo_resp_js.get("total_count", 0)
         if result_count > 1000:
             midpoint = size_range[0] + round((size_range[1] - size_range[0]) / 2)
             gt = self.get_size_partitions(topic, [size_range[0], midpoint])
@@ -172,7 +172,9 @@ class RepoRetriever:
         repo_resp_js = repo_resp.json()
         if repo_resp_js.get("incomplete_results"):
             print(f"Incomplete results for {topic}, {repo_resp_js['total_count']}")
-            return self.get_topic_page(topic, size_range, page)
+            return self.get_topic_page(
+                topic, size_range, page=page, num_retries=num_retries
+            )
         if "items" not in repo_resp_js:
             num_retries += 1
             print(f"{repo_resp_js}, retrying in {3*num_retries} seconds")
