@@ -35,9 +35,14 @@ def get_owner(owner: str) -> dict:
     return None
 
 
-def write_owners(repo_list: str, owner_output: str) -> None:
+def write_owners(repo_list: str, owner_output: str, prev_owners: str = None) -> None:
     out = open(owner_output, mode="w")
     seen_owners = set()
+    if prev_owners:
+        with open(prev_owners) as f:
+            for line in f:
+                js = json.loads(line)
+                seen_owners.add(js["login"])
     with open(repo_list) as f:
         for line in f:
             js = json.loads(line)
@@ -55,6 +60,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("repo_list")
     parser.add_argument("owner_output")
+    parser.add_argument("--prev_owners")
     args = parser.parse_args()
 
     write_owners(args.repo_list, args.owner_output)
