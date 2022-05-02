@@ -119,7 +119,7 @@ class RepoRetriever:
         has_an_issue = repo_resp_js.get("incomplete_results") or (
             "items" not in repo_resp_js
         )
-        time_to_sleep = 3 * (num_retries + 1)
+        time_to_sleep = 3 * (min(num_retries, 2) + 1)
         if has_an_issue:
             retrying = f"retrying in {time_to_sleep} seconds"
             if "items" in repo_resp_js:
@@ -145,7 +145,7 @@ class RepoRetriever:
             time.sleep(RATE_LIMIT_INTERVAL)
             fmt_size_range = (
                 f"{size_range[0]}..{size_range[1]}"
-                if size_range[1]
+                if size_range[1] is not None
                 else f">={size_range[0]}"
             )
             repo_resp = requests.get(
