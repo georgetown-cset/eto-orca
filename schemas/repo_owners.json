@@ -13,7 +13,7 @@
   },
   {
     "mode": "NULLABLE",
-    "name": "github_id",
+    "name": "id",
     "type": "INTEGER",
     "description": "Numeric github id"
   },

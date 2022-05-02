@@ -3,7 +3,7 @@
 SELECT
   login,
   name,
-  id AS github_id,
+  id,
   location,
   type,
   public_gists AS public_gists_count,

@@ -37,3 +37,5 @@ Now, it's time to load everything into BigQuery and clean up the table structure
 * Run `sql/star_events.sql` and write the output to `github_metrics.star_events`
 
 Optionally, also run `sql/lexisnexis_repos.sql` to get Lexis-Nexis repository references.
+
+Finally, use `dataloader/populate_documentation.py` to update table and column descriptions.
