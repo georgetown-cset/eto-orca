@@ -2,17 +2,6 @@
 
 # Reference: anaconda3\Lib\site-packages\gitgeo
 
-# from gitgeo.geographies_list import (
-#     ALL_COUNTRIES,
-#     CITY_COUNTRY_DICT,
-#     CODE_COUNTRY_DICT,
-#     STATE_ABBREV,
-#     STATE_NAMES,
-#     CITY_COUNTRY_STRINGS,
-#     METRO_AREA_COUNTRY_DICT,
-#     SPECIAL_CITIES,
-# )
-
 from geographies_list import (
     ALL_COUNTRIES,
     CITY_COUNTRY_DICT,
@@ -223,5 +212,5 @@ def get_country_from_location(location_string):
                 return METRO_AREA_COUNTRY_DICT[token]
 
     # return edit_distance_to_world(location_string)
-    
+
     return "None"

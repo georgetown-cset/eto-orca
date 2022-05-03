@@ -33,6 +33,8 @@ city_country_dict['South Australia'] = 'Australia'
 city_country_dict['Tasmania'] = 'Australia'
 city_country_dict['Victoria'] = 'Australia'
 city_country_dict['Western Australia'] = 'Australia'
+city_country_dict['Korea'] = 'South Korea'
+
 
 CITY_COUNTRY_DICT = city_country_dict
 METRO_AREA_COUNTRY_DICT = metro_area_country_dict

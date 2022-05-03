@@ -1,6 +1,6 @@
 from geolocation_base import *
 import pandas as pd
-
+# get_country_from_location("Jalisco, Mexico")
 
 df = pd.read_csv("repo_owners_location_sample.csv")
 
