@@ -1,5 +1,5 @@
-from geolocation_base import *
 import pandas as pd
+from geolocation_base import get_country_from_location
 
 # get_country_from_location("Jalisco, Mexico")
 
