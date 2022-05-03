@@ -91,7 +91,7 @@ def edit_distance_to_world(location):
             min_country = country
     return min_country
 
-
+# flake8: noqa: C901
 def get_country_from_location(location_string):
     """Return country (Hungary, United States, etc) from user location text.
 
@@ -109,29 +109,51 @@ def get_country_from_location(location_string):
     # TODO: make all checks lowercase
     if location_string is None:
         return "None"
-    
+
     if location_string == "":
         return "None"
 
     location_string = location_string[0].upper() + location_string[1:]
 
-    special_locations_domestic = ["US", "USA", "U.S.A", "U.S.",
-                                  "San Francisco", 'NYC', 'Bay Area', 'New York', 'SF', 'SF Bay Area']
+    special_locations_domestic = [
+        "US",
+        "USA",
+        "U.S.A",
+        "U.S.",
+        "San Francisco",
+        "NYC",
+        "Bay Area",
+        "New York",
+        "SF",
+        "SF Bay Area",
+    ]
     if location_string in special_locations_domestic:
         return "United States"
     for locale in special_locations_domestic:
         if locale in location_string:
             return "United States"
 
-    special_locations_universe = ["EU", "Europe", 'Earth', 'Universe', 'Mars',
-                                  'Milky Way', 'Knowhere', 'Internet', 'Remote', 'space', '127.0.0.1', 'localhost']
+    special_locations_universe = [
+        "EU",
+        "Europe",
+        "Earth",
+        "Universe",
+        "Mars",
+        "Milky Way",
+        "Knowhere",
+        "Internet",
+        "Remote",
+        "space",
+        "127.0.0.1",
+        "localhost",
+    ]
     if location_string in special_locations_universe:
         return "None"
     for special in special_locations_universe:
         if special in location_string:
             return "None"
 
-    special_locations_international = {'Scotland': 'United Kingdom'}
+    special_locations_international = {"Scotland": "United Kingdom"}
     for special in special_locations_international.keys():
         if special in location_string:
             return special_locations_international[special]
@@ -143,22 +165,22 @@ def get_country_from_location(location_string):
         return SPECIAL_CITIES[location_string]
 
     # do some basic cleanup on weird characters in the location
-    location_string = location_string.replace("/", ' ')
-    location_string = location_string.replace("√©", 'e')
-    location_string = location_string.replace("√º", 'u')
-    location_string = location_string.replace("The ", '')
-    location_string = location_string.replace("the ", '')
-    location_string = location_string.replace("√≠", 'i')
-    location_string = location_string.replace("√®", 'e')
-    location_string = location_string.replace(".", '')
-    location_string = location_string.replace("(", '')
-    location_string = location_string.replace(")", '')
-    location_string = location_string.replace("»ô", 's')
-    location_string = location_string.replace("√£", 'a')
-    location_string = location_string.replace("√≥", 'o')
-    location_string = location_string.replace("Ƒ∞", 'I')
-    location_string = location_string.replace("c≈Ç", 'c')
-    location_string = location_string.replace("≈Ñ", 'n')
+    location_string = location_string.replace("/", " ")
+    location_string = location_string.replace("√©", "e")
+    location_string = location_string.replace("√º", "u")
+    location_string = location_string.replace("The ", "")
+    location_string = location_string.replace("the ", "")
+    location_string = location_string.replace("√≠", "i")
+    location_string = location_string.replace("√®", "e")
+    location_string = location_string.replace(".", "")
+    location_string = location_string.replace("(", "")
+    location_string = location_string.replace(")", "")
+    location_string = location_string.replace("»ô", "s")
+    location_string = location_string.replace("√£", "a")
+    location_string = location_string.replace("√≥", "o")
+    location_string = location_string.replace("Ƒ∞", "I")
+    location_string = location_string.replace("c≈Ç", "c")
+    location_string = location_string.replace("≈Ñ", "n")
 
     # sometimes they give an international state or metro area
     if location_string in METRO_AREA_COUNTRY_DICT.keys():

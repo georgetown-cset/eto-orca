@@ -18,29 +18,31 @@ with open(("world_cities.csv"), errors="ignore", newline="") as file:
         # key is metro location (row[2]), value is country (row[1])
         metro_area_country_dict[row[2]] = row[1]
 
-city_country_dict['British Columbia'] = 'Canada'
-city_country_dict['Ontario'] = 'Canada'
-city_country_dict['Quebec'] = 'Canada'
-city_country_dict['Manitoba'] = 'Canada'
-city_country_dict['Alberta'] = 'Canada'
-city_country_dict['New Brunswick'] = 'Canada'
-city_country_dict['Nova Scotia'] = 'Canada'
-city_country_dict['Nsw'] = 'Australia'
-city_country_dict['Qld'] = 'Australia'
-city_country_dict['New South Wales'] = 'Australia'
-city_country_dict['Queensland'] = 'Australia'
-city_country_dict['South Australia'] = 'Australia'
-city_country_dict['Tasmania'] = 'Australia'
-city_country_dict['Victoria'] = 'Australia'
-city_country_dict['Western Australia'] = 'Australia'
-city_country_dict['Korea'] = 'South Korea'
+city_country_dict["British Columbia"] = "Canada"
+city_country_dict["Ontario"] = "Canada"
+city_country_dict["Quebec"] = "Canada"
+city_country_dict["Manitoba"] = "Canada"
+city_country_dict["Alberta"] = "Canada"
+city_country_dict["New Brunswick"] = "Canada"
+city_country_dict["Nova Scotia"] = "Canada"
+city_country_dict["Nsw"] = "Australia"
+city_country_dict["Qld"] = "Australia"
+city_country_dict["New South Wales"] = "Australia"
+city_country_dict["Queensland"] = "Australia"
+city_country_dict["South Australia"] = "Australia"
+city_country_dict["Tasmania"] = "Australia"
+city_country_dict["Victoria"] = "Australia"
+city_country_dict["Western Australia"] = "Australia"
+city_country_dict["Korea"] = "South Korea"
 
 
 CITY_COUNTRY_DICT = city_country_dict
 METRO_AREA_COUNTRY_DICT = metro_area_country_dict
 
 # list of country codes
-with open(Path(__file__).with_name("country_codes.csv"), errors="ignore", newline="") as file:
+with open(
+    Path(__file__).with_name("country_codes.csv"), errors="ignore", newline=""
+) as file:
     reader = csv.reader(file)
     code_country_list = list(reader)
     code_country_dict = {}
@@ -428,35 +430,35 @@ STATE_ABBREV = [
 # live in the latter know not to use their city name. See Sydney in Nova Scotia vs Syndey Austratial
 
 SPECIAL_CITIES = {
-    'Sydney': 'Australia',
-    'Amsterdam': 'Netherlands',
-    'Barcelona': 'Spain',
-    'Hyderabad': 'India',
-    'Vancouver': 'Canada',
-    'Saint Petersburg': 'Russia',
-    'England': 'United Kingdom',
-    'Athens': 'Greece',
-    'Lima': 'Peru',
-    'Scotland': 'United Kingdom',
-    'Rome': 'Italy',
-    'Dublin': 'Ireland',
-    'Edinburgh': 'United Kingdom',
-    'Bangalore': 'India',
-    'Geneva': 'Switzerland',
-    'Melbourne': 'Australia',
-    'Bruges': 'Belgium',
-    'PRC': 'China',
-    'York': 'United Kingdom',
-    'Valenica': 'Spain',
-    'Republic of Korea': 'South Korea',
-    'Waterloo': 'United Kingdom',
-    'M√ºnchen': 'Germany',
-    'Montreal, CA': 'Canada',
-    'Florian√≥polis': 'Brazil',
-    'Perth': 'Australia',
-    'Oxford': 'United Kingdom',
-    'Milan': 'Italy',
-    'Russian Federation': 'Russia'
+    "Sydney": "Australia",
+    "Amsterdam": "Netherlands",
+    "Barcelona": "Spain",
+    "Hyderabad": "India",
+    "Vancouver": "Canada",
+    "Saint Petersburg": "Russia",
+    "England": "United Kingdom",
+    "Athens": "Greece",
+    "Lima": "Peru",
+    "Scotland": "United Kingdom",
+    "Rome": "Italy",
+    "Dublin": "Ireland",
+    "Edinburgh": "United Kingdom",
+    "Bangalore": "India",
+    "Geneva": "Switzerland",
+    "Melbourne": "Australia",
+    "Bruges": "Belgium",
+    "PRC": "China",
+    "York": "United Kingdom",
+    "Valenica": "Spain",
+    "Republic of Korea": "South Korea",
+    "Waterloo": "United Kingdom",
+    "M√ºnchen": "Germany",
+    "Montreal, CA": "Canada",
+    "Florian√≥polis": "Brazil",
+    "Perth": "Australia",
+    "Oxford": "United Kingdom",
+    "Milan": "Italy",
+    "Russian Federation": "Russia",
 }
 
 # mashes together the common cities and countries/codes in a stable format,
@@ -478,6 +480,5 @@ with open(Path(__file__).with_name("world_cities.csv"), errors="ignore") as file
         # city,country_code->country entries in another dict below
         if country in COUNTRY_CODE_DICT.keys():
             CITY_COUNTRY_STRINGS[
-                (city + COUNTRY_CODE_DICT[country]
-                 ).replace(",", "").replace(" ", "")
+                (city + COUNTRY_CODE_DICT[country]).replace(",", "").replace(" ", "")
             ] = country
