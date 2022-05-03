@@ -112,6 +112,8 @@ This `pushEvent` has some email metadata in between.
 
 Summary: GitGeo and Perceval do the same things. Majority do not have location data, which is a field the user needs to manually specify inside the Github interface. Neither location extractor is doing anything special, just going through the API. Github rate limits bottleneck testing.
 
+GitGeo repo is deprecated.
+
 Perceval: No native Python implementation for Perceval - only bash. API `fetch` function is in line 178 of `grimoirelab-perceval/perceval/backends/core/github.py`. 
 [Link](https://github.com/chaoss/grimoirelab-perceval/blob/master/perceval/backends/core/github.py)
 
@@ -230,3 +232,26 @@ Out[11]:
 ### Other Notes:
 
 In searching for prebuilt parsers to extract company names et al, I found a cool [repo](https://github.com/psolin/cleanco) that does can clean and infer locations for company names, albeit it mostly works on older legacy companies that include things like LLC.
+
+
+
+### Perceval Run 2/17/2022
+
+```
+[2022-02-17 15:52:51,188] - Summary of results
+
+           Total items:         770
+        Items produced:         770
+         Items skipped:         0
+
+        Last item UUID:         a99c5ca86e8521cf59def6f2b3707cabced838f3
+        Last item date:         2022-02-16 13:42:29+00:00
+
+        Min. item date:         2016-01-04 17:42:23+00:00
+        Max. item date:         2022-02-16 13:42:29+00:00
+
+        Min. offset:    -       Max. offset:    -       Last offset:    -
+
+
+[2022-02-17 15:52:51,190] - Sir Perceval completed his quest.
+```
