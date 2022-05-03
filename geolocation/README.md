@@ -3,7 +3,7 @@
 Objective: take a location input string commonly found in Github's user `location` setting, and return a normalized country name.
 
 
-This code is based off of the `gitgeo` repository with some updates. 
+This code is based off of the `gitgeo` repository with some manual updates. 
 
 https://pypi.org/project/gitgeo/
 
@@ -32,3 +32,7 @@ for metro in METRO_AREA_COUNTRY_DICT.keys():
      if location_string in metro:
          return METRO_AREA_COUNTRY_DICT[metro]
 ```
+
+More improvements in process based on testing in `runner.py`.
+
+Moved `India` world cities to the top.
