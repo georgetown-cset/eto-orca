@@ -36,3 +36,12 @@ for metro in METRO_AREA_COUNTRY_DICT.keys():
 More improvements in process based on testing in `runner.py`.
 
 Moved `India` world cities to the top.
+
+Next one to debug: why does `IIT PATNA, INDIA` return United States? The last two letters are `IA` which infers Iowa from
+
+```
+for state in STATE_ABBREV:
+    if location_string.endswith(state):
+        return "United States"
+```
+
