@@ -5,12 +5,12 @@
 from geographies_list import (
     ALL_COUNTRIES,
     CITY_COUNTRY_DICT,
-    CODE_COUNTRY_DICT,
-    STATE_ABBREV,
-    STATE_NAMES,
     CITY_COUNTRY_STRINGS,
+    CODE_COUNTRY_DICT,
     METRO_AREA_COUNTRY_DICT,
     SPECIAL_CITIES,
+    STATE_ABBREV,
+    STATE_NAMES,
 )
 
 
@@ -90,6 +90,7 @@ def edit_distance_to_world(location):
             MIN_DIST = dist
             min_country = country
     return min_country
+
 
 # flake8: noqa: C901
 def get_country_from_location(location_string):
