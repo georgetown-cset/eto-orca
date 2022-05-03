@@ -3,7 +3,7 @@
 Objective: take a location input string commonly found in Github's user `location` setting, and return a normalized country name.
 
 
-This code is based off of the `gitgeo` repository with some manual updates. 
+This code is based off of the `gitgeo` repository with some manual updates.
 
 https://pypi.org/project/gitgeo/
 
@@ -24,7 +24,7 @@ Manual update to `world_cities.csv`:
 
 Other error types:
 
-errors: India 
+errors: India
 
 below process is NOT safe, deleted: ex. India -> Indiana -> United States
 ```
@@ -44,4 +44,3 @@ for state in STATE_ABBREV:
     if location_string.endswith(state):
         return "United States"
 ```
-
