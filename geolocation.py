@@ -1,6 +1,19 @@
 """geolocation functionality."""
 
-from gitgeo.geographies_list import (
+# C:\Users\PC\anaconda3\Lib\site-packages\gitgeo
+
+# from gitgeo.geographies_list import (
+#     ALL_COUNTRIES,
+#     CITY_COUNTRY_DICT,
+#     CODE_COUNTRY_DICT,
+#     STATE_ABBREV,
+#     STATE_NAMES,
+#     CITY_COUNTRY_STRINGS,
+#     METRO_AREA_COUNTRY_DICT,
+#     SPECIAL_CITIES,
+# )
+
+from geographies_list import (
     ALL_COUNTRIES,
     CITY_COUNTRY_DICT,
     CODE_COUNTRY_DICT,
@@ -107,6 +120,9 @@ def get_country_from_location(location_string):
     # TODO: make all checks lowercase
     if location_string is None:
         return "None"
+    
+    if location_string == "":
+        return "None"
 
     location_string = location_string[0].upper() + location_string[1:]
 
@@ -158,9 +174,11 @@ def get_country_from_location(location_string):
     # sometimes they give an international state or metro area
     if location_string in METRO_AREA_COUNTRY_DICT.keys():
         return METRO_AREA_COUNTRY_DICT[location_string]
-    for metro in METRO_AREA_COUNTRY_DICT.keys():
-        if location_string in metro:
-            return METRO_AREA_COUNTRY_DICT[metro]
+
+    # this process is NOT safe: ex. India -> Indiana -> United States
+    # for metro in METRO_AREA_COUNTRY_DICT.keys():
+    #     if location_string in metro:
+    #         return METRO_AREA_COUNTRY_DICT[metro]
 
     # check if city,country is recognized (global and USA) as major city
     stripped_location = location_string.replace(",", "").replace(
@@ -204,4 +222,4 @@ def get_country_from_location(location_string):
             elif token in METRO_AREA_COUNTRY_DICT.keys():
                 return METRO_AREA_COUNTRY_DICT[token]
 
-    return edit_distance_to_world(location_string)
+    # return edit_distance_to_world(location_string)

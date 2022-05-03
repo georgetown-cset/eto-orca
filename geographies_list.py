@@ -6,7 +6,7 @@ from pathlib import Path
 # static list of all cities mapped to countries
 # from https://datahub.io/core/world-cities\
 # ignore errors because of many unicode errors.
-with open(Path(__file__).with_name("world_cities.csv"), errors="ignore", newline="") as file:
+with open(("world_cities.csv"), errors="ignore", newline="") as file:
     reader = csv.reader(file)
     city_country_list = list(reader)
     city_country_dict = {}
