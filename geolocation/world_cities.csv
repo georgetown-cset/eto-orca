@@ -9435,7 +9435,6 @@ Bissau,Guinea-Bissau,Bissau,2374775
 Bafata,Guinea-Bissau,Bafata,2375254
 New Amsterdam,Guyana,East Berbice-Corentyne,3376762
 Linden,Guyana,Upper Demerara-Berbice,3377408
-Georgetown,Guyana,Demerara-Mahaica,3378644
 Verrettes,Haiti,Artibonite,3716044
 Thomazeau,Haiti,Ouest,3716667
 Saint-Raphael,Haiti,Nord,3717546
@@ -13004,8 +13003,8 @@ Ceadir-Lunga,Moldova,Gagauzia,618450
 Cahul,Moldova,Cahul,618456
 Bender,Moldova,Bender,618577
 Balti,Moldova,Balti,618605
-Monte-Carlo,Monaco,,2992741
-Monaco,Monaco,,2993458
+Monte-Carlo,Monaco,Monaco,2992741
+Monaco,Monaco,Monaco,2993458
 Uliastay,Mongolia,Dzabkhan,1515007
 Ulaangom,Mongolia,Uvs,1515029
 Ã–lgiy,Mongolia,Bayan-Ã–lgiy,1515436
@@ -13481,7 +13480,6 @@ Bloemendaal,Netherlands,North Holland,2758804
 Bladel,Netherlands,North Brabant,2758878
 Beverwijk,Netherlands,North Holland,2758998
 Beuningen,Netherlands,Gelderland,2759016
-Best,Netherlands,North Brabant,2759040
 Bergschenhoek,Netherlands,South Holland,2759113
 Bergeijk,Netherlands,North Brabant,2759132
 Bergen op Zoom,Netherlands,North Brabant,2759145
