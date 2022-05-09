@@ -19,7 +19,17 @@ df["location_cleaned"] = (
 
 df_min = df.sample(100, random_state=120)
 
-
+nan = 0
+counter = 1
 for i, r in df_min.iterrows():  # ["location_cleaned"]:
     result = get_country_from_location(r["location_cleaned"])
-    print("{:>50}  {:>50}  {:>50}".format(r["location"], r["location_cleaned"], result))
+    if result == "None":
+        nan += 1
+    print(
+        "{:1}  {:>50}  {:>50}  {:>50}".format(
+            counter, r["location"], r["location_cleaned"], result
+        )
+    )
+    counter += 1
+
+print(nan)

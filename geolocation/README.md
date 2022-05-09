@@ -1,46 +1,53 @@
 # Geolocation
 
-Objective: take a location input string commonly found in Github's user `location` setting, and return a normalized country name.
+Objective: take a location input string found in Github's user `location` setting, and return a normalized country name.
 
 
-This code is based off of the `gitgeo` repository with some manual updates.
+This code is based off of the [`gitgeo==1.0.2`](https://pypi.org/project/gitgeo/) repository with manual updates.
 
-https://pypi.org/project/gitgeo/
+Updates to `world_cities.csv` and `geographies_list.py`: added and removed city options, deduplicated.
 
-`gitgeo==1.0.2`
+Improvements in process based on testing in `runner.py`.
 
-
-Manual update to `world_cities.csv`:
-
-`University,United States,Florida,7260219` deleted
-`Mexico,Philippines,Central Luzon,1699805` deleted
-
-<!-- Manual update to `country_codes.csv`:
-
-`"South Korea", KR` added -->
-`city_country_dict['Korea'] = 'South Korea'`
-
-`Mohali,Punjab` not being inferred correctly despite being in the set - reshuffle the order of how it is inferred.
-
-Other error types:
-
-errors: India
-
-below process is NOT safe, deleted: ex. India -> Indiana -> United States
+Unsafe processes deleted: ex. India -> Indiana -> United States
 ```
 for metro in METRO_AREA_COUNTRY_DICT.keys():
      if location_string in metro:
          return METRO_AREA_COUNTRY_DICT[metro]
 ```
 
-More improvements in process based on testing in `runner.py`.
 
-Moved `India` world cities to the top.
+World cities sorted by aggregate country count.
 
-Next one to debug: why does `IIT PATNA, INDIA` return United States? The last two letters are `IA` which infers Iowa from
-
+added capitalization check to ensure last 2 letters correspond to US states.
 ```
 for state in STATE_ABBREV:
     if location_string.endswith(state):
         return "United States"
 ```
+
+### `runner.py` Analysis:
+
+After all improvements implemented, taking a random sample of 100 rows:
+
+3 Errors out of 84 inferred (94 actual locations): 96-97% accuracy rate
+
+```
+University of British Columbia -> United States
+Feira de Santana, BA, Brasil -> Portugal
+Mohali,Punjab -> Pakistan
+```
+
+Sample of locations unable to infer:
+```
+中国，上海 -> None
+Zhejiang University -> None
+The Netherlands, Europe -> None
+Bazemont -> None
+```
+
+Error sampling edge case sample:
+
+`get_country_from_location("Mohali,Punjab")`
+
+`Mohali,Punjab` is not inferred correctly (India) because the 2nd token is searched first, and is matched as Punjab in Pakistan.
