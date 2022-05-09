@@ -2,6 +2,8 @@
 
 # Reference: anaconda3\Lib\site-packages\gitgeo
 
+import re
+
 from geographies_list import (
     ALL_COUNTRIES,
     CITY_COUNTRY_DICT,
@@ -205,12 +207,15 @@ def get_country_from_location(location_string):
         return SPECIAL_CITIES[location_string]
 
     # if not international, likely to be USA: check if ends in a state
-    for state in STATE_NAMES:
-        if location_string.endswith(state):
-            return "United States"
-    for state in STATE_ABBREV:
-        if location_string.endswith(state):
-            return "United States"
+    if not re.search(
+        "[A-Z]{3}$", location_string
+    ):  # fixes INDIA and other capitalizations
+        for state in STATE_NAMES:
+            if location_string.endswith(state):
+                return "United States"
+        for state in STATE_ABBREV:
+            if location_string.endswith(state):
+                return "United States"
 
     # Loop through different typical separators of city, country, etc.
     for separator in [",", " "]:
