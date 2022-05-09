@@ -1,6 +1,7 @@
 """Geography lists used to map user location text to country."""
 
 import csv
+from collections import OrderedDict
 from pathlib import Path
 
 # static list of all cities mapped to countries
@@ -9,8 +10,8 @@ from pathlib import Path
 with open(("world_cities.csv"), errors="ignore", newline="") as file:
     reader = csv.reader(file)
     city_country_list = list(reader)
-    city_country_dict = {}
-    metro_area_country_dict = {}
+    city_country_dict = OrderedDict()
+    metro_area_country_dict = OrderedDict()
     # TODO: If a city is in the list twice, the country should be ambiguous.
     for row in city_country_list:
         # key is city (row[0]), value is country (row[1])
@@ -230,7 +231,7 @@ ALL_COUNTRIES = [
     "Oman",
     "Pakistan",
     "Palau",
-    "Palestinian Territories",
+    "Palestine",
     "Panama",
     "Papua New Guinea",
     "Paraguay",
