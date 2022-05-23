@@ -35,6 +35,7 @@ city_country_dict["Tasmania"] = "Australia"
 city_country_dict["Victoria"] = "Australia"
 city_country_dict["Western Australia"] = "Australia"
 city_country_dict["Korea"] = "South Korea"
+city_country_dict["Brasil"] = "Brazil"
 
 
 CITY_COUNTRY_DICT = city_country_dict
