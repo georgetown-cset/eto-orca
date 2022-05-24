@@ -4,6 +4,7 @@ import time
 
 import requests
 
+from geolocation.geolocation_base import get_country_from_location
 from scripts.github_config import RATE_LIMIT_INTERVAL, mk_auth
 
 AUTH = mk_auth()
@@ -56,11 +57,24 @@ def write_owners(repo_list: str, owner_output: str, prev_owners: str = None) -> 
     out.close()
 
 
+def get_location(user_str: str, get_location) -> str:
+    js = json.loads(user_str)
+    location = js["location"]
+    if location is None or not get_location:
+        inferred_country = None
+    else:
+        inferred_country = get_country_from_location(location)
+    return inferred_country
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("repo_list")
     parser.add_argument("owner_output")
     parser.add_argument("--prev_owners")
+    parser.add_argument("--get_location", action="store_false")
     args = parser.parse_args()
 
     write_owners(args.repo_list, args.owner_output)
+
+    # print(get_location(json.dumps(get_owner("jmelot")), True))
