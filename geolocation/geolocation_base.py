@@ -4,7 +4,7 @@
 
 import re
 
-from geographies_list import (
+from geolocation.geographies_list import (
     ALL_COUNTRIES,
     CITY_COUNTRY_DICT,
     CITY_COUNTRY_STRINGS,
