@@ -36,7 +36,9 @@ def get_owner(owner: str) -> dict:
     return None
 
 
-def write_owners(repo_list: str, owner_output: str, prev_owners: str = None) -> None:
+def write_owners(
+    repo_list: str, owner_output: str, prev_owners: bool, infer_country: bool
+) -> None:
     out = open(owner_output, mode="w")
     seen_owners = set()
     if prev_owners:
@@ -53,28 +55,22 @@ def write_owners(repo_list: str, owner_output: str, prev_owners: str = None) -> 
             seen_owners.add(owner)
             owner_meta = get_owner(owner)
             if owner_meta:
+                if infer_country:
+                    owner_meta["inferred_country"] = get_country_from_location(
+                        owner_meta["location"]
+                    )
                 out.write(json.dumps(owner_meta) + "\n")
     out.close()
-
-
-def get_location(user_str: str, get_location) -> str:
-    js = json.loads(user_str)
-    location = js["location"]
-    if location is None or not get_location:
-        inferred_country = None
-    else:
-        inferred_country = get_country_from_location(location)
-    return inferred_country
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("repo_list")
     parser.add_argument("owner_output")
-    parser.add_argument("--prev_owners")
-    parser.add_argument("--get_location", action="store_false")
+    parser.add_argument("--prev_owners", action="store_true")
+    parser.add_argument("--infer_country", action="store_true")
     args = parser.parse_args()
 
-    write_owners(args.repo_list, args.owner_output)
-
-    # print(get_location(json.dumps(get_owner("jmelot")), True))
+    write_owners(
+        args.repo_list, args.owner_output, args.prev_owners, args.infer_country
+    )

@@ -1,6 +1,6 @@
 """geolocation functionality."""
 
-# Reference: anaconda3\Lib\site-packages\gitgeo
+# Adapted from https://github.com/Open-Source-Software-Neighborhood-Watch/GitGeo/blob/d54b1fcd1a9f627e514b69eefc45e029d2fedd38/gitgeo/geolocation.py
 
 import re
 
