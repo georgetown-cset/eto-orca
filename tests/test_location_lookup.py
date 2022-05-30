@@ -13,7 +13,7 @@ class TestLocationLookup(unittest.TestCase):
         )
 
     def test_initial_china_from_regex(self):
-        self.assertEqual("china", get_country_from_regex("china, a country"))
+        self.assertEqual("China", get_country_from_regex("china, a country"))
 
     def get_country_from_place_usa(self):
         self.assertEqual("United States", get_country_from_place("Fulton, MD, USA"))
