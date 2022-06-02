@@ -2,6 +2,7 @@ import argparse
 import csv
 import json
 import os
+import random
 import re
 
 import requests
@@ -68,33 +69,55 @@ def add_inferred_locations(
     input_data: str, locations_output: str, inferred_locations_output: str
 ) -> None:
     loc_out = open(locations_output, mode="w")
+    out_rows = []
+    with open(input_data) as f:
+        for line in csv.DictReader(f):
+            location = line["location"]
+            inferred_country = get_country_from_regex(location)
+            if not inferred_country:
+                resp = get_place_response(line["location"])
+                loc_out.write(json.dumps(resp) + "\n")
+                if resp.get("candidates") and resp["candidates"]:
+                    location = resp["candidates"][0]["formatted_address"]
+                    inferred_country = get_country_from_place(location)
+                    print(
+                        f"found {inferred_country} in {line['location']} using Places API"
+                    )
+            location_parts = [lp.strip().title() for lp in location.split(",")]
+            city, state = None, None
+            if (
+                location_parts
+                and inferred_country
+                and (location_parts[-1].lower() == inferred_country.lower())
+            ):
+                if len(location_parts) == 3:
+                    city, state = location_parts[0], location_parts[1]
+                elif len(location_parts) == 2:
+                    city = location_parts[0]
+            elif len(location_parts) == 2:
+                city, state = location_parts
+            line.pop("difficulty")
+            line["inferred_country"] = inferred_country
+            line["inferred_city"] = city
+            line["inferred_state"] = state
+            out_rows.append(line)
     with open(inferred_locations_output, mode="w") as out_f:
         out = csv.DictWriter(
             out_f,
             fieldnames=[
                 "location",
                 "inferred_country",
+                "inferred_state",
+                "inferred_city",
                 "annotator_country",
                 "contains_pii",
+                "not_clear",
             ],
         )
         out.writeheader()
-        with open(input_data) as f:
-            for line in csv.DictReader(f):
-                inferred_country = get_country_from_regex(line["location"])
-                if not inferred_country:
-                    resp = get_place_response(line["location"])
-                    loc_out.write(json.dumps(resp) + "\n")
-                    if resp.get("candidates") and resp["candidates"]:
-                        inferred_country = get_country_from_place(
-                            resp["candidates"][0]["formatted_address"]
-                        )
-                        print(
-                            f"found {inferred_country} in {line['location']} using Places API"
-                        )
-                line.pop("difficulty")
-                line["inferred_country"] = inferred_country
-                out.writerow(line)
+        random.shuffle(out_rows)
+        for row in out_rows:
+            out.writerow(row)
     loc_out.close()
 
 
