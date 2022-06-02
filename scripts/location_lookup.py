@@ -65,6 +65,31 @@ def get_country_from_regex(place_name: str) -> str:
     return None
 
 
+def get_location_parts(location: str, loc_out):
+    inferred_country = get_country_from_regex(location)
+    if not inferred_country:
+        resp = get_place_response(location)
+        loc_out.write(json.dumps({"location": location, "response": resp}) + "\n")
+        if resp.get("candidates") and resp["candidates"]:
+            location = resp["candidates"][0]["formatted_address"]
+            inferred_country = get_country_from_place(location)
+            print(f"found {inferred_country} in {location} using Places API")
+    location_parts = [lp.strip().title() for lp in location.split(",")]
+    city, state = None, None
+    if (
+        location_parts
+        and inferred_country
+        and (location_parts[-1].lower() == inferred_country.lower())
+    ):
+        if len(location_parts) >= 3:
+            city, state = location_parts[-3], location_parts[-2]
+        elif len(location_parts) == 2:
+            city = location_parts[0]
+    elif len(location_parts) == 2:
+        city, state = location_parts
+    return city, state, inferred_country
+
+
 def add_inferred_locations(
     input_data: str, locations_output: str, inferred_locations_output: str
 ) -> None:
@@ -73,29 +98,7 @@ def add_inferred_locations(
     with open(input_data) as f:
         for line in csv.DictReader(f):
             location = line["location"]
-            inferred_country = get_country_from_regex(location)
-            if not inferred_country:
-                resp = get_place_response(line["location"])
-                loc_out.write(json.dumps(resp) + "\n")
-                if resp.get("candidates") and resp["candidates"]:
-                    location = resp["candidates"][0]["formatted_address"]
-                    inferred_country = get_country_from_place(location)
-                    print(
-                        f"found {inferred_country} in {line['location']} using Places API"
-                    )
-            location_parts = [lp.strip().title() for lp in location.split(",")]
-            city, state = None, None
-            if (
-                location_parts
-                and inferred_country
-                and (location_parts[-1].lower() == inferred_country.lower())
-            ):
-                if len(location_parts) == 3:
-                    city, state = location_parts[0], location_parts[1]
-                elif len(location_parts) == 2:
-                    city = location_parts[0]
-            elif len(location_parts) == 2:
-                city, state = location_parts
+            city, state, inferred_country = get_location_parts(location, loc_out)
             line.pop("difficulty")
             line["inferred_country"] = inferred_country
             line["inferred_city"] = city
