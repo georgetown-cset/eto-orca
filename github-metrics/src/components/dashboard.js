@@ -47,9 +47,18 @@ const Dashboard = () => {
   const defaultFilterValues = {
     "field_of_study": "Speech recognition",
   };
+  const sortOptions = {
+    "Stars": "stargazers_count",
+    "Watchers": "subscribers_count",
+    "Releases": "num_releases",
+    "Contributors": "num_contributors",
+    "Created Date": "created_at",
+    "Last Push Date": "pushed_at"
+  };
   const theme = useTheme();
 
   const [filterValues, setFilterValues] = React.useState({...defaultFilterValues});
+  const [orderBy, setOrderBy] = React.useState("stargazers_count");
 
   const handleSingleSelectChange = (event, key) => {
     const updatedFilterValues = {...filterValues};
@@ -57,9 +66,19 @@ const Dashboard = () => {
     setFilterValues(updatedFilterValues);
   };
 
+  const compareFn = (a, b) => {
+    if(a > b){
+      return -1
+    } else if (b > a){
+      return 1
+    } else {
+      return 0;
+    }
+  };
+
   return (
     <div>
-      <Paper component={"div"} style={{textAlign: "left", top: 0, backgroundColor: "white", zIndex: "998"}}>
+      <Paper component={"div"} style={{textAlign: "left", top: 0, backgroundColor: "white", zIndex: "998", padding: "20px"}}>
         <Typography component={"span"} variant={"h5"} style={{verticalAlign: "middle"}}>Select a field of study </Typography>
         <div style={{margin: "15px 0px 10px 20px", display: "inline-block"}}>
           <ToolbarFormControl sx={{ m: 1}}>
@@ -84,9 +103,33 @@ const Dashboard = () => {
             </Select>
           </ToolbarFormControl>
         </div>
+        <Typography component={"span"} variant={"h5"} style={{verticalAlign: "middle"}}> ordered by </Typography>
+        <div style={{margin: "15px 0px 10px 20px", display: "inline-block"}}>
+          <ToolbarFormControl sx={{ m: 1}}>
+            <InputLabel id="country-select-label">Order by</InputLabel>
+            <Select
+              labelId="fos-select-label"
+              id="fos-select"
+              value={orderBy}
+              onChange={(evt) => setOrderBy(evt.target.value)}
+              input={<OutlinedInput label="Order by" />}
+              MenuProps={MenuProps}
+            >
+            {Object.keys(sortOptions).sort().map((name) => (
+              <MenuItem
+                key={sortOptions[name]}
+                value={sortOptions[name]}
+                style={getStyles(sortOptions[name], orderBy, theme)}
+              >
+                {name}
+              </MenuItem>
+            ))}
+            </Select>
+          </ToolbarFormControl>
+        </div>
       </Paper>
-      {field_to_repos[filterValues["field_of_study"]].map(repo_id => (
-        <RepoCard data={repo_data[repo_id.toString()]}/>
+      {field_to_repos[filterValues["field_of_study"]].sort((a, b) => compareFn(repo_data[a][orderBy], repo_data[b][orderBy])).map(repo_id => (
+        <RepoCard data={repo_data[repo_id.toString()]} sortOptions={sortOptions}/>
       ))}
     </div>
   )

@@ -38,6 +38,8 @@ def retrieve_data(
             )
         row["star_dates"] = get_counts_by_month(row.pop("star_dates"))
         row["push_dates"] = get_counts_by_month(row.pop("push_dates"))
+        assert row["open_issues_count"] == row["open_issues"], row
+        row.pop("open_issues_count")
         for paper_meta in row["paper_meta"]:
             for field in paper_meta["fields"]:
                 field_name = field["name"]

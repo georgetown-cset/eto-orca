@@ -8,9 +8,9 @@ import "core-js/features/url-search-params";
 
 const Header = () => {
   return (
-    <Paper>
+    <div style={{padding: "20px"}}>
       <Typography component={"p"} variant={"h4"}>Open-Source Software in Emerging Technology Metrics</Typography>
-    </Paper>
+    </div>
   )
 };
 
