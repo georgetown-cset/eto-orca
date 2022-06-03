@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 
 from google.cloud import bigquery
+from tqdm import tqdm
 
 
 def get_counts_by_month(dates):
@@ -20,12 +21,12 @@ def retrieve_data(
     input_table: str, output_repo_file: str, output_field_file: str
 ) -> None:
     client = bigquery.Client()
-    query_job = client.query(f"select * from {input_table} limit 100")
+    query_job = client.query(f"select * from {input_table}")
     results = query_job.result()
     seen_ids = set()
     fmt_data = {}
     field_to_repos = {}
-    for result in results:
+    for result in tqdm(results):
         if result["id"] in seen_ids:
             continue
         seen_ids.add(result["id"])
