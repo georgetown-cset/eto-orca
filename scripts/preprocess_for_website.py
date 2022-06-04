@@ -58,11 +58,11 @@ if __name__ == "__main__":
     parser.add_argument("--input_dir", default="gh_website_stats")
     parser.add_argument(
         "--output_repo_file",
-        default=os.path.join("id_to_repo.pkl"),
+        default=os.path.join("get_data_cloud_fn", "data", "id_to_repo.pkl"),
     )
     parser.add_argument(
         "--output_field_file",
-        default=os.path.join("field_to_repo.pkl"),
+        default=os.path.join("get_data_cloud_fn", "data", "field_to_repo.pkl"),
     )
     args = parser.parse_args()
 
