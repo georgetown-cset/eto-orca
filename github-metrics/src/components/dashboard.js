@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useTheme } from "@mui/material/styles";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
@@ -12,8 +12,6 @@ import { styled } from '@mui/material/styles';
 import "core-js/features/url";
 import "core-js/features/url-search-params";
 
-import field_to_repos from "../data/fields";
-import repo_data from "../data/repos";
 import RepoCard from "./repo_card";
 
 const ToolbarFormControl = styled(FormControl)(({ theme }) => ({
@@ -33,6 +31,8 @@ const MenuProps = {
   },
 };
 
+const dataUrl = "https://us-east1-gcp-cset-projects.cloudfunctions.net/github-metrics/";
+
 function getStyles(name, selectedValue, theme) {
   return {
     fontWeight:
@@ -43,7 +43,9 @@ function getStyles(name, selectedValue, theme) {
 }
 
 const Dashboard = () => {
-
+  useEffect(() => {
+    mkFields().then(mkRepoData());
+  }, []);
   const defaultFilterValues = {
     "field_of_study": "Speech recognition",
   };
@@ -56,24 +58,31 @@ const Dashboard = () => {
     "Last Push Date": "pushed_at"
   };
   const theme = useTheme();
-
+  async function mkFields(){
+    let response = await fetch(dataUrl).catch((error) => {
+      console.log(error);
+    });
+    const data = (await response.json())["fields"];
+    setFields(data);
+  }
+  async function mkRepoData(){
+    const params = new URLSearchParams({"field": filterValues["field_of_study"], "order_by": orderBy}).toString();
+    let response = await fetch(dataUrl+"?"+params).catch((error) => {
+      console.log(error);
+    });
+    const data = (await response.json())["matches"];
+    setRepoData(data);
+  }
   const [filterValues, setFilterValues] = React.useState({...defaultFilterValues});
   const [orderBy, setOrderBy] = React.useState("stargazers_count");
+  const [fields, setFields] = React.useState([]);
+  const [repoData, setRepoData] = React.useState([]);
 
   const handleSingleSelectChange = (event, key) => {
     const updatedFilterValues = {...filterValues};
     updatedFilterValues[key] = event.target.value;
     setFilterValues(updatedFilterValues);
-  };
-
-  const compareFn = (a, b) => {
-    if(a > b){
-      return -1
-    } else if (b > a){
-      return 1
-    } else {
-      return 0;
-    }
+    mkRepoData();
   };
 
   return (
@@ -91,7 +100,7 @@ const Dashboard = () => {
               input={<OutlinedInput label="Field of Study" />}
               MenuProps={MenuProps}
             >
-            {Object.keys(field_to_repos).sort().map((name) => (
+            {fields.sort().map((name) => (
               <MenuItem
                 key={name}
                 value={name}
@@ -128,8 +137,8 @@ const Dashboard = () => {
           </ToolbarFormControl>
         </div>
       </Paper>
-      {field_to_repos[filterValues["field_of_study"]].sort((a, b) => compareFn(repo_data[a][orderBy], repo_data[b][orderBy])).map(repo_id => (
-        <RepoCard data={repo_data[repo_id.toString()]} sortOptions={sortOptions}/>
+      {repoData.map(repo => (
+        <RepoCard data={repo} sortOptions={sortOptions}/>
       ))}
     </div>
   )
