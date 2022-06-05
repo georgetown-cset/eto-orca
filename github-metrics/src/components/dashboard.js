@@ -55,7 +55,8 @@ const Dashboard = () => {
     "Releases": "num_releases",
     "Contributors": "num_contributors",
     "Created Date": "created_at",
-    "Last Push Date": "pushed_at"
+    "Last Push Date": "pushed_at",
+    "Open Issues": "open_issues"
   };
   const theme = useTheme();
   async function mkFields(){

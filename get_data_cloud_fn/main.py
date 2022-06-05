@@ -27,7 +27,9 @@ def get_data(request):
     if request_json and ("field" in request_json) and ("order_by" in request_json):
         all_repo_ids = FIELD_TO_REPOS[request_json["field"]]
         all_repos = [ID_TO_REPO[int(repo_id)] for repo_id in all_repo_ids]
-        sorted_repos = sorted(all_repos, key=lambda r: r[request_json["order_by"]])
+        sorted_repos = sorted(
+            all_repos, key=lambda r: r[request_json["order_by"]], reverse=True
+        )
         result = {"matches": sorted_repos[:20]}
     else:
         result = {"fields": sorted(list(FIELD_TO_REPOS.keys()))}

@@ -29,24 +29,39 @@ def retrieve_data(
     seen_ids = set()
     id_to_repo = {}
     field_to_repos = {}
+    int_keys = [
+        "subscribers_count",
+        "stargazers_count",
+        "open_issues",
+        "num_releases",
+        "num_contributors",
+        "id",
+    ]
     for line in tqdm(get_lines(input_dir)):
         if line["id"] in seen_ids:
             continue
         seen_ids.add(line["id"])
         row = {}
+        assert line["open_issues_count"] == line["open_issues"], line
         for key in line.keys():
-            row[key] = line[key] if not key.endswith("_at") else line[key].split()[0]
+            if key.endswith("_at"):
+                val = line[key].split()[0]
+            elif key in int_keys:
+                val = int(line[key].replace(",", "").replace("+", ""))
+            else:
+                val = line[key]
+            row[key] = val
+        row.pop("open_issues_count", None)
         row["star_dates"] = get_counts_by_month(row.pop("star_dates"))
         row["push_dates"] = get_counts_by_month(row.pop("push_dates"))
-        assert row["open_issues_count"] == row["open_issues"], row
-        row.pop("open_issues_count")
         for paper_meta in row.pop("paper_meta"):
             for field in paper_meta["fields"]:
                 field_name = field["name"]
                 if field_name not in field_to_repos:
-                    field_to_repos[field_name] = []
-                field_to_repos[field_name].append(row["id"])
+                    field_to_repos[field_name] = set()
+                field_to_repos[field_name].add(row["id"])
         id_to_repo[int(row["id"])] = row
+    field_to_repos = {fn: list(elts) for fn, elts in field_to_repos.items()}
     with open(output_repo_file, mode="wb") as f:
         pickle.dump(id_to_repo, f)
     with open(output_field_file, mode="wb") as f:
