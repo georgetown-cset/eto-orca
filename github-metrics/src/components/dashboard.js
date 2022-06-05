@@ -44,10 +44,11 @@ function getStyles(name, selectedValue, theme) {
 
 const Dashboard = () => {
   useEffect(() => {
-    mkFields().then(mkRepoData());
+    mkFields();
   }, []);
   const defaultFilterValues = {
     "field_of_study": "Speech recognition",
+    "order_by": "stargazers_count"
   };
   const sortOptions = {
     "Stars": "stargazers_count",
@@ -63,19 +64,28 @@ const Dashboard = () => {
     let response = await fetch(dataUrl).catch((error) => {
       console.log(error);
     });
-    const data = (await response.json())["fields"];
-    setFields(data);
+    if(response !== undefined) {
+      const data = (await response.json())["fields"];
+      setFields(data);
+      mkRepoData(defaultFilterValues);
+    } else{
+      console.log("No response for mkFields")
+    }
   }
-  async function mkRepoData(){
-    const params = new URLSearchParams({"field": filterValues["field_of_study"], "order_by": orderBy}).toString();
+  async function mkRepoData(filterValues){
+    const params = new URLSearchParams({"field": filterValues["field_of_study"],
+      "order_by": filterValues["order_by"]}).toString();
     let response = await fetch(dataUrl+"?"+params).catch((error) => {
       console.log(error);
     });
-    const data = (await response.json())["matches"];
-    setRepoData(data);
+    if(response !== undefined) {
+      const data = (await response.json())["matches"];
+      setRepoData(data);
+    } else{
+      console.log("No response for "+JSON.stringify(filterValues))
+    }
   }
   const [filterValues, setFilterValues] = React.useState({...defaultFilterValues});
-  const [orderBy, setOrderBy] = React.useState("stargazers_count");
   const [fields, setFields] = React.useState([]);
   const [repoData, setRepoData] = React.useState([]);
 
@@ -83,7 +93,7 @@ const Dashboard = () => {
     const updatedFilterValues = {...filterValues};
     updatedFilterValues[key] = event.target.value;
     setFilterValues(updatedFilterValues);
-    mkRepoData();
+    mkRepoData(updatedFilterValues);
   };
 
   return (
@@ -92,7 +102,7 @@ const Dashboard = () => {
         <Typography component={"span"} variant={"h5"} style={{verticalAlign: "middle"}}>Select a field of study </Typography>
         <div style={{margin: "15px 0px 10px 20px", display: "inline-block"}}>
           <ToolbarFormControl sx={{ m: 1}}>
-            <InputLabel id="country-select-label">Field of Study</InputLabel>
+            <InputLabel id="fos-select-label">Field of Study</InputLabel>
             <Select
               labelId="fos-select-label"
               id="fos-select"
@@ -116,12 +126,12 @@ const Dashboard = () => {
         <Typography component={"span"} variant={"h5"} style={{verticalAlign: "middle"}}> ordered by </Typography>
         <div style={{margin: "15px 0px 10px 20px", display: "inline-block"}}>
           <ToolbarFormControl sx={{ m: 1}}>
-            <InputLabel id="country-select-label">Order by</InputLabel>
+            <InputLabel id="order-by-select-label">Order by</InputLabel>
             <Select
-              labelId="fos-select-label"
-              id="fos-select"
-              value={orderBy}
-              onChange={(evt) => setOrderBy(evt.target.value)}
+              labelId="order-by-select-label"
+              id="order-by-select"
+              value={filterValues["order_by"]}
+              onChange={(evt) => handleSingleSelectChange(evt, "order_by")}
               input={<OutlinedInput label="Order by" />}
               MenuProps={MenuProps}
             >
@@ -129,7 +139,7 @@ const Dashboard = () => {
               <MenuItem
                 key={sortOptions[name]}
                 value={sortOptions[name]}
-                style={getStyles(sortOptions[name], orderBy, theme)}
+                style={getStyles(sortOptions[name], filterValues["order_by"], theme)}
               >
                 {name}
               </MenuItem>
