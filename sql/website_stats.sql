@@ -52,7 +52,6 @@ SELECT
   stargazers_count,
   subscribers_count,
   num_releases,
-  num_contributors,
   created_at,
   updated_at,
   pushed_at,
@@ -60,6 +59,8 @@ SELECT
   ultimate_fork_of,
   sources,
   paper_meta,
+  num_contributors,
+  used_by,
   star_dates,
   push_dates
 FROM

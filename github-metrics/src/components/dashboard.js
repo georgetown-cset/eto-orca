@@ -48,16 +48,16 @@ const Dashboard = () => {
   }, []);
   const defaultFilterValues = {
     "field_of_study": "Speech recognition",
-    "order_by": "stargazers_count"
+    "order_by": "num_references"
   };
   const sortOptions = {
     "Stars": "stargazers_count",
     "Watchers": "subscribers_count",
-    "Releases": "num_releases",
     "Contributors": "num_contributors",
     "Created Date": "created_at",
     "Last Push Date": "pushed_at",
-    "Open Issues": "open_issues"
+    "Open Issues": "open_issues",
+    "References": "num_references"
   };
   const theme = useTheme();
   async function mkFields(){
@@ -149,7 +149,7 @@ const Dashboard = () => {
         </div>
       </Paper>
       {repoData.map(repo => (
-        <RepoCard data={repo} sortOptions={sortOptions}/>
+        <RepoCard data={repo} sortOptions={sortOptions} field={filterValues["field_of_study"]}/>
       ))}
     </div>
   )

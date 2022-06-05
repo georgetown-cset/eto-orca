@@ -29,14 +29,15 @@ def retrieve_data(
     seen_ids = set()
     id_to_repo = {}
     field_to_repos = {}
-    int_keys = [
+    int_keys = {
         "subscribers_count",
         "stargazers_count",
         "open_issues",
         "num_releases",
         "num_contributors",
         "id",
-    ]
+        "used_by",
+    }
     for line in tqdm(get_lines(input_dir)):
         if line["id"] in seen_ids:
             continue
@@ -52,11 +53,15 @@ def retrieve_data(
             row[key] = val
         row["star_dates"] = get_counts_by_month(row.pop("star_dates"))
         row["push_dates"] = get_counts_by_month(row.pop("push_dates"))
+        row["num_references"] = {}
         for paper_meta in row.pop("paper_meta"):
             for field in paper_meta["fields"]:
                 field_name = field["name"]
                 if field_name not in field_to_repos:
                     field_to_repos[field_name] = set()
+                if field_name not in row["num_references"]:
+                    row["num_references"][field_name] = 0
+                row["num_references"][field_name] += 1
                 field_to_repos[field_name].add(row["id"])
         id_to_repo[int(row["id"])] = row
     field_to_repos = {fn: list(elts) for fn, elts in field_to_repos.items()}

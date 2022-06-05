@@ -8,9 +8,18 @@ import "core-js/features/url-search-params";
 
 
 const RepoCard = (props) => {
-  const {data, sortOptions} = props;
+  const {data, sortOptions, field} = props;
 
   const repo_name = data["owner_name"]+"/"+data["current_name"];
+
+  const getValue = (sort_key) => {
+    if(data[sort_key] === null) {
+      return 0;
+    } else if(sort_key === "num_references"){
+      return data[sort_key][field];
+    }
+    return data[sort_key];
+  }
 
   return (
     <Paper style={{maxWidth: "1000px", margin: "20px auto", padding: "20px"}}>
@@ -18,7 +27,7 @@ const RepoCard = (props) => {
       <div>
       {Object.keys(sortOptions).map(sortname => (
         <Typography component={"span"} variant={"body2"} style={{marginRight: "10px"}}>
-          <span style={{fontWeight: "bold"}}>{sortname}</span>: {data[sortOptions[sortname]] === null ? 0 : data[sortOptions[sortname]]}
+          <span style={{fontWeight: "bold"}}>{sortname}</span>: {getValue(sortOptions[sortname])}
         </Typography>
       ))}
       <Typography component={"p"} variant={"body2"} style={{marginTop: "15px"}}>
