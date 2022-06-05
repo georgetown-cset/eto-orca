@@ -42,7 +42,6 @@ def retrieve_data(
             continue
         seen_ids.add(line["id"])
         row = {}
-        assert line["open_issues_count"] == line["open_issues"], line
         for key in line.keys():
             if key.endswith("_at"):
                 val = line[key].split()[0]
@@ -51,7 +50,6 @@ def retrieve_data(
             else:
                 val = line[key]
             row[key] = val
-        row.pop("open_issues_count", None)
         row["star_dates"] = get_counts_by_month(row.pop("star_dates"))
         row["push_dates"] = get_counts_by_month(row.pop("push_dates"))
         for paper_meta in row.pop("paper_meta"):

@@ -46,7 +46,6 @@ SELECT
   owner_name,
   matched_name,
   current_name,
-  open_issues_count,
   open_issues,
   primary_programming_language,
   topics,
