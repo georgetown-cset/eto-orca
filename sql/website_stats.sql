@@ -81,9 +81,9 @@ SELECT
   num_contributors,
   used_by,
   star_dates,
-  repo_pushes,
-  issues,
-  prs
+  repo_pushes.events AS push_events,
+  issues.events AS issue_open_events,
+  prs AS pr_events
 FROM
   github_metrics.repos_with_full_meta
 INNER JOIN
