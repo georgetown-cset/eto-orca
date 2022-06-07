@@ -24,20 +24,39 @@ repo_star_dates AS (
   GROUP BY
     repo_id),
 
-push_events AS (
-  SELECT DISTINCT
-    repo_id,
-    event_id,
-    push_created_at
-  FROM
-    github_metrics.push_event_commits),
-
-repo_push_dates AS (
+repo_pushes AS (
   SELECT
     repo_id,
-    ARRAY_AGG(push_created_at) AS push_dates
+    ARRAY_AGG(STRUCT(
+        committer_id AS contributor,
+        push_created_at AS contrib_date
+    )) AS events
   FROM
-    push_events
+    github_metrics.push_event_commits
+  GROUP BY
+    repo_id),
+
+issues AS (
+  SELECT
+    repo_id,
+    ARRAY_AGG(STRUCT(
+        opener_id AS contributor,
+        issue_created_at AS contrib_date
+    )) AS events
+  FROM
+    github_metrics.issues_opened
+  GROUP BY
+    repo_id),
+
+prs AS (
+  SELECT
+    repo_id,
+    ARRAY_AGG(STRUCT(
+        opener_id AS contributor,
+        pr_created_at AS contrib_date
+    )) AS events
+  FROM
+    github_metrics.pull_requests_opened
   GROUP BY
     repo_id)
 
@@ -62,7 +81,9 @@ SELECT
   num_contributors,
   used_by,
   star_dates,
-  push_dates
+  repo_pushes,
+  issues,
+  prs
 FROM
   github_metrics.repos_with_full_meta
 INNER JOIN
@@ -74,8 +95,16 @@ LEFT JOIN
   ON
     id = repo_star_dates.repo_id
 LEFT JOIN
-  repo_push_dates
+  repo_pushes
   ON
-    id = repo_push_dates.repo_id
+    id = repo_pushes.repo_id
+LEFT JOIN
+  issues
+  ON
+    id = issues.repo_id
+LEFT JOIN
+  prs
+  ON
+    id = prs.repo_id
 WHERE
   (stargazers_count >= 10) AND ARRAY_LENGTH(paper_meta) > 1
