@@ -78,4 +78,4 @@ LEFT JOIN
   ON
     id = repo_push_dates.repo_id
 WHERE
-  (stargazers_count >= 10)
+  (stargazers_count >= 10) AND ARRAY_LENGTH(paper_meta) > 1
