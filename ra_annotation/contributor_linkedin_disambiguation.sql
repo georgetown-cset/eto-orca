@@ -5,7 +5,6 @@ with aggregated_li as (
       distinct concat("https://github.com", "/", push_event_commits.owner_name, "/", push_event_commits.repo_name)
     ) as contributed_repos,
     array_agg(distinct user_li_url) as linkedin_urls,
-    array_agg(distinct repo_id) as repo_ids,
     -- I dithered about the impact metric - for now I am going with the largest stargazers
     -- count among their contibuted repos. This is going to weight
     -- people who go about making typo contributions to a million repos weirdly but at least
