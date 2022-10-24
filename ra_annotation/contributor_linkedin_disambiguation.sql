@@ -1,4 +1,24 @@
-with aggregated_li as (
+with rel_ids as (
+  select distinct id
+  from
+    github_metrics.repos_with_full_meta
+  cross join
+    unnest(topics) as t
+  where
+    t in (
+      "speech-recognition",
+      "explainable-ai",
+      "interpretable-ai",
+      "explainable-ml",
+      "interpretable-ml",
+      "xai",
+      "explainability",
+      "interpretability",
+      "speech-to-text"
+    )
+),
+
+aggregated_li as (
   select
     trim(contributor_name) as contributor,
     array_agg(
@@ -17,12 +37,24 @@ with aggregated_li as (
   left join github_metrics.repos_with_full_meta
     on repo_id = id
   where user_li_url is not null
+    and id in (
+      select id
+      from
+        rel_ids)
   group by contributor
 )
 
 select
   contributor,
-  contributed_repos,
-  linkedin_urls
+  array_to_string(contributed_repos, " ; ") as contributed_repos,
+  case
+    when
+      array_length(
+        linkedin_urls
+      ) > 5 then concat(
+        "Use Google and ", "https://github.com/search?q=", replace(lower(contributor), " ", "+"), "&type=users"
+      )
+    else array_to_string(linkedin_urls, " ; ")
+  end as linkedin_urls
 from aggregated_li
 where array_length(linkedin_urls) > 1 order by impact_ranking desc
