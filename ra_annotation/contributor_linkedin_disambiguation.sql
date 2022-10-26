@@ -46,14 +46,13 @@ aggregated_li as (
 
 select
   contributor,
+  concat("https://github.com/search?q=", replace(lower(contributor), " ", "+"), "&type=users") as contributor_search,
   array_to_string(contributed_repos, " ; ") as contributed_repos,
   case
     when
       array_length(
         linkedin_urls
-      ) > 5 then concat(
-        "Use Google and ", "https://github.com/search?q=", replace(lower(contributor), " ", "+"), "&type=users"
-      )
+      ) > 5 then "Use Google and GitHub profile information"
     else array_to_string(linkedin_urls, " ; ")
   end as linkedin_urls
 from aggregated_li
