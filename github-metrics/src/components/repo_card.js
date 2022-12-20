@@ -11,7 +11,7 @@ import {LineGraph} from "../components/graph";
 
 const styles = {
   card: css`
-    max-width: 1000px;
+    max-width: 100%;
     margin: 20px auto;
     padding: 20px;
     border: 1px solid black;

@@ -146,7 +146,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <Paper component={"div"} style={{textAlign: "left", top: 0, backgroundColor: "white", zIndex: "998", padding: "20px"}}>
+      <div style={{textAlign: "left", top: 0, backgroundColor: "white", zIndex: "998", padding: "20px", width: "350px", float: "left"}}>
         <Typography component={"span"} variant={"h5"} style={{verticalAlign: "middle"}}>Select a field of study </Typography>
         <div style={{margin: "15px 0px 10px 20px", display: "inline-block"}}>
           <ToolbarFormControl sx={{ m: 1}}>
@@ -195,21 +195,23 @@ const Dashboard = () => {
             </Select>
           </ToolbarFormControl>
         </div>
-      </Paper>
-      <div style={{ borderBottom: 1, borderColor: "divider", position: "sticky", top: "0", zIndex: 200, backgroundColor: "white"}}>
-        <StyledTabs value={tabValue} onChange={(evt, newValue) => {setTabValue(newValue)}} aria-label="map of science tabs">
-          <Tab label="Field summary" {...a11yProps(0)} />
-          <Tab label="Repository list" {...a11yProps(1)} />
-        </StyledTabs>
       </div>
-      <TabPanel value={tabValue} index={0}>
-        <span>This is where the summary view will go</span>
-      </TabPanel>
-      <TabPanel value={tabValue} index={1}>
-        {repoData.map(repo => (
-          <RepoCard data={repo} sortOptions={sortOptions} field={filterValues["field_of_study"]}/>
-        ))}
-      </TabPanel>
+      <div style={{overflow: "auto"}}>
+        <div style={{ borderBottom: 1, borderColor: "divider", position: "sticky", top: "0", zIndex: 200, backgroundColor: "white"}}>
+          <StyledTabs value={tabValue} onChange={(evt, newValue) => {setTabValue(newValue)}} aria-label="map of science tabs">
+            <Tab label="Field summary" {...a11yProps(0)} />
+            <Tab label="Repository list" {...a11yProps(1)} />
+          </StyledTabs>
+        </div>
+        <TabPanel value={tabValue} index={0}>
+          <span>This is where the summary view will go</span>
+        </TabPanel>
+        <TabPanel value={tabValue} index={1}>
+          {repoData.map(repo => (
+            <RepoCard data={repo} sortOptions={sortOptions} field={filterValues["field_of_study"]}/>
+          ))}
+        </TabPanel>
+      </div>
     </div>
   )
 };
