@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import CircularProgress from "@mui/material/CircularProgress";
-import Header from "../components/header";
+import {AppWrapper, InfoCard} from "@eto/eto-ui-components";
 
 /* Set the body margin and padding to 0 here */
 import "../styles/styles.css";
@@ -13,14 +13,18 @@ const IndexPage = () => {
   }, []);
 
   return (
-    <div>
-      <Header/>
+    <AppWrapper>
+      <InfoCard
+        title={"Open-Source Software in Emerging Technology Metrics"}
+        description={"This will contain some cool info someday!"}
+        documentationLink={"https://eto.tech/tool-docs/oss-tracker"}
+      />
       {(typeof window !== "undefined") &&
         <React.Suspense fallback={<div style={{textAlign: "center"}}><CircularProgress/></div>}>
           <Dashboard/>
         </React.Suspense>
       }
-    </div>
+    </AppWrapper>
   )
 };
 

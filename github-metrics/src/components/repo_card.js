@@ -6,7 +6,7 @@ import { css } from "@emotion/react";
 import "core-js/features/url";
 import "core-js/features/url-search-params";
 
-import {LineGraph} from "../components/graph";
+import {LineGraph} from "./graph";
 
 
 const styles = {
@@ -54,9 +54,9 @@ const RepoCard = (props) => {
     <div css={styles.card}>
       <Link href={"https://github.com/"+repo_name}>{repo_name}</Link>
       <div>
-        {Object.keys(sortOptions).map(sortname => (
+        {sortOptions.map(option => (
           <Typography component={"span"} variant={"body2"} css={styles.sortOption}>
-            <span css={styles.emph}>{sortname}</span>: {getValue(sortOptions[sortname])}
+            <span css={styles.emph}>{option.text}</span>: {getValue(option.val)}
           </Typography>
         ))}
         <Typography component={"p"} variant={"body2"} css={styles.dataDesc}>

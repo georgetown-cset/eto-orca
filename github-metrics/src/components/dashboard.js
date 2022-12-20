@@ -1,16 +1,11 @@
 import React, {useEffect} from "react";
-import { useTheme } from "@mui/material/styles";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Paper from "@mui/material/Paper";
-import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import PropTypes from "prop-types";
 import { styled } from "@mui/material/styles";
+import { Dropdown } from "@eto/eto-ui-components";
 
 import "core-js/features/url";
 import "core-js/features/url-search-params";
@@ -22,17 +17,6 @@ const ToolbarFormControl = styled(FormControl)(({ theme }) => ({
   minWidth: "150px",
   width: null
 }));
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -97,16 +81,15 @@ const Dashboard = () => {
     "field_of_study": "Speech recognition",
     "order_by": "num_references"
   };
-  const sortOptions = {
-    "Stars": "stargazers_count",
-    "Watchers": "subscribers_count",
-    "Contributors": "num_contributors",
-    "Created Date": "created_at",
-    "Last Push Date": "pushed_at",
-    "Open Issues": "open_issues",
-    "References": "num_references"
-  };
-  const theme = useTheme();
+  const sortOptions = [
+    {"val": "stargazers_count", "text": "Stars"},
+    {"val": "subscribers_count", "text": "Watchers"},
+    {"val": "num_contributors", "text": "Contributors"},
+    {"val": "created_at", "text": "Created Date"},
+    {"val": "pushed_at", "text": "Last Push Date"},
+    {"val": "open_issues", "text": "Open Issues"},
+    {"val": "num_references", "text": "References"}
+ ];
   async function mkFields(){
     let response = await fetch(dataUrl).catch((error) => {
       console.log(error);
@@ -137,63 +120,24 @@ const Dashboard = () => {
   const [repoData, setRepoData] = React.useState([]);
   const [tabValue, setTabValue] = React.useState(0);
 
-  const handleSingleSelectChange = (event, key) => {
+  const handleSingleSelectChange = (value, key) => {
     const updatedFilterValues = {...filterValues};
-    updatedFilterValues[key] = event.target.value;
+    updatedFilterValues[key] = value;
     setFilterValues(updatedFilterValues);
     mkRepoData(updatedFilterValues);
   };
 
   return (
-    <div>
+    <div style={{backgroundColor: "white"}}>
       <div style={{textAlign: "left", top: 0, backgroundColor: "white", zIndex: "998", padding: "20px", width: "350px", float: "left"}}>
         <Typography component={"span"} variant={"h5"} style={{verticalAlign: "middle"}}>Select a field of study </Typography>
         <div style={{margin: "15px 0px 10px 20px", display: "inline-block"}}>
-          <ToolbarFormControl sx={{ m: 1}}>
-            <InputLabel id="fos-select-label">Field of Study</InputLabel>
-            <Select
-              labelId="fos-select-label"
-              id="fos-select"
-              value={filterValues["field_of_study"]}
-              onChange={(evt) => handleSingleSelectChange(evt, "field_of_study")}
-              input={<OutlinedInput label="Field of Study" />}
-              MenuProps={MenuProps}
-            >
-            {fields.sort().map((name) => (
-              <MenuItem
-                key={name}
-                value={name}
-                style={getStyles(name, filterValues["field_of_study"], theme)}
-              >
-                {name}
-              </MenuItem>
-            ))}
-            </Select>
-          </ToolbarFormControl>
-        </div>
-        <Typography component={"span"} variant={"h5"} style={{verticalAlign: "middle"}}> ordered by </Typography>
-        <div style={{margin: "15px 0px 10px 20px", display: "inline-block"}}>
-          <ToolbarFormControl sx={{ m: 1}}>
-            <InputLabel id="order-by-select-label">Order by</InputLabel>
-            <Select
-              labelId="order-by-select-label"
-              id="order-by-select"
-              value={filterValues["order_by"]}
-              onChange={(evt) => handleSingleSelectChange(evt, "order_by")}
-              input={<OutlinedInput label="Order by" />}
-              MenuProps={MenuProps}
-            >
-            {Object.keys(sortOptions).sort().map((name) => (
-              <MenuItem
-                key={sortOptions[name]}
-                value={sortOptions[name]}
-                style={getStyles(sortOptions[name], filterValues["order_by"], theme)}
-              >
-                {name}
-              </MenuItem>
-            ))}
-            </Select>
-          </ToolbarFormControl>
+          <Dropdown
+            selected={filterValues["field_of_study"]}
+            setSelected={(val) => handleSingleSelectChange(val, "field_of_study")}
+            inputLabel={"Field of Study"}
+            options={fields.sort().map(f => ({"text": f, "val": f}))}
+          />
         </div>
       </div>
       <div style={{overflow: "auto"}}>
@@ -207,6 +151,14 @@ const Dashboard = () => {
           <span>This is where the summary view will go</span>
         </TabPanel>
         <TabPanel value={tabValue} index={1}>
+          <div style={{marginTop: "5px"}}>
+            <Dropdown
+              selected={filterValues["order_by"]}
+              setSelected={(val) => handleSingleSelectChange(val, "order_by")}
+              inputLabel={"Order by"}
+              options={sortOptions}
+            />
+          </div>
           {repoData.map(repo => (
             <RepoCard data={repo} sortOptions={sortOptions} field={filterValues["field_of_study"]}/>
           ))}
