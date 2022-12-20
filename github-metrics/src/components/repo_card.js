@@ -29,7 +29,7 @@ const styles = {
 };
 
 const RepoCard = (props) => {
-  const {data, sortOptions, field} = props;
+  const {data, sortOptions, field, graph_key, graph_title} = props;
 
   const repo_name = data["owner_name"]+"/"+data["current_name"];
 
@@ -64,8 +64,7 @@ const RepoCard = (props) => {
         </Typography>
       </div>
       <div>
-        <LineGraph traces={[{x: getX(data["star_dates"]), y: getY(data["star_dates"])}]} title={"Stars over Time"}/>
-        <LineGraph traces={[{x: getX(data["push_dates"]), y: getY(data["push_dates"])}]} title={"Push Events over Time"}/>
+        <LineGraph traces={[{x: getX(data[graph_key]), y: getY(data[graph_key])}]} title={graph_title}/>
       </div>
     </div>
   )

@@ -79,7 +79,8 @@ const Dashboard = () => {
   }, []);
   const defaultFilterValues = {
     "field_of_study": "Speech recognition",
-    "order_by": "num_references"
+    "order_by": "num_references",
+    "compare_graph": "push_dates"
   };
   const sortOptions = [
     {"val": "stargazers_count", "text": "Stars"},
@@ -89,7 +90,13 @@ const Dashboard = () => {
     {"val": "pushed_at", "text": "Last Push Date"},
     {"val": "open_issues", "text": "Open Issues"},
     {"val": "num_references", "text": "References"}
- ];
+  ];
+  const compareMapping = {
+    "star_dates": "Stars over time",
+    "push_dates": "Push events over time"
+  };
+  const compareOptions = Object.entries(compareMapping).map(e => ({"val": e[0], "text": e[1]}));
+
   async function mkFields(){
     let response = await fetch(dataUrl).catch((error) => {
       console.log(error);
@@ -152,15 +159,27 @@ const Dashboard = () => {
         </TabPanel>
         <TabPanel value={tabValue} index={1}>
           <div style={{marginTop: "5px"}}>
-            <Dropdown
-              selected={filterValues["order_by"]}
-              setSelected={(val) => handleSingleSelectChange(val, "order_by")}
-              inputLabel={"Order by"}
-              options={sortOptions}
-            />
+            <div style={{display: "inline-block"}}>
+              <Dropdown
+                selected={filterValues["order_by"]}
+                setSelected={(val) => handleSingleSelectChange(val, "order_by")}
+                inputLabel={"Order by"}
+                options={sortOptions}
+              />
+            </div>
+            <div style={{display: "inline-block"}}>
+              <Dropdown
+                selected={filterValues["compare_graph"]}
+                setSelected={(val) => handleSingleSelectChange(val, "compare_graph")}
+                inputLabel={"Compare"}
+                options={compareOptions}
+              />
+            </div>
           </div>
           {repoData.map(repo => (
-            <RepoCard data={repo} sortOptions={sortOptions} field={filterValues["field_of_study"]}/>
+            <RepoCard data={repo} sortOptions={sortOptions} field={filterValues["field_of_study"]}
+                      graph_key={filterValues["compare_graph"]}
+                      graph_title={compareMapping[filterValues["compare_graph"]]}/>
           ))}
         </TabPanel>
       </div>
