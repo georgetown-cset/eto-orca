@@ -1,5 +1,4 @@
 import React, {useEffect} from "react";
-import FormControl from "@mui/material/FormControl";
 import Typography from "@mui/material/Typography";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -11,12 +10,6 @@ import "core-js/features/url";
 import "core-js/features/url-search-params";
 
 import RepoCard from "./repo_card";
-
-const ToolbarFormControl = styled(FormControl)(({ theme }) => ({
-  verticalAlign: "middle",
-  minWidth: "150px",
-  width: null
-}));
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -64,15 +57,6 @@ function a11yProps(index) {
 
 const dataUrl = "https://us-east1-gcp-cset-projects.cloudfunctions.net/github-metrics/";
 
-function getStyles(name, selectedValue, theme) {
-  return {
-    fontWeight:
-      selectedValue !== name
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
-
 const Dashboard = () => {
   useEffect(() => {
     mkFields();
@@ -85,15 +69,16 @@ const Dashboard = () => {
     "language": "Coming soon!",
     "license": "Coming soon!"
   };
-  const sortOptions = [
-    {"val": "stargazers_count", "text": "Stars"},
-    {"val": "subscribers_count", "text": "Watchers"},
-    {"val": "num_contributors", "text": "Contributors"},
-    {"val": "created_at", "text": "Created Date"},
-    {"val": "pushed_at", "text": "Last Push Date"},
-    {"val": "open_issues", "text": "Open Issues"},
-    {"val": "num_references", "text": "References"}
-  ];
+  const sortMapping = {
+    "stargazers_count": "Stars",
+    "subscribers_count": "Watchers",
+    "num_contributors": "Contributors",
+    "created_at": "Created Date",
+    "pushed_at": "Last Push Date",
+    "open_issues": "Open Issues",
+    "num_references": "References"
+  };
+  const sortOptions = Object.entries(sortMapping).map(e => ({"val": e[0], "text": e[1]}));
   const compareMapping = {
     "star_dates": "Stars over time",
     "push_dates": "Push events over time"
@@ -217,7 +202,7 @@ const Dashboard = () => {
               </div>
             </div>
             {repoData.map(repo => (
-              <RepoCard data={repo} sortOptions={sortOptions} field={filterValues["field_of_study"]}
+              <RepoCard data={repo} metaMapping={sortMapping} field={filterValues["field_of_study"]}
                         graph_key={filterValues["compare_graph"]}
                         graph_title={compareMapping[filterValues["compare_graph"]]}/>
             ))}

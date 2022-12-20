@@ -1,7 +1,7 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
 import { css } from "@emotion/react";
+import { ExternalLink } from "@eto/eto-ui-components";
 
 import "core-js/features/url";
 import "core-js/features/url-search-params";
@@ -22,17 +22,18 @@ const styles = {
   `,
   nobreak: css`
     word-wrap: nobreak;
+    margin-right: 10px;
   `,
   sortOption: css`
     margin-right: 10px;
   `,
   dataDesc: css`
-    margin-top: 15px;
+    margin: 15px 0px;
   `
 };
 
 const RepoCard = (props) => {
-  const {data, sortOptions, field, graph_key, graph_title} = props;
+  const {data, metaMapping, field, graph_key, graph_title} = props;
 
   const repo_name = data["owner_name"]+"/"+data["current_name"];
 
@@ -53,21 +54,31 @@ const RepoCard = (props) => {
     return ary.map(elt => elt[1])
   };
 
+  const metaGroups = [
+    ["stargazers_count", "subscribers_count", "num_contributors"],
+    ["open_issues", "num_references"],
+    ["created_at", "pushed_at"]
+  ];
+
   return (
     <div css={styles.card}>
-      <Link href={"https://github.com/"+repo_name}>{repo_name}</Link>
       <div>
         <div style={{width: "40%", display: "inline-block", verticalAlign: "top"}}>
-          {sortOptions.map(option => (
-            <Typography component={"span"} variant={"body2"} css={styles.sortOption}>
-              <span css={styles.nobreak}><span css={styles.emph}>{option.text}</span>: {getValue(option.val)}</span>
-            </Typography>
-          ))}
+          <h4><ExternalLink href={"https://github.com/"+repo_name}>{repo_name}</ExternalLink></h4>
           <Typography component={"p"} variant={"body2"} css={styles.dataDesc}>
             {data["description"]}
           </Typography>
+          {metaGroups.map((group, group_idx) => (
+            <Typography component={"div"} variant={"body2"} css={styles.sortOption} key={`meta-group-${group_idx}`}>
+              {group.map(option => (
+                <span css={styles.nobreak} key={option}>
+                  <span css={styles.emph}>{metaMapping[option]}</span>: {getValue(option)}
+                </span>
+              ))}
+            </Typography>
+          ))}
         </div>
-        <div style={{width: "59%", display: "inline-block"}}>
+        <div style={{width: "59%", display: "inline-block", verticalAlign: "top"}}>
           <LineGraph traces={[{x: getX(data[graph_key]), y: getY(data[graph_key])}]}
                      title={graph_title} height={"250px"}/>
         </div>

@@ -20,8 +20,6 @@ const isSSR = typeof window === "undefined";
 const LineGraph = (props) => {
   const {traces, title, height} = props;
 
-  const offset = -1;
-
   const traceMetadata = [];
   let maxY = -1;
   for(const [idx, trace] of traces.entries()) {
