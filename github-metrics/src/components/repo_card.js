@@ -20,6 +20,9 @@ const styles = {
   emph: css`
     font-weight: bold;
   `,
+  nobreak: css`
+    word-wrap: nobreak;
+  `,
   sortOption: css`
     margin-right: 10px;
   `,
@@ -54,17 +57,20 @@ const RepoCard = (props) => {
     <div css={styles.card}>
       <Link href={"https://github.com/"+repo_name}>{repo_name}</Link>
       <div>
-        {sortOptions.map(option => (
-          <Typography component={"span"} variant={"body2"} css={styles.sortOption}>
-            <span css={styles.emph}>{option.text}</span>: {getValue(option.val)}
+        <div style={{width: "40%", display: "inline-block", verticalAlign: "top"}}>
+          {sortOptions.map(option => (
+            <Typography component={"span"} variant={"body2"} css={styles.sortOption}>
+              <span css={styles.nobreak}><span css={styles.emph}>{option.text}</span>: {getValue(option.val)}</span>
+            </Typography>
+          ))}
+          <Typography component={"p"} variant={"body2"} css={styles.dataDesc}>
+            {data["description"]}
           </Typography>
-        ))}
-        <Typography component={"p"} variant={"body2"} css={styles.dataDesc}>
-          {data["description"]}
-        </Typography>
-      </div>
-      <div>
-        <LineGraph traces={[{x: getX(data[graph_key]), y: getY(data[graph_key])}]} title={graph_title}/>
+        </div>
+        <div style={{width: "59%", display: "inline-block"}}>
+          <LineGraph traces={[{x: getX(data[graph_key]), y: getY(data[graph_key])}]}
+                     title={graph_title} height={"250px"}/>
+        </div>
       </div>
     </div>
   )

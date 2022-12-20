@@ -18,7 +18,7 @@ const Plot = lazy(() => import('react-plotly.js'));
 const isSSR = typeof window === "undefined";
 
 const LineGraph = (props) => {
-  const {traces, title} = props;
+  const {traces, title, height} = props;
 
   const offset = -1;
 
@@ -68,7 +68,7 @@ const LineGraph = (props) => {
             config={plotlyDefaults.config}
             data={traceMetadata}
             layout={layout}
-            style={{height: "450px", width: "100%"}}
+            style={{height: height ? height : "450px", width: "100%"}}
           />
         </Suspense>
       }
