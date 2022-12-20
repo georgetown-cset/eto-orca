@@ -1,7 +1,7 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 import { css } from "@emotion/react";
-import { ExternalLink } from "@eto/eto-ui-components";
+import {ButtonStyled, ExternalLink} from "@eto/eto-ui-components";
 
 import "core-js/features/url";
 import "core-js/features/url-search-params";
@@ -64,7 +64,10 @@ const RepoCard = (props) => {
     <div css={styles.card}>
       <div>
         <div style={{width: "40%", display: "inline-block", verticalAlign: "top"}}>
-          <h4><ExternalLink href={"https://github.com/"+repo_name}>{repo_name}</ExternalLink></h4>
+          <span>
+            <h4 style={{display: "inline-block", marginRight: "10px"}}><ExternalLink href={"https://github.com/"+repo_name}>{repo_name}</ExternalLink></h4>
+            <span style={{display: "inline-block", fontSize: "80%"}}><ExternalLink href={"https://deps.dev/pypi/"+data["current_name"]}>[deps.dev]</ExternalLink></span>
+          </span>
           <Typography component={"p"} variant={"body2"} css={styles.dataDesc}>
             {data["description"]}
           </Typography>
@@ -77,12 +80,23 @@ const RepoCard = (props) => {
               ))}
             </Typography>
           ))}
+          <Typography component={"div"} variant={"body2"} css={styles.sortOption}>
+            <span css={styles.nobreak}>
+              <span css={styles.emph}>Funders</span>: tk
+            </span>
+          </Typography>
+          <Typography component={"div"} variant={"body2"} css={styles.sortOption}>
+            <span css={styles.nobreak}>
+              <span css={styles.emph}>License TK</span>
+            </span>
+          </Typography>
         </div>
         <div style={{width: "59%", display: "inline-block", verticalAlign: "top"}}>
           <LineGraph traces={[{x: getX(data[graph_key]), y: getY(data[graph_key])}]}
                      title={graph_title} height={"250px"}/>
         </div>
       </div>
+      <div style={{textAlign: "center"}}><ButtonStyled href={"/"}>More details</ButtonStyled></div>
     </div>
   )
 };
