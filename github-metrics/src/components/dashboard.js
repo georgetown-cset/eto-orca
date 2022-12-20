@@ -80,7 +80,10 @@ const Dashboard = () => {
   const defaultFilterValues = {
     "field_of_study": "Speech recognition",
     "order_by": "num_references",
-    "compare_graph": "push_dates"
+    "compare_graph": "push_dates",
+    "topic": "",
+    "language": "Coming soon!",
+    "license": "Coming soon!"
   };
   const sortOptions = [
     {"val": "stargazers_count", "text": "Stars"},
@@ -96,6 +99,12 @@ const Dashboard = () => {
     "push_dates": "Push events over time"
   };
   const compareOptions = Object.entries(compareMapping).map(e => ({"val": e[0], "text": e[1]}));
+  const topicsMapping = {
+    "riscv": "RISC-V",
+    "speech_recognition": "Speech recognition",
+    "ai_safety": "AI Safety"
+  };
+  const topicOptions = Object.entries(topicsMapping).map(e => ({"val": e[0], "text": e[1]}));
 
   async function mkFields(){
     let response = await fetch(dataUrl).catch((error) => {
@@ -136,52 +145,84 @@ const Dashboard = () => {
 
   return (
     <div style={{backgroundColor: "white"}}>
-      <div style={{textAlign: "left", top: 0, backgroundColor: "white", zIndex: "998", padding: "20px", width: "350px", float: "left"}}>
-        <Typography component={"span"} variant={"h5"} style={{verticalAlign: "middle"}}>Select a field of study </Typography>
-        <div style={{margin: "15px 0px 10px 20px", display: "inline-block"}}>
-          <Dropdown
-            selected={filterValues["field_of_study"]}
-            setSelected={(val) => handleSingleSelectChange(val, "field_of_study")}
-            inputLabel={"Field of Study"}
-            options={fields.sort().map(f => ({"text": f, "val": f}))}
-          />
-        </div>
+      <div style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.12)", borderColor: "divider", position: "sticky", top: "0", zIndex: 200, backgroundColor: "white"}}>
+        <StyledTabs value={tabValue} onChange={(evt, newValue) => {setTabValue(newValue)}} aria-label="OSS tracker tabs">
+          <Tab label="Field summary" {...a11yProps(0)} />
+          <Tab label="Repository list" {...a11yProps(1)} />
+        </StyledTabs>
       </div>
-      <div style={{overflow: "auto"}}>
-        <div style={{ borderBottom: 1, borderColor: "divider", position: "sticky", top: "0", zIndex: 200, backgroundColor: "white"}}>
-          <StyledTabs value={tabValue} onChange={(evt, newValue) => {setTabValue(newValue)}} aria-label="map of science tabs">
-            <Tab label="Field summary" {...a11yProps(0)} />
-            <Tab label="Repository list" {...a11yProps(1)} />
-          </StyledTabs>
-        </div>
-        <TabPanel value={tabValue} index={0}>
-          <span>This is where the summary view will go</span>
-        </TabPanel>
-        <TabPanel value={tabValue} index={1}>
-          <div style={{marginTop: "5px"}}>
-            <div style={{display: "inline-block"}}>
+      <div>
+        <div style={{textAlign: "left", top: 0, zIndex: "998", padding: "20px", width: "350px", float: "left"}}>
+          <div>
+            <h3>Select a subject</h3>
+            <div style={{margin: "15px 0px 10px 20px"}}>
               <Dropdown
-                selected={filterValues["order_by"]}
-                setSelected={(val) => handleSingleSelectChange(val, "order_by")}
-                inputLabel={"Order by"}
-                options={sortOptions}
+                selected={filterValues["topic"]}
+                setSelected={(val) => handleSingleSelectChange(val, "topic")}
+                inputLabel={"Curated topic area"}
+                options={topicOptions}
               />
             </div>
-            <div style={{display: "inline-block"}}>
+            <div style={{textAlign: "center"}}>or (advanced)</div>
+            <div style={{margin: "15px 0px 10px 20px"}}>
               <Dropdown
-                selected={filterValues["compare_graph"]}
-                setSelected={(val) => handleSingleSelectChange(val, "compare_graph")}
-                inputLabel={"Compare"}
-                options={compareOptions}
+                selected={filterValues["field_of_study"]}
+                setSelected={(val) => handleSingleSelectChange(val, "field_of_study")}
+                inputLabel={"Field of study"}
+                options={fields.sort().map(f => ({"text": f, "val": f}))}
               />
             </div>
           </div>
-          {repoData.map(repo => (
-            <RepoCard data={repo} sortOptions={sortOptions} field={filterValues["field_of_study"]}
-                      graph_key={filterValues["compare_graph"]}
-                      graph_title={compareMapping[filterValues["compare_graph"]]}/>
-          ))}
-        </TabPanel>
+          <div>
+            <h3>Filter further</h3>
+            <div style={{margin: "15px 0px 10px 20px"}}>
+              <Dropdown
+                selected={filterValues["language"]}
+                setSelected={(val) => handleSingleSelectChange(val, "language")}
+                inputLabel={"Top programming language"}
+                options={[{"text": "Coming soon!", "val": "coming_soon"}]}
+              />
+            </div>
+            <div style={{margin: "15px 0px 10px 20px"}}>
+              <Dropdown
+                selected={filterValues["license"]}
+                setSelected={(val) => handleSingleSelectChange(val, "license")}
+                inputLabel={"License"}
+                options={[{"text": "Coming soon!", "val": "coming_soon"}]}
+              />
+            </div>
+          </div>
+        </div>
+        <div style={{overflow: "auto"}}>
+          <TabPanel value={tabValue} index={0}>
+            <span>This is where the summary view will go</span>
+          </TabPanel>
+          <TabPanel value={tabValue} index={1}>
+            <div style={{marginTop: "5px"}}>
+              <div style={{display: "inline-block"}}>
+                <Dropdown
+                  selected={filterValues["order_by"]}
+                  setSelected={(val) => handleSingleSelectChange(val, "order_by")}
+                  inputLabel={"Order by"}
+                  options={sortOptions}
+                />
+              </div>
+              <div style={{display: "inline-block"}}>
+                <Dropdown
+                  selected={filterValues["compare_graph"]}
+                  setSelected={(val) => handleSingleSelectChange(val, "compare_graph")}
+                  inputLabel={"Compare"}
+                  options={compareOptions}
+                />
+              </div>
+            </div>
+            {repoData.map(repo => (
+              <RepoCard data={repo} sortOptions={sortOptions} field={filterValues["field_of_study"]}
+                        graph_key={filterValues["compare_graph"]}
+                        graph_title={compareMapping[filterValues["compare_graph"]]}/>
+            ))}
+          </TabPanel>
+        </div>
       </div>
     </div>
   )
