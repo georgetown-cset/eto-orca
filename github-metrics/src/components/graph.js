@@ -30,23 +30,12 @@ const LineGraph = (props) => {
       maxY = traceMaxY;
     }
     traceMetadata.push({
-      x: trace.x.slice(0, offset),
-      y: trace.y.slice(0, offset),
+      x: trace.x,
+      y: trace.y,
       name: trace.name,
       type: "scatter",
       mode: "lines",
       marker: {color: colors[idx]},
-      legendgroup: trace.name
-    });
-    traceMetadata.push({
-      x: trace.x.slice(offset-1),
-      y: trace.y.slice(offset-1),
-      name: trace.name,
-      type: "scatter",
-      mode: "lines",
-      marker: {color: colors[idx]},
-      showlegend: false,
-      line: {dash: "dash"},
       legendgroup: trace.name
     });
   }
