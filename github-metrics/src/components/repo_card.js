@@ -1,11 +1,30 @@
 import React from "react";
-import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
+import { css } from "@emotion/react";
 
 import "core-js/features/url";
 import "core-js/features/url-search-params";
 
+
+const styles = {
+  card: css`
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid black;
+    border-radius: 5px;
+  `,
+  emph: css`
+    font-weight: bold;
+  `,
+  sortOption: css`
+    margin-right: 10px;
+  `,
+  dataDesc: css`
+    margin-top: 15px;
+  `
+};
 
 const RepoCard = (props) => {
   const {data, sortOptions, field} = props;
@@ -19,22 +38,22 @@ const RepoCard = (props) => {
       return data[sort_key][field];
     }
     return data[sort_key];
-  }
+  };
 
   return (
-    <Paper style={{maxWidth: "1000px", margin: "20px auto", padding: "20px"}}>
+    <div css={styles.card}>
      <Link href={"https://github.com/"+repo_name}>{repo_name}</Link>
       <div>
       {Object.keys(sortOptions).map(sortname => (
-        <Typography component={"span"} variant={"body2"} style={{marginRight: "10px"}}>
-          <span style={{fontWeight: "bold"}}>{sortname}</span>: {getValue(sortOptions[sortname])}
+        <Typography component={"span"} variant={"body2"} css={styles.sortOption}>
+          <span css={styles.emph}>{sortname}</span>: {getValue(sortOptions[sortname])}
         </Typography>
       ))}
-      <Typography component={"p"} variant={"body2"} style={{marginTop: "15px"}}>
+      <Typography component={"p"} variant={"body2"} css={styles.dataDesc}>
         {data["description"]}
       </Typography>
       </div>
-    </Paper>
+    </div>
   )
 };
 
