@@ -130,14 +130,14 @@ const Dashboard = () => {
 
   return (
     <div style={{backgroundColor: "white"}}>
-      <div style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.12)", borderColor: "divider", position: "sticky", top: "0", zIndex: 200, backgroundColor: "white"}}>
+      <div style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.12)", borderColor: "divider", backgroundColor: "white"}}>
         <StyledTabs value={tabValue} onChange={(evt, newValue) => {setTabValue(newValue)}} aria-label="OSS tracker tabs">
           <Tab label="Field summary" {...a11yProps(0)} />
           <Tab label="Repository list" {...a11yProps(1)} />
         </StyledTabs>
       </div>
       <div>
-        <div style={{textAlign: "left", top: 0, zIndex: "998", padding: "20px", width: "350px", float: "left"}}>
+        <div style={{textAlign: "left", padding: "20px", width: "350px", position: "absolute"}}>
           <div>
             <h3>Select a subject</h3>
             <div style={{margin: "15px 0px 10px 20px"}}>
@@ -178,12 +178,13 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        <div style={{overflow: "auto"}}>
+        <div style={{float: "left", width: "auto", marginLeft: "355px"}}>
           <TabPanel value={tabValue} index={0}>
             <span>This is where the summary view will go</span>
           </TabPanel>
           <TabPanel value={tabValue} index={1}>
-            <div style={{marginTop: "5px"}}>
+            <div style={{marginTop: "5px", position: "sticky", top: "0", zIndex: 200, backgroundColor: "white",
+                borderBottom: "1px solid rgba(0, 0, 0, 0.12)"}}>
               <div style={{display: "inline-block"}}>
                 <Dropdown
                   selected={filterValues["order_by"]}
