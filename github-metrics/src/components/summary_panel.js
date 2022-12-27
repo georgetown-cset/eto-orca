@@ -5,8 +5,6 @@ import {css} from "@emotion/react";
 
 const styles = {
   card: css`
-    max-width: 100%;
-    margin: 20px 40px;
     padding: 20px;
   `
 };
@@ -27,8 +25,10 @@ const SummaryPanel = (props) => {
 
   return (
     <div css={styles.card}>
+      <h3>Contributor activity</h3>
       <LineGraph title={"Star events in top five referenced projects"}
                  traces={getTrace("star_dates", repo => repo["num_references"][field])}/>
+      <h3>User activity</h3>
       <LineGraph title={"Push events in top five referenced projects"}
                  traces={getTrace("push_dates", repo => repo["num_references"][field])}/>
     </div>

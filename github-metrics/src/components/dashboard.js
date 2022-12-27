@@ -138,7 +138,7 @@ const Dashboard = () => {
         </StyledTabs>
       </div>
       <div>
-        <div style={{textAlign: "left", padding: "20px", width: "350px", position: "absolute"}}>
+        <div style={{textAlign: "left", padding: "20px", width: "25%", display: "inline-block", verticalAlign: "top"}}>
           <div>
             <h3>Select a subject</h3>
             <div style={{margin: "15px 0px 10px 20px"}}>
@@ -179,7 +179,7 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        <div style={{float: "left", width: "auto", marginLeft: "355px", minHeight: "80vh"}}>
+        <div style={{width: "70%", minHeight: "80vh", display: "inline-block"}}>
           <TabPanel value={tabValue} index={0}>
             {repoData.length > 0 && <SummaryPanel data={repoData} field={filterValues["field_of_study"]}/>}
           </TabPanel>
