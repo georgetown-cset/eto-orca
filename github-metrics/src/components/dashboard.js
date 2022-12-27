@@ -10,6 +10,7 @@ import "core-js/features/url";
 import "core-js/features/url-search-params";
 
 import RepoCard from "./repo_card";
+import SummaryPanel from "./summary_panel";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -178,9 +179,9 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        <div style={{float: "left", width: "auto", marginLeft: "355px"}}>
+        <div style={{float: "left", width: "auto", marginLeft: "355px", minHeight: "80vh"}}>
           <TabPanel value={tabValue} index={0}>
-            <span>This is where the summary view will go</span>
+            {repoData.length > 0 && <SummaryPanel data={repoData} field={filterValues["field_of_study"]}/>}
           </TabPanel>
           <TabPanel value={tabValue} index={1}>
             <div style={{marginTop: "5px", position: "sticky", top: "0", zIndex: 200, backgroundColor: "white",

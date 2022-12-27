@@ -42,7 +42,7 @@ const LineGraph = (props) => {
 
   const layout = plotlyDefaults.layout;
   layout.showlegend = traces.length > 1;
-  layout.margin = {t: 50, r: 50, b: 50, l: 50, pad: 4};
+  layout.margin = {t: traces.length == 1 ? 50 : 100, r: 50, b: 50, l: 50, pad: 4};
   if(title) {
     layout.title = title;
   }
