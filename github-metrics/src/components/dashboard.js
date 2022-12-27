@@ -134,7 +134,7 @@ const Dashboard = () => {
       <div style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.12)", borderColor: "divider", backgroundColor: "white"}}>
         <StyledTabs value={tabValue} onChange={(evt, newValue) => {setTabValue(newValue)}} aria-label="OSS tracker tabs">
           <Tab label="Field summary" {...a11yProps(0)} />
-          <Tab label="Repository list" {...a11yProps(1)} />
+          <Tab label="Project list" {...a11yProps(1)} />
         </StyledTabs>
       </div>
       <div>
