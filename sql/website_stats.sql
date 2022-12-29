@@ -40,23 +40,41 @@ issues AS (
   SELECT
     repo_id,
     ARRAY_AGG(STRUCT(
-        opener_id AS contributor,
-        issue_created_at AS contrib_date
+        user_id AS contributor,
+        event_date,
+        action AS event_type
     )) AS events
   FROM
-    github_metrics.issues_opened
+    github_metrics.issue_events
+  WHERE
+    action IN ("opened", "closed")
   GROUP BY
     repo_id),
 
-prs AS (
+first_pr AS (
   SELECT
     repo_id,
+    opener_id AS contributor,
+    MIN(pr_created_at) AS first_contrib_date
+  FROM
+    github_metrics.pull_requests_opened
+  GROUP BY repo_id, opener_id
+),
+
+prs AS (
+  SELECT
+    pull_requests_opened.repo_id,
     ARRAY_AGG(STRUCT(
         opener_id AS contributor,
-        pr_created_at AS contrib_date
+        pr_created_at AS contrib_date,
+        pr_created_at = first_contrib_date AS is_first_time_contributor
     )) AS events
   FROM
     github_metrics.pull_requests_opened
+  LEFT JOIN
+    first_pr
+    ON
+      (first_pr.contributor = pull_requests_opened.opener_id) AND (first_pr.repo_id = pull_requests_opened.repo_id)
   GROUP BY
     repo_id)
 

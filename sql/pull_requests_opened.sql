@@ -11,11 +11,11 @@ with prs as (select distinct
   SPLIT(repo.name, "/")[
     offset
     (1)] as repo_name,
-  JSON_EXTRACT(payload,
-    '$.action') as action
+  TRIM(JSON_EXTRACT(payload,
+    "$.action"), '"') as action
   from
     staging_github_metrics.events
   where
     (type = "PullRequestEvent"))
 
-select * from prs where action = "created"
+select * from prs where action = "opened"
