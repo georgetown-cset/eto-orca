@@ -15,6 +15,21 @@ def get_counts(dates, transform=lambda x: x):
     )
 
 
+def get_issue_counts(dates):
+    year_data = [
+        (date["event_date"].split("-")[0], date["event_type"]) for date in dates
+    ]
+    counts = {}
+    for year, evt_type in year_data:
+        count = counts.get(year, [0, 0])
+        idx = 0 if evt_type == "opened" else 1
+        count[idx] = count[idx] + 1
+        counts[year] = count
+    return sorted(
+        [[year] + count for year, count in counts.items()], key=lambda elt: elt[0]
+    )
+
+
 def get_lines(input_dir: str):
     for fi in os.listdir(input_dir):
         with open(os.path.join(input_dir, fi)) as f:
@@ -61,6 +76,7 @@ def retrieve_data(input_dir: str, output_js: str) -> None:
         row["push_dates"] = get_counts(
             row.pop("push_events"), lambda evt: evt["contrib_date"]
         )
+        row["issue_dates"] = get_issue_counts(row.pop("issue_events"))
         row["num_references"] = {}
         if "primary_programming_language" in row:
             lang = row.pop("primary_programming_language")

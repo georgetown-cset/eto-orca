@@ -6,7 +6,7 @@ import {ButtonStyled, ExternalLink} from "@eto/eto-ui-components";
 import "core-js/features/url";
 import "core-js/features/url-search-params";
 
-import {LineGraph} from "./graph";
+import {LineGraph, BarGraph} from "./graph";
 
 
 const styles = {
@@ -54,6 +54,22 @@ const RepoCard = (props) => {
     return ary.map(elt => elt[1])
   };
 
+  const getIssueTraces = (issueData) => {
+    const yearData = issueData.map(elt => elt[0]);
+    return [
+      {
+        x: yearData,
+        y: issueData.map(elt => elt[1]),
+        name: "Opened"
+      },
+      {
+        x: yearData,
+        y: issueData.map(elt => elt[2]),
+        name: "Closed"
+      }
+    ]
+  };
+
   const metaGroups = [
     ["stargazers_count", "subscribers_count", "num_contributors"],
     ["open_issues", "num_references"],
@@ -97,8 +113,11 @@ const RepoCard = (props) => {
           </Typography>
         </div>
         <div style={{width: "59%", display: "inline-block", verticalAlign: "top"}}>
-          <LineGraph traces={[{x: getX(data[graph_key]), y: getY(data[graph_key])}]}
-                     title={graph_title} height={"250px"}/>
+          {graph_key === "issue_dates" ?
+            <BarGraph traces={getIssueTraces(data[graph_key])} title={graph_title} height={"250px"}/> :
+            <LineGraph traces={[{x: getX(data[graph_key]), y: getY(data[graph_key])}]}
+                       title={graph_title} height={"250px"}/>
+          }
         </div>
       </div>
       <div style={{textAlign: "center"}}><ButtonStyled href={"/"}>More details</ButtonStyled></div>

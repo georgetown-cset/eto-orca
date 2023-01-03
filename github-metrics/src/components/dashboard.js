@@ -81,7 +81,8 @@ const Dashboard = () => {
   const sortOptions = Object.entries(sortMapping).map(e => ({"val": e[0], "text": e[1]}));
   const compareMapping = {
     "star_dates": "Stars over time",
-    "push_dates": "Push events over time"
+    "push_dates": "Push events over time",
+    "issue_dates": "Issues over time"
   };
   const compareOptions = Object.entries(compareMapping).map(e => ({"val": e[0], "text": e[1]}));
   const topicsMapping = {

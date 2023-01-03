@@ -78,7 +78,7 @@ const BarGraph = (props) => {
       x: trace.x,
       y: trace.y,
       name: trace.name,
-      mode: "bar",
+      type: "bar",
       marker: {color: colors[idx]},
       legendgroup: trace.name
     });
@@ -88,7 +88,8 @@ const BarGraph = (props) => {
 
   const layout = plotlyDefaults.layout;
   layout.showlegend = traces.length > 1;
-  layout.margin = {t: traces.length == 1 ? 50 : 100, r: 50, b: 50, l: 50, pad: 4};
+  layout.barmode = "group";
+  layout.margin = {t: 50, r: 50, b: 50, l: 50, pad: 4};
   if(title) {
     layout.title = title;
   }
