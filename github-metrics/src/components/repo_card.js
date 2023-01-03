@@ -54,20 +54,21 @@ const RepoCard = (props) => {
     return ary.map(elt => elt[1])
   };
 
-  const getBarTraces = (barData, key) => {
-    const yearData = barData.map(elt => elt[0]);
-    return [
-      {
-        x: yearData,
-        y: barData.map(elt => elt[1]),
-        name: barTraceNames[key][0]
-      },
-      {
-        x: yearData,
-        y: barData.map(elt => elt[2]),
-        name: barTraceNames[key][1]
-      }
-    ]
+  const getBarTraces = (key) => {
+    const barData = data[key];
+    const traceData = [];
+    const yTrans = y => key !== "contrib_counts" ? y : 100*y/data["num_prs"];
+    if(barData.length === 0){
+      return [];
+    }
+    for(let i = 0; i < barData[0].length - 1; i ++){
+      traceData.push({
+        x: barData.map(elt => elt[0]),
+        y: barData.map(elt => yTrans(elt[i+1])),
+        name: barTraceNames[key][i]
+      })
+    }
+    return traceData;
   };
 
   const metaGroups = [
@@ -77,7 +78,8 @@ const RepoCard = (props) => {
   ];
   const barTraceNames = {
     "issue_dates": ["Opened", "Closed"],
-    "pr_dates": ["New", "Returning"]
+    "pr_dates": ["New", "Returning"],
+    "contrib_counts": ["Num Contributions"]
   };
 
   return (
@@ -117,8 +119,8 @@ const RepoCard = (props) => {
           </Typography>
         </div>
         <div style={{width: "59%", display: "inline-block", verticalAlign: "top"}}>
-          {["issue_dates", "pr_dates"].includes(graph_key) ?
-            <BarGraph traces={getBarTraces(data[graph_key], graph_key)} title={graph_title} height={"250px"}/> :
+          {["issue_dates", "pr_dates", "contrib_counts"].includes(graph_key) ?
+            <BarGraph traces={getBarTraces(graph_key)} title={graph_title} height={"250px"}/> :
             <LineGraph traces={[{x: getX(data[graph_key]), y: getY(data[graph_key])}]}
                        title={graph_title} height={"250px"}/>
           }

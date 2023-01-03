@@ -31,7 +31,21 @@ def get_issue_counts(dates):
 
 
 def get_cumulative_contributor_counts(contribs):
-    return []
+    contrib_counts = {}
+    for contrib in contribs:
+        if "contributor" not in contrib:
+            continue
+        contrib_counts[contrib["contributor"]] = (
+            contrib_counts.get(contrib["contributor"], 0) + 1
+        )
+    total_counts = sum([count for _, count in contrib_counts.items()])
+    top_contributors = sorted(
+        [[contrib, count] for contrib, count in contrib_counts.items()],
+        key=lambda elt: -1 * elt[1],
+    )[:20]
+    return [
+        [idx + 1, count] for idx, [_, count] in enumerate(top_contributors)
+    ], total_counts
 
 
 def get_new_vs_returning_contributor_counts(contribs):
@@ -113,7 +127,9 @@ def retrieve_data(input_dir: str, output_js: str) -> None:
         )
         row["issue_dates"] = get_issue_counts(row.pop("issue_events"))
         contribs = row.pop("pr_events")
-        row["pct_contribs"] = get_cumulative_contributor_counts(contribs)
+        row["contrib_counts"], row["num_prs"] = get_cumulative_contributor_counts(
+            contribs
+        )
         row["pr_dates"] = get_new_vs_returning_contributor_counts(contribs)
         row["num_references"] = {}
         if "primary_programming_language" in row:

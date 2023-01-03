@@ -83,7 +83,8 @@ const Dashboard = () => {
     "star_dates": "Stars over time",
     "push_dates": "Push events over time",
     "issue_dates": "Issues over time",
-    "pr_dates": "New vs returning contributors over time"
+    "pr_dates": "New vs returning contributors over time",
+    "contrib_counts": "Contribution percentage counts"
   };
   const compareOptions = Object.entries(compareMapping).map(e => ({"val": e[0], "text": e[1]}));
   const topicsMapping = {
