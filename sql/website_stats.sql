@@ -101,7 +101,7 @@ SELECT
   star_dates,
   repo_pushes.events AS push_events,
   issues.events AS issue_events,
-  prs AS pr_events
+  prs.events AS pr_events
 FROM
   github_metrics.repos_with_full_meta
 INNER JOIN

@@ -16,6 +16,7 @@ const colors = [
 
 const Plot = lazy(() => import('react-plotly.js'));
 const isSSR = typeof window === "undefined";
+const noData = <div style={{textAlign: "center"}}>No graph data available</div>;
 
 const LineGraph = (props) => {
   const {traces, title, height} = props;
@@ -52,12 +53,14 @@ const LineGraph = (props) => {
     <>
       { !isSSR &&
         <Suspense fallback={<div>Loading graph...</div>}>
-          <Plot
-            config={plotlyDefaults.config}
-            data={traceMetadata}
-            layout={layout}
-            style={{height: height ? height : "450px", width: "100%"}}
-          />
+          {traces[0].x.length === 0 ? noData :
+            <Plot
+              config={plotlyDefaults.config}
+              data={traceMetadata}
+              layout={layout}
+              style={{height: height ? height : "450px", width: "100%"}}
+            />
+          }
         </Suspense>
       }
     </>
@@ -98,12 +101,14 @@ const BarGraph = (props) => {
     <>
       { !isSSR &&
         <Suspense fallback={<div>Loading graph...</div>}>
-          <Plot
-            config={plotlyDefaults.config}
-            data={traceMetadata}
-            layout={layout}
-            style={{height: height ? height : "450px", width: "100%"}}
-          />
+          {traces[0].x.length === 0 ? noData :
+            <Plot
+              config={plotlyDefaults.config}
+              data={traceMetadata}
+              layout={layout}
+              style={{height: height ? height : "450px", width: "100%"}}
+            />
+          }
         </Suspense>
       }
     </>

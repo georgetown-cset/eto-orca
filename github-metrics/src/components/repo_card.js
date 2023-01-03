@@ -54,18 +54,18 @@ const RepoCard = (props) => {
     return ary.map(elt => elt[1])
   };
 
-  const getIssueTraces = (issueData) => {
-    const yearData = issueData.map(elt => elt[0]);
+  const getBarTraces = (barData, key) => {
+    const yearData = barData.map(elt => elt[0]);
     return [
       {
         x: yearData,
-        y: issueData.map(elt => elt[1]),
-        name: "Opened"
+        y: barData.map(elt => elt[1]),
+        name: barTraceNames[key][0]
       },
       {
         x: yearData,
-        y: issueData.map(elt => elt[2]),
-        name: "Closed"
+        y: barData.map(elt => elt[2]),
+        name: barTraceNames[key][1]
       }
     ]
   };
@@ -75,6 +75,10 @@ const RepoCard = (props) => {
     ["open_issues", "num_references"],
     ["created_at", "pushed_at"]
   ];
+  const barTraceNames = {
+    "issue_dates": ["Opened", "Closed"],
+    "pr_dates": ["New", "Returning"]
+  };
 
   return (
     <div css={styles.card}>
@@ -113,8 +117,8 @@ const RepoCard = (props) => {
           </Typography>
         </div>
         <div style={{width: "59%", display: "inline-block", verticalAlign: "top"}}>
-          {graph_key === "issue_dates" ?
-            <BarGraph traces={getIssueTraces(data[graph_key])} title={graph_title} height={"250px"}/> :
+          {["issue_dates", "pr_dates"].includes(graph_key) ?
+            <BarGraph traces={getBarTraces(data[graph_key], graph_key)} title={graph_title} height={"250px"}/> :
             <LineGraph traces={[{x: getX(data[graph_key]), y: getY(data[graph_key])}]}
                        title={graph_title} height={"250px"}/>
           }

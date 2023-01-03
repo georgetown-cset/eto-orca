@@ -31,6 +31,9 @@ const SummaryPanel = (props) => {
       <LineGraph title={"Ratio of issues opened to closed in top five referenced projects"}
                  traces={getTrace(row => row["issue_dates"], repo => repo["num_references"][field],
                    val => val[1]/val[2])}/>
+      <LineGraph title={"Ratio of new vs returning contributors in top five referenced projects"}
+                 traces={getTrace(row => row["pr_dates"], repo => repo["num_references"][field],
+                   val => val[1]/val[2])}/>
       <h3>User activity</h3>
       <LineGraph title={"Star events in top five referenced projects"}
                  traces={getTrace(row => row["star_dates"], repo => repo["num_references"][field])}/>

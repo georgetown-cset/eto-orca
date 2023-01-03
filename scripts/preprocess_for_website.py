@@ -30,6 +30,41 @@ def get_issue_counts(dates):
     )
 
 
+def get_cumulative_contributor_counts(contribs):
+    return []
+
+
+def get_new_vs_returning_contributor_counts(contribs):
+    year_data = [
+        (
+            contrib["contrib_date"].split("-")[0],
+            contrib.get("is_first_time_contributor", False),
+            contrib.get("contributor", None),
+        )
+        for contrib in contribs
+        if "contributor" in contrib
+    ]
+    first_year_contrib = {}
+    for year, is_first_contrib, contributor in year_data:
+        if year not in first_year_contrib:
+            first_year_contrib[year] = {}
+        new_is_first = (
+            first_year_contrib[year].get(contributor, is_first_contrib)
+            or is_first_contrib
+        )
+        first_year_contrib[year][contributor] = new_is_first
+    counts = {}
+    for year in first_year_contrib:
+        count = counts.get(year, [0, 0])
+        for contributor in first_year_contrib[year]:
+            idx = 0 if first_year_contrib[year][contributor] else 1
+            count[idx] = count[idx] + 1
+            counts[year] = count
+    return sorted(
+        [[year] + count for year, count in counts.items()], key=lambda elt: elt[0]
+    )
+
+
 def get_lines(input_dir: str):
     for fi in os.listdir(input_dir):
         with open(os.path.join(input_dir, fi)) as f:
@@ -77,6 +112,9 @@ def retrieve_data(input_dir: str, output_js: str) -> None:
             row.pop("push_events"), lambda evt: evt["contrib_date"]
         )
         row["issue_dates"] = get_issue_counts(row.pop("issue_events"))
+        contribs = row.pop("pr_events")
+        row["pct_contribs"] = get_cumulative_contributor_counts(contribs)
+        row["pr_dates"] = get_new_vs_returning_contributor_counts(contribs)
         row["num_references"] = {}
         if "primary_programming_language" in row:
             lang = row.pop("primary_programming_language")
