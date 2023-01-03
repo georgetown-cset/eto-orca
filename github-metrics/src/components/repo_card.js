@@ -126,7 +126,9 @@ const RepoCard = (props) => {
           }
         </div>
       </div>
-      <div style={{textAlign: "center"}}><ButtonStyled href={"/"}>More details</ButtonStyled></div>
+      <div style={{textAlign: "center"}}>
+        <ButtonStyled href={`/project?project_id=${data['id']}`} target={"_blank"} rel={"noopener"}>More details</ButtonStyled>
+      </div>
     </div>
   )
 };

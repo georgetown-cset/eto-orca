@@ -106,6 +106,7 @@ const Dashboard = () => {
     const newRepoData = [];
     for(let key of relKeys){
       const repo = id_to_repo[key];
+      repo["id"] = key;
       if((filters["language"] === "All") || (filters["language"] === repo["language"])){
         newRepoData.push(repo);
       }

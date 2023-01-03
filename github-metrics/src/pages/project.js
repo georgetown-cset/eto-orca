@@ -1,23 +1,27 @@
 import React from "react";
-import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import {AppWrapper, ErrorBoundary} from "@eto/eto-ui-components";
 
-import "../styles/styles.css";
-//const ClusterDashboard = React.lazy(() => import("../components/cluster_dashboard"));
+const ProjectDashboard = React.lazy(() => import("../components/project_dashboard"));
 
-const Cluster = () => {
+const Project = () => {
 
   return (
-    <AppWrapper>
-      <Box style={{
+      <AppWrapper>
+      <div style={{
         backgroundColor: "white"
       }}>
-        Hello world
-      </Box>
-    </AppWrapper>
+        {(typeof window !== "undefined") &&
+          <React.Suspense fallback={<div style={{textAlign: "center"}}><CircularProgress/></div>}>
+            <ErrorBoundary>
+              <ProjectDashboard/>
+            </ErrorBoundary>
+          </React.Suspense>
+        }
+      </div>
+      </AppWrapper>
   )
 };
 
-export default Cluster;
+export default Project;
