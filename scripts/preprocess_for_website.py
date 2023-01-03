@@ -1,18 +1,17 @@
 import argparse
 import json
 import os
-import pickle
 
 from tqdm import tqdm
 
 
-def get_counts_by_month(dates):
-    months = ["-".join(date.split("-")[:2]) for date in dates]
+def get_counts(dates, transform=lambda x: x):
+    years = [transform(date).split("-")[0] for date in dates]
     counts = {}
-    for month in months:
-        counts[month] = counts.get(month, 0) + 1
+    for year in years:
+        counts[year] = counts.get(year, 0) + 1
     return sorted(
-        [(month, count) for month, count in counts.items()], key=lambda elt: elt[0]
+        [[year, count] for year, count in counts.items()], key=lambda elt: elt[0]
     )
 
 
@@ -23,12 +22,11 @@ def get_lines(input_dir: str):
                 yield json.loads(line)
 
 
-def retrieve_data(
-    input_dir: str, output_repo_file: str, output_field_file: str
-) -> None:
+def retrieve_data(input_dir: str, output_js: str) -> None:
     seen_ids = set()
     id_to_repo = {}
     field_to_repos = {}
+    languages = set()
     int_keys = {
         "subscribers_count",
         "stargazers_count",
@@ -38,10 +36,18 @@ def retrieve_data(
         "id",
         "used_by",
     }
+    unused_keys = {
+        "matched_name",
+        "topics",
+        "sources",
+        "pr_events",
+        "issue_open_events",
+    }
     for line in tqdm(get_lines(input_dir)):
         if line["id"] in seen_ids:
             continue
-        seen_ids.add(line["id"])
+        repo_id = line.pop("id")
+        seen_ids.add(repo_id)
         row = {}
         for key in line.keys():
             if key.endswith("_at"):
@@ -51,9 +57,15 @@ def retrieve_data(
             else:
                 val = line[key]
             row[key] = val
-        row["star_dates"] = get_counts_by_month(row.pop("star_dates"))
-        row["push_dates"] = get_counts_by_month(row.pop("push_dates"))
+        row["star_dates"] = get_counts(row.pop("star_dates"))
+        row["push_dates"] = get_counts(
+            row.pop("push_events"), lambda evt: evt["contrib_date"]
+        )
         row["num_references"] = {}
+        if "primary_programming_language" in row:
+            lang = row.pop("primary_programming_language")
+            languages.add(lang)
+            row["language"] = lang
         for paper_meta in row.pop("paper_meta"):
             for field in paper_meta["fields"]:
                 field_name = field["name"]
@@ -62,26 +74,37 @@ def retrieve_data(
                 if field_name not in row["num_references"]:
                     row["num_references"][field_name] = 0
                 row["num_references"][field_name] += 1
-                field_to_repos[field_name].add(row["id"])
-        id_to_repo[int(row["id"])] = row
-    field_to_repos = {fn: list(elts) for fn, elts in field_to_repos.items()}
-    with open(output_repo_file, mode="wb") as f:
-        pickle.dump(id_to_repo, f)
-    with open(output_field_file, mode="wb") as f:
-        pickle.dump(field_to_repos, f)
+                if row["num_references"][field_name] > 1:
+                    field_to_repos[field_name].add(repo_id)
+        if not any(
+            [row["num_references"][field] > 1 for field in row["num_references"]]
+        ):
+            continue
+        for k in unused_keys:
+            if k in row:
+                row.pop(k)
+        id_to_repo[int(repo_id)] = row
+    sizeable_fields = {
+        field for field in field_to_repos.keys() if len(field_to_repos[field]) > 5
+    }
+    field_to_repos = {
+        fn: list(elts) for fn, elts in field_to_repos.items() if fn in sizeable_fields
+    }
+    with open(output_js, mode="w") as f:
+        f.write(f"const id_to_repo = {id_to_repo};\n")
+        f.write(f"const field_to_repos = {field_to_repos};\n")
+        f.write(f"const languages = {list(languages)};\n")
+        f.write(f"const fields = {list(sizeable_fields)};\n")
+        f.write("export {id_to_repo, field_to_repos, fields, languages};")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--input_dir", default="gh_website_stats")
     parser.add_argument(
-        "--output_repo_file",
-        default=os.path.join("get_data_cloud_fn", "data", "id_to_repo.pkl"),
-    )
-    parser.add_argument(
-        "--output_field_file",
-        default=os.path.join("get_data_cloud_fn", "data", "field_to_repo.pkl"),
+        "--output_js",
+        default=os.path.join("github-metrics", "src", "data", "constants.js"),
     )
     args = parser.parse_args()
 
-    retrieve_data(args.input_dir, args.output_repo_file, args.output_field_file)
+    retrieve_data(args.input_dir, args.output_js)

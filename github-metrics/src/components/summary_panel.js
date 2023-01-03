@@ -12,13 +12,13 @@ const styles = {
 const SummaryPanel = (props) => {
   const {data, field} = props;
 
-  const getTrace = (data_key, getSortVal) => {
+  const getTrace = (ext_fn, getSortVal) => {
     const traceData = [...data];
     traceData.sort((r1, r2) => getSortVal(r2) - getSortVal(r1))
     const topFive = traceData.slice(0, 5);
     return topFive.map(row => ({
-      x: row[data_key].map(val => val[0]),
-      y: row[data_key].map(val => val[1]),
+      x: ext_fn(row).map(val => val[0]),
+      y: ext_fn(row).map(val => val[1]),
       name: row["owner_name"]+"/"+row["current_name"]
     }))
   };
@@ -27,10 +27,10 @@ const SummaryPanel = (props) => {
     <div css={styles.card}>
       <h3>Contributor activity</h3>
       <LineGraph title={"Star events in top five referenced projects"}
-                 traces={getTrace("star_dates", repo => repo["num_references"][field])}/>
+                 traces={getTrace(row => row["star_dates"], repo => repo["num_references"][field])}/>
       <h3>User activity</h3>
       <LineGraph title={"Push events in top five referenced projects"}
-                 traces={getTrace("push_dates", repo => repo["num_references"][field])}/>
+                 traces={getTrace(row => row["push_dates"], repo => repo["num_references"][field])}/>
     </div>
   );
 };

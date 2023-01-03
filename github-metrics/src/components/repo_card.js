@@ -90,6 +90,11 @@ const RepoCard = (props) => {
               <span css={styles.emph}>License TK</span>
             </span>
           </Typography>
+          <Typography component={"div"} variant={"body2"} css={styles.sortOption}>
+            <span css={styles.nobreak}>
+              <span css={styles.emph}>Top programming language:</span> {data["language"]}
+            </span>
+          </Typography>
         </div>
         <div style={{width: "59%", display: "inline-block", verticalAlign: "top"}}>
           <LineGraph traces={[{x: getX(data[graph_key]), y: getY(data[graph_key])}]}

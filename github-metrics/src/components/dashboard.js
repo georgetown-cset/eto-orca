@@ -11,6 +11,7 @@ import "core-js/features/url-search-params";
 
 import RepoCard from "./repo_card";
 import SummaryPanel from "./summary_panel";
+import {id_to_repo, field_to_repos, fields, languages} from "../data/constants";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -56,19 +57,17 @@ function a11yProps(index) {
   };
 }
 
-const dataUrl = "https://us-east1-gcp-cset-projects.cloudfunctions.net/github-metrics/";
-
 const Dashboard = () => {
   useEffect(() => {
-    mkFields();
+    mkRepoData(defaultFilterValues);
   }, []);
   const defaultFilterValues = {
     "field_of_study": "Speech recognition",
     "order_by": "num_references",
     "compare_graph": "push_dates",
     "topic": "",
-    "language": "Coming soon!",
-    "license": "Coming soon!"
+    "language": "All",
+    "license": "All"
   };
   const sortMapping = {
     "stargazers_count": "Stars",
@@ -90,35 +89,29 @@ const Dashboard = () => {
     "speech_recognition": "Speech recognition",
     "ai_safety": "AI Safety"
   };
+  languages.sort();
+  const cleanLanguages = ["All"].concat(languages);
   const topicOptions = Object.entries(topicsMapping).map(e => ({"val": e[0], "text": e[1]}));
-
-  async function mkFields(){
-    let response = await fetch(dataUrl).catch((error) => {
-      console.log(error);
-    });
-    if(response !== undefined) {
-      const data = (await response.json())["fields"];
-      setFields(data);
-      mkRepoData(defaultFilterValues);
-    } else{
-      console.log("No response for mkFields")
+  const repoSortFn = (repo, filters) => {
+    if(filters["order_by"] === "num_references"){
+      return repo["num_references"][filters["field_of_study"]]
     }
-  }
-  async function mkRepoData(filterValues){
-    const params = new URLSearchParams({"field": filterValues["field_of_study"],
-      "order_by": filterValues["order_by"]}).toString();
-    let response = await fetch(dataUrl+"?"+params).catch((error) => {
-      console.log(error);
-    });
-    if(response !== undefined) {
-      const data = (await response.json())["matches"];
-      setRepoData(data);
-    } else{
-      console.log("No response for "+JSON.stringify(filterValues))
+    return repo[filters["order_by"]]
+  };
+  const mkRepoData = (filters) => {
+    const relKeys = field_to_repos[filters["field_of_study"]];
+    const newRepoData = [];
+    for(let key of relKeys){
+      const repo = id_to_repo[key];
+      if((filters["language"] === "All") || (filters["language"] === repo["language"])){
+        newRepoData.push(repo);
+      }
     }
-  }
+    relKeys.map(key => id_to_repo[key]);
+    newRepoData.sort((a, b) => repoSortFn(b, filters) - repoSortFn(a, filters));
+    setRepoData(newRepoData.slice(0, 20));
+  };
   const [filterValues, setFilterValues] = React.useState({...defaultFilterValues});
-  const [fields, setFields] = React.useState([]);
   const [repoData, setRepoData] = React.useState([]);
   const [tabValue, setTabValue] = React.useState(0);
 
@@ -166,7 +159,7 @@ const Dashboard = () => {
                 selected={filterValues["language"]}
                 setSelected={(val) => handleSingleSelectChange(val, "language")}
                 inputLabel={"Top programming language"}
-                options={[{"text": "Coming soon!", "val": "coming_soon"}]}
+                options={cleanLanguages.map(lang => ({"text": lang, "val": lang}))}
               />
             </div>
             <div style={{margin: "15px 0px 10px 20px"}}>
@@ -174,7 +167,7 @@ const Dashboard = () => {
                 selected={filterValues["license"]}
                 setSelected={(val) => handleSingleSelectChange(val, "license")}
                 inputLabel={"License"}
-                options={[{"text": "Coming soon!", "val": "coming_soon"}]}
+                options={[{"text": "All", "val": "All"}]}
               />
             </div>
           </div>
@@ -204,7 +197,9 @@ const Dashboard = () => {
               </div>
             </div>
             {repoData.map(repo => (
-              <RepoCard data={repo} metaMapping={sortMapping} field={filterValues["field_of_study"]}
+              <RepoCard key={repoData["owner_name"]+"/"+repoData["current_name"]}
+                        data={repo} metaMapping={sortMapping}
+                        field={filterValues["field_of_study"]}
                         graph_key={filterValues["compare_graph"]}
                         graph_title={compareMapping[filterValues["compare_graph"]]}/>
             ))}
