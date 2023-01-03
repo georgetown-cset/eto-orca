@@ -127,7 +127,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div style={{backgroundColor: "white"}}>
+    <div style={{backgroundColor: "white"}} id={"dashboard"}>
       <div style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.12)", borderColor: "divider", backgroundColor: "white"}}>
         <StyledTabs value={tabValue} onChange={(evt, newValue) => {setTabValue(newValue)}} aria-label="OSS tracker tabs">
           <Tab label="Field summary" {...a11yProps(0)} />
@@ -146,7 +146,7 @@ const Dashboard = () => {
                 options={topicOptions}
               />
             </div>
-            <div style={{textAlign: "center"}}>or (advanced)</div>
+            <div>or (advanced)</div>
             <div style={{margin: "15px 0px 10px 20px"}}>
               <Dropdown
                 selected={filterValues["field_of_study"]}

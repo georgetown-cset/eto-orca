@@ -1,0 +1,25 @@
+body{
+  padding: 0;
+  margin: 0;
+  font-family: GTZirkonLight, sans-serif !important;
+}
+
+#dashboard .MuiTypography-root{
+   font-family: GTZirkonLight, sans-serif !important;
+}
+
+#project-dashboard .MuiTypography-root{
+   font-family: GTZirkonLight, sans-serif !important;
+}
+
+.MuiTableCell-body, .MuiTableSortLabel-root, .MuiTableCell-root, .MuiTablePagination-displayedRows{
+   font-family: GTZirkonLight, sans-serif !important;
+}
+
+.input-text{
+  color: #F17F4C !important;
+}
+
+.footnote{
+  font-size: 90% !important;
+}

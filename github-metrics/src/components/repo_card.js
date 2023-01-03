@@ -106,10 +106,8 @@ const RepoCard = (props) => {
             <span css={styles.nobreak}>
               <span css={styles.emph}>Funders</span>: tk
             </span>
-          </Typography>
-          <Typography component={"div"} variant={"body2"} css={styles.sortOption}>
             <span css={styles.nobreak}>
-              <span css={styles.emph}>License TK</span>
+              <span css={styles.emph}>License</span>: tk
             </span>
           </Typography>
           <Typography component={"div"} variant={"body2"} css={styles.sortOption}>

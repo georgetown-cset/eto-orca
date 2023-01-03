@@ -118,7 +118,7 @@ const ProjectDashboard = () => {
   ];
 
   return (
-   <div style={{margin: "20px auto", maxWidth: "1000px"}}>
+   <div style={{margin: "20px auto", maxWidth: "1000px"}} id={"project-dashboard"}>
      <div style={{textAlign: "right"}}>
       <a href={"/"}>Back to summary page</a>
      </div>
