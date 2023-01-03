@@ -26,11 +26,11 @@ const SummaryPanel = (props) => {
   return (
     <div css={styles.card}>
       <h3>Contributor activity</h3>
-      <LineGraph title={"Star events in top five referenced projects"}
-                 traces={getTrace(row => row["star_dates"], repo => repo["num_references"][field])}/>
-      <h3>User activity</h3>
       <LineGraph title={"Push events in top five referenced projects"}
                  traces={getTrace(row => row["push_dates"], repo => repo["num_references"][field])}/>
+      <h3>User activity</h3>
+      <LineGraph title={"Star events in top five referenced projects"}
+                 traces={getTrace(row => row["star_dates"], repo => repo["num_references"][field])}/>
     </div>
   );
 };
