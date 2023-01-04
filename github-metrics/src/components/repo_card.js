@@ -33,7 +33,7 @@ const styles = {
 };
 
 const RepoCard = (props) => {
-  const {data, metaMapping, field, graph_key, graph_title} = props;
+  const {data, metaMapping, field, graph_key, graph_title, isCurated} = props;
 
   const repo_name = data["owner_name"]+"/"+data["current_name"];
 
@@ -95,7 +95,7 @@ const RepoCard = (props) => {
           </Typography>
           {metaGroups.map((group, group_idx) => (
             <Typography component={"div"} variant={"body2"} css={styles.sortOption} key={`meta-group-${group_idx}`}>
-              {group.map(option => (
+              {group.map(option => ((!isCurated) || (option !== "num_references")) && (
                 <span css={styles.nobreak} key={option}>
                   <span css={styles.emph}>{metaMapping[option]}</span>: {getValue(option)}
                 </span>

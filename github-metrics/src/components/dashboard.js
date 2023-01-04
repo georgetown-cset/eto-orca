@@ -77,7 +77,6 @@ const Dashboard = () => {
     "open_issues": "Open Issues",
     "num_references": "References"
   };
-  const sortOptions = Object.entries(sortMapping).map(e => ({"val": e[0], "text": e[1]}));
   const compareMapping = {
     "star_dates": "Stars over time",
     "push_dates": "Push events over time",
@@ -117,10 +116,18 @@ const Dashboard = () => {
   const [filterValues, setFilterValues] = React.useState({...defaultFilterValues});
   const [repoData, setRepoData] = React.useState([]);
   const [tabValue, setTabValue] = React.useState(0);
+  const isCuratedField = (field) => {
+    return ["ai_safety", "asr", "riscv"].includes(field);
+  };
+  const sortOptions = Object.entries(sortMapping).map(e => ({"val": e[0], "text": e[1]})).filter(
+    obj => (!isCuratedField(filterValues["field_of_study"]) || (obj["val"] !== "num_references")));
 
   const handleSingleSelectChange = (value, key) => {
     const updatedFilterValues = {...filterValues};
     updatedFilterValues[key] = value;
+    if((key === "field_of_study") && (filterValues["order_by"] === "num_references")){
+      updatedFilterValues["order_by"] = "stargazers_count";
+    }
     setFilterValues(updatedFilterValues);
     mkRepoData(updatedFilterValues);
   };
@@ -145,7 +152,7 @@ const Dashboard = () => {
                 options={[{"header": "Curated Fields"}, {"text": "AI Safety", "val": "ai_safety"},
                   {"text": "Automatic Speech Recognition", "val": "asr"}, {"text": "RISC-V", "val": "riscv"},
                   {"header": "Automated Field Detection"}].concat(
-                fields.filter(f => !["ai_safety", "asr", "riscv"].includes(f)).sort().map(f => ({"text": f, "val": f})))}
+                fields.filter(f => !isCuratedField(f)).sort().map(f => ({"text": f, "val": f})))}
               />
             </div>
           </div>
@@ -171,7 +178,8 @@ const Dashboard = () => {
         </div>
         <div style={{width: "70%", minHeight: "80vh", display: "inline-block"}}>
           <TabPanel value={tabValue} index={0}>
-            {repoData.length > 0 && <SummaryPanel data={repoData} field={filterValues["field_of_study"]}/>}
+            {repoData.length > 0 && <SummaryPanel data={repoData} field={filterValues["field_of_study"]}
+                                                  isCurated={isCuratedField(filterValues["field_of_study"])}/>}
           </TabPanel>
           <TabPanel value={tabValue} index={1}>
             <div style={{marginTop: "5px", position: "sticky", top: "0", zIndex: 200, backgroundColor: "white",
@@ -198,7 +206,8 @@ const Dashboard = () => {
                         data={repo} metaMapping={sortMapping}
                         field={filterValues["field_of_study"]}
                         graph_key={filterValues["compare_graph"]}
-                        graph_title={compareMapping[filterValues["compare_graph"]]}/>
+                        graph_title={compareMapping[filterValues["compare_graph"]]}
+                        isCurated={isCuratedField(filterValues["field_of_study"])}/>
             ))}
           </TabPanel>
         </div>

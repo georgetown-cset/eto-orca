@@ -10,11 +10,14 @@ const styles = {
 };
 
 const SummaryPanel = (props) => {
-  const {data, field} = props;
+  const {data, field, isCurated} = props;
 
-  const getTrace = (ext_fn, getSortVal, yMap = val => val[1]) => {
+  const getSortVal = repo => isCurated ? repo["stargazers_count"] : repo["num_references"][field];
+  const titleMetric = isCurated ? "starred" : "referenced";
+
+  const getTrace = (ext_fn, yMap = val => val[1]) => {
     const traceData = [...data];
-    traceData.sort((r1, r2) => getSortVal(r2) - getSortVal(r1))
+    traceData.sort((r1, r2) => getSortVal(r2) - getSortVal(r1));
     const topFive = traceData.slice(0, 5);
     return topFive.map(row => ({
       x: ext_fn(row).map(val => val[0]),
@@ -23,7 +26,7 @@ const SummaryPanel = (props) => {
     }))
   };
 
-  const getContribTrace = (ext_fn, getSortVal) => {
+  const getContribTrace = (ext_fn) => {
     const traceData = [...data];
     traceData.sort((r1, r2) => getSortVal(r2) - getSortVal(r1));
     const topFive = traceData.slice(0, 5);
@@ -47,20 +50,19 @@ const SummaryPanel = (props) => {
   return (
     <div css={styles.card}>
       <h3>Contributor activity</h3>
-      <LineGraph title={"Push events in top five referenced projects"}
-                 traces={getTrace(row => row["push_dates"], repo => repo["num_references"][field])}/>
-      <LineGraph title={"Ratio of issues opened to closed in top five referenced projects"}
-                 traces={getTrace(row => row["issue_dates"], repo => repo["num_references"][field],
+      <LineGraph title={`Push events in top five ${titleMetric} projects`}
+                 traces={getTrace(row => row["push_dates"])}/>
+      <LineGraph title={`Ratio of issues opened to closed in top five ${titleMetric} projects`}
+                 traces={getTrace(row => row["issue_dates"],
                    val => val[1]/val[2])}/>
-      <LineGraph title={"Ratio of new vs returning contributors in top five referenced projects"}
-                 traces={getTrace(row => row["pr_dates"], repo => repo["num_references"][field],
+      <LineGraph title={`Ratio of new vs returning contributors in top five ${titleMetric} projects`}
+                 traces={getTrace(row => row["pr_dates"],
                    val => val[1]/val[2])}/>
       <LineGraph title={"Cumulative total of contributions by number of contributors"}
-                 traces={getContribTrace(row => row["contrib_counts"],
-                     repo => repo["num_references"][field])}/>
+                 traces={getContribTrace(row => row["contrib_counts"])}/>
       <h3>User activity</h3>
-      <LineGraph title={"Star events in top five referenced projects"}
-                 traces={getTrace(row => row["star_dates"], repo => repo["num_references"][field])}/>
+      <LineGraph title={`Star events in top five ${titleMetric} projects`}
+                 traces={getTrace(row => row["star_dates"])}/>
     </div>
   );
 };
