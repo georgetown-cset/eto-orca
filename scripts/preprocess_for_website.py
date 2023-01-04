@@ -86,10 +86,25 @@ def get_lines(input_dir: str):
                 yield json.loads(line)
 
 
+def get_curated_repos():
+    repo_to_field = {}
+    for fi in os.listdir(os.path.join("repo_lists")):
+        if fi.startswith("."):
+            continue
+        field = fi.replace(".txt", "")
+        with open(os.path.join("repo_lists", fi)) as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    repo_to_field[line] = field
+    return repo_to_field
+
+
 def retrieve_data(input_dir: str, output_js: str) -> None:
     seen_ids = set()
     id_to_repo = {}
     field_to_repos = {}
+    curated_repos = get_curated_repos()
     languages = set()
     int_keys = {
         "subscribers_count",
@@ -111,6 +126,7 @@ def retrieve_data(input_dir: str, output_js: str) -> None:
         if line["id"] in seen_ids:
             continue
         repo_id = line.pop("id")
+        repo_name = line["owner_name"] + "/" + line["current_name"]
         seen_ids.add(repo_id)
         row = {}
         for key in line.keys():
@@ -136,9 +152,15 @@ def retrieve_data(input_dir: str, output_js: str) -> None:
             lang = row.pop("primary_programming_language")
             languages.add(lang)
             row["language"] = lang
+        if repo_name in curated_repos:
+            field_to_repos[curated_repos[repo_name]] = field_to_repos.get(
+                curated_repos[repo_name], []
+            ) + [repo_id]
         for paper_meta in row.pop("paper_meta"):
             for field in paper_meta["fields"]:
                 field_name = field["name"]
+                if not field_name:
+                    continue
                 if field_name not in field_to_repos:
                     field_to_repos[field_name] = set()
                 if field_name not in row["num_references"]:
@@ -146,8 +168,11 @@ def retrieve_data(input_dir: str, output_js: str) -> None:
                 row["num_references"][field_name] += 1
                 if row["num_references"][field_name] > 1:
                     field_to_repos[field_name].add(repo_id)
-        if not any(
-            [row["num_references"][field] > 1 for field in row["num_references"]]
+        if not (
+            repo_name in curated_repos
+            or any(
+                [row["num_references"][field] > 1 for field in row["num_references"]]
+            )
         ):
             continue
         for k in unused_keys:

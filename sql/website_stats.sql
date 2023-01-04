@@ -13,7 +13,17 @@ repo_paper_meta AS (
     USING
       (merged_id)
   GROUP BY
-    repo),
+    repo
+  UNION ALL
+  SELECT
+    repo,
+    [
+      STRUCT("p1" AS merged_id, [STRUCT("" AS name, 0.1 AS score)] AS fields), -- noqa: L029
+      STRUCT("p1" AS merged_id, [STRUCT("" AS name, 0.1 AS score)] AS fields)  -- noqa: L029
+    ] AS paper_meta
+  FROM
+    github_metrics.curated_repos
+  WHERE repo NOT IN (SELECT repo FROM github_metrics.repos_in_papers)),
 
 repo_star_dates AS (
   SELECT
@@ -125,4 +135,6 @@ LEFT JOIN
   ON
     id = prs.repo_id
 WHERE
-  (stargazers_count >= 10) AND ARRAY_LENGTH(paper_meta) > 1
+  (
+    stargazers_count >= 10
+  ) AND ((ARRAY_LENGTH(paper_meta) > 1) OR repo IN (SELECT repo FROM github_metrics.curated_repos))

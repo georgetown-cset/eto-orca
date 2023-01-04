@@ -65,7 +65,6 @@ const Dashboard = () => {
     "field_of_study": "Speech recognition",
     "order_by": "num_references",
     "compare_graph": "push_dates",
-    "topic": "",
     "language": "All",
     "license": "All"
   };
@@ -140,19 +139,13 @@ const Dashboard = () => {
             <h3>Select a subject</h3>
             <div style={{margin: "15px 0px 10px 20px"}}>
               <Dropdown
-                selected={filterValues["topic"]}
-                setSelected={(val) => handleSingleSelectChange(val, "topic")}
-                inputLabel={"Curated topic area"}
-                options={topicOptions}
-              />
-            </div>
-            <div>or (advanced)</div>
-            <div style={{margin: "15px 0px 10px 20px"}}>
-              <Dropdown
                 selected={filterValues["field_of_study"]}
                 setSelected={(val) => handleSingleSelectChange(val, "field_of_study")}
                 inputLabel={"Field of study"}
-                options={fields.sort().map(f => ({"text": f, "val": f}))}
+                options={[{"header": "Curated Fields"}, {"text": "AI Safety", "val": "ai_safety"},
+                  {"text": "Automatic Speech Recognition", "val": "asr"}, {"text": "RISC-V", "val": "riscv"},
+                  {"header": "Automated Field Detection"}].concat(
+                fields.filter(f => !["ai_safety", "asr", "riscv"].includes(f)).sort().map(f => ({"text": f, "val": f})))}
               />
             </div>
           </div>
