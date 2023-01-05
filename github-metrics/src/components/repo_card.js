@@ -71,6 +71,45 @@ const RepoCard = (props) => {
     return traceData;
   };
 
+  const getCountryTraces = (graphData) => {
+    const nameToYearToCounts = {};
+    const countryCounts = {};
+    for(let elt of graphData){
+      const [year, country, count] = elt;
+      if(!(country in countryCounts)){
+        countryCounts[country] = 0
+      }
+      countryCounts[country] += parseInt(count);
+      if(!(country in nameToYearToCounts)){
+        nameToYearToCounts[country] = {};
+      }
+      nameToYearToCounts[country][year] = count;
+    }
+    const topCountries = [...Object.keys(countryCounts)];
+    topCountries.sort((a, b) => countryCounts[b] - countryCounts[a]);
+    const traces = [];
+    for(let name of topCountries.slice(0, 5)){
+      const years = [...Object.keys(nameToYearToCounts[name])];
+      years.sort();
+      traces.push({
+        x: years,
+        y: years.map(y => nameToYearToCounts[name][y]),
+        name: name
+      })
+    }
+    return traces;
+  };
+
+  const getGraph = () => {
+    if(["issue_dates", "pr_dates", "contrib_counts"].includes(graph_key)){
+      return <BarGraph traces={getBarTraces(graph_key)} title={graph_title} height={"250px"}/>;
+    } else if(graph_key === "country_contributions"){
+      return <LineGraph traces={getCountryTraces(data[graph_key])} title={graph_title} height={"250px"}/>;
+    }
+    return <LineGraph traces={[{x: getX(data[graph_key]), y: getY(data[graph_key])}]}
+                       title={graph_title} height={"250px"}/>;
+  };
+
   const metaGroups = [
     ["stargazers_count", "subscribers_count", "num_contributors"],
     ["open_issues", "num_references"],
@@ -117,11 +156,7 @@ const RepoCard = (props) => {
           </Typography>
         </div>
         <div style={{width: "59%", display: "inline-block", verticalAlign: "top"}}>
-          {["issue_dates", "pr_dates", "contrib_counts"].includes(graph_key) ?
-            <BarGraph traces={getBarTraces(graph_key)} title={graph_title} height={"250px"}/> :
-            <LineGraph traces={[{x: getX(data[graph_key]), y: getY(data[graph_key])}]}
-                       title={graph_title} height={"250px"}/>
-          }
+          {getGraph()}
         </div>
       </div>
       <div style={{textAlign: "center"}}>

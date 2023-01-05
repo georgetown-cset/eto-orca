@@ -53,7 +53,7 @@ const LineGraph = (props) => {
     <>
       { !isSSR &&
         <Suspense fallback={<div>Loading graph...</div>}>
-          {traces[0].x.length === 0 ? noData :
+          {((traces.length === 0) || (traces[0].x.length === 0)) ? noData :
             <Plot
               config={plotlyDefaults.config}
               data={traceMetadata}

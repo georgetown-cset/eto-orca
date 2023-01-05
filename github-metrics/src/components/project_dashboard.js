@@ -88,6 +88,34 @@ const ProjectDashboard = () => {
     "pr_dates": ["New", "Returning"],
     "contrib_counts": ["Num Contributions"]
   };
+  const getCountryTraces = (graphData) => {
+    const nameToYearToCounts = {};
+    const countryCounts = {};
+    for(let elt of graphData){
+      const [year, country, count] = elt;
+      if(!(country in countryCounts)){
+        countryCounts[country] = 0
+      }
+      countryCounts[country] += parseInt(count);
+      if(!(country in nameToYearToCounts)){
+        nameToYearToCounts[country] = {};
+      }
+      nameToYearToCounts[country][year] = count;
+    }
+    const topCountries = [...Object.keys(countryCounts)];
+    topCountries.sort((a, b) => countryCounts[b] - countryCounts[a]);
+    const traces = [];
+    for(let name of topCountries.slice(0, 5)){
+      const years = [...Object.keys(nameToYearToCounts[name])];
+      years.sort();
+      traces.push({
+        x: years,
+        y: years.map(y => nameToYearToCounts[name][y]),
+        name: name
+      })
+    }
+    return traces;
+  };
 
   // todo: pull this out of here and dashboard
   const metaMapping = {
@@ -104,18 +132,30 @@ const ProjectDashboard = () => {
     "push_dates": "Push events over time",
     "issue_dates": "Issues over time",
     "pr_dates": "New vs returning contributors over time",
-    "contrib_counts": "Contribution percentage counts"
+    "contrib_counts": "Contribution percentage counts",
+    "country_contributions": "Code contributions by top five countries (incomplete data)"
   };
 
   const contribGraphs = [
     ["push_dates", "line"],
     ["issue_dates", "bar"],
     ["pr_dates", "bar"],
-    ["contrib_counts", "bar"]
+    ["contrib_counts", "bar"],
+    ["country_contributions", "multi-line"]
   ];
   const userGraphs = [
     ["star_dates", "line"]
   ];
+
+  const getContributorGraph = (meta) => {
+    if(meta[1] === "bar"){
+      return <BarGraph traces={getBarTraces(meta[0])} title={keyToTitle[meta[0]]} height={"250px"}/>
+    } else if(meta[1] === "line") {
+      return <LineGraph traces={[{x: getX(data[meta[0]]), y: getY(data[meta[0]])}]}
+                 title={keyToTitle[meta[0]]} height={"250px"}/>
+    }
+    return <LineGraph traces={getCountryTraces(data[meta[0]])} title={keyToTitle[meta[0]]} height={"250px"}/>;
+  };
 
   return (
    <div style={{margin: "20px auto", maxWidth: "1000px"}} id={"project-dashboard"}>
@@ -148,11 +188,9 @@ const ProjectDashboard = () => {
      </div>
      <div>
        <h3>Contributor activity</h3>
-       {Object.keys(data).length > 0 && contribGraphs.map(meta => (
-         meta[1] === "bar" ? <BarGraph traces={getBarTraces(meta[0])} title={keyToTitle[meta[0]]} height={"250px"}/> :
-            <LineGraph traces={[{x: getX(data[meta[0]]), y: getY(data[meta[0]])}]}
-                       title={keyToTitle[meta[0]]} height={"250px"}/>
-       ))}
+       {Object.keys(data).length > 0 && contribGraphs.map(meta =>
+         getContributorGraph(meta)
+       )}
      </div>
      <div>
        <h3>User activity</h3>

@@ -86,7 +86,45 @@ prs AS (
     ON
       (first_pr.contributor = pull_requests_opened.opener_id) AND (first_pr.repo_id = pull_requests_opened.repo_id)
   GROUP BY
-    repo_id)
+    repo_id),
+
+country_year_disagg AS (
+  SELECT
+    push_event_commits.repo_id AS repo_id,
+    country,
+    EXTRACT(YEAR FROM push_created_at) AS year,
+    COUNT(DISTINCT(event_id)) AS num_pushes
+  FROM
+    github_metrics.push_event_commits
+  INNER JOIN
+    (SELECT * FROM github_metrics.contributor_affiliations
+      CROSS JOIN UNNEST(contributed_repos) AS repo_id) AS contributor_affiliations
+    ON push_event_commits.contributor_name = contributor_affiliations.contributor
+      AND push_event_commits.repo_id = contributor_affiliations.repo_id
+  WHERE
+    (
+      contributor_affiliations.endyear IS NULL OR EXTRACT(YEAR FROM push_created_at) <= contributor_affiliations.endyear
+    )
+    AND --noqa: L007
+    (
+      contributor_affiliations.startyear IS NULL OR EXTRACT(
+        YEAR FROM push_created_at
+      ) >= contributor_affiliations.startyear
+    )
+  GROUP BY
+    repo_id,
+    year,
+    country
+),
+
+country_year AS (
+  SELECT
+    repo_id,
+    ARRAY_AGG(STRUCT(year, country, num_pushes)) AS country_year_contributions
+  FROM
+    country_year_disagg
+  GROUP BY repo_id
+)
 
 SELECT
   id,
@@ -111,7 +149,8 @@ SELECT
   star_dates,
   repo_pushes.events AS push_events,
   issues.events AS issue_events,
-  prs.events AS pr_events
+  prs.events AS pr_events,
+  country_year_contributions
 FROM
   github_metrics.repos_with_full_meta
 INNER JOIN
@@ -134,6 +173,10 @@ LEFT JOIN
   prs
   ON
     id = prs.repo_id
+LEFT JOIN
+  country_year
+  ON
+    id = country_year.repo_id
 WHERE
   (
     stargazers_count >= 10

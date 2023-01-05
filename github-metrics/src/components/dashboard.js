@@ -82,7 +82,8 @@ const Dashboard = () => {
     "push_dates": "Push events over time",
     "issue_dates": "Issues over time",
     "pr_dates": "New vs returning contributors over time",
-    "contrib_counts": "Contribution percentage counts"
+    "contrib_counts": "Contribution percentage counts",
+    "country_contributions": "Code contributions by top five countries (incomplete data)"
   };
   const compareOptions = Object.entries(compareMapping).map(e => ({"val": e[0], "text": e[1]}));
   const topicsMapping = {

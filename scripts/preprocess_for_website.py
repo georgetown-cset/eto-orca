@@ -79,6 +79,18 @@ def get_new_vs_returning_contributor_counts(contribs):
     )
 
 
+def get_country_contribution_counts(contribs):
+    year_data = [
+        [
+            contrib.get("year"),
+            contrib.get("country", "Unknown"),
+            contrib.get("num_pushes"),
+        ]
+        for contrib in contribs
+    ]
+    return sorted([d for d in year_data], key=lambda elt: elt[0])
+
+
 def get_lines(input_dir: str):
     for fi in os.listdir(input_dir):
         with open(os.path.join(input_dir, fi)) as f:
@@ -121,6 +133,7 @@ def retrieve_data(input_dir: str, output_js: str) -> None:
         "sources",
         "pr_events",
         "issue_open_events",
+        "ultimate_fork_of",
     }
     for line in tqdm(get_lines(input_dir)):
         if line["id"] in seen_ids:
@@ -147,6 +160,9 @@ def retrieve_data(input_dir: str, output_js: str) -> None:
             contribs
         )
         row["pr_dates"] = get_new_vs_returning_contributor_counts(contribs)
+        row["country_contributions"] = get_country_contribution_counts(
+            row.pop("country_year_contributions")
+        )
         row["num_references"] = {}
         if "primary_programming_language" in row:
             lang = row.pop("primary_programming_language")
