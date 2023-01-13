@@ -93,7 +93,6 @@ const Dashboard = () => {
   };
   languages.sort();
   const cleanLanguages = ["All"].concat(languages);
-  const topicOptions = Object.entries(topicsMapping).map(e => ({"val": e[0], "text": e[1]}));
   const repoSortFn = (repo, filters) => {
     if(filters["order_by"] === "num_references"){
       return repo["num_references"][filters["field_of_study"]]
@@ -116,7 +115,7 @@ const Dashboard = () => {
   };
   const [filterValues, setFilterValues] = React.useState({...defaultFilterValues});
   const [repoData, setRepoData] = React.useState([]);
-  const [tabValue, setTabValue] = React.useState(0);
+  const [tabValue, setTabValue] = React.useState(1);
   const isCuratedField = (field) => {
     return ["ai_safety", "asr", "riscv"].includes(field);
   };
