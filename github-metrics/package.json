@@ -24,6 +24,7 @@
     "@mui/material": "^5.10.13",
     "gatsby": "^4.24.8",
     "gatsby-plugin-emotion": "^7.25.0",
+    "gatsby-plugin-manifest": "^4.23.0",
     "gatsby-plugin-mdx": "^4.3.0",
     "gatsby-plugin-plausible": "^0.0.7",
     "package.json": "^2.0.1",

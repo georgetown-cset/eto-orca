@@ -10,5 +10,11 @@ module.exports = {
       "path": "./src/pages/"
     },
     __key: "pages"
-  }, `gatsby-plugin-emotion`]
+  }, `gatsby-plugin-emotion`,
+  {
+    resolve: "gatsby-plugin-manifest",
+    options: {
+      icon: "src/images/favicon.svg"
+    },
+  },]
 };
