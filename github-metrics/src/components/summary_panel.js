@@ -11,7 +11,7 @@ const styles = {
 };
 
 const SummaryPanel = (props) => {
-  const {data, field, sortOptions, customTopics} = props;
+  const {data, sortOptions, customTopics} = props;
   const [orderBy, setOrderBy] = React.useState(
     sortOptions.map(opt => opt.val).includes("num_references") ? "num_references" : "stargazers_count");
   const customTopicMap = {};
@@ -56,7 +56,7 @@ const SummaryPanel = (props) => {
       <div style={{marginTop: "5px", position: "sticky", top: "0", zIndex: 200, backgroundColor: "white",
                    borderBottom: "1px solid rgba(0, 0, 0, 0.12)", verticalAlign: "top"}}>
         <div style={{display: "inline-block", verticalAlign: "bottom", fontWeight: "bold", paddingBottom: "16px"}}>
-          Displaying top 5 repos in {field in customTopicMap ? customTopicMap[field] : field}, ordered by
+          Displaying top 5 selected repos, ordered by
         </div>
         <div style={{display: "inline-block"}}>
           <Dropdown
@@ -68,18 +68,22 @@ const SummaryPanel = (props) => {
         </div>
       </div>
       <h3>Contributor activity</h3>
-      <LineGraph title={`Push events in top five projects`}
+      <LineGraph title={`Push events in top projects`} showLegend={true}
                  traces={getTrace("push_dates")}/>
-      <LineGraph title={`Ratio of issues opened to closed in top five projects`}
+      <LineGraph title={`Ratio of issues opened to closed in top projects`}
+                 showLegend={true}
                  traces={getTrace("issue_dates",
                    val => val[1]/val[2])}/>
-      <LineGraph title={`Ratio of new vs returning contributors in top five projects`}
+      <LineGraph title={`Ratio of new vs returning contributors in top projects`}
+                 showLegend={true}
                  traces={getTrace("pr_dates",
                    val => val[1]/val[2])}/>
       <LineGraph title={"Cumulative total of contributions by number of contributors"}
+                 showLegend={true}
                  traces={getContribTrace("contrib_counts")}/>
       <h3>User activity</h3>
       <LineGraph title={`Star events in top five projects`}
+                 showLegend={true}
                  traces={getTrace("star_dates")}/>
     </div>
   );

@@ -19,7 +19,7 @@ const isSSR = typeof window === "undefined";
 const noData = <div style={{textAlign: "center"}}>No graph data available</div>;
 
 const LineGraph = (props) => {
-  const {traces, title, height} = props;
+  const {traces, title, height, showLegend=false} = props;
 
   const traceMetadata = [];
   let maxY = -1;
@@ -42,8 +42,9 @@ const LineGraph = (props) => {
   const plotlyDefaults = PlotlyDefaults(maxY);
 
   const layout = plotlyDefaults.layout;
-  layout.showlegend = traces.length > 1;
-  layout.margin = {t: traces.length == 1 ? 50 : 100, r: 50, b: 50, l: 50, pad: 4};
+  const legendVisible = showLegend || (traces.length > 1);
+  layout.showlegend = legendVisible;
+  layout.margin = {t: legendVisible ? 100 : 50, r: 50, b: 50, l: 50, pad: 4};
   layout.xaxis.dtick = 1;
   if(title) {
     layout.title = title;

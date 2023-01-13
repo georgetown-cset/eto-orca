@@ -11,7 +11,7 @@ import "core-js/features/url-search-params";
 
 import RepoCard from "./repo_card";
 import SummaryPanel from "./summary_panel";
-import {id_to_repo, field_to_repos, fields, languages} from "../data/constants";
+import {id_to_repo, field_to_repos, fields} from "../data/constants";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -91,15 +91,7 @@ const Dashboard = () => {
     {"val": "asr", "text": "Automatic Speech Recognition"},
     {"val": "riscv", "text": "RISC-V"}
   ];
-  languages.sort();
-  const cleanLanguages = ["All"].concat(languages);
-  const repoSortFn = (repo, filters) => {
-    if(filters["order_by"] === "num_references"){
-      return repo["num_references"][filters["field_of_study"]]
-    }
-    return repo[filters["order_by"]]
-  };
-  const mkRepoData = (filters) => {
+  const getSelectedRepos = (filters) => {
     const relKeys = field_to_repos[filters["field_of_study"]];
     const newRepoData = [];
     for(let key of relKeys){
@@ -110,6 +102,22 @@ const Dashboard = () => {
       }
     }
     relKeys.map(key => id_to_repo[key]);
+    return newRepoData;
+  };
+  const getLanguages = () => {
+    const fieldRepos = getSelectedRepos({"field_of_study": filterValues["field_of_study"], "language": "All"});
+    const languages = [...new Set(fieldRepos.map(row => row["language"]))];
+    languages.sort();
+    return ["All"].concat(languages);
+  };
+  const repoSortFn = (repo, filters) => {
+    if(filters["order_by"] === "num_references"){
+      return repo["num_references"][filters["field_of_study"]]
+    }
+    return repo[filters["order_by"]]
+  };
+  const mkRepoData = (filters) => {
+    const newRepoData = getSelectedRepos(filters);
     newRepoData.sort((a, b) => repoSortFn(b, filters) - repoSortFn(a, filters));
     setRepoData(newRepoData.slice(0, 20));
   };
@@ -125,8 +133,13 @@ const Dashboard = () => {
   const handleSingleSelectChange = (value, key) => {
     const updatedFilterValues = {...filterValues};
     updatedFilterValues[key] = value;
-    if((key === "field_of_study") && (filterValues["order_by"] === "num_references")){
-      updatedFilterValues["order_by"] = "stargazers_count";
+    if(key === "field_of_study"){
+      if(filterValues["order_by"] === "num_references"){
+        updatedFilterValues["order_by"] = "stargazers_count";
+      }
+      for(let filteredKey of ["language", "license"]){
+        updatedFilterValues[filteredKey] = "All";
+      }
     }
     setFilterValues(updatedFilterValues);
     mkRepoData(updatedFilterValues);
@@ -167,7 +180,7 @@ const Dashboard = () => {
                 selected={filterValues["language"]}
                 setSelected={(val) => handleSingleSelectChange(val, "language")}
                 inputLabel={"Top programming language"}
-                options={cleanLanguages.map(lang => ({"text": lang, "val": lang}))}
+                options={getLanguages().map(lang => ({"text": lang, "val": lang}))}
               />
             </div>
             <div style={{margin: "15px 0px 10px 20px"}}>
@@ -182,7 +195,7 @@ const Dashboard = () => {
         </div>
         <div style={{width: "70%", minHeight: "80vh", display: "inline-block"}}>
           <TabPanel value={tabValue} index={0}>
-            {repoData.length > 0 && <SummaryPanel data={repoData} field={filterValues["field_of_study"]}
+            {repoData.length > 0 && <SummaryPanel data={repoData}
                                                   sortOptions={sortOptions} customTopics={customTopics}/>}
           </TabPanel>
           <TabPanel value={tabValue} index={1}>
