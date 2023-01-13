@@ -179,7 +179,7 @@ const Dashboard = () => {
         <div style={{width: "70%", minHeight: "80vh", display: "inline-block"}}>
           <TabPanel value={tabValue} index={0}>
             {repoData.length > 0 && <SummaryPanel data={repoData} field={filterValues["field_of_study"]}
-                                                  isCurated={isCuratedField(filterValues["field_of_study"])}/>}
+                                                  sortOptions={sortOptions}/>}
           </TabPanel>
           <TabPanel value={tabValue} index={1}>
             <div style={{marginTop: "5px", position: "sticky", top: "0", zIndex: 200, backgroundColor: "white",
