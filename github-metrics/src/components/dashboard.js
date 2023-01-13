@@ -62,8 +62,8 @@ const Dashboard = () => {
     mkRepoData(defaultFilterValues);
   }, []);
   const defaultFilterValues = {
-    "field_of_study": "Speech recognition",
-    "order_by": "num_references",
+    "field_of_study": "ai_safety",
+    "order_by": "stargazers_count",
     "compare_graph": "push_dates",
     "language": "All",
     "license": "All"
@@ -88,7 +88,7 @@ const Dashboard = () => {
   const compareOptions = Object.entries(compareMapping).map(e => ({"val": e[0], "text": e[1]}));
   const customTopics = [
     {"val": "ai_safety", "text": "AI Safety"},
-    {"val": "asr", "text": "Automatic Speech Recognition"},
+    {"val": "asr", "text": "Speech Recognition (curated)"},
     {"val": "riscv", "text": "RISC-V"}
   ];
   const getSelectedRepos = (filters) => {
