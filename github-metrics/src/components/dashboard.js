@@ -86,11 +86,11 @@ const Dashboard = () => {
     "country_contributions": "Code contributions by top five countries (incomplete data)"
   };
   const compareOptions = Object.entries(compareMapping).map(e => ({"val": e[0], "text": e[1]}));
-  const topicsMapping = {
-    "riscv": "RISC-V",
-    "speech_recognition": "Speech recognition",
-    "ai_safety": "AI Safety"
-  };
+  const customTopics = [
+    {"val": "ai_safety", "text": "AI Safety"},
+    {"val": "asr", "text": "Automatic Speech Recognition"},
+    {"val": "riscv", "text": "RISC-V"}
+  ];
   languages.sort();
   const cleanLanguages = ["All"].concat(languages);
   const repoSortFn = (repo, filters) => {
@@ -117,7 +117,7 @@ const Dashboard = () => {
   const [repoData, setRepoData] = React.useState([]);
   const [tabValue, setTabValue] = React.useState(1);
   const isCuratedField = (field) => {
-    return ["ai_safety", "asr", "riscv"].includes(field);
+    return customTopics.map(topic => topic["val"]).includes(field);
   };
   const sortOptions = Object.entries(sortMapping).map(e => ({"val": e[0], "text": e[1]})).filter(
     obj => (!isCuratedField(filterValues["field_of_study"]) || (obj["val"] !== "num_references")));
@@ -130,6 +130,13 @@ const Dashboard = () => {
     }
     setFilterValues(updatedFilterValues);
     mkRepoData(updatedFilterValues);
+  };
+
+  const getFOSOptions = () => {
+    const options = [{"header": "Curated Fields"}].concat(customTopics);
+    options.push({"header": "Automated Field Detection"});
+    const autoFields = fields.filter(f => !isCuratedField(f)).sort().map(f => ({"text": f, "val": f}));
+    return options.concat(autoFields);
   };
 
   return (
@@ -149,10 +156,7 @@ const Dashboard = () => {
                 selected={filterValues["field_of_study"]}
                 setSelected={(val) => handleSingleSelectChange(val, "field_of_study")}
                 inputLabel={"Field of study"}
-                options={[{"header": "Curated Fields"}, {"text": "AI Safety", "val": "ai_safety"},
-                  {"text": "Automatic Speech Recognition", "val": "asr"}, {"text": "RISC-V", "val": "riscv"},
-                  {"header": "Automated Field Detection"}].concat(
-                fields.filter(f => !isCuratedField(f)).sort().map(f => ({"text": f, "val": f})))}
+                options={getFOSOptions()}
               />
             </div>
           </div>
@@ -179,7 +183,7 @@ const Dashboard = () => {
         <div style={{width: "70%", minHeight: "80vh", display: "inline-block"}}>
           <TabPanel value={tabValue} index={0}>
             {repoData.length > 0 && <SummaryPanel data={repoData} field={filterValues["field_of_study"]}
-                                                  sortOptions={sortOptions}/>}
+                                                  sortOptions={sortOptions} customTopics={customTopics}/>}
           </TabPanel>
           <TabPanel value={tabValue} index={1}>
             <div style={{marginTop: "5px", position: "sticky", top: "0", zIndex: 200, backgroundColor: "white",

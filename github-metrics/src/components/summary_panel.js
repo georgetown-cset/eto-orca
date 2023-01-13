@@ -11,9 +11,13 @@ const styles = {
 };
 
 const SummaryPanel = (props) => {
-  const {data, field, sortOptions} = props;
+  const {data, field, sortOptions, customTopics} = props;
   const [orderBy, setOrderBy] = React.useState(
     sortOptions.map(opt => opt.val).includes("num_references") ? "num_references" : "stargazers_count");
+  const customTopicMap = {};
+  for(let topic of customTopics){
+    customTopicMap[topic["val"]] = topic["text"];
+  }
 
   const getTrace = (key, yMap = val => val[1]) => {
     const traceData = [...data];
@@ -52,7 +56,7 @@ const SummaryPanel = (props) => {
       <div style={{marginTop: "5px", position: "sticky", top: "0", zIndex: 200, backgroundColor: "white",
                    borderBottom: "1px solid rgba(0, 0, 0, 0.12)", verticalAlign: "top"}}>
         <div style={{display: "inline-block", verticalAlign: "bottom", fontWeight: "bold", paddingBottom: "16px"}}>
-          Displaying top 5 repos in {field.toLowerCase()}, ordered by
+          Displaying top 5 repos in {field in customTopicMap ? customTopicMap[field] : field}, ordered by
         </div>
         <div style={{display: "inline-block"}}>
           <Dropdown
