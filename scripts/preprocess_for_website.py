@@ -142,10 +142,13 @@ def retrieve_data(input_dir: str, output_js: str) -> None:
         repo_name = line["owner_name"] + "/" + line["current_name"]
         seen_ids.add(repo_id)
         row = {}
+        for key in int_keys:
+            if (key not in line) or not line[key]:
+                line[key] = 0
         for key in line.keys():
             if key.endswith("_at"):
                 val = line[key].split()[0]
-            elif key in int_keys:
+            elif (key in int_keys) and (type(line[key]) == str):
                 val = int(line[key].replace(",", "").replace("+", ""))
             else:
                 val = line[key]
