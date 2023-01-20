@@ -80,7 +80,8 @@ const SummaryPanel = (props) => {
                    val => val[1]/val[2])}/>
       <LineGraph title={"Cumulative total of contributions by number of contributors"}
                  showLegend={true}
-                 traces={getContribTrace("contrib_counts")}/>
+                 traces={getContribTrace("contrib_counts")}
+                 normalizeTime={false}/>
       <h3>User activity</h3>
       <LineGraph title={`Star events in top five projects`}
                  showLegend={true}

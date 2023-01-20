@@ -151,12 +151,14 @@ const ProjectDashboard = () => {
 
   const getContributorGraph = (meta) => {
     if(meta[1] === "bar"){
-      return <BarGraph traces={getBarTraces(meta[0])} title={keyToTitle[meta[0]]} height={"250px"}/>
+      return <BarGraph traces={getBarTraces(meta[0])} title={keyToTitle[meta[0]]} height={"250px"}
+                                        normalizeTime={meta[0] !== "contrib_counts"}/>
     } else if(meta[1] === "line") {
       return <LineGraph traces={[{x: getX(data[meta[0]]), y: getY(data[meta[0]])}]}
-                 title={keyToTitle[meta[0]]} height={"250px"}/>
+                 title={keyToTitle[meta[0]]} height={"250px"} />
     }
-    return <LineGraph traces={getCountryTraces(data[meta[0]])} title={keyToTitle[meta[0]]} height={"250px"}/>;
+    return <LineGraph traces={getCountryTraces(data[meta[0]])} title={keyToTitle[meta[0]]} height={"250px"}
+                      showLegend={true}/>;
   };
 
   return (
@@ -197,7 +199,7 @@ const ProjectDashboard = () => {
      <div>
        <h3>User activity</h3>
        {Object.keys(data).length > 0 && userGraphs.map(meta => (
-         meta[1] === "bar" ? <BarGraph traces={getBarTraces(meta[0])} title={keyToTitle[meta[0]]} height={"250px"}/> :
+         meta[1] === "bar" ? <BarGraph traces={getBarTraces(meta[0])} title={keyToTitle[meta[0]]} height={"250px"} /> :
             <LineGraph traces={[{x: getX(data[meta[0]]), y: getY(data[meta[0]])}]}
                        title={keyToTitle[meta[0]]} height={"250px"}/>
        ))}

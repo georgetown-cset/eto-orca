@@ -30,21 +30,23 @@ const cleanTraces = (x, y) => {
     clean_x.push(curr_year);
     clean_y.push(curr_year in x_to_y ? x_to_y[curr_year]: 0)
   }
-}
+  return [clean_x, clean_y];
+};
 
 const LineGraph = (props) => {
-  const {traces, title, height, showLegend=false} = props;
+  const {traces, title, height, showLegend=false, normalizeTime=true} = props;
 
   const traceMetadata = [];
   let maxY = -1;
   for(const [idx, trace] of traces.entries()) {
-    const traceMaxY = Math.max(...trace.y);
+    const [clean_x, clean_y] = normalizeTime ? cleanTraces(trace.x, trace.y) : [trace.x, trace.y];
+    const traceMaxY = Math.max(...clean_y);
     if(traceMaxY > maxY){
       maxY = traceMaxY;
     }
     traceMetadata.push({
-      x: trace.x,
-      y: trace.y,
+      x: clean_x,
+      y: clean_y,
       name: trace.name,
       type: "scatter",
       mode: "lines",
@@ -83,18 +85,19 @@ const LineGraph = (props) => {
 };
 
 const BarGraph = (props) => {
-  const {traces, title, height} = props;
+  const {traces, title, height, normalizeTime=true} = props;
 
   const traceMetadata = [];
   let maxY = -1;
   for(const [idx, trace] of traces.entries()) {
-    const traceMaxY = Math.max(...trace.y);
+    const [clean_x, clean_y] = normalizeTime ? cleanTraces(trace.x, trace.y) : [trace.x, trace.y];
+    const traceMaxY = Math.max(...clean_y);
     if(traceMaxY > maxY){
       maxY = traceMaxY;
     }
     traceMetadata.push({
-      x: trace.x,
-      y: trace.y,
+      x: clean_x,
+      y: clean_y,
       name: trace.name,
       type: "bar",
       marker: {color: colors[idx]},
