@@ -103,7 +103,7 @@ const RepoCard = (props) => {
   const getGraph = () => {
     if(["issue_dates", "pr_dates", "contrib_counts"].includes(graph_key)){
       return <BarGraph traces={getBarTraces(graph_key)} title={graph_title} height={"250px"}/>;
-    } else if(graph_key === "country_contributions"){
+    } else if(["country_contributions", "org_contributions"].includes(graph_key)){
       return <LineGraph traces={getCountryTraces(data[graph_key])} title={graph_title} height={"250px"}/>;
     }
     return <LineGraph traces={[{x: getX(data[graph_key]), y: getY(data[graph_key])}]}

@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+from datetime import datetime
 
 from tqdm import tqdm
 
@@ -79,11 +80,11 @@ def get_new_vs_returning_contributor_counts(contribs):
     )
 
 
-def get_country_contribution_counts(contribs):
+def get_contribution_counts(contribs, key):
     year_data = [
         [
             contrib.get("year"),
-            contrib.get("country", "Unknown"),
+            contrib.get(key, "Unknown"),
             contrib.get("num_pushes"),
         ]
         for contrib in contribs
@@ -163,8 +164,11 @@ def retrieve_data(input_dir: str, output_js: str) -> None:
             contribs
         )
         row["pr_dates"] = get_new_vs_returning_contributor_counts(contribs)
-        row["country_contributions"] = get_country_contribution_counts(
-            row.pop("country_year_contributions")
+        row["country_contributions"] = get_contribution_counts(
+            row.pop("country_year_contributions"), "country"
+        )
+        row["org_contributions"] = get_contribution_counts(
+            row.pop("org_year_contributions"), "org"
         )
         row["num_references"] = {}
         if "primary_programming_language" in row:
@@ -212,13 +216,25 @@ def retrieve_data(input_dir: str, output_js: str) -> None:
         f.write("export {id_to_repo, field_to_repos, fields, languages};")
 
 
+def write_config(config_fi):
+    with open(config_fi, mode="w") as f:
+        now = datetime.now()
+        curr_year = now.year if now.month > 6 else now.year - 1
+        f.write(json.dumps({"start_year": curr_year - 6, "end_year": curr_year}))
+
+
 if __name__ == "__main__":
+    default_data_dir = os.path.join("github-metrics", "src", "data")
     parser = argparse.ArgumentParser()
     parser.add_argument("--input_dir", default="gh_website_stats")
     parser.add_argument(
         "--output_js",
-        default=os.path.join("github-metrics", "src", "data", "constants.js"),
+        default=os.path.join(default_data_dir, "constants.js"),
+    )
+    parser.add_argument(
+        "--config", default=os.path.join(default_data_dir, "config.json")
     )
     args = parser.parse_args()
 
     retrieve_data(args.input_dir, args.output_js)
+    write_config(args.config)

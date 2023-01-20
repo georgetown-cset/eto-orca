@@ -133,7 +133,8 @@ const ProjectDashboard = () => {
     "issue_dates": "Issues over time",
     "pr_dates": "New vs returning contributors over time",
     "contrib_counts": "Contribution percentage counts",
-    "country_contributions": "Code contributions by top five countries (incomplete data)"
+    "country_contributions": "Code contributions by top five countries (incomplete data)",
+    "org_contributions": "Code contributions by top five contributor organizations (incomplete data)"
   };
 
   const contribGraphs = [
@@ -141,7 +142,8 @@ const ProjectDashboard = () => {
     ["issue_dates", "bar"],
     ["pr_dates", "bar"],
     ["contrib_counts", "bar"],
-    ["country_contributions", "multi-line"]
+    ["country_contributions", "multi-line"],
+    ["org_contributions", "multi-line"]
   ];
   const userGraphs = [
     ["star_dates", "line"]

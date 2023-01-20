@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import {PlotlyDefaults} from "@eto/eto-ui-components";
+import config from "../data/config.json";
 
 const colors = [
   "#7AC4A5",
@@ -17,6 +18,19 @@ const colors = [
 const Plot = lazy(() => import('react-plotly.js'));
 const isSSR = typeof window === "undefined";
 const noData = <div style={{textAlign: "center"}}>No graph data available</div>;
+
+const cleanTraces = (x, y) => {
+  const [clean_x, clean_y] = [[], []];
+  const x_to_y = {};
+  for(let [idx, x_value] of x.entries()){
+    x_to_y[parseInt(x_value)] = y[idx];
+  }
+  for(let i = 0; i < (config.end_year - config.start_year); i ++){
+    const curr_year = config.start_year+i;
+    clean_x.push(curr_year);
+    clean_y.push(curr_year in x_to_y ? x_to_y[curr_year]: 0)
+  }
+}
 
 const LineGraph = (props) => {
   const {traces, title, height, showLegend=false} = props;

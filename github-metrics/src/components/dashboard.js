@@ -83,7 +83,8 @@ const Dashboard = () => {
     "issue_dates": "Issues over time",
     "pr_dates": "New vs returning contributors over time",
     "contrib_counts": "Contribution percentage counts",
-    "country_contributions": "Code contributions by top five countries (incomplete data)"
+    "country_contributions": "Code contributions by top five countries (incomplete data)",
+    "org_contributions": "Code contributions by top five contributor organizations (incomplete data)"
   };
   const compareOptions = Object.entries(compareMapping).map(e => ({"val": e[0], "text": e[1]}));
   const customTopics = [
