@@ -184,6 +184,7 @@ SELECT
   paper_meta,
   num_contributors,
   used_by,
+  license.name AS license,
   star_dates,
   repo_pushes.events AS push_events,
   issues.events AS issue_events,

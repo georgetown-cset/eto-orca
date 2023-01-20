@@ -92,24 +92,30 @@ const Dashboard = () => {
     {"val": "asr", "text": "Speech Recognition (curated)"},
     {"val": "riscv", "text": "RISC-V"}
   ];
-  const getSelectedRepos = (filters) => {
+  const getSelectedRepos = (filters, ignoreFilter = null) => {
     const relKeys = field_to_repos[filters["field_of_study"]];
     const newRepoData = [];
     for(let key of relKeys){
       const repo = id_to_repo[key];
       repo["id"] = key;
-      if((filters["language"] === "All") || (filters["language"] === repo["language"])){
+      let addRepo = true;
+      for(let filt of ["language", "license"]){
+        if(!((filt === ignoreFilter) || (filters[filt] === "All") || (filters[filt] === repo[filt]))){
+          addRepo = false;
+        }
+      }
+      if(addRepo){
         newRepoData.push(repo);
       }
     }
     relKeys.map(key => id_to_repo[key]);
     return newRepoData;
   };
-  const getLanguages = () => {
-    const fieldRepos = getSelectedRepos({"field_of_study": filterValues["field_of_study"], "language": "All"});
-    const languages = [...new Set(fieldRepos.map(row => row["language"]))];
-    languages.sort();
-    return ["All"].concat(languages);
+  const getFilterOptions = (key) => {
+    const fieldRepos = getSelectedRepos(filterValues, key);
+    const opts = [...new Set(fieldRepos.map(row => row[key]))];
+    opts.sort();
+    return ["All"].concat(opts);
   };
   const repoSortFn = (repo, filters) => {
     if(filters["order_by"] === "num_references"){
@@ -181,7 +187,7 @@ const Dashboard = () => {
                 selected={filterValues["language"]}
                 setSelected={(val) => handleSingleSelectChange(val, "language")}
                 inputLabel={"Top programming language"}
-                options={getLanguages().map(lang => ({"text": lang, "val": lang}))}
+                options={getFilterOptions("language").map(lang => ({"text": lang, "val": lang}))}
               />
             </div>
             <div style={{margin: "15px 0px 10px 20px"}}>
@@ -189,7 +195,7 @@ const Dashboard = () => {
                 selected={filterValues["license"]}
                 setSelected={(val) => handleSingleSelectChange(val, "license")}
                 inputLabel={"License"}
-                options={[{"text": "All", "val": "All"}]}
+                options={getFilterOptions("license").map(lang => ({"text": lang, "val": lang}))}
               />
             </div>
           </div>

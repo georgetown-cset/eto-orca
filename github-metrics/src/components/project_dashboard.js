@@ -5,7 +5,6 @@ import "core-js/features/url-search-params";
 
 import {id_to_repo} from "../data/constants";
 import {ExternalLink} from "@eto/eto-ui-components";
-import Typography from "@mui/material/Typography";
 import {css} from "@emotion/react";
 import {BarGraph, LineGraph} from "./graph";
 
@@ -51,7 +50,8 @@ const ProjectDashboard = () => {
   const metaGroups = [
     ["stargazers_count", "subscribers_count"],
     ["num_contributors", "open_issues"],
-    ["created_at", "pushed_at"]
+    ["created_at", "pushed_at"],
+    ["license"]
   ];
   const getValue = (sort_key) => {
     if(data[sort_key] === null) {
@@ -125,7 +125,8 @@ const ProjectDashboard = () => {
     "created_at": "Created Date",
     "pushed_at": "Last Push Date",
     "open_issues": "Open Issues",
-    "num_references": "References"
+    "num_references": "References",
+    "license": "License"
   };
   const keyToTitle = {
     "star_dates": "Stars over time",
@@ -175,7 +176,9 @@ const ProjectDashboard = () => {
        </div>
        <div>
          <div style={{display: "inline-block", width: "50%", verticalAlign: "top"}}>
-           {data["description"]}
+           <div>
+             {data["description"]}
+           </div>
          </div>
          <div style={{display: "inline-block", width: "50%"}}>
            {metaGroups.map((group, group_idx) => (
