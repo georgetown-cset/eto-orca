@@ -190,7 +190,10 @@ SELECT
   issues.events AS issue_events,
   prs.events AS pr_events,
   country_year_contributions,
-  org_year_contributions
+  org_year_contributions,
+  CONCAT(
+    owner_name, "/", current_name
+  ) IN (SELECT name FROM `bigquery-public-data.deps_dev_v1.Projects`) AS has_deps_dev -- noqa: L057
 FROM
   github_metrics.repos_with_full_meta
 INNER JOIN

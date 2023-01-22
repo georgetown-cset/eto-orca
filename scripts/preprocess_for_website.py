@@ -89,7 +89,7 @@ def get_contribution_counts(contribs, key):
         ]
         for contrib in contribs
     ]
-    return sorted([d for d in year_data], key=lambda elt: elt[0])
+    return sorted([d for d in year_data], key=lambda elt: elt[0])[:2]
 
 
 def get_lines(input_dir: str):
@@ -209,10 +209,10 @@ def retrieve_data(input_dir: str, output_js: str) -> None:
         fn: list(elts) for fn, elts in field_to_repos.items() if fn in sizeable_fields
     }
     with open(output_js, mode="w") as f:
-        f.write(f"const id_to_repo = {id_to_repo};\n")
-        f.write(f"const field_to_repos = {field_to_repos};\n")
-        f.write(f"const languages = {list(languages)};\n")
-        f.write(f"const fields = {list(sizeable_fields)};\n")
+        f.write(f"const id_to_repo = {json.dumps(id_to_repo)};\n")
+        f.write(f"const field_to_repos = {json.dumps(field_to_repos)};\n")
+        f.write(f"const languages = {json.dumps(list(languages))};\n")
+        f.write(f"const fields = {json.dumps(list(sizeable_fields))};\n")
         f.write("export {id_to_repo, field_to_repos, fields, languages};")
 
 

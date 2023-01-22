@@ -227,7 +227,7 @@ const Dashboard = () => {
             </div>
             {repoData.map(repo => (
               <RepoCard key={repoData["owner_name"]+"/"+repoData["current_name"]}
-                        data={repo} metaMapping={sortMapping}
+                        data={repo}
                         field={filterValues["field_of_study"]}
                         graph_key={filterValues["compare_graph"]}
                         graph_title={compareMapping[filterValues["compare_graph"]]}

@@ -7,6 +7,7 @@ import "core-js/features/url";
 import "core-js/features/url-search-params";
 
 import {LineGraph, BarGraph} from "./graph";
+import ProjectMetadata from "./project_metadata";
 
 
 const styles = {
@@ -33,18 +34,9 @@ const styles = {
 };
 
 const RepoCard = (props) => {
-  const {data, metaMapping, field, graph_key, graph_title, isCurated} = props;
+  const {data, field, graph_key, graph_title, isCurated} = props;
 
   const repo_name = data["owner_name"]+"/"+data["current_name"];
-
-  const getValue = (sort_key) => {
-    if(data[sort_key] === null) {
-      return 0;
-    } else if(sort_key === "num_references"){
-      return data[sort_key][field];
-    }
-    return data[sort_key];
-  };
 
   const getX = (ary) => {
     return ary.map(elt => elt[0])
@@ -111,11 +103,6 @@ const RepoCard = (props) => {
                        title={graph_title} height={"250px"}/>;
   };
 
-  const metaGroups = [
-    ["stargazers_count", "subscribers_count", "num_contributors"],
-    ["open_issues", "num_references"],
-    ["created_at", "pushed_at"]
-  ];
   const barTraceNames = {
     "issue_dates": ["Opened", "Closed"],
     "pr_dates": ["New", "Returning"],
@@ -128,33 +115,18 @@ const RepoCard = (props) => {
         <div style={{width: "40%", display: "inline-block", verticalAlign: "top"}}>
           <span>
             <h4 style={{display: "inline-block", marginRight: "10px"}}><ExternalLink href={"https://github.com/"+repo_name}>{repo_name}</ExternalLink></h4>
-            <span style={{display: "inline-block", fontSize: "80%"}}><ExternalLink href={"https://deps.dev/pypi/"+data["current_name"]}>[deps.dev]</ExternalLink></span>
+            {data["has_deps_dev"] &&
+            <span style={{display: "inline-block", fontSize: "80%"}}>
+              <ExternalLink href={"https://deps.dev/project/github/" + data["owner_name"] + "%2F" + data["current_name"]}>
+                [deps.dev]
+              </ExternalLink>
+            </span>
+            }
           </span>
           <Typography component={"p"} variant={"body2"} css={styles.dataDesc}>
             {data["description"]}
           </Typography>
-          {metaGroups.map((group, group_idx) => (
-            <Typography component={"div"} variant={"body2"} css={styles.sortOption} key={`meta-group-${group_idx}`}>
-              {group.map(option => ((!isCurated) || (option !== "num_references")) && (
-                <span css={styles.nobreak} key={option}>
-                  <span css={styles.emph}>{metaMapping[option]}</span>: {getValue(option)}
-                </span>
-              ))}
-            </Typography>
-          ))}
-          <Typography component={"div"} variant={"body2"} css={styles.sortOption}>
-            <span css={styles.nobreak}>
-              <span css={styles.emph}>Funders</span>: tk
-            </span>
-            <span css={styles.nobreak}>
-              <span css={styles.emph}>License</span>: {data["license"]}
-            </span>
-          </Typography>
-          <Typography component={"div"} variant={"body2"} css={styles.sortOption}>
-            <span css={styles.nobreak}>
-              <span css={styles.emph}>Top programming language:</span> {data["language"]}
-            </span>
-          </Typography>
+          <ProjectMetadata data={data} showNumReferences={!isCurated} field={field}/>
         </div>
         <div style={{width: "59%", display: "inline-block", verticalAlign: "top"}}>
           {getGraph()}
