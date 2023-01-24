@@ -83,7 +83,7 @@ const ProjectDashboard = () => {
 
   const keyToTitle = {
     "star_dates": "Stars over time",
-    "push_dates": "Push events over time",
+    "push_dates": "Commit events over time",
     "issue_dates": "Issues over time",
     "pr_dates": "New vs returning contributors over time",
     "contrib_counts": "Contribution percentage counts",

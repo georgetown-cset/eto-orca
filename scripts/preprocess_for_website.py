@@ -85,7 +85,7 @@ def get_contribution_counts(contribs, key):
         [
             contrib.get("year"),
             contrib.get(key, "Unknown"),
-            contrib.get("num_pushes"),
+            contrib.get("num_commits"),
         ]
         for contrib in contribs
     ]

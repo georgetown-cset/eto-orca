@@ -68,7 +68,7 @@ const SummaryPanel = (props) => {
         </div>
       </div>
       <h3>Contributor activity</h3>
-      <LineGraph title={`Push events in top projects`} showLegend={true}
+      <LineGraph title={`Commit events in top projects`} showLegend={true}
                  traces={getTrace("push_dates")}/>
       <LineGraph title={`Ratio of issues opened to closed in top projects`}
                  showLegend={true}

@@ -38,11 +38,11 @@ repo_pushes AS (
   SELECT
     repo_id,
     ARRAY_AGG(STRUCT(
-        committer_id AS contributor,
+        contributor_name AS contributor,
         push_created_at AS contrib_date
     )) AS events
   FROM
-    github_metrics.push_event_commits
+    staging_github_metrics.push_event_commits
   GROUP BY
     repo_id),
 
@@ -93,9 +93,9 @@ country_year_disagg AS (
     push_event_commits.repo_id AS repo_id,
     country,
     EXTRACT(YEAR FROM push_created_at) AS year,
-    COUNT(DISTINCT(event_id)) AS num_pushes
+    COUNT(DISTINCT(commit_sha)) AS num_commits
   FROM
-    github_metrics.push_event_commits
+    staging_github_metrics.push_event_commits
   INNER JOIN
     (SELECT * FROM github_metrics.contributor_affiliations
       CROSS JOIN UNNEST(contributed_repos) AS repo_id) AS contributor_affiliations
@@ -120,7 +120,7 @@ country_year_disagg AS (
 country_year AS (
   SELECT
     repo_id,
-    ARRAY_AGG(STRUCT(year, country, num_pushes)) AS country_year_contributions
+    ARRAY_AGG(STRUCT(year, country, num_commits)) AS country_year_contributions
   FROM
     country_year_disagg
   GROUP BY repo_id
@@ -131,9 +131,9 @@ org_year_disagg AS (
     push_event_commits.repo_id AS repo_id,
     company AS org,
     EXTRACT(YEAR FROM push_created_at) AS year,
-    COUNT(DISTINCT(event_id)) AS num_pushes
+    COUNT(DISTINCT(commit_sha)) AS num_commits
   FROM
-    github_metrics.push_event_commits
+    staging_github_metrics.push_event_commits
   INNER JOIN
     (SELECT * FROM github_metrics.contributor_affiliations
       CROSS JOIN UNNEST(contributed_repos) AS repo_id) AS contributor_affiliations
@@ -158,7 +158,7 @@ org_year_disagg AS (
 org_year AS (
   SELECT
     repo_id,
-    ARRAY_AGG(STRUCT(year, org, num_pushes)) AS org_year_contributions
+    ARRAY_AGG(STRUCT(year, org, num_commits)) AS org_year_contributions
   FROM
     org_year_disagg
   GROUP BY repo_id
