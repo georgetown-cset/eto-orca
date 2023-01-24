@@ -81,7 +81,7 @@ class RepoRetriever:
         """
         client = bigquery.Client()
         query_job = client.query(
-            "SELECT repo, datasets, merged_ids from github_metrics.repos_in_papers"
+            "SELECT repo, datasets, merged_ids from staging_github_metrics.repos_in_papers"
         )
         results = query_job.result()
         for row in results:

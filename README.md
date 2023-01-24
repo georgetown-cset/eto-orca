@@ -39,3 +39,24 @@ Now, it's time to load everything into BigQuery and clean up the table structure
 Optionally, also run `sql/lexisnexis_repos.sql` to get Lexis-Nexis repository references.
 
 Finally, use `dataloader/populate_documentation.py` to update table and column descriptions.
+
+### Data provenance
+
+* Total stars - This comes from the GitHub API (see `staging_github_metrics.repos_with_full_meta_raw.full_metadata.stargazers_count`)
+* Total watchers - This comes from the GitHub API (see `staging_github_metrics.repos_with_full_meta_raw.full_metadata.subscribers_count`)
+* Total contributors - This is scraped by `retrieve_repo_metadata.py` (TODO: maybe retrieve from gh archive)
+* Total references - This comes from our scholarly literature (see `paper_meta` in `website_stats.sql`)
+* Total open issues - This comes from the GitHub API (see `staging_github_metrics.repos_with_full_meta_raw.full_metadata.open_issues`)
+* Created date - This comes from the GitHub API (see `staging_github_metrics.repos_with_full_meta_raw.full_metadata.created_at`)
+* Last push date - This comes from the GitHub API (see `staging_github_metrics.repos_with_full_meta_raw.full_metadata.pushed_at`)
+* License - This comes from the GitHub API (see `staging_github_metrics.repos_with_full_meta_raw.full_metadata.license.name`)
+* Top programming language - This comes from the GitHub API (see `staging_github_metrics.repos_with_full_meta_raw.full_metadata.language`)
+
+* Stars over time -
+* Push events over time -
+* Issues over time -
+* New versus returning contributors over time -
+* Contributor percentage counts -
+* Code contributions by top 5 countries -
+* Code contributions by top 5 organizations -
+* Cumulative total of contributions by number of contributors -

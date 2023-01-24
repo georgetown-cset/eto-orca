@@ -196,7 +196,7 @@ SELECT
   ) IN (SELECT name FROM `bigquery-public-data.deps_dev_v1.Projects`) AS has_deps_dev -- noqa: L057
 FROM
   github_metrics.repos_with_full_meta
-INNER JOIN
+LEFT JOIN
   repo_paper_meta
   ON
     LOWER(CONCAT(owner_name, "/", matched_name)) = LOWER(repo)
