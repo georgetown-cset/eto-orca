@@ -51,12 +51,13 @@ Finally, use `dataloader/populate_documentation.py` to update table and column d
 * Last push date - This comes from the GitHub API (see `staging_github_metrics.repos_with_full_meta_raw.full_metadata.pushed_at`)
 * License - This comes from the GitHub API (see `staging_github_metrics.repos_with_full_meta_raw.full_metadata.license.name`)
 * Top programming language - This comes from the GitHub API (see `staging_github_metrics.repos_with_full_meta_raw.full_metadata.language`)
-
 * Stars over time - This counts the number of `WatchEvent`s for the project in the githubarchive BQ public dataset. The sum of these counts
 may not equal the total stars because users may unstar (or even unstar and re-star!) a repo
 * Commits over time - This counts the number of distinct commits based on the unnested commits for `PushEvent`s
 in the githubarchive BQ public dataset. See also `push_event_commits.sql`
-* Issues over time -
+* Issues over time - This counts the number of opened and closed issues based on `IssuesEvent`s
+in the githubarchive BQ public dataset. See also `issue_events.sql`. We determine whether the issue was opened or closed based on the `action`
+field
 * New versus returning contributors over time -
 * Contributor percentage counts -
 * Code contributions by top 5 countries -
