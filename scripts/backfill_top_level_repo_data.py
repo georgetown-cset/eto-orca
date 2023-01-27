@@ -9,10 +9,14 @@ from scripts.github_config import RATE_LIMIT_INTERVAL, mk_auth
 
 def get_meta(owner: str, repo: str) -> dict:
     auth = mk_auth()
-    repo_resp = requests.get(
-        f"https://api.github.com/repos/{owner}/{repo}",
-        auth=auth,
-    )
+    try:
+        repo_resp = requests.get(
+            f"https://api.github.com/repos/{owner}/{repo}",
+            auth=auth,
+        )
+    except requests.exceptions.ConnectionError as e:
+        print(e)
+        return {}
     if repo_resp.status_code != 200:
         print(f"{owner}/{repo}: {repo_resp.json()}")
         return {}

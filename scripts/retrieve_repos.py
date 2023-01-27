@@ -163,6 +163,11 @@ class RepoRetriever:
                 result_count = repo_resp_js.get("total_count", 0)
                 print(f"Found {result_count} repos in {fmt_size_range}")
                 if result_count > 1000:
+                    if size_range[0] == size_range[1]:
+                        print(
+                            f"ERROR: too many repos ({result_count}) for {topic} in {fmt_size_range}"
+                        )
+                        continue
                     eleven_gb = 11000000
                     upper_range_limit = size_range[1] if size_range[1] else eleven_gb
                     midpoint = size_range[0] + round(
