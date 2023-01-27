@@ -91,17 +91,18 @@ prs AS (
 country_year_disagg AS (
   SELECT
     push_event_commits.repo_id AS repo_id,
-    country,
+    COALESCE(country, "Unknown") AS country,
     EXTRACT(YEAR FROM push_created_at) AS year,
     COUNT(DISTINCT(commit_sha)) AS num_commits
   FROM
     staging_github_metrics.push_event_commits
-  INNER JOIN
+  LEFT JOIN
     (SELECT * FROM github_metrics.contributor_affiliations
       CROSS JOIN UNNEST(contributed_repos) AS repo_id) AS contributor_affiliations
     ON push_event_commits.contributor_name = contributor_affiliations.contributor
       AND push_event_commits.repo_id = contributor_affiliations.repo_id
   WHERE
+    -- associate contributions with the country affiliation the person had at the time
     (
       contributor_affiliations.endyear IS NULL OR EXTRACT(YEAR FROM push_created_at) <= contributor_affiliations.endyear
     )
@@ -129,17 +130,18 @@ country_year AS (
 org_year_disagg AS (
   SELECT
     push_event_commits.repo_id AS repo_id,
-    company AS org,
+    COALESCE(company, "Unknown") AS org,
     EXTRACT(YEAR FROM push_created_at) AS year,
     COUNT(DISTINCT(commit_sha)) AS num_commits
   FROM
     staging_github_metrics.push_event_commits
-  INNER JOIN
+  LEFT JOIN
     (SELECT * FROM github_metrics.contributor_affiliations
       CROSS JOIN UNNEST(contributed_repos) AS repo_id) AS contributor_affiliations
     ON push_event_commits.contributor_name = contributor_affiliations.contributor
       AND push_event_commits.repo_id = contributor_affiliations.repo_id
   WHERE
+    -- associate contributions with the company affiliation the person had at the time
     (
       contributor_affiliations.endyear IS NULL OR EXTRACT(YEAR FROM push_created_at) <= contributor_affiliations.endyear
     )
