@@ -1,0 +1,14 @@
+curated_repos
+repos_with_full_meta
+repo_owners
+events
+push_event_commits
+pull_requests_opened
+star_events
+issue_events
+top_level1_fields
+pypi_file_downloads
+pypi_repo_metadata
+pypi_over_time
+contributor_affiliations
+website_stats

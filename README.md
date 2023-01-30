@@ -30,15 +30,12 @@ Now, it's time to load everything into BigQuery and clean up the table structure
 
 * `bq load --replace --source_format NEWLINE_DELIMITED_JSON staging_github_metrics.repos_with_full_meta_raw curr_repos_final.jsonl schemas/repos_with_full_meta_raw.json`
 * `bq load --replace --source_format NEWLINE_DELIMITED_JSON staging_github_metrics.repo_owners_raw repo_owners.jsonl schemas/repo_owners_raw.json`
-* Run `sql/repos_with_full_meta.sql` and write the output to `github_metrics.repos_with_full_meta`
-* Run `sql/repo_owners.sql` and write the output to `github_metrics.repo_owners`
-* Run `sql/events.sql` and write the output to `staging_github_metrics.events`
-* Run `sql/push_event_commits.sql` and write the output to `github_metrics.push_event_commits`
-* Run `sql/star_events.sql` and write the output to `github_metrics.star_events`
+* Run the remaining queries in the `sql` directory in the order they appear in `downstream_order.txt`, writing the output to `staging_github_metrics.<query_name>`
 
 Optionally, also run `sql/lexisnexis_repos.sql` to get Lexis-Nexis repository references.
 
-Finally, use `dataloader/populate_documentation.py` to update table and column descriptions.
+Finally, copy any queries into `github_metrics` and `github_metrics_backups` that already appear there
+(or are new and useful to analysts) and use `dataloader/populate_documentation.py` to update table and column descriptions.
 
 ### Data provenance
 
