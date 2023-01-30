@@ -1,3 +1,4 @@
+-- get open and close issue events
 SELECT DISTINCT
   org.id AS org_id,
   actor.id AS user_id,

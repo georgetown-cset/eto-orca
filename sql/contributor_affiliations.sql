@@ -1,3 +1,8 @@
+-- attempts to map contributors to their linkedin profiles, either by using their names alone if there is only
+-- one linkedin profile by that name, or by using profiles manually identified by student RAs
+
+-- map committer names to their contributed repos and linkedin urls for people with that name. Note, this approach is
+-- very imperfect as OSS contributors do not have unique names
 with aggregated_li as (
   select
     trim(contributor_name) as contributor,
@@ -14,6 +19,8 @@ with aggregated_li as (
   group by contributor
 ),
 
+-- create a table of unambiguous contributor-linkedin url mappings - either because we only found one linkedin url
+-- in revelio for someone with that name, or because annotators found a single linkedin url for the contributor
 contributor_mapping as (
   select
     contributor,

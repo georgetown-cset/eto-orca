@@ -1,3 +1,4 @@
+-- prepares user country data for student annotators
 with distinct_locations as (select distinct trim(lower(location)) as location from github_metrics.repo_owners)
 
 select

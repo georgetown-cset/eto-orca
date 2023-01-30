@@ -1,3 +1,4 @@
+-- get star dates
 SELECT DISTINCT
   org.id AS org_id,
   actor.id AS starring_user_id,

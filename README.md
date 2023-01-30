@@ -71,3 +71,5 @@ of 2023-01-25, we have just under 19% of contributors in the overall dataset lin
 and then pulling the user's organization as of the time they made a given contribution. See also `contributor_affiliations.sql`. As
 of 2023-01-25, we have just under 19% of contributors in the overall dataset linked to LinkedIn profiles
 * Cumulative total of contributions by number of contributors - See the `get_cumulative_contributor_counts` method in `preprocess_for_website.py`. This relies on
+* The deps.dev links are added if the repo is present in `bigquery-public-data.deps_dev_v1`
+* The pypi downloads over time come from `bigquery-public-data.pypi`

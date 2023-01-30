@@ -1,3 +1,4 @@
+-- get commits. The same commit may appear in multiple pushes, so try to deduplicate
 with all_events as (
   select distinct
     org.id as org_id,

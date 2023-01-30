@@ -1,5 +1,4 @@
--- removes cruft from repo_owners_raw (like various trivially constructed urls) and coalesces
--- some fields that are similar between users and orgs
+-- clean up repo_owners metadata
 SELECT
   login,
   name,

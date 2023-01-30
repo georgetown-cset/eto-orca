@@ -1,3 +1,4 @@
+-- (hackily) create a table of custom-selected repos
 select "BCG-Gamma/facet" as repo
 union all
 select "BorealisAI/advertorch" as repo

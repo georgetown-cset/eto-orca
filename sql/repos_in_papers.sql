@@ -1,3 +1,4 @@
+-- get repo mentions in CNKI fulltext, arXiv fulltext, Papers with Code, and paper titles/abstracts
 WITH
 cnki_ft AS ((
     SELECT

@@ -1,3 +1,4 @@
+-- aggregate data for the webapp
 WITH
 repo_paper_meta AS (
   SELECT
@@ -15,6 +16,7 @@ repo_paper_meta AS (
   GROUP BY
     repo
   UNION ALL
+  -- hackily add in the curated repos along with fake fields
   SELECT
     repo,
     [
@@ -180,7 +182,6 @@ SELECT
   created_at,
   updated_at,
   pushed_at,
-  description,
   ultimate_fork_of,
   sources,
   paper_meta,
@@ -193,6 +194,8 @@ SELECT
   prs.events AS pr_events,
   country_year_contributions,
   org_year_contributions,
+  downloads,
+  COALESCE(pypi_over_time.summary, description) AS description,
   CONCAT(
     owner_name, "/", current_name
   ) IN (SELECT name FROM `bigquery-public-data.deps_dev_v1.Projects`) AS has_deps_dev -- noqa: L057
@@ -226,7 +229,17 @@ LEFT JOIN
   org_year
   ON
     id = org_year.repo_id
+LEFT JOIN
+  github_metrics.pypi_over_time
+  ON
+    CONCAT(
+      owner_name, "/", current_name
+    ) = pypi_over_time.repo
 WHERE
   (
     stargazers_count >= 10
-  ) AND ((ARRAY_LENGTH(paper_meta) > 1) OR repo IN (SELECT repo FROM github_metrics.curated_repos))
+  ) AND (
+    (
+      ARRAY_LENGTH(paper_meta) > 1
+    ) OR CONCAT(owner_name, "/", matched_name) IN (SELECT repo FROM github_metrics.curated_repos)
+  )

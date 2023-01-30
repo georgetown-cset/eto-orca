@@ -1,3 +1,4 @@
+-- get pull request open events
 with prs as (select distinct
   org.id as org_id,
   actor.id as opener_id,

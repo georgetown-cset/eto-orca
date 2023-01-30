@@ -169,7 +169,7 @@ curr_data AS (
     id,
     other
   FROM
-    `githubarchive.month.202201`
+    `githubarchive.year.2022`
   UNION ALL
   SELECT
     type,
@@ -182,7 +182,7 @@ curr_data AS (
     id,
     other
   FROM
-    `githubarchive.month.202202`
+    `githubarchive.month.202301`
   UNION ALL
   SELECT
     type,
@@ -195,20 +195,7 @@ curr_data AS (
     id,
     other
   FROM
-    `githubarchive.month.202203`
-  UNION ALL
-  SELECT
-    type,
-    public,
-    payload,
-    repo,
-    actor,
-    org,
-    created_at,
-    id,
-    other
-  FROM
-    `githubarchive.month.202204` )
+    `githubarchive.month.202302` )
 
 SELECT
   *

@@ -1,3 +1,4 @@
+-- get top 3 level 1 fields of study per paper
 WITH
 field_name_scores AS (
   SELECT

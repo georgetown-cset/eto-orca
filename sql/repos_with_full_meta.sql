@@ -1,4 +1,4 @@
--- grab fields from repos_with_full_meta_raw most likely to be relevant
+-- grab fields from repos_with_full_meta_raw, which comes from the scraper scripts, most likely to be relevant
 SELECT
   owner_name,
   repo_name AS matched_name,
