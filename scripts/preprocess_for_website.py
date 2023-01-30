@@ -1,10 +1,32 @@
 import argparse
+import copy
 import json
 import os
 from datetime import datetime
 from typing import Tuple
 
 from tqdm import tqdm
+
+INT_KEYS = {
+    "subscribers_count",
+    "stargazers_count",
+    "open_issues",
+    "num_releases",
+    "num_contributors",
+    "id",
+    "used_by",
+}
+UNUSED_KEYS = {
+    "matched_name",
+    "topics",
+    "sources",
+    "issue_open_events",
+    "ultimate_fork_of",
+}
+NOW = datetime.now()
+END_YEAR = NOW.year if NOW.month > 6 else NOW.year - 1
+START_YEAR = END_YEAR - 6
+MIN_FIELD_REFERENCES = 3
 
 
 def get_counts(dates: list, transform=lambda x: x) -> list:
@@ -18,7 +40,8 @@ def get_counts(dates: list, transform=lambda x: x) -> list:
     years = [int(transform(date).split("-")[0]) for date in dates]
     counts = {}
     for year in years:
-        counts[year] = counts.get(year, 0) + 1
+        if (year >= START_YEAR) and (year <= END_YEAR):
+            counts[year] = counts.get(year, 0) + 1
     return sorted(
         [[year, count] for year, count in counts.items()], key=lambda elt: elt[0]
     )
@@ -36,10 +59,11 @@ def get_issue_counts(dates):
     ]
     counts = {}
     for year, evt_type in year_data:
-        count = counts.get(year, [0, 0])
-        idx = 0 if evt_type == "opened" else 1
-        count[idx] = count[idx] + 1
-        counts[year] = count
+        if (year >= START_YEAR) and (year <= END_YEAR):
+            count = counts.get(year, [0, 0])
+            idx = 0 if evt_type == "opened" else 1
+            count[idx] = count[idx] + 1
+            counts[year] = count
     return sorted(
         [[year] + count for year, count in counts.items()], key=lambda elt: elt[0]
     )
@@ -89,13 +113,14 @@ def get_new_vs_returning_contributor_counts(contribs: list) -> list:
     ]
     first_year_contrib = {}
     for year, is_first_contrib, contributor in year_data:
-        if year not in first_year_contrib:
-            first_year_contrib[year] = {}
-        new_is_first = (
-            first_year_contrib[year].get(contributor, is_first_contrib)
-            or is_first_contrib
-        )
-        first_year_contrib[year][contributor] = new_is_first
+        if (year >= START_YEAR) and (year <= END_YEAR):
+            if year not in first_year_contrib:
+                first_year_contrib[year] = {}
+            new_is_first = (
+                first_year_contrib[year].get(contributor, is_first_contrib)
+                or is_first_contrib
+            )
+            first_year_contrib[year][contributor] = new_is_first
     counts = {}
     for year in first_year_contrib:
         count = counts.get(year, [0, 0])
@@ -119,13 +144,16 @@ def get_entity_contribution_counts(contribs: list, entity_key: str) -> list:
     """
     year_data = [
         [
-            contrib.get("year"),
+            int(contrib.get("year")),
             contrib.get(entity_key, "Unknown"),
             contrib.get("num_commits"),
         ]
         for contrib in contribs
     ]
-    return sorted(year_data, key=lambda elt: elt[0])[:2]
+    return sorted(
+        [d for d in year_data if (d[0] >= START_YEAR) and (d[0] <= END_YEAR)],
+        key=lambda elt: elt[0],
+    )
 
 
 def get_lines(input_dir: str):
@@ -149,68 +177,57 @@ def get_curated_repos():
     return repo_to_field
 
 
+def clean_row(raw_row: dict) -> dict:
+    row = {}
+    for key in raw_row.keys():
+        if key in UNUSED_KEYS:
+            continue
+        if key.endswith("_at"):
+            val = raw_row[key].split()[0]
+        elif (key in INT_KEYS) and (type(raw_row.get(key, 0)) == str):
+            val = int(raw_row[key].replace(",", "").replace("+", ""))
+        else:
+            val = raw_row[key]
+        row[key] = val
+    for key in INT_KEYS:
+        if (key not in row) or not row[key]:
+            row[key] = 0
+    return row
+
+
+def reformat_row(row: dict) -> None:
+    row["star_dates"] = get_counts(row.pop("star_dates"))
+    row["push_dates"] = get_counts(
+        row.pop("push_events"), lambda evt: evt["contrib_date"]
+    )
+    row["issue_dates"] = get_issue_counts(row.pop("issue_events"))
+    contribs = row.pop("pr_events")
+    row["contrib_counts"], row["num_prs"] = get_cumulative_contributor_counts(contribs)
+    row["pr_dates"] = get_new_vs_returning_contributor_counts(contribs)
+    row["country_contributions"] = get_entity_contribution_counts(
+        row.pop("country_year_contributions"), "country"
+    )
+    row["org_contributions"] = get_entity_contribution_counts(
+        row.pop("org_year_contributions"), "org"
+    )
+    row["num_references"] = {}
+    if "primary_programming_language" in row:
+        row["language"] = row.pop("primary_programming_language")
+
+
 def retrieve_data(input_dir: str, output_js: str) -> None:
     seen_ids = set()
     id_to_repo = {}
     field_to_repos = {}
     curated_repos = get_curated_repos()
-    languages = set()
-    int_keys = {
-        "subscribers_count",
-        "stargazers_count",
-        "open_issues",
-        "num_releases",
-        "num_contributors",
-        "id",
-        "used_by",
-    }
-    unused_keys = {
-        "matched_name",
-        "topics",
-        "sources",
-        "pr_events",
-        "issue_open_events",
-        "ultimate_fork_of",
-    }
     for line in tqdm(get_lines(input_dir)):
         if line["id"] in seen_ids:
             continue
         repo_id = line.pop("id")
         repo_name = line["owner_name"] + "/" + line["current_name"]
         seen_ids.add(repo_id)
-        row = {}
-        for key in int_keys:
-            if (key not in line) or not line[key]:
-                line[key] = 0
-        for key in line.keys():
-            if key.endswith("_at"):
-                val = line[key].split()[0]
-            elif (key in int_keys) and (type(line[key]) == str):
-                val = int(line[key].replace(",", "").replace("+", ""))
-            else:
-                val = line[key]
-            row[key] = val
-        row["star_dates"] = get_counts(row.pop("star_dates"))
-        row["push_dates"] = get_counts(
-            row.pop("push_events"), lambda evt: evt["contrib_date"]
-        )
-        row["issue_dates"] = get_issue_counts(row.pop("issue_events"))
-        contribs = row.pop("pr_events")
-        row["contrib_counts"], row["num_prs"] = get_cumulative_contributor_counts(
-            contribs
-        )
-        row["pr_dates"] = get_new_vs_returning_contributor_counts(contribs)
-        row["country_contributions"] = get_entity_contribution_counts(
-            row.pop("country_year_contributions"), "country"
-        )
-        row["org_contributions"] = get_entity_contribution_counts(
-            row.pop("org_year_contributions"), "org"
-        )
-        row["num_references"] = {}
-        if "primary_programming_language" in row:
-            lang = row.pop("primary_programming_language")
-            languages.add(lang)
-            row["language"] = lang
+        row = clean_row(line)
+        reformat_row(row)
         if repo_name in curated_repos:
             field_to_repos[curated_repos[repo_name]] = field_to_repos.get(
                 curated_repos[repo_name], []
@@ -225,18 +242,18 @@ def retrieve_data(input_dir: str, output_js: str) -> None:
                 if field_name not in row["num_references"]:
                     row["num_references"][field_name] = 0
                 row["num_references"][field_name] += 1
-                if row["num_references"][field_name] > 1:
+                if row["num_references"][field_name] >= MIN_FIELD_REFERENCES:
                     field_to_repos[field_name].add(repo_id)
         if not (
             repo_name in curated_repos
             or any(
-                [row["num_references"][field] > 1 for field in row["num_references"]]
+                [
+                    row["num_references"][field] >= MIN_FIELD_REFERENCES
+                    for field in row["num_references"]
+                ]
             )
         ):
             continue
-        for k in unused_keys:
-            if k in row:
-                row.pop(k)
         id_to_repo[int(repo_id)] = row
     sizeable_fields = {
         field for field in field_to_repos.keys() if len(field_to_repos[field]) > 5
@@ -244,19 +261,22 @@ def retrieve_data(input_dir: str, output_js: str) -> None:
     field_to_repos = {
         fn: list(elts) for fn, elts in field_to_repos.items() if fn in sizeable_fields
     }
+    for repo_id in id_to_repo:
+        id_to_repo[repo_id]["num_references"] = {
+            k: v
+            for k, v in id_to_repo[repo_id]["num_references"].items()
+            if k in sizeable_fields
+        }
     with open(output_js, mode="w") as f:
         f.write(f"const id_to_repo = {json.dumps(id_to_repo)};\n")
         f.write(f"const field_to_repos = {json.dumps(field_to_repos)};\n")
-        f.write(f"const languages = {json.dumps(list(languages))};\n")
         f.write(f"const fields = {json.dumps(list(sizeable_fields))};\n")
-        f.write("export {id_to_repo, field_to_repos, fields, languages};")
+        f.write("export {id_to_repo, field_to_repos, fields};")
 
 
 def write_config(config_fi):
     with open(config_fi, mode="w") as f:
-        now = datetime.now()
-        curr_year = now.year if now.month > 6 else now.year - 1
-        f.write(json.dumps({"start_year": curr_year - 6, "end_year": curr_year}))
+        f.write(json.dumps({"start_year": START_YEAR, "end_year": END_YEAR}))
 
 
 if __name__ == "__main__":
