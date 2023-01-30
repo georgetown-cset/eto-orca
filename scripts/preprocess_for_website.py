@@ -2,12 +2,20 @@ import argparse
 import json
 import os
 from datetime import datetime
+from typing import Tuple
 
 from tqdm import tqdm
 
 
-def get_counts(dates, transform=lambda x: x):
-    years = [transform(date).split("-")[0] for date in dates]
+def get_counts(dates: list, transform=lambda x: x) -> list:
+    """
+    Transform a list of dates into a list of year, count pairs ordered by year
+    :param dates: List of dates
+    :param transform: Function to transform the date (for example, if the date is an object not a string, we can use
+        this to access one of its values
+    :return: A list of year, count pairs
+    """
+    years = [int(transform(date).split("-")[0]) for date in dates]
     counts = {}
     for year in years:
         counts[year] = counts.get(year, 0) + 1
@@ -17,8 +25,14 @@ def get_counts(dates, transform=lambda x: x):
 
 
 def get_issue_counts(dates):
+    """
+    Transform a list of issue events containing date and event type into a triple of
+    year, issue open count, and issue close count
+    :param dates: List of issue events containing date and event type
+    :return: List of triples of year, issue open count, and issue close count
+    """
     year_data = [
-        (date["event_date"].split("-")[0], date["event_type"]) for date in dates
+        (int(date["event_date"].split("-")[0]), date["event_type"]) for date in dates
     ]
     counts = {}
     for year, evt_type in year_data:
@@ -31,7 +45,14 @@ def get_issue_counts(dates):
     )
 
 
-def get_cumulative_contributor_counts(contribs):
+def get_cumulative_contributor_counts(contribs: list) -> Tuple[list, int]:
+    """
+    Get a list of contributor ranks and their number of contributions (= number of opened PRs), as well as the total
+    number of contributions/PRs
+    :param contribs: Array of dicts containing a contributor key
+    :return: Tuple of list of contributor ranks and their number of contributions (= number of opened PRs), and the
+    total number of contributions/PRs across all contributors
+    """
     contrib_counts = {}
     for contrib in contribs:
         if "contributor" not in contrib:
@@ -49,10 +70,17 @@ def get_cumulative_contributor_counts(contribs):
     ], total_counts
 
 
-def get_new_vs_returning_contributor_counts(contribs):
+def get_new_vs_returning_contributor_counts(contribs: list) -> list:
+    """
+    Given a list of contribution metadata dicts (date of PR, boolean "is_first_time_contributor", and user identifier),
+    return a list of triples of year, count of new contributors, and count of returning contributors
+    :param contribs: List of contribution metadata dicts (date of PR, boolean "is_first_time_contributor",
+    and user identifier)
+    :return: List of triples of year, count of new contributors, and count of returning contributors
+    """
     year_data = [
         (
-            contrib["contrib_date"].split("-")[0],
+            int(contrib["contrib_date"].split("-")[0]),
             contrib.get("is_first_time_contributor", False),
             contrib.get("contributor", None),
         )
@@ -80,16 +108,24 @@ def get_new_vs_returning_contributor_counts(contribs):
     )
 
 
-def get_contribution_counts(contribs, key):
+def get_entity_contribution_counts(contribs: list, entity_key: str) -> list:
+    """
+    Given a list of dicts containing the number of commits per year for some entity,
+    and the key in that dict which identifies the committing entity, returns a sorted
+    list of triples of year, the entity name, and the number of commits made by that entity
+    :param contribs: List of dicts containing the number of commits per year for some entity
+    :param entity_key: Key in `contribs` identifying the committing entity
+    :return: List of triples of year, entity name, and the number of commits made by that entity
+    """
     year_data = [
         [
             contrib.get("year"),
-            contrib.get(key, "Unknown"),
+            contrib.get(entity_key, "Unknown"),
             contrib.get("num_commits"),
         ]
         for contrib in contribs
     ]
-    return sorted([d for d in year_data], key=lambda elt: elt[0])[:2]
+    return sorted(year_data, key=lambda elt: elt[0])[:2]
 
 
 def get_lines(input_dir: str):
@@ -164,10 +200,10 @@ def retrieve_data(input_dir: str, output_js: str) -> None:
             contribs
         )
         row["pr_dates"] = get_new_vs_returning_contributor_counts(contribs)
-        row["country_contributions"] = get_contribution_counts(
+        row["country_contributions"] = get_entity_contribution_counts(
             row.pop("country_year_contributions"), "country"
         )
-        row["org_contributions"] = get_contribution_counts(
+        row["org_contributions"] = get_entity_contribution_counts(
             row.pop("org_year_contributions"), "org"
         )
         row["num_references"] = {}
