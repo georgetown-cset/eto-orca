@@ -156,7 +156,12 @@ def get_entity_contribution_counts(contribs: list, entity_key: str) -> list:
     )
 
 
-def get_lines(input_dir: str):
+def get_lines(input_dir: str) -> iter:
+    """
+    For each file in an input dir, read the file and parse each line as json. Return a generator of these lines
+    :param input_dir: Dir containing jsonls
+    :return: A generator of jsons read from the files in `input_dir`
+    """
     for fi in os.listdir(input_dir):
         with open(os.path.join(input_dir, fi)) as f:
             for line in f:
@@ -164,6 +169,11 @@ def get_lines(input_dir: str):
 
 
 def get_curated_repos():
+    """
+    Get hand-selected repos, which we treat differently from the ones that were found in the scholarly literature
+    :return: A dict mapping repo names to one or more "field names" which are parsed from their file name in the
+        `repo_lists` directory
+    """
     repo_to_field = {}
     for fi in os.listdir(os.path.join("repo_lists")):
         if fi.startswith("."):
@@ -173,18 +183,25 @@ def get_curated_repos():
             for line in f:
                 line = line.strip()
                 if line:
-                    repo_to_field[line] = field
+                    repo_to_field[line] = repo_to_field.get(line, []) + [field]
     return repo_to_field
 
 
 def clean_row(raw_row: dict) -> dict:
+    """
+    Clean up raw data, normalizing strings and removing unused keys
+    :param raw_row: raw repo metadata
+    :return: clean repo metadata
+    """
     row = {}
     for key in raw_row.keys():
         if key in UNUSED_KEYS:
             continue
         if key.endswith("_at"):
+            # it's a timestamp, take the date part
             val = raw_row[key].split()[0]
         elif (key in INT_KEYS) and (type(raw_row.get(key, 0)) == str):
+            # clean up scraped strings
             val = int(raw_row[key].replace(",", "").replace("+", ""))
         else:
             val = raw_row[key]
@@ -196,6 +213,11 @@ def clean_row(raw_row: dict) -> dict:
 
 
 def reformat_row(row: dict) -> None:
+    """
+    Reformat data
+    :param row: Data in need of reformatting
+    :return: None (mutates `row`)
+    """
     row["star_dates"] = get_counts(row.pop("star_dates"))
     row["push_dates"] = get_counts(
         row.pop("push_events"), lambda evt: evt["contrib_date"]
@@ -215,11 +237,17 @@ def reformat_row(row: dict) -> None:
         row["language"] = row.pop("primary_programming_language")
 
 
-def retrieve_data(input_dir: str, output_js: str) -> None:
+def write_data(input_dir: str, output_js: str) -> None:
+    """
+    Reads repo metadata, cleans it up, writes it out for the webapp
+    :param input_dir: Directory of repo metadata as jsonl BQ exports
+    :param output_js: File where output js objects should be written
+    :return: None
+    """
     seen_ids = set()
     id_to_repo = {}
-    field_to_repos = {}
     curated_repos = get_curated_repos()
+    field_to_repos = {}
     for line in tqdm(get_lines(input_dir)):
         if line["id"] in seen_ids:
             continue
@@ -229,9 +257,8 @@ def retrieve_data(input_dir: str, output_js: str) -> None:
         row = clean_row(line)
         reformat_row(row)
         if repo_name in curated_repos:
-            field_to_repos[curated_repos[repo_name]] = field_to_repos.get(
-                curated_repos[repo_name], []
-            ) + [repo_id]
+            for field in curated_repos[repo_name]:
+                field_to_repos[field] = field_to_repos.get(field, []) + [repo_id]
         for paper_meta in row.pop("paper_meta"):
             for field in paper_meta["fields"]:
                 field_name = field["name"]
@@ -274,7 +301,12 @@ def retrieve_data(input_dir: str, output_js: str) -> None:
         f.write("export {id_to_repo, field_to_repos, fields};")
 
 
-def write_config(config_fi):
+def write_config(config_fi: str) -> None:
+    """
+    Writes out start and end year for use by the webapp
+    :param config_fi: Path to file where config info should be written
+    :return: None
+    """
     with open(config_fi, mode="w") as f:
         f.write(json.dumps({"start_year": START_YEAR, "end_year": END_YEAR}))
 
@@ -292,5 +324,5 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    retrieve_data(args.input_dir, args.output_js)
+    write_data(args.input_dir, args.output_js)
     write_config(args.config)
