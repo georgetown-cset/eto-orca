@@ -171,8 +171,8 @@ def get_lines(input_dir: str) -> iter:
 def get_curated_repos():
     """
     Get hand-selected repos, which we treat differently from the ones that were found in the scholarly literature
-    :return: A dict mapping repo names to one or more "field names" which are parsed from their file name in the
-        `repo_lists` directory
+    :return: A dict mapping repo names to one or more "field names" which are parsed from the file name(s) in the
+        `repo_lists` directory where the repo appears
     """
     repo_to_field = {}
     for fi in os.listdir(os.path.join("repo_lists")):
