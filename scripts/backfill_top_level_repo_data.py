@@ -18,7 +18,11 @@ def get_meta(owner: str, repo: str) -> dict:
         print(e)
         return {}
     if repo_resp.status_code != 200:
-        print(f"{owner}/{repo}: {repo_resp.json()}")
+        try:
+            print(f"{owner}/{repo}: {repo_resp.json()}")
+        except Exception as e:
+            print(f"Couldn't print response for {owner}/{repo}")
+            print(e)
         return {}
     return repo_resp.json()
 
