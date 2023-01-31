@@ -5,6 +5,7 @@ import { css } from "@emotion/react";
 import "core-js/features/url";
 import "core-js/features/url-search-params";
 
+import {metaMapping} from "../data/mappings";
 
 
 const styles = {
@@ -40,18 +41,6 @@ const ProjectMetadata = (props) => {
       return data[sort_key][field];
     }
     return data[sort_key];
-  };
-
-  const metaMapping = {
-    "stargazers_count": "Stars",
-    "subscribers_count": "Watchers",
-    "num_contributors": "Contributors",
-    "created_at": "Created Date",
-    "pushed_at": "Last Push Date",
-    "open_issues": "Open Issues",
-    "num_references": "References",
-    "license": "License",
-    "language": "Top Programming Language"
   };
 
   const metaGroups = [

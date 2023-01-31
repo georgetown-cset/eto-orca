@@ -12,6 +12,7 @@ import "core-js/features/url-search-params";
 import RepoCard from "./repo_card";
 import SummaryPanel from "./summary_panel";
 import {id_to_repo, field_to_repos, fields} from "../data/constants";
+import {sortMapping} from "../data/mappings";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -67,15 +68,6 @@ const Dashboard = () => {
     "compare_graph": "push_dates",
     "language": "All",
     "license": "All"
-  };
-  const sortMapping = {
-    "stargazers_count": "Stars",
-    "subscribers_count": "Watchers",
-    "num_contributors": "Contributors",
-    "created_at": "Created Date",
-    "pushed_at": "Last Push Date",
-    "open_issues": "Open Issues",
-    "num_references": "References"
   };
   const compareMapping = {
     "star_dates": "Stars over time",
