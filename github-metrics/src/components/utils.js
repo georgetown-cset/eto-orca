@@ -1,3 +1,6 @@
+/*
+Miscellaneous utilities and shared functionality
+ */
 const sortMapping = {
   "stargazers_count": "Stars",
   "subscribers_count": "Watchers",
@@ -18,9 +21,10 @@ const keyToTitle = {
   "issue_dates": "Issues over time",
   "commit_dates": "New vs returning contributors over time",
   "contrib_counts": "Contribution percentages by ranked contributor",
-  "downloads": "Pypi downloads over time"
+  "downloads": "PyPI downloads over time"
 };
 
+// returns data traces for country comparison graphs
 const getCountryTraces = (graphData) => {
   const nameToYearToCounts = {};
   const countryCounts = {};
@@ -56,6 +60,7 @@ const barTraceNames = {
   "contrib_counts": ["Num Contributions"]
 };
 
+// returns bar graph traces
 const getBarTraces = (key, data) => {
   const barData = data[key];
   const traceData = [];

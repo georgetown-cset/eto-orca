@@ -292,7 +292,9 @@ def write_data(input_dir: str, output_js: str) -> None:
         reformat_row(row)
         if repo_name in curated_repos:
             for field in curated_repos[repo_name]:
-                field_to_repos[field] = field_to_repos.get(field, []) + [repo_id]
+                if field not in field_to_repos:
+                    field_to_repos[field] = set()
+                field_to_repos[field].add(repo_id)
         for paper_meta in row.pop("paper_meta"):
             for field in paper_meta["fields"]:
                 field_name = field["name"]

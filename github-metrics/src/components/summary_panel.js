@@ -1,3 +1,6 @@
+/*
+Summary metrics for top five repos within current selection
+ */
 import React from "react";
 
 import {LineGraph} from "./graph";

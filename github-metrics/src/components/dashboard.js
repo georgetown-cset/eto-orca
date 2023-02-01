@@ -1,3 +1,6 @@
+/*
+The container component for the list view and summary view
+ */
 import React, {useEffect} from "react";
 import {css} from "@emotion/react";
 import Typography from "@mui/material/Typography";
@@ -10,7 +13,7 @@ import { Dropdown } from "@eto/eto-ui-components";
 import "core-js/features/url";
 import "core-js/features/url-search-params";
 
-import RepoCard from "./repo_card";
+import ProjectCard from "./project_card";
 import SummaryPanel from "./summary_panel";
 import {id_to_repo, field_to_repos, fields} from "../data/constants";
 import {sortMapping, keyToTitle} from "./utils";
@@ -263,7 +266,7 @@ const Dashboard = () => {
               </div>
             </div>
             {repoData.map(repo => (
-              <RepoCard key={repoData["owner_name"]+"/"+repoData["current_name"]}
+              <ProjectCard key={repoData["owner_name"]+"/"+repoData["current_name"]}
                         data={repo}
                         field={filterValues["field_of_study"]}
                         graph_key={filterValues["compare_graph"]}

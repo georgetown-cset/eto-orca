@@ -1,3 +1,6 @@
+/*
+Component containing repo detail view
+ */
 import React, {useEffect} from "react";
 
 import "core-js/features/url";
@@ -65,13 +68,13 @@ const ProjectDashboard = () => {
 
   const getGraphs = (meta) => {
     if(meta[1] === "bar"){
-      return <BarGraph traces={getBarTraces(meta[0], data)} title={keyToTitle[meta[0]]} height={"250px"}
+      return <BarGraph traces={getBarTraces(meta[0], data)} title={keyToTitle[meta[0]]}
                                         normalizeTime={meta[0] !== "contrib_counts"}/>
     } else if(meta[1] === "line") {
       return <LineGraph traces={[{x: getX(data[meta[0]]), y: getY(data[meta[0]])}]}
-                 title={keyToTitle[meta[0]]} height={"250px"} />
+                 title={keyToTitle[meta[0]]} />
     }
-    return <LineGraph traces={getCountryTraces(data[meta[0]])} title={keyToTitle[meta[0]]} height={"250px"}
+    return <LineGraph traces={getCountryTraces(data[meta[0]])} title={keyToTitle[meta[0]]}
                       showLegend={true}/>;
   };
 

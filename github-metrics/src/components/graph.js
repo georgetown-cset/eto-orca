@@ -1,3 +1,6 @@
+/*
+Line and bar graphs used in various other components
+ */
 import React, { Suspense, lazy } from "react";
 import {PlotlyDefaults} from "@eto/eto-ui-components";
 import config from "../data/config.json";
@@ -61,7 +64,7 @@ const LineGraph = (props) => {
   const layout = plotlyDefaults.layout;
   const legendVisible = showLegend || (traces.length > 1);
   layout.showlegend = legendVisible;
-  layout.margin = {t: legendVisible ? 100 : 50, r: 50, b: 50, l: 50, pad: 4};
+  layout.margin = {t: height ? 50 : 100, r: 50, b: 50, l: 50, pad: 4};
   layout.xaxis.dtick = 1;
   if(title) {
     layout.title = title;
@@ -79,7 +82,7 @@ const LineGraph = (props) => {
               config={plotlyDefaults.config}
               data={traceMetadata}
               layout={layout}
-              style={{height: height ? height : "450px", width: "100%"}}
+              style={{height: height ? height : "350px", width: "100%"}}
             />
           }
         </Suspense>
@@ -114,7 +117,7 @@ const BarGraph = (props) => {
   const layout = plotlyDefaults.layout;
   layout.showlegend = traces.length > 1;
   layout.barmode = "group";
-  layout.margin = {t: 50, r: 50, b: 50, l: 50, pad: 4};
+  layout.margin = {t: height ? 50 : 100, r: 50, b: 50, l: 50, pad: 4};
   if(title) {
     layout.title = title;
   }
@@ -128,7 +131,7 @@ const BarGraph = (props) => {
               config={plotlyDefaults.config}
               data={traceMetadata}
               layout={layout}
-              style={{height: height ? height : "450px", width: "100%"}}
+              style={{height: height ? height : "350px", width: "100%"}}
             />
           }
         </Suspense>

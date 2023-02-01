@@ -1,3 +1,6 @@
+/*
+The project card component displayed for each repo in the list view
+ */
 import React from "react";
 import Typography from "@mui/material/Typography";
 import { css } from "@emotion/react";
@@ -46,7 +49,7 @@ const styles = {
   `
 };
 
-const RepoCard = (props) => {
+const ProjectCard = (props) => {
   const {data, field, graph_key, graph_title, isCurated} = props;
 
   const repo_name = data["owner_name"]+"/"+data["current_name"];
@@ -92,4 +95,4 @@ const RepoCard = (props) => {
   )
 };
 
-export default RepoCard;
+export default ProjectCard;
