@@ -16,7 +16,7 @@ const keyToTitle = {
   "star_dates": "Stars over time",
   "push_dates": "Commits over time",
   "issue_dates": "Issues over time",
-  "pr_dates": "New vs returning contributors over time",
+  "commit_dates": "New vs returning contributors over time",
   "contrib_counts": "Contribution percentages by ranked contributor",
   "downloads": "Pypi downloads over time"
 };
@@ -52,14 +52,14 @@ const getCountryTraces = (graphData) => {
 
 const barTraceNames = {
   "issue_dates": ["Opened", "Closed"],
-  "pr_dates": ["New", "Returning"],
+  "commit_dates": ["New", "Returning"],
   "contrib_counts": ["Num Contributions"]
 };
 
 const getBarTraces = (key, data) => {
   const barData = data[key];
   const traceData = [];
-  const yTrans = y => key !== "contrib_counts" ? y : 100*y/data["num_prs"];
+  const yTrans = y => key !== "contrib_counts" ? y : 100*y/data["num_commits"];
   if(barData.length === 0){
     return [];
   }

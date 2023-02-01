@@ -52,7 +52,7 @@ const RepoCard = (props) => {
   const repo_name = data["owner_name"]+"/"+data["current_name"];
 
   const getGraph = () => {
-    if(["issue_dates", "pr_dates", "contrib_counts"].includes(graph_key)){
+    if(["issue_dates", "commit_dates", "contrib_counts"].includes(graph_key)){
       return <BarGraph traces={getBarTraces(graph_key, data)} title={graph_title} height={"250px"}
                        normalizeTime={graph_key !== "contrib_counts"}/>;
     } else if(["country_contributions", "org_contributions", "downloads"].includes(graph_key)){

@@ -138,7 +138,7 @@ def get_new_vs_returning_contributor_counts(contribs: list) -> list:
     year_data = [
         (
             int(contrib["contrib_date"].split("-")[0]),
-            contrib.get("is_first_time_contributor", False),
+            contrib.get("is_first_time_contribution", False),
             contrib.get("contributor", None),
         )
         for contrib in contribs
@@ -252,13 +252,13 @@ def reformat_row(row: dict) -> None:
     :return: None (mutates `row`)
     """
     row["star_dates"] = get_counts(row.pop("star_dates"))
-    row["push_dates"] = get_counts(
-        row.pop("push_events"), lambda evt: evt["contrib_date"]
-    )
+    contribs = row.pop("push_events")
+    row["push_dates"] = get_counts(contribs, lambda evt: evt["contrib_date"])
     row["issue_dates"] = get_issue_counts(row.pop("issue_events"))
-    contribs = row.pop("pr_events")
-    row["contrib_counts"], row["num_prs"] = get_cumulative_contributor_counts(contribs)
-    row["pr_dates"] = get_new_vs_returning_contributor_counts(contribs)
+    row["contrib_counts"], row["num_commits"] = get_cumulative_contributor_counts(
+        contribs
+    )
+    row["commit_dates"] = get_new_vs_returning_contributor_counts(contribs)
     #    row["country_contributions"] = get_entity_contribution_counts(
     #        row.pop("country_year_contributions"), "country"
     #    )
@@ -283,11 +283,11 @@ def write_data(input_dir: str, output_js: str) -> None:
     curated_repos = get_curated_repos()
     field_to_repos = {}
     for line in tqdm(get_lines(input_dir)):
-        if line["id"] in seen_ids:
-            continue
         repo_id = line.pop("id")
         repo_name = line["owner_name"] + "/" + line["current_name"]
-        seen_ids.add(repo_id)
+        if repo_name in seen_ids:
+            continue
+        seen_ids.add(repo_name)
         row = clean_row(line)
         reformat_row(row)
         if repo_name in curated_repos:

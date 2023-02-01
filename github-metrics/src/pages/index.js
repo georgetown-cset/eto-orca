@@ -26,7 +26,7 @@ const IndexPage = () => {
           In the automated
           retrieval method, we affiliate any OSS project that is mentioned in the title, abstract, or Papers with Code
           references of an article with that article. We assign each article to its top three fields of study, then
-          affiliate each OSS project with all fields of study containing at least two papers that reference the OSS project.
+          affiliate each OSS project with fields of study containing at least three papers that reference the OSS project.
           </div>
           <div style={{marginBottom: "10px"}}>
           At the moment, this project only includes GitHub data, but in the future we hope to expand to other repository

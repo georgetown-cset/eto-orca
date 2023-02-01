@@ -61,7 +61,7 @@ const SummaryPanel = (props) => {
       const y = [];
       for(let idx = 0; idx < row[key].length; idx++){
         x.push(row[key][idx][0]);
-        y.push(100*row[key].slice(0, idx+1).reduce((partialSum, v) => partialSum + v[1], 0)/row["num_prs"])
+        y.push(100*row[key].slice(0, idx+1).reduce((partialSum, v) => partialSum + v[1], 0)/row["num_commits"])
       }
       traces.push({
         x: x,
@@ -96,7 +96,7 @@ const SummaryPanel = (props) => {
                    val => val[1] === 0 ? 0 : val[2]/val[1])}/>
       <LineGraph title={"Ratio of new vs returning contributors over time"}
                  showLegend={true}
-                 traces={getTrace("pr_dates",
+                 traces={getTrace("commit_dates",
                    val => val[2] === 0 ? 0 : val[1]/val[2])}/>
       <LineGraph title={"Cumulative percentage of contributions by number of contributors"}
                  showLegend={true}

@@ -36,15 +36,32 @@ repo_star_dates AS (
   GROUP BY
     repo_id),
 
-repo_pushes AS (
+first_commit AS (
   SELECT
     repo_id,
+    contributor_name AS contributor,
+    MIN(push_created_at) AS first_contrib_date
+  FROM
+    github_metrics.push_event_commits
+  GROUP BY repo_id, contributor_name
+),
+
+repo_pushes AS (
+  SELECT
+    push_event_commits.repo_id,
     ARRAY_AGG(STRUCT(
         contributor_name AS contributor,
-        push_created_at AS contrib_date
+        push_created_at AS contrib_date,
+        push_created_at = first_contrib_date AS is_first_time_contribution
     )) AS events
   FROM
     staging_github_metrics.push_event_commits
+  LEFT JOIN
+    first_commit
+    ON
+      (
+        first_commit.contributor = push_event_commits.contributor_name
+      ) AND (first_commit.repo_id = push_event_commits.repo_id)
   GROUP BY
     repo_id),
 
@@ -60,33 +77,6 @@ issues AS (
     github_metrics.issue_events
   WHERE
     action IN ("opened", "closed")
-  GROUP BY
-    repo_id),
-
-first_pr AS (
-  SELECT
-    repo_id,
-    opener_id AS contributor,
-    MIN(pr_created_at) AS first_contrib_date
-  FROM
-    github_metrics.pull_requests_opened
-  GROUP BY repo_id, opener_id
-),
-
-prs AS (
-  SELECT
-    pull_requests_opened.repo_id,
-    ARRAY_AGG(STRUCT(
-        opener_id AS contributor,
-        pr_created_at AS contrib_date,
-        pr_created_at = first_contrib_date AS is_first_time_contributor
-    )) AS events
-  FROM
-    github_metrics.pull_requests_opened
-  LEFT JOIN
-    first_pr
-    ON
-      (first_pr.contributor = pull_requests_opened.opener_id) AND (first_pr.repo_id = pull_requests_opened.repo_id)
   GROUP BY
     repo_id),
 
@@ -191,7 +181,6 @@ SELECT
   star_dates,
   repo_pushes.events AS push_events,
   issues.events AS issue_events,
-  prs.events AS pr_events,
   country_year_contributions,
   org_year_contributions,
   downloads,
@@ -217,10 +206,6 @@ LEFT JOIN
   issues
   ON
     id = issues.repo_id
-LEFT JOIN
-  prs
-  ON
-    id = prs.repo_id
 LEFT JOIN
   country_year
   ON

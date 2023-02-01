@@ -55,7 +55,7 @@ const ProjectDashboard = () => {
   const contribGraphs = [
     ["push_dates", "line"],
     ["issue_dates", "bar"],
-    ["pr_dates", "bar"],
+    ["commit_dates", "bar"],
     ["contrib_counts", "bar"],
   ];
   const userGraphs = [
