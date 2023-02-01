@@ -253,6 +253,7 @@ def reformat_row(row: dict) -> None:
     """
     row["star_dates"] = get_counts(row.pop("star_dates"))
     contribs = row.pop("push_events")
+    # todo rename this key
     row["push_dates"] = get_counts(contribs, lambda evt: evt["contrib_date"])
     row["issue_dates"] = get_issue_counts(row.pop("issue_events"))
     row["contrib_counts"], row["num_commits"] = get_cumulative_contributor_counts(

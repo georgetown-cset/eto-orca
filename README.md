@@ -58,9 +58,10 @@ field
 * **New versus returning contributors over time** - this metric is based on commits. If a contributor makes their first commit during a given time interval,
 we mark them as a new contributor. Otherwise, they are a returning contributor. See combination of `repo_pushes` in `website_stats.sql`
 and `get_new_vs_returning_contributor_counts` in `preprocess_for_website.py`.
-* **Contributor percentage counts** - this metric is based on commits. For each contributor, we count their number of opened PRs,
-then calculate the percentage of PRs submitted by each contributor. See combination of `repo_pushes` in `website_stats.sql` and
+* **Contribution percentages** - this metric is based on commits. For each contributor, we count their number of commits,
+then calculate the percentage of commits written by each contributor. See combination of `repo_pushes` in `website_stats.sql` and
 `get_cumulative_contributor_counts` in `preprocess_for_website.py`.
-* **Cumulative total of contributions by number of contributors** - See the `get_cumulative_contributor_counts` method in `preprocess_for_website.py`. This relies on
+* **Cumulative percentage of contributions by number of contributors** - This metric is based on commits. See description of
+Contribution percentages above, and `github-metrics/src/components/summary_panel.js:getContribTrace`
 * The deps.dev links are added if the repo is present in `bigquery-public-data.deps_dev_v1`
 * The pypi downloads over time come from `bigquery-public-data.pypi`
