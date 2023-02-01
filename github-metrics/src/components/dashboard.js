@@ -12,7 +12,7 @@ import "core-js/features/url-search-params";
 import RepoCard from "./repo_card";
 import SummaryPanel from "./summary_panel";
 import {id_to_repo, field_to_repos, fields} from "../data/constants";
-import {sortMapping} from "../data/mappings";
+import {sortMapping, keyToTitle} from "../data/mappings";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -69,16 +69,7 @@ const Dashboard = () => {
     "language": "All",
     "license": "All"
   };
-  const compareMapping = {
-    "star_dates": "Stars over time",
-    "push_dates": "Commit events over time",
-    "issue_dates": "Issues over time",
-    "pr_dates": "New vs returning contributors over time",
-    "contrib_counts": "Contribution percentage counts",
-    "country_contributions": "Code contributions by top five countries (incomplete data)",
-    "org_contributions": "Code contributions by top five contributor organizations (incomplete data)"
-  };
-  const compareOptions = Object.entries(compareMapping).map(e => ({"val": e[0], "text": e[1]}));
+  const compareOptions = Object.entries(keyToTitle).map(e => ({"val": e[0], "text": e[1]}));
   const customTopics = [
     {"val": "ai_safety", "text": "AI Safety"},
     {"val": "asr", "text": "Speech Recognition (curated)"},
@@ -222,7 +213,7 @@ const Dashboard = () => {
                         data={repo}
                         field={filterValues["field_of_study"]}
                         graph_key={filterValues["compare_graph"]}
-                        graph_title={compareMapping[filterValues["compare_graph"]]}
+                        graph_title={keyToTitle[filterValues["compare_graph"]]}
                         isCurated={isCuratedField(filterValues["field_of_study"])}/>
             ))}
           </TabPanel>

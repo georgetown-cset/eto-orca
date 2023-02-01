@@ -9,6 +9,8 @@ import "core-js/features/url-search-params";
 import {LineGraph, BarGraph} from "./graph";
 import ProjectMetadata from "./project_metadata";
 
+import {getCountryTraces, getBarTraces} from "../data/mappings";
+
 
 const styles = {
   card: css`
@@ -46,67 +48,15 @@ const RepoCard = (props) => {
     return ary.map(elt => elt[1])
   };
 
-  const getBarTraces = (key) => {
-    const barData = data[key];
-    const traceData = [];
-    const yTrans = y => key !== "contrib_counts" ? y : 100*y/data["num_prs"];
-    if(barData.length === 0){
-      return [];
-    }
-    for(let i = 0; i < barData[0].length - 1; i ++){
-      traceData.push({
-        x: barData.map(elt => elt[0]),
-        y: barData.map(elt => yTrans(elt[i+1])),
-        name: barTraceNames[key][i]
-      })
-    }
-    return traceData;
-  };
-
-  const getCountryTraces = (graphData) => {
-    const nameToYearToCounts = {};
-    const countryCounts = {};
-    for(let elt of graphData){
-      const [year, country, count] = elt;
-      if(!(country in countryCounts)){
-        countryCounts[country] = 0
-      }
-      countryCounts[country] += parseInt(count);
-      if(!(country in nameToYearToCounts)){
-        nameToYearToCounts[country] = {};
-      }
-      nameToYearToCounts[country][year] = count;
-    }
-    const topCountries = [...Object.keys(countryCounts)];
-    topCountries.sort((a, b) => countryCounts[b] - countryCounts[a]);
-    const traces = [];
-    for(let name of topCountries.slice(0, 5)){
-      const years = [...Object.keys(nameToYearToCounts[name])];
-      years.sort();
-      traces.push({
-        x: years,
-        y: years.map(y => nameToYearToCounts[name][y]),
-        name: name
-      })
-    }
-    return traces;
-  };
-
   const getGraph = () => {
     if(["issue_dates", "pr_dates", "contrib_counts"].includes(graph_key)){
-      return <BarGraph traces={getBarTraces(graph_key)} title={graph_title} height={"250px"}
+      return <BarGraph traces={getBarTraces(graph_key, data)} title={graph_title} height={"250px"}
                        normalizeTime={graph_key !== "contrib_counts"}/>;
     } else if(["country_contributions", "org_contributions"].includes(graph_key)){
       return <LineGraph traces={getCountryTraces(data[graph_key])} title={graph_title} height={"250px"} showLegend={true}/>;
     }
     return <LineGraph traces={[{x: getX(data[graph_key]), y: getY(data[graph_key])}]}
                        title={graph_title} height={"250px"}/>;
-  };
-
-  const barTraceNames = {
-    "issue_dates": ["Opened", "Closed"],
-    "pr_dates": ["New", "Returning"],
-    "contrib_counts": ["Num Contributions"]
   };
 
   return (
