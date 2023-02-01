@@ -11,6 +11,35 @@ import ProjectMetadata from "./project_metadata";
 
 import {keyToTitle, getCountryTraces, getBarTraces, getX, getY} from "./utils";
 
+const styles = {
+  dashboardContainer: css`
+    margin: 20px auto;
+    max-width: 1000px;
+  `,
+  backLink: css`
+    text-align: right;
+  `,
+  ghLink: css`
+    display: inline-block;
+    margin-right: 10px;
+  `,
+  depsLink: css`
+    display: inline-block;
+    font-size: 80%;
+  `,
+  description: css`
+    display: inline-block;
+    width: 49%;
+    vertical-align: top;
+    padding-right: 5px;
+  `,
+  metadataContainer: css`
+    display: inline-block;
+    width: 50%;
+    vertical-align: top;
+  `
+};
+
 const ProjectDashboard = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -47,28 +76,28 @@ const ProjectDashboard = () => {
   };
 
   return (
-   <div style={{margin: "20px auto", maxWidth: "1000px"}} id={"project-dashboard"}>
-     <div style={{textAlign: "right"}}>
+   <div css={styles.dashboardContainer} id={"project-dashboard"}>
+     <div css={styles.backLink}>
       <a href={"/"}>Back to listing page</a>
      </div>
      <div>
-       <h2 style={{display: "inline-block", marginRight: "10px"}}>
+       <h2 css={styles.ghLink}>
          <ExternalLink href={"https://github.com/"+repo_name}>{repo_name}</ExternalLink>
        </h2>
         {data["has_deps_dev"] &&
-        <span style={{display: "inline-block", fontSize: "80%"}}>
+        <span css={styles.depsLink}>
           <ExternalLink href={"https://deps.dev/project/github/" + data["owner_name"] + "%2F" + data["current_name"]}>
             [deps.dev]
           </ExternalLink>
         </span>
         }
        <div>
-         <div style={{display: "inline-block", width: "49%", verticalAlign: "top", paddingRight: "5px"}}>
+         <div css={styles.description}>
            <div>
              {data["description"]}
            </div>
          </div>
-         <div style={{display: "inline-block", width: "50%", verticalAlign: "top"}}>
+         <div css={styles.metadataContainer}>
           <ProjectMetadata data={data}/>
          </div>
        </div>

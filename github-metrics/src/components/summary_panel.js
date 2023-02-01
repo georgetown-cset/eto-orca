@@ -6,9 +6,28 @@ import {Dropdown} from "@eto/eto-ui-components";
 
 import {keyToTitle} from "./utils";
 
+
 const styles = {
   card: css`
     padding: 20px;
+  `,
+  summaryContainer: css`
+    margin-top: 5px;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background-color: white;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    verticalAlign: top;
+  `,
+  summaryContainerLabel: css`
+    display: inline-block;
+    vertical-align: bottom;
+    font-weight: bold;
+    padding-bottom: 16px;
+  `,
+  summaryContainerFilter: css`
+    display: inline-block;
   `
 };
 
@@ -55,12 +74,11 @@ const SummaryPanel = (props) => {
 
   return (
     <div css={styles.card}>
-      <div style={{marginTop: "5px", position: "sticky", top: "0", zIndex: 200, backgroundColor: "white",
-                   borderBottom: "1px solid rgba(0, 0, 0, 0.12)", verticalAlign: "top"}}>
-        <div style={{display: "inline-block", verticalAlign: "bottom", fontWeight: "bold", paddingBottom: "16px"}}>
+      <div css={styles.summaryContainer}>
+        <div css={styles.summaryContainerLabel}>
           Displaying top 5 selected repos, ordered by
         </div>
-        <div style={{display: "inline-block"}}>
+        <div css={styles.summaryContainerFilter}>
           <Dropdown
             selected={orderBy}
             setSelected={val => setOrderBy(val)}

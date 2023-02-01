@@ -1,4 +1,5 @@
 import React, {useEffect} from "react";
+import {css} from "@emotion/react";
 import Typography from "@mui/material/Typography";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -13,6 +14,50 @@ import RepoCard from "./repo_card";
 import SummaryPanel from "./summary_panel";
 import {id_to_repo, field_to_repos, fields} from "../data/constants";
 import {sortMapping, keyToTitle} from "./utils";
+
+const styles = {
+  tabContainer: css`
+    background-color: white;
+    border-color: divider;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12)
+  `,
+  leftPanel: css`
+    text-align: left;
+    padding: 20px;
+    width: 25%;
+    display: inline-block;
+    vertical-align: top;
+    @media (max-width: 1300px) {
+      width: 100%;
+      display: block;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    }
+  `,
+  rightPanel: css`
+    width: 70%;
+    min-height: 80vh;
+    display: inline-block;
+    @media (max-width: 1300px) {
+      width: 95%;
+      margin: auto;
+      display: block;
+    }
+  `,
+  filterDropdownContainer: css`
+    margin: 15px 0px 10px 20px;
+  `,
+  sortDropdownContainer: css`
+    display: inline-block;
+  `,
+  sortConfig: css`
+    margin-top: 5px;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background-color: white;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12)
+  `
+};
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -154,17 +199,17 @@ const Dashboard = () => {
 
   return (
     <div style={{backgroundColor: "white"}} id={"dashboard"}>
-      <div style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.12)", borderColor: "divider", backgroundColor: "white"}}>
+      <div css={styles.tabContainer}>
         <StyledTabs value={tabValue} onChange={(evt, newValue) => {setTabValue(newValue)}} aria-label="OSS tracker tabs">
           <Tab label="Field summary" {...a11yProps(0)} />
           <Tab label="Project list" {...a11yProps(1)} />
         </StyledTabs>
       </div>
       <div>
-        <div style={{textAlign: "left", padding: "20px", width: "25%", display: "inline-block", verticalAlign: "top"}}>
+        <div css={styles.leftPanel}>
           <div>
             <h3>Select a subject</h3>
-            <div style={{margin: "15px 0px 10px 20px"}}>
+            <div css={styles.filterDropdownContainer}>
               <Dropdown
                 selected={filterValues["field_of_study"]}
                 setSelected={(val) => handleSingleSelectChange(val, "field_of_study")}
@@ -175,7 +220,7 @@ const Dashboard = () => {
           </div>
           <div>
             <h3>Filter further</h3>
-            <div style={{margin: "15px 0px 10px 20px"}}>
+            <div css={styles.filterDropdownContainer}>
               <Dropdown
                 selected={filterValues["language"]}
                 setSelected={(val) => handleSingleSelectChange(val, "language")}
@@ -183,7 +228,7 @@ const Dashboard = () => {
                 options={getFilterOptions("language").map(lang => ({"text": lang, "val": lang}))}
               />
             </div>
-            <div style={{margin: "15px 0px 10px 20px"}}>
+            <div css={styles.filterDropdownContainer}>
               <Dropdown
                 selected={filterValues["license"]}
                 setSelected={(val) => handleSingleSelectChange(val, "license")}
@@ -193,15 +238,14 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        <div style={{width: "70%", minHeight: "80vh", display: "inline-block"}}>
+        <div css={styles.rightPanel}>
           <TabPanel value={tabValue} index={0}>
             {repoData.length > 0 && <SummaryPanel data={repoData}
                                                   sortOptions={sortOptions} customTopics={customTopics}/>}
           </TabPanel>
           <TabPanel value={tabValue} index={1}>
-            <div style={{marginTop: "5px", position: "sticky", top: "0", zIndex: 200, backgroundColor: "white",
-                borderBottom: "1px solid rgba(0, 0, 0, 0.12)"}}>
-              <div style={{display: "inline-block"}}>
+            <div css={styles.sortConfig}>
+              <div css={styles.sortDropdownContainer}>
                 <Dropdown
                   selected={filterValues["order_by"]}
                   setSelected={(val) => handleSingleSelectChange(val, "order_by")}
@@ -209,7 +253,7 @@ const Dashboard = () => {
                   options={sortOptions}
                 />
               </div>
-              <div style={{display: "inline-block"}}>
+              <div css={styles.sortDropdownContainer}>
                 <Dropdown
                   selected={filterValues["compare_graph"]}
                   setSelected={(val) => handleSingleSelectChange(val, "compare_graph")}

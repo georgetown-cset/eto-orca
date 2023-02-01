@@ -20,18 +20,29 @@ const styles = {
     border: 1px solid black;
     border-radius: 5px;
   `,
-  emph: css`
-    font-weight: bold;
+  leftPanel: css`
+    width: 40%;
+    display: inline-block;
+    vertical-align: top;
   `,
-  nobreak: css`
-    word-wrap: nobreak;
-    margin-right: 10px;
-  `,
-  sortOption: css`
-    margin-right: 10px;
+  rightPanel: css`
+    width: 59%;
+    display: inline-block;
+    vertical-align: top;
   `,
   dataDesc: css`
     margin: 15px 0px;
+  `,
+  ghLink: css`
+    display: inline-block;
+    margin-right: 10px;
+  `,
+  depsLink: css`
+    display: inline-block;
+    font-size: 80%;
+  `,
+  buttonContainer: css`
+    text-align: center;
   `
 };
 
@@ -54,11 +65,11 @@ const RepoCard = (props) => {
   return (
     <div css={styles.card}>
       <div>
-        <div style={{width: "40%", display: "inline-block", verticalAlign: "top"}}>
+        <div css={styles.leftPanel}>
           <span>
-            <h4 style={{display: "inline-block", marginRight: "10px"}}><ExternalLink href={"https://github.com/"+repo_name}>{repo_name}</ExternalLink></h4>
+            <h4 css={styles.ghLink}><ExternalLink href={"https://github.com/"+repo_name}>{repo_name}</ExternalLink></h4>
             {data["has_deps_dev"] &&
-            <span style={{display: "inline-block", fontSize: "80%"}}>
+            <span css={styles.depsLink}>
               <ExternalLink href={"https://deps.dev/project/github/" + data["owner_name"] + "%2F" + data["current_name"]}>
                 [deps.dev]
               </ExternalLink>
@@ -70,11 +81,11 @@ const RepoCard = (props) => {
           </Typography>
           <ProjectMetadata data={data} showNumReferences={!isCurated} field={field}/>
         </div>
-        <div style={{width: "59%", display: "inline-block", verticalAlign: "top"}}>
+        <div css={styles.rightPanel}>
           {getGraph()}
         </div>
       </div>
-      <div style={{textAlign: "center"}}>
+      <div css={styles.buttonContainer}>
         <ButtonStyled href={`/project?project_id=${data['id']}`} target={"_blank"} rel={"noopener"}>More details</ButtonStyled>
       </div>
     </div>

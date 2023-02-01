@@ -9,25 +9,15 @@ import {metaMapping} from "./utils";
 
 
 const styles = {
-  card: css`
-    max-width: 100%;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid black;
-    border-radius: 5px;
-  `,
   emph: css`
     font-weight: bold;
   `,
-  nobreak: css`
+  metaSection: css`
     word-wrap: nobreak;
     margin-right: 10px;
   `,
   sortOption: css`
     margin-right: 10px;
-  `,
-  dataDesc: css`
-    margin: 15px 0px;
   `
 };
 
@@ -56,7 +46,7 @@ const ProjectMetadata = (props) => {
       {metaGroups.map((group, group_idx) => (
         <Typography component={"div"} variant={"body2"} css={styles.sortOption} key={`meta-group-${group_idx}`}>
           {group.map(option => ((showNumReferences) || (option !== "num_references")) && (
-            <span css={styles.nobreak} key={option}>
+            <span css={styles.metaSection} key={option}>
               <span css={styles.emph}>{metaMapping[option]}</span>: {getValue(option)}
             </span>
           ))}
