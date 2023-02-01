@@ -9,7 +9,7 @@ import {css} from "@emotion/react";
 import {BarGraph, LineGraph} from "./graph";
 import ProjectMetadata from "./project_metadata";
 
-import {keyToTitle, getCountryTraces, getBarTraces} from "../data/mappings";
+import {keyToTitle, getCountryTraces, getBarTraces} from "./utils";
 
 const ProjectDashboard = () => {
   useEffect(() => {

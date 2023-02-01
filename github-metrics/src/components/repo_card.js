@@ -9,7 +9,7 @@ import "core-js/features/url-search-params";
 import {LineGraph, BarGraph} from "./graph";
 import ProjectMetadata from "./project_metadata";
 
-import {getCountryTraces, getBarTraces} from "../data/mappings";
+import {getCountryTraces, getBarTraces} from "./utils";
 
 
 const styles = {

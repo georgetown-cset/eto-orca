@@ -5,7 +5,7 @@ import { css } from "@emotion/react";
 import "core-js/features/url";
 import "core-js/features/url-search-params";
 
-import {metaMapping} from "../data/mappings";
+import {metaMapping} from "./utils";
 
 
 const styles = {

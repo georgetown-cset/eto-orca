@@ -1,4 +1,3 @@
-
 const sortMapping = {
   "stargazers_count": "Stars",
   "subscribers_count": "Watchers",

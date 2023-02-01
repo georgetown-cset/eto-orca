@@ -12,7 +12,7 @@ import "core-js/features/url-search-params";
 import RepoCard from "./repo_card";
 import SummaryPanel from "./summary_panel";
 import {id_to_repo, field_to_repos, fields} from "../data/constants";
-import {sortMapping, keyToTitle} from "../data/mappings";
+import {sortMapping, keyToTitle} from "./utils";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
