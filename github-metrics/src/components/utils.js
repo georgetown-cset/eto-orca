@@ -14,10 +14,10 @@ metaMapping["language"] = "Top Programming Language";
 
 const keyToTitle = {
   "star_dates": "Stars over time",
-  "push_dates": "Commit events over time",
+  "push_dates": "Commits over time",
   "issue_dates": "Issues over time",
   "pr_dates": "New vs returning contributors over time",
-  "contrib_counts": "Contribution percentage counts",
+  "contrib_counts": "Contribution percentages by ranked contributor",
   "country_contributions": "Code contributions by top five countries (incomplete data)",
   "org_contributions": "Code contributions by top five contributor organizations (incomplete data)"
 };
@@ -74,4 +74,12 @@ const getBarTraces = (key, data) => {
   return traceData;
 };
 
-export {sortMapping, metaMapping, keyToTitle, getCountryTraces, getBarTraces};
+const getX = (ary) => {
+  return ary.map(elt => elt[0])
+};
+
+const getY = (ary) => {
+  return ary.map(elt => elt[1])
+};
+
+export {sortMapping, metaMapping, keyToTitle, getCountryTraces, getBarTraces, getX, getY};

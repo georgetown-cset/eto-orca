@@ -9,7 +9,7 @@ import "core-js/features/url-search-params";
 import {LineGraph, BarGraph} from "./graph";
 import ProjectMetadata from "./project_metadata";
 
-import {getCountryTraces, getBarTraces} from "./utils";
+import {getCountryTraces, getBarTraces, getX, getY} from "./utils";
 
 
 const styles = {
@@ -39,14 +39,6 @@ const RepoCard = (props) => {
   const {data, field, graph_key, graph_title, isCurated} = props;
 
   const repo_name = data["owner_name"]+"/"+data["current_name"];
-
-  const getX = (ary) => {
-    return ary.map(elt => elt[0])
-  };
-
-  const getY = (ary) => {
-    return ary.map(elt => elt[1])
-  };
 
   const getGraph = () => {
     if(["issue_dates", "pr_dates", "contrib_counts"].includes(graph_key)){

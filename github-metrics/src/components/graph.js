@@ -25,21 +25,22 @@ const cleanTraces = (x, y) => {
   for(let [idx, x_value] of x.entries()){
     x_to_y[parseInt(x_value)] = y[idx];
   }
-  for(let i = 0; i < (config.end_year - config.start_year); i ++){
+  for(let i = 0; i < (config.end_year+1 - config.start_year); i ++){
     const curr_year = config.start_year+i;
     clean_x.push(curr_year);
-    clean_y.push(curr_year in x_to_y ? x_to_y[curr_year]: 0)
+    clean_y.push((curr_year in x_to_y) && (x_to_y[curr_year] !== null) ? x_to_y[curr_year]: 0)
   }
   return [clean_x, clean_y];
 };
 
 const LineGraph = (props) => {
-  const {traces, title, height, showLegend=false, normalizeTime=true} = props;
+  const {traces, title, height, showLegend=false, normalizeTime=true, forceInteger=true} = props;
 
   const traceMetadata = [];
   let maxY = -1;
   for(const [idx, trace] of traces.entries()) {
     const [clean_x, clean_y] = normalizeTime ? cleanTraces(trace.x, trace.y) : [trace.x, trace.y];
+
     const traceMaxY = Math.max(...clean_y);
     if(traceMaxY > maxY){
       maxY = traceMaxY;
@@ -64,6 +65,9 @@ const LineGraph = (props) => {
   layout.xaxis.dtick = 1;
   if(title) {
     layout.title = title;
+  }
+  if(!forceInteger){
+    layout["yaxis"]["dtick"] = null;
   }
 
   return (

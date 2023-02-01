@@ -4,6 +4,8 @@ import {LineGraph} from "./graph";
 import {css} from "@emotion/react";
 import {Dropdown} from "@eto/eto-ui-components";
 
+import {keyToTitle} from "./utils";
+
 const styles = {
   card: css`
     padding: 20px;
@@ -68,22 +70,22 @@ const SummaryPanel = (props) => {
         </div>
       </div>
       <h3>Contributor activity</h3>
-      <LineGraph title={`Commit events in top projects`} showLegend={true}
+      <LineGraph title={keyToTitle["push_dates"]} showLegend={true}
                  traces={getTrace("push_dates")}/>
-      <LineGraph title={`Ratio of issues opened to closed in top projects`}
-                 showLegend={true}
+      <LineGraph title={"Ratio of issues closed to opened over time"}
+                 showLegend={true} forceInteger={false}
                  traces={getTrace("issue_dates",
-                   val => val[1]/val[2])}/>
-      <LineGraph title={`Ratio of new vs returning contributors in top projects`}
+                   val => val[1] === 0 ? 0 : val[2]/val[1])}/>
+      <LineGraph title={"Ratio of new vs returning contributors over time"}
                  showLegend={true}
                  traces={getTrace("pr_dates",
-                   val => val[1]/val[2])}/>
-      <LineGraph title={"Cumulative total of contributions by number of contributors"}
+                   val => val[2] === 0 ? 0 : val[1]/val[2])}/>
+      <LineGraph title={"Cumulative percentage of contributions by number of contributors"}
                  showLegend={true}
                  traces={getContribTrace("contrib_counts")}
                  normalizeTime={false}/>
       <h3>User activity</h3>
-      <LineGraph title={`Star events in top five projects`}
+      <LineGraph title={keyToTitle["star_dates"]}
                  showLegend={true}
                  traces={getTrace("star_dates")}/>
     </div>
