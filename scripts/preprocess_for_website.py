@@ -22,6 +22,8 @@ UNUSED_KEYS = {
     "sources",
     "issue_open_events",
     "ultimate_fork_of",
+    "country_year_contributions",
+    "org_year_contributions",
 }
 NOW = datetime.now()
 END_YEAR = NOW.year if NOW.month > 6 else NOW.year - 1
@@ -257,12 +259,12 @@ def reformat_row(row: dict) -> None:
     contribs = row.pop("pr_events")
     row["contrib_counts"], row["num_prs"] = get_cumulative_contributor_counts(contribs)
     row["pr_dates"] = get_new_vs_returning_contributor_counts(contribs)
-    row["country_contributions"] = get_entity_contribution_counts(
-        row.pop("country_year_contributions"), "country"
-    )
-    row["org_contributions"] = get_entity_contribution_counts(
-        row.pop("org_year_contributions"), "org"
-    )
+    #    row["country_contributions"] = get_entity_contribution_counts(
+    #        row.pop("country_year_contributions"), "country"
+    #    )
+    #    row["org_contributions"] = get_entity_contribution_counts(
+    #        row.pop("org_year_contributions"), "org"
+    #    )
     row["num_references"] = {}
     if "primary_programming_language" in row:
         row["language"] = row.pop("primary_programming_language")

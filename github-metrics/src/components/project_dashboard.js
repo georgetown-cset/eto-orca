@@ -28,8 +28,6 @@ const ProjectDashboard = () => {
     ["issue_dates", "bar"],
     ["pr_dates", "bar"],
     ["contrib_counts", "bar"],
-    ["country_contributions", "multi-line"],
-    ["org_contributions", "multi-line"],
   ];
   const userGraphs = [
     ["star_dates", "line"],
