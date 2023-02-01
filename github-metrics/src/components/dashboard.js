@@ -62,6 +62,7 @@ const Dashboard = () => {
   useEffect(() => {
     mkRepoData(defaultFilterValues);
   }, []);
+
   const defaultFilterValues = {
     "field_of_study": "ai_safety",
     "order_by": "stargazers_count",
@@ -69,12 +70,19 @@ const Dashboard = () => {
     "language": "All",
     "license": "All"
   };
+
+  const [filterValues, setFilterValues] = React.useState({...defaultFilterValues});
+  const [repoData, setRepoData] = React.useState([]);
+  const [tabValue, setTabValue] = React.useState(1);
+
   const compareOptions = Object.entries(keyToTitle).map(e => ({"val": e[0], "text": e[1]}));
+
   const customTopics = [
     {"val": "ai_safety", "text": "AI Safety"},
     {"val": "asr", "text": "Speech Recognition (curated)"},
     {"val": "riscv", "text": "RISC-V"}
   ];
+
   const getSelectedRepos = (filters, ignoreFilter = null) => {
     const relKeys = field_to_repos[filters["field_of_study"]];
     const newRepoData = [];
@@ -94,29 +102,31 @@ const Dashboard = () => {
     relKeys.map(key => id_to_repo[key]);
     return newRepoData;
   };
+
   const getFilterOptions = (key) => {
     const fieldRepos = getSelectedRepos(filterValues, key);
     const opts = [...new Set(fieldRepos.map(row => row[key]))];
     opts.sort();
     return ["All"].concat(opts);
   };
+
   const repoSortFn = (repo, filters) => {
     if(filters["order_by"] === "num_references"){
       return repo["num_references"][filters["field_of_study"]]
     }
     return repo[filters["order_by"]]
   };
+
   const mkRepoData = (filters) => {
     const newRepoData = getSelectedRepos(filters);
     newRepoData.sort((a, b) => repoSortFn(b, filters) - repoSortFn(a, filters));
     setRepoData(newRepoData.slice(0, 20));
   };
-  const [filterValues, setFilterValues] = React.useState({...defaultFilterValues});
-  const [repoData, setRepoData] = React.useState([]);
-  const [tabValue, setTabValue] = React.useState(1);
+
   const isCuratedField = (field) => {
     return customTopics.map(topic => topic["val"]).includes(field);
   };
+
   const sortOptions = Object.entries(sortMapping).map(e => ({"val": e[0], "text": e[1]})).filter(
     obj => (!isCuratedField(filterValues["field_of_study"]) || (obj["val"] !== "num_references")));
 
