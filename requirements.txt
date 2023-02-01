@@ -7,3 +7,4 @@ beautifulsoup4==4.11.1
 Flask
 functions-framework
 pycountry
+tqdm
