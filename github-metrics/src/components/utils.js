@@ -19,7 +19,8 @@ const keyToTitle = {
   "pr_dates": "New vs returning contributors over time",
   "contrib_counts": "Contribution percentages by ranked contributor",
   "country_contributions": "Code contributions by top five countries (incomplete data)",
-  "org_contributions": "Code contributions by top five contributor organizations (incomplete data)"
+  "org_contributions": "Code contributions by top five contributor organizations (incomplete data)",
+  "downloads": "Pypi downloads over time"
 };
 
 const getCountryTraces = (graphData) => {

@@ -1,10 +1,10 @@
 import argparse
-import copy
 import json
 import os
 from datetime import datetime
 from typing import Tuple
 
+import pycountry
 from tqdm import tqdm
 
 INT_KEYS = {
@@ -47,7 +47,7 @@ def get_counts(dates: list, transform=lambda x: x) -> list:
     )
 
 
-def get_issue_counts(dates):
+def get_issue_counts(dates: list) -> list:
     """
     Transform a list of issue events containing date and event type into a triple of
     year, issue open count, and issue close count
@@ -66,6 +66,37 @@ def get_issue_counts(dates):
             counts[year] = count
     return sorted(
         [[year] + count for year, count in counts.items()], key=lambda elt: elt[0]
+    )
+
+
+def reformat_downloads(downloads: list) -> list:
+    """
+    Clean up a list of downloads, converting country codes to country names
+    :param dates: List of dicts of pypi count by year
+    :return: List of triples of year, country name, and pypi download count
+    """
+    reformatted_downloads = []
+    total_country_counts = {}
+    for dl in downloads:
+        if not dl:
+            continue
+        country = "Unknown"
+        if "country_code" in dl:
+            country_obj = pycountry.countries.get(alpha_2=dl["country_code"])
+            if country_obj:
+                country = country_obj.name
+        year = int(dl["year"])
+        if (year >= START_YEAR) and (year <= END_YEAR):
+            reformatted_downloads.append([year, country, int(dl["num_downloads"])])
+            total_country_counts[country] = total_country_counts.get(country, 0) + int(
+                dl["num_downloads"]
+            )
+    top_countries = sorted(
+        total_country_counts.keys(), key=lambda c: -1 * total_country_counts[c]
+    )[:5]
+    return sorted(
+        [dl for dl in reformatted_downloads if dl[1] in top_countries],
+        key=lambda elt: elt[0],
     )
 
 
@@ -235,6 +266,7 @@ def reformat_row(row: dict) -> None:
     row["num_references"] = {}
     if "primary_programming_language" in row:
         row["language"] = row.pop("primary_programming_language")
+    row["downloads"] = reformat_downloads(row.pop("downloads"))
 
 
 def write_data(input_dir: str, output_js: str) -> None:

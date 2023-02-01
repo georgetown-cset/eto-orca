@@ -29,13 +29,14 @@ const ProjectDashboard = () => {
     ["pr_dates", "bar"],
     ["contrib_counts", "bar"],
     ["country_contributions", "multi-line"],
-    ["org_contributions", "multi-line"]
+    ["org_contributions", "multi-line"],
   ];
   const userGraphs = [
-    ["star_dates", "line"]
+    ["star_dates", "line"],
+    ["downloads", "multi-line"]
   ];
 
-  const getContributorGraph = (meta) => {
+  const getGraphs = (meta) => {
     if(meta[1] === "bar"){
       return <BarGraph traces={getBarTraces(meta[0], data)} title={keyToTitle[meta[0]]} height={"250px"}
                                         normalizeTime={meta[0] !== "contrib_counts"}/>
@@ -77,16 +78,14 @@ const ProjectDashboard = () => {
      <div>
        <h3>Contributor activity</h3>
        {Object.keys(data).length > 0 && contribGraphs.map(meta =>
-         getContributorGraph(meta)
+         getGraphs(meta)
        )}
      </div>
      <div>
        <h3>User activity</h3>
-       {Object.keys(data).length > 0 && userGraphs.map(meta => (
-         meta[1] === "bar" ? <BarGraph traces={getBarTraces(meta[0], data)} title={keyToTitle[meta[0]]} height={"250px"} /> :
-            <LineGraph traces={[{x: getX(data[meta[0]]), y: getY(data[meta[0]])}]}
-                       title={keyToTitle[meta[0]]} height={"250px"}/>
-       ))}
+       {Object.keys(data).length > 0 && userGraphs.map(meta =>
+         getGraphs(meta)
+       )}
      </div>
    </div>
   );

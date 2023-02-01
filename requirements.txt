@@ -6,3 +6,4 @@ ratelimit==2.2.1
 beautifulsoup4==4.11.1
 Flask
 functions-framework
+pycountry
