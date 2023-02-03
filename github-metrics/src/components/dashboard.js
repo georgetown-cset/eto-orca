@@ -182,7 +182,7 @@ const Dashboard = () => {
     const updatedFilterValues = {...filterValues};
     updatedFilterValues[key] = value;
     if(key === "field_of_study"){
-      if(filterValues["order_by"] === "num_references"){
+      if((filterValues["order_by"] === "num_references") && isCuratedField(value)){
         updatedFilterValues["order_by"] = "stargazers_count";
       }
       for(let filteredKey of ["language", "license"]){
