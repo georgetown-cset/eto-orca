@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import CircularProgress from "@mui/material/CircularProgress";
-import {AppWrapper, InfoCard} from "@eto/eto-ui-components";
+import {AppWrapper, ExternalLink, InfoCard} from "@eto/eto-ui-components";
 
 /* Set the body margin and padding to 0 here */
 import "../styles/styles.css";
@@ -30,7 +30,7 @@ const IndexPage = () => {
           </div>
           <div style={{marginBottom: "10px"}}>
           At the moment, this project only includes GitHub data, but in the future we hope to expand to other repository
-          hosting services.
+            hosting services. Data sources include: <ExternalLink href={"https://console.cloud.google.com/bigquery?project=githubarchive&page=project"}>Github Archive</ExternalLink>, <ExternalLink href={"https://console.cloud.google.com/marketplace/product/gcp-public-data-pypi/pypi?_ga=2.174631522.-1309707215.1607703367"}>PyPI</ExternalLink>, and our <ExternalLink href={"https://eto.tech/dataset-docs/mac/"}>merged academic corpus</ExternalLink>.
           </div>
         </div>}
         documentationLink={"https://eto.tech/tool-docs/oss-tracker"}
