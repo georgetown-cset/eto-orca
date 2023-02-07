@@ -6,11 +6,11 @@ relevant_repos AS (
   FROM (
     SELECT CONCAT(owner_name, "/", matched_name) AS repo_name
     FROM
-      github_metrics.repos_with_full_meta
+      staging_github_metrics.repos_with_full_meta
     UNION ALL
     SELECT CONCAT(owner_name, "/", current_name) AS repo_name
     FROM
-      github_metrics.repos_with_full_meta
+      staging_github_metrics.repos_with_full_meta
     WHERE
       current_name IS NOT NULL) ),
 

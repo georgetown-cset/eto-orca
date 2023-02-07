@@ -4,9 +4,9 @@ repo_paper_meta AS (
   SELECT
     repo,
     ARRAY_AGG(STRUCT(merged_id,
-        fields)) AS paper_meta
+        top_lvl1_fields AS fields)) AS paper_meta
   FROM
-    github_metrics.repos_in_papers
+    staging_github_metrics.repos_in_papers
   CROSS JOIN
     UNNEST(merged_ids) AS merged_id
   LEFT JOIN
@@ -24,15 +24,15 @@ repo_paper_meta AS (
       STRUCT("p1" AS merged_id, [STRUCT("" AS name, 0.1 AS score)] AS fields)  -- noqa: L029
     ] AS paper_meta
   FROM
-    github_metrics.curated_repos
-  WHERE repo NOT IN (SELECT repo FROM github_metrics.repos_in_papers)),
+    staging_github_metrics.curated_repos
+  WHERE repo NOT IN (SELECT repo FROM staging_github_metrics.repos_in_papers)),
 
 repo_star_dates AS (
   SELECT
     repo_id,
     ARRAY_AGG(star_date) AS star_dates
   FROM
-    github_metrics.star_events
+    staging_github_metrics.star_events
   GROUP BY
     repo_id),
 
@@ -42,7 +42,7 @@ first_commit AS (
     contributor_name AS contributor,
     MIN(push_created_at) AS first_contrib_date
   FROM
-    github_metrics.push_event_commits
+    staging_github_metrics.push_event_commits
   GROUP BY repo_id, contributor_name
 ),
 
@@ -74,7 +74,7 @@ issues AS (
         action AS event_type
     )) AS events
   FROM
-    github_metrics.issue_events
+    staging_github_metrics.issue_events
   WHERE
     action IN ("opened", "closed")
   GROUP BY
@@ -89,7 +89,7 @@ country_year_disagg AS (
   FROM
     staging_github_metrics.push_event_commits
   LEFT JOIN
-    (SELECT * FROM github_metrics.contributor_affiliations
+    (SELECT * FROM staging_github_metrics.contributor_affiliations
       CROSS JOIN UNNEST(contributed_repos) AS repo_id) AS contributor_affiliations
     ON push_event_commits.contributor_name = contributor_affiliations.contributor
       AND push_event_commits.repo_id = contributor_affiliations.repo_id
@@ -128,7 +128,7 @@ org_year_disagg AS (
   FROM
     staging_github_metrics.push_event_commits
   LEFT JOIN
-    (SELECT * FROM github_metrics.contributor_affiliations
+    (SELECT * FROM staging_github_metrics.contributor_affiliations
       CROSS JOIN UNNEST(contributed_repos) AS repo_id) AS contributor_affiliations
     ON push_event_commits.contributor_name = contributor_affiliations.contributor
       AND push_event_commits.repo_id = contributor_affiliations.repo_id
@@ -189,7 +189,7 @@ SELECT
     owner_name, "/", current_name
   ) IN (SELECT name FROM `bigquery-public-data.deps_dev_v1.Projects`) AS has_deps_dev -- noqa: L057
 FROM
-  github_metrics.repos_with_full_meta
+  staging_github_metrics.repos_with_full_meta
 LEFT JOIN
   repo_paper_meta
   ON
@@ -215,7 +215,7 @@ LEFT JOIN
   ON
     id = org_year.repo_id
 LEFT JOIN
-  github_metrics.pypi_over_time
+  staging_github_metrics.pypi_over_time
   ON
     CONCAT(
       owner_name, "/", current_name
@@ -226,5 +226,5 @@ WHERE
   ) AND (
     (
       ARRAY_LENGTH(paper_meta) > 1
-    ) OR CONCAT(owner_name, "/", matched_name) IN (SELECT repo FROM github_metrics.curated_repos)
+    ) OR CONCAT(owner_name, "/", matched_name) IN (SELECT repo FROM staging_github_metrics.curated_repos)
   )
