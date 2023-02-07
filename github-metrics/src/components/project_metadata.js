@@ -37,7 +37,7 @@ const ProjectMetadata = (props) => {
   };
 
   const metaGroups = [
-    ["stargazers_count", "subscribers_count", "num_contributors"],
+    ["stargazers_count", "num_contributors"],
     ["open_issues", "num_references"],
     ["created_at", "pushed_at"],
     ["license"],
