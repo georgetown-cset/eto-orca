@@ -13,5 +13,7 @@ select * except(meta_rank) from candidate_metadata
 where
   (
     repo is not null
-  ) and (repo in (select concat(owner_name, "/", current_name) from github_metrics.repos_with_full_meta))
+  ) and (
+    repo in (select concat(owner_name, "/", full_metadata.name) from staging_github_metrics.repos_with_full_meta_raw)
+  )
   and meta_rank = 1

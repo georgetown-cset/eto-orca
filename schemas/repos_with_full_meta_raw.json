@@ -529,6 +529,16 @@
             "mode": "NULLABLE",
             "name": "private",
             "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "has_discussions",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "web_commit_signoff_required",
+            "type": "BOOLEAN"
           }
         ],
         "mode": "NULLABLE",
@@ -1207,6 +1217,16 @@
           {
             "mode": "NULLABLE",
             "name": "private",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "has_discussions",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "web_commit_signoff_required",
             "type": "BOOLEAN"
           }
         ],
@@ -2205,6 +2225,16 @@
             "mode": "NULLABLE",
             "name": "private",
             "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "has_discussions",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "web_commit_signoff_required",
+            "type": "BOOLEAN"
           }
         ],
         "mode": "NULLABLE",
@@ -2285,6 +2315,72 @@
         "mode": "NULLABLE",
         "name": "allow_update_branch",
         "type": "BOOLEAN"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "has_discussions",
+        "type": "BOOLEAN"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "web_commit_signoff_required",
+        "type": "BOOLEAN"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "use_squash_pr_title_as_default",
+        "type": "BOOLEAN"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "squash_merge_commit_message",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "squash_merge_commit_title",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "merge_commit_message",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "merge_commit_title",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "fields": [
+              {
+                "name": "status",
+                "mode": "NULLABLE",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "secret_scanning",
+            "type": "RECORD"
+          },
+          {
+            "fields": [
+              {
+                "name": "status",
+                "mode": "NULLABLE",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "secret_scanning_push_protection",
+            "type": "RECORD"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "security_and_analysis",
+        "type": "RECORD"
       }
     ],
     "mode": "NULLABLE",
