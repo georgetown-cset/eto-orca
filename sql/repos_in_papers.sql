@@ -95,7 +95,7 @@ agg_repos AS (
   SELECT
     merged_id,
     dataset,
-    regexp_extract_all(full_text, r"(?i)github.com/([A-Za-z0-9-_.]+/[A-Za-z0-9-_.]*[A-Za-z0-9-_])") AS repos
+    github_metrics.get_first_repo_slug(full_text) AS repos
   FROM (
     SELECT
       merged_id,

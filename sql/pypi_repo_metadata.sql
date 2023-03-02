@@ -4,7 +4,7 @@ with candidate_metadata as (
     summary,
     license,
     download_url,
-    regexp_extract(home_page, r"(?i)github.com/([A-Za-z0-9-_.]+/[A-Za-z0-9-_.]*[A-Za-z0-9-_])") as repo,
+    github_metrics.get_first_repo_slug(home_page) as repo,
     row_number() over(partition by name order by metadata_version desc, version desc) as meta_rank
   from `bigquery-public-data.pypi.distribution_metadata` --noqa: L057
 )
