@@ -1,11 +1,16 @@
 name: Python application
 
-on: [push]
+on: [pull_request]
 
 jobs:
   build:
-
+    name: tests-pass
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+      pull-requests: 'write'
 
     steps:
     - uses: actions/checkout@v2
@@ -17,11 +22,50 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Run linting
-      run: |
-        pip install pre-commit
-        pre-commit run --all-files
     - name: Test with pytest
       run: |
-        pip install pytest
-        python3 -m pytest tests
+        mkdir coverage
+        coverage run -m pytest tests
+        coverage xml -o coverage/python.xml
+    - name: Report python coverage
+      uses: orgoro/coverage@v3
+      with:
+        coverageFile: coverage/python.xml
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - name: 'Authenticate to Google Cloud'
+      id: 'auth'
+      uses: 'google-github-actions/auth@v0'
+      with:
+        workload_identity_provider: 'projects/855475113448/locations/global/workloadIdentityPools/eto-github/providers/eto-github'
+        service_account: 'eto-artifact-registry-github@gcp-cset-projects.iam.gserviceaccount.com'
+        token_format: 'access_token'
+    - name: 'Log into Artifact Registry'
+      uses: 'docker/login-action@v1'
+      with:
+        registry: us-east1-docker.pkg.dev
+        username: 'oauth2accesstoken'
+        password: '${{ steps.auth.outputs.access_token }}'
+    - name: Setup node
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    - name: Test with jest
+      run: |
+        cd cat-tracker
+        npm run artifactregistry-login
+        npm install
+        npm test -- --coverage --coverageReporters="json-summary" --coverageReporters="text" | tee ./coverage.txt
+    - name: Report javascript coverage
+      uses: MishaKav/jest-coverage-comment@v1.0.20
+      with:
+        title: "JavaScript Coverage"
+        summary-title: "Summary"
+        coverage-title: "Modified Files"
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        report-only-changed-files: true
+        coverage-path: ./cat-tracker/coverage.txt
+        coverage-summary-path: ./cat-tracker/coverage/coverage-summary.json
+        coverage-path-prefix: cat-tracker/src/
+    - name: Run linting
+      run: |
+        pre-commit run --all-files
