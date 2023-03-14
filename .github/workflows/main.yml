@@ -51,7 +51,7 @@ jobs:
         node-version: '18'
     - name: Test with jest
       run: |
-        cd cat-tracker
+        cd github-metrics
         npm run artifactregistry-login
         npm install
         npm test -- --coverage --coverageReporters="json-summary" --coverageReporters="text" | tee ./coverage.txt
@@ -63,9 +63,9 @@ jobs:
         coverage-title: "Modified Files"
         github-token: ${{ secrets.GITHUB_TOKEN }}
         report-only-changed-files: true
-        coverage-path: ./cat-tracker/coverage.txt
-        coverage-summary-path: ./cat-tracker/coverage/coverage-summary.json
-        coverage-path-prefix: cat-tracker/src/
+        coverage-path: ./github-metrics/coverage.txt
+        coverage-summary-path: ./github-metrics/coverage/coverage-summary.json
+        coverage-path-prefix: github-metrics/src/
     - name: Run linting
       run: |
         pre-commit run --all-files
