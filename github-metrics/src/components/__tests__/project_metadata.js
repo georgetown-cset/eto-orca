@@ -6,15 +6,15 @@ describe("Project metadata", () => {
   it("renders correctly with no references", () => {
     const card = render(
       <ProjectMetadata
-          data={{
-            "stargazers_count": 123,
-            "num_contributors": 45,
-            "open_issues": 56,
-            "created_at": "2023-01-01",
-            "pushed_at": "2023-03-14",
-            "license": "MIT",
-            "language": "Python"
-          }}
+        data={{
+          "stargazers_count": 123,
+          "num_contributors": 45,
+          "open_issues": 56,
+          "created_at": "2023-01-01",
+          "pushed_at": "2023-03-14",
+          "license": "MIT",
+          "language": "Python"
+        }}
       />
     );
     expect(card).toMatchSnapshot();
@@ -24,18 +24,18 @@ describe("Project metadata", () => {
   it("renders correctly with references", () => {
     const card = render(
       <ProjectMetadata
-          field={"Algebraic Geometry"}
-          showNumReferences={true}
-          data={{
-            "stargazers_count": 123,
-            "num_contributors": 45,
-            "open_issues": 56,
-            "created_at": "2023-01-01",
-            "pushed_at": "2023-03-14",
-            "license": "MIT",
-            "language": "Python",
-            "num_references": {"Algebraic Geometry": 76}
-          }}
+        field={"Algebraic Geometry"}
+        showNumReferences={true}
+        data={{
+          "stargazers_count": 123,
+          "num_contributors": 45,
+          "open_issues": 56,
+          "created_at": "2023-01-01",
+          "pushed_at": "2023-03-14",
+          "license": "MIT",
+          "language": "Python",
+          "num_references": {"Algebraic Geometry": 76}
+        }}
       />
     );
     expect(card).toMatchSnapshot();

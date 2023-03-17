@@ -50,6 +50,7 @@ jobs:
       with:
         node-version: '18'
     - name: Test with jest
+      shell: bash
       run: |
         cd github-metrics
         npm run artifactregistry-login
