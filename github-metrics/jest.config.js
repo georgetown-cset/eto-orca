@@ -16,6 +16,12 @@ module.exports = {
     `<rootDir>/loadershim.js`,
     'jest-canvas-mock',
   ],
+  collectCoverage: true,
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx}',
+    '!**/*.test.*',
+    '!**/__tests__/**',
+  ],
   setupFilesAfterEnv: ["<rootDir>/setup-test-env.js"],
   testEnvironment: "jsdom",
   testEnvironmentOptions: {
