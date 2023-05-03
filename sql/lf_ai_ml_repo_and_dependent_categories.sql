@@ -27,7 +27,7 @@ ai_categories AS (
 dep_categories AS (
   SELECT
     repo_slug,
-    -1 AS depth,
+    -1 AS depth, -- deps.dev uses 0 for direct dependencies so we'll use -1 for the base repos themselves
     category
   FROM
     ai_categories

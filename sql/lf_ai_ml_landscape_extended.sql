@@ -23,7 +23,7 @@ repo_dependents AS (
   SELECT DISTINCT
     repo_package_names.repo_slug,
     Name AS pypi_name,
-    MinimumDepth AS depth,
+    MinimumDepth AS depth, -- an integer with minimum value 0 for direct dependencies
     repo_package_names_dep.repo_slug AS dep_repo_slug
   FROM
     staging_github_metrics.deps_dev_dependencies_20230220
