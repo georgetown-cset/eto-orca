@@ -65,3 +65,14 @@ then calculate the percentage of commits written by each contributor. See combin
 Contribution percentages above, and `github-metrics/src/components/summary_panel.js:getContribTrace`
 * The deps.dev links are added if the repo is present in `bigquery-public-data.deps_dev_v1`
 * The pypi downloads over time come from `bigquery-public-data.pypi`
+
+### Notes on lf_ai_ml_repo_and_dependent_categories.sql
+
+The Linux Foundation maintains a list of projects they feel are relevant to AI/ML. Some of these are unlikely to be relevant according to our own sensibilities (for example, they include workflow tools, databases, etc in their list), but nevertheless, it was a starting point for an analysis I wanted to try.
+
+I imported their data into BQ, and then wrote lf_ai_ml_repo_and_dependent_categories.sql to aggregate all the dependent projects based on the dependencies extracted by deps.dev. This is imperfect and incomplete in multiple dimensions:
+
+1.) I was only able to link projects that were in pypi because pypi links repo names to package names. For other distribution models, I could try linking using the repo name as the package name, but I decided to go with unambiguous links for now and come back to non-pypi projects later
+2.) The dependencies extracted by deps.dev are also incomplete.
+
+Nevertheless, I think this is a potentially interesting method of helping to identify AI-related repos. You can see the 3110 AI-related repos I identified using this data, either because they were in a relevant category or because they depended on a project in a relevant category, here: github_metrics.lf_ai_ml_repo_and_dependent_categories. `repo_slug` gives the name of the repo on github, `category` gives the LF AI/ML category of the base repo (the ultimate dependent of `repo_slug`), and `depth` gives the minimum depth at which the dependency appears, with -1 used to note the LF repos themselves.
