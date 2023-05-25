@@ -242,6 +242,8 @@ def clean_row(raw_row: dict) -> dict:
     for key in INT_KEYS:
         if (key not in row) or not row[key]:
             row[key] = 0
+    if row.get("primary_programming_language", "").lower() == "matlab":
+        row["primary_programming_language"] = "MATLAB"
     return row
 
 
@@ -325,12 +327,19 @@ def write_data(input_dir: str, output_js: str) -> None:
     field_to_repos = {
         fn: list(elts) for fn, elts in field_to_repos.items() if fn in sizeable_fields
     }
+    languages = set()
     for repo_id in id_to_repo:
         id_to_repo[repo_id]["num_references"] = {
             k: v
             for k, v in id_to_repo[repo_id]["num_references"].items()
             if k in sizeable_fields
         }
+        languages.add(
+            id_to_repo[repo_id].get("primary_programming_language", "").lower()
+        )
+    assert len(languages) == len(
+        {lang.lower() for lang in languages}
+    ), f"Duplicate languages: {languages}"
     with open(output_js, mode="w") as f:
         f.write(f"const id_to_repo = {json.dumps(id_to_repo)};\n")
         f.write(f"const field_to_repos = {json.dumps(field_to_repos)};\n")
