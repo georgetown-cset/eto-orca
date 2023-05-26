@@ -161,6 +161,8 @@ const Dashboard = () => {
   const repoSortFn = (repo, filters) => {
     if(filters["order_by"] === "num_references"){
       return repo["num_references"][filters["field_of_study"]]
+    } else if(["created_at", "pushed_at"].includes(filters["order_by"])){
+      return new Date(repo[filters["order_by"]])
     }
     return repo[filters["order_by"]]
   };
