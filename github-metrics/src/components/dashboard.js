@@ -8,7 +8,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import PropTypes from "prop-types";
 import { styled } from "@mui/material/styles";
-import { Dropdown } from "@eto/eto-ui-components";
+import { ButtonStyled, Dropdown } from "@eto/eto-ui-components";
 
 import "core-js/features/url";
 import "core-js/features/url-search-params";
@@ -22,44 +22,27 @@ const styles = {
   tabContainer: css`
     background-color: white;
     border-color: divider;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12)
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   `,
-  leftPanel: css`
+  topPanel: css`
     text-align: left;
     padding: 20px;
-    width: 25%;
-    display: inline-block;
+    display: block;
     vertical-align: top;
-    @media (max-width: 1300px) {
-      width: 100%;
-      display: block;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-    }
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    background-color: var(--bright-blue-lightest);
   `,
-  rightPanel: css`
-    width: 70%;
-    min-height: 80vh;
-    display: inline-block;
-    @media (max-width: 1300px) {
-      width: 95%;
-      margin: auto;
-      display: block;
-    }
-  `,
-  filterDropdownContainer: css`
-    margin: 15px 0px 10px 20px;
+  bottomPanel: css`
+    display: block;
+    margin: 0px auto;
+    max-width: 1300px;
   `,
   sortDropdownContainer: css`
     display: inline-block;
   `,
-  sortConfig: css`
-    margin-top: 5px;
-    position: sticky;
-    top: 0;
-    z-index: 200;
-    background-color: white;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12)
-  `
 };
 
 function TabPanel(props) {
@@ -122,6 +105,7 @@ const Dashboard = () => {
   const [filterValues, setFilterValues] = React.useState({...defaultFilterValues});
   const [repoData, setRepoData] = React.useState([]);
   const [tabValue, setTabValue] = React.useState(1);
+  const [moreFilters, setMoreFilters] = React.useState(false);
 
   const compareOptions = Object.entries(keyToTitle).map(e => ({"val": e[0], "text": e[1]}));
 
@@ -211,45 +195,37 @@ const Dashboard = () => {
         </StyledTabs>
       </div>
       <div>
-        <div css={styles.leftPanel}>
+        <div css={styles.topPanel}>
           <div>
-            <h3>Select a topic</h3>
-            <div css={styles.filterDropdownContainer}>
+            <div css={styles.sortDropdownContainer}>
               <Dropdown
                 selected={filterValues["field_of_study"]}
                 setSelected={(val) => handleSingleSelectChange(val, "field_of_study")}
-                inputLabel={"Topics"}
+                inputLabel={"Application Topic"}
                 options={getFOSOptions()}
               />
             </div>
+            {moreFilters && <>
+              <div css={styles.sortDropdownContainer}>
+                <Dropdown
+                  selected={filterValues["language_group"]}
+                  setSelected={(val) => handleSingleSelectChange(val, "language_group")}
+                  inputLabel={"Top programming language"}
+                  options={getFilterOptions("language_group").map(lang => ({"text": lang, "val": lang}))}
+                />
+              </div>
+              <div css={styles.sortDropdownContainer}>
+                <Dropdown
+                  selected={filterValues["license_group"]}
+                  setSelected={(val) => handleSingleSelectChange(val, "license_group")}
+                  inputLabel={"License"}
+                  options={getFilterOptions("license_group").map(lang => ({"text": lang, "val": lang}))}
+                />
+              </div>
+            </>}
+            <ButtonStyled style={{verticalAlign: "bottom", marginBottom: "8px"}} onClick={()=>setMoreFilters(!moreFilters)}>{moreFilters ? "Hide" : "Show"} Detail Filters</ButtonStyled>
           </div>
           <div>
-            <h3>Filter further</h3>
-            <div css={styles.filterDropdownContainer}>
-              <Dropdown
-                selected={filterValues["language_group"]}
-                setSelected={(val) => handleSingleSelectChange(val, "language_group")}
-                inputLabel={"Top programming language"}
-                options={getFilterOptions("language_group").map(lang => ({"text": lang, "val": lang}))}
-              />
-            </div>
-            <div css={styles.filterDropdownContainer}>
-              <Dropdown
-                selected={filterValues["license_group"]}
-                setSelected={(val) => handleSingleSelectChange(val, "license_group")}
-                inputLabel={"License"}
-                options={getFilterOptions("license_group").map(lang => ({"text": lang, "val": lang}))}
-              />
-            </div>
-          </div>
-        </div>
-        <div css={styles.rightPanel}>
-          <TabPanel value={tabValue} index={0}>
-            {repoData.length > 0 && <SummaryPanel data={repoData}
-                                                  sortOptions={sortOptions} customTopics={customTopics}/>}
-          </TabPanel>
-          <TabPanel value={tabValue} index={1}>
-            <div css={styles.sortConfig}>
               <div css={styles.sortDropdownContainer}>
                 <Dropdown
                   selected={filterValues["order_by"]}
@@ -266,7 +242,14 @@ const Dashboard = () => {
                   options={compareOptions}
                 />
               </div>
-            </div>
+          </div>
+        </div>
+        <div css={styles.bottomPanel}>
+          <TabPanel value={tabValue} index={0}>
+            {repoData.length > 0 && <SummaryPanel data={repoData}
+                                                  sortOptions={sortOptions} customTopics={customTopics}/>}
+          </TabPanel>
+          <TabPanel value={tabValue} index={1}>
             {repoData.map(repo => (
               <ProjectCard key={repoData["owner_name"]+"/"+repoData["current_name"]}
                         data={repo}
