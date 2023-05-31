@@ -7,28 +7,16 @@ from typing import Tuple
 import pycountry
 from tqdm import tqdm
 
-INT_KEYS = {
-    "subscribers_count",
-    "stargazers_count",
-    "open_issues",
-    "num_releases",
-    "num_contributors",
-    "id",
-    "used_by",
-}
-UNUSED_KEYS = {
-    "matched_name",
-    "topics",
-    "sources",
-    "issue_open_events",
-    "ultimate_fork_of",
-    "country_year_contributions",
-    "org_year_contributions",
-}
+from scripts.constants import (
+    INT_KEYS,
+    LICENSE_TO_GROUP,
+    MIN_FIELD_REFERENCES,
+    UNUSED_KEYS,
+)
+
 NOW = datetime.now()
 END_YEAR = NOW.year if NOW.month > 6 else NOW.year - 1
 START_YEAR = END_YEAR - 6
-MIN_FIELD_REFERENCES = 3
 
 
 def get_counts(dates: list, transform=lambda x: x) -> list:
@@ -220,6 +208,27 @@ def get_curated_repos():
     return repo_to_field
 
 
+def get_grouped_license(raw_license: str) -> str:
+    """
+    Given a raw license string, returns a higher-level license type
+    :param raw_license: License to group
+    :return: Grouped license
+    """
+    if raw_license not in LICENSE_TO_GROUP:
+        raise ValueError(f"Unknown license: {raw_license}")
+    return LICENSE_TO_GROUP[raw_license]
+
+
+def add_grouped_languages(languages: set, rows: list) -> None:
+    """
+    Groups all languages that appear fewer than 20 times into "Other". Also
+    maps null languages
+    :param languages: Set of languages appearing in the data
+    :param rows: Rows to add grouped languages to
+    :return: None (mutates rows)
+    """
+
+
 def clean_row(raw_row: dict) -> dict:
     """
     Clean up raw data, normalizing strings and removing unused keys
@@ -242,8 +251,6 @@ def clean_row(raw_row: dict) -> dict:
     for key in INT_KEYS:
         if (key not in row) or not row[key]:
             row[key] = 0
-    if row.get("primary_programming_language", "").lower() == "matlab":
-        row["primary_programming_language"] = "MATLAB"
     return row
 
 
@@ -274,17 +281,19 @@ def reformat_row(row: dict) -> None:
     row["downloads"] = reformat_downloads(row.pop("downloads"))
 
 
-def write_data(input_dir: str, output_js: str) -> None:
+def read_rows(input_dir: str) -> tuple:
     """
-    Reads repo metadata, cleans it up, writes it out for the webapp
+    Does a first pass over the data, cleaning fields that don't need information about the overall data distribution
     :param input_dir: Directory of repo metadata as jsonl BQ exports
-    :param output_js: File where output js objects should be written
-    :return: None
+    :return: A tuple of dicts. The first maps fields to repos, the second maps primary programming languages to counts,
+    and the third maps ids to repo metadata
     """
     seen_ids = set()
     id_to_repo = {}
     curated_repos = get_curated_repos()
     field_to_repos = {}
+    language_counts = {}
+
     for line in tqdm(get_lines(input_dir)):
         repo_id = line.pop("id")
         repo_name = line["owner_name"] + "/" + line["current_name"]
@@ -320,26 +329,54 @@ def write_data(input_dir: str, output_js: str) -> None:
             )
         ):
             continue
+        row["language"] = row.get("language", "No language detected")
+        language_counts[row["language"]] = language_counts.get(row["language"], 0) + 1
         id_to_repo[int(repo_id)] = row
+    return field_to_repos, language_counts, id_to_repo
+
+
+def write_data(input_dir: str, output_js: str) -> None:
+    """
+    Reads repo metadata, cleans it up, writes it out for the webapp
+    :param input_dir: Directory of repo metadata as jsonl BQ exports
+    :param output_js: File where output js objects should be written
+    :return: None
+    """
+    field_to_repos, language_counts, id_to_repo = read_rows(input_dir)
     sizeable_fields = {
         field for field in field_to_repos.keys() if len(field_to_repos[field]) > 5
     }
     field_to_repos = {
         fn: list(elts) for fn, elts in field_to_repos.items() if fn in sizeable_fields
     }
-    languages = set()
+    language_to_canonical_name = {}
+    for lang in language_counts:
+        lower_lang = lang.lower()
+        if (
+            lower_lang not in language_to_canonical_name
+            or language_to_canonical_name[lower_lang] > lang
+        ):
+            language_to_canonical_name[lower_lang] = lang
     for repo_id in id_to_repo:
         id_to_repo[repo_id]["num_references"] = {
             k: v
             for k, v in id_to_repo[repo_id]["num_references"].items()
             if k in sizeable_fields
         }
-        languages.add(
-            id_to_repo[repo_id].get("primary_programming_language", "").lower()
+        id_to_repo[repo_id]["license_group"] = get_grouped_license(
+            id_to_repo[repo_id].get("license")
         )
-    assert len(languages) == len(
-        {lang.lower() for lang in languages}
-    ), f"Duplicate languages: {languages}"
+        # Map null to the nicer name we have in the grouped license mapping
+        id_to_repo[repo_id]["license"] = id_to_repo[repo_id].get(
+            "license", id_to_repo[repo_id]["license_group"]
+        )
+        language = language_to_canonical_name[
+            id_to_repo[repo_id].get("language").lower()
+        ]
+        id_to_repo[repo_id]["language"] = language
+        if language_counts[language] < 20:
+            language = "Other"
+        id_to_repo[repo_id]["language_group"] = language
     with open(output_js, mode="w") as f:
         f.write(f"const id_to_repo = {json.dumps(id_to_repo)};\n")
         f.write(f"const field_to_repos = {json.dumps(field_to_repos)};\n")

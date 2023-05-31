@@ -29,9 +29,6 @@ const ProjectMetadata = (props) => {
 
   const getValue = (key) => {
     if(!data[key]) {
-      if(["license", "language"].includes(key)){
-        return "None retrieved"
-      }
       return 0;
     } else if(showNumReferences && (key === "num_references")){
       return data[key][field];

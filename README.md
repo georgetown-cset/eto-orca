@@ -76,3 +76,10 @@ I imported their data into BQ, and then wrote lf_ai_ml_repo_and_dependent_catego
 2.) The dependencies extracted by deps.dev are also incomplete.
 
 Nevertheless, I think this is a potentially interesting method of helping to identify AI-related repos. You can see the 3110 AI-related repos I identified using this data, either because they were in a relevant category or because they depended on a project in a relevant category, here: github_metrics.lf_ai_ml_repo_and_dependent_categories. `repo_slug` gives the name of the repo on github, `category` gives the LF AI/ML category of the base repo (the ultimate dependent of `repo_slug`), and `depth` gives the minimum depth at which the dependency appears, with -1 used to note the LF repos themselves.
+
+### Web application
+
+To prepare data for the web application, download the data from `staging_github_metrics.website_stats` in BigQuery as JSONL,
+then run `PYTHONPATH='.' python3 scripts/preprocess_for_website.py --input_dir <path to your downloaded data>`.
+
+To run the web application, change directories to `github-metrics`, then run `npm install` and `gatsby develop`.

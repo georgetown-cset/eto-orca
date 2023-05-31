@@ -115,8 +115,8 @@ const Dashboard = () => {
     "field_of_study": "ai_safety",
     "order_by": "stargazers_count",
     "compare_graph": "push_dates",
-    "language": "All",
-    "license": "All"
+    "language_group": "All",
+    "license_group": "All"
   };
 
   const [filterValues, setFilterValues] = React.useState({...defaultFilterValues});
@@ -138,7 +138,7 @@ const Dashboard = () => {
       const repo = id_to_repo[key];
       repo["id"] = key;
       let addRepo = true;
-      for(let filt of ["language", "license"]){
+      for(let filt of ["language_group", "license_group"]){
         if(!((filt === ignoreFilter) || (filters[filt] === "All") || (filters[filt] === repo[filt]))){
           addRepo = false;
         }
@@ -187,7 +187,7 @@ const Dashboard = () => {
       if((filterValues["order_by"] === "num_references") && isCuratedField(value)){
         updatedFilterValues["order_by"] = "stargazers_count";
       }
-      for(let filteredKey of ["language", "license"]){
+      for(let filteredKey of ["language_group", "license_group"]){
         updatedFilterValues[filteredKey] = "All";
       }
     }
@@ -227,18 +227,18 @@ const Dashboard = () => {
             <h3>Filter further</h3>
             <div css={styles.filterDropdownContainer}>
               <Dropdown
-                selected={filterValues["language"]}
-                setSelected={(val) => handleSingleSelectChange(val, "language")}
+                selected={filterValues["language_group"]}
+                setSelected={(val) => handleSingleSelectChange(val, "language_group")}
                 inputLabel={"Top programming language"}
-                options={getFilterOptions("language").map(lang => ({"text": lang, "val": lang}))}
+                options={getFilterOptions("language_group").map(lang => ({"text": lang, "val": lang}))}
               />
             </div>
             <div css={styles.filterDropdownContainer}>
               <Dropdown
-                selected={filterValues["license"]}
-                setSelected={(val) => handleSingleSelectChange(val, "license")}
+                selected={filterValues["license_group"]}
+                setSelected={(val) => handleSingleSelectChange(val, "license_group")}
                 inputLabel={"License"}
-                options={getFilterOptions("license").map(lang => ({"text": lang, "val": lang}))}
+                options={getFilterOptions("license_group").map(lang => ({"text": lang, "val": lang}))}
               />
             </div>
           </div>
