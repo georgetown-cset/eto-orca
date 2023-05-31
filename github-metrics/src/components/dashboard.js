@@ -127,7 +127,7 @@ const Dashboard = () => {
 
   const customTopics = [
     {"val": "ai_safety", "text": "AI Safety"},
-    {"val": "asr", "text": "Speech Recognition (curated)"},
+    {"val": "asr", "text": "Speech Recognition"},
     {"val": "riscv", "text": "RISC-V"}
   ];
 
@@ -196,8 +196,8 @@ const Dashboard = () => {
   };
 
   const getFOSOptions = () => {
-    const options = [{"header": "Curated Fields"}].concat(customTopics);
-    options.push({"header": "Automated Field Detection"});
+    const options = [{"header": <span>Display projects <em>related to</em></span>}].concat(customTopics);
+    options.push({"header": <span>Display projects <em>used for research into</em></span>});
     const autoFields = fields.filter(f => !isCuratedField(f)).sort().map(f => ({"text": f, "val": f}));
     return options.concat(autoFields);
   };
@@ -213,12 +213,12 @@ const Dashboard = () => {
       <div>
         <div css={styles.leftPanel}>
           <div>
-            <h3>Select a subject</h3>
+            <h3>Select a topic</h3>
             <div css={styles.filterDropdownContainer}>
               <Dropdown
                 selected={filterValues["field_of_study"]}
                 setSelected={(val) => handleSingleSelectChange(val, "field_of_study")}
-                inputLabel={"Field of study"}
+                inputLabel={"Topics"}
                 options={getFOSOptions()}
               />
             </div>
