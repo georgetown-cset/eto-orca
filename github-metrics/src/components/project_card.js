@@ -18,15 +18,14 @@ import {getCountryTraces, getBarTraces, getX, getY} from "./utils";
 const styles = {
   card: css`
     max-width: 100%;
-    margin: 20px auto;
-    padding: 20px;
     border: 1px solid black;
-    border-radius: 5px;
+    margin: 25px auto;
   `,
   leftPanel: css`
     width: 40%;
     display: inline-block;
     vertical-align: top;
+    padding-bottom: 20px;
   `,
   rightPanel: css`
     width: 59%;
@@ -46,6 +45,9 @@ const styles = {
   `,
   buttonContainer: css`
     text-align: center;
+  `,
+  metadataContainer: css`
+    padding: 20px 20px 0px 20px;
   `
 };
 
@@ -67,7 +69,7 @@ const ProjectCard = (props) => {
 
   return (
     <div css={styles.card}>
-      <div>
+      <div css={styles.metadataContainer}>
         <div css={styles.leftPanel}>
           <span>
             <h4 css={styles.ghLink}><ExternalLink href={"https://github.com/"+repo_name}>{repo_name}</ExternalLink></h4>
@@ -89,7 +91,7 @@ const ProjectCard = (props) => {
         </div>
       </div>
       <div css={styles.buttonContainer}>
-        <ButtonStyled href={`/project?project_id=${data['id']}`} target={"_blank"} rel={"noopener"}>More details</ButtonStyled>
+        <ButtonStyled style={{width: "100%"}} href={`/project?project_id=${data['id']}`} target={"_blank"} rel={"noopener"}>>> Full profile</ButtonStyled>
       </div>
     </div>
   )
