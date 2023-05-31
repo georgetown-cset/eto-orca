@@ -37,7 +37,7 @@ const styles = {
     margin: 0px auto;
     max-width: 1300px;
   `,
-  sortDropdownContainer: css`
+  dropdownContainer: css`
     display: inline-block;
   `,
   moreFilters: css`
@@ -174,7 +174,7 @@ const Dashboard = () => {
             List <StyledSwitch checked={showSummary} onChange={() => setShowSummary(!showSummary)}/> Comparison
           </div>
           <div>
-            <div css={styles.sortDropdownContainer}>
+            <div css={styles.dropdownContainer}>
               <Dropdown
                 selected={filterValues["field_of_study"]}
                 setSelected={(val) => handleSingleSelectChange(val, "field_of_study")}
@@ -183,7 +183,7 @@ const Dashboard = () => {
               />
             </div>
             {moreFilters && <>
-              <div css={styles.sortDropdownContainer}>
+              <div css={styles.dropdownContainer}>
                 <Dropdown
                   selected={filterValues["language_group"]}
                   setSelected={(val) => handleSingleSelectChange(val, "language_group")}
@@ -191,7 +191,7 @@ const Dashboard = () => {
                   options={getFilterOptions("language_group").map(lang => ({"text": lang, "val": lang}))}
                 />
               </div>
-              <div css={styles.sortDropdownContainer}>
+              <div css={styles.dropdownContainer}>
                 <Dropdown
                   selected={filterValues["license_group"]}
                   setSelected={(val) => handleSingleSelectChange(val, "license_group")}
@@ -205,7 +205,7 @@ const Dashboard = () => {
             </ButtonStyled>
           </div>
           <div>
-              <div css={styles.sortDropdownContainer}>
+              <div css={styles.dropdownContainer}>
                 <Dropdown
                   selected={filterValues["order_by"]}
                   setSelected={(val) => handleSingleSelectChange(val, "order_by")}
@@ -213,7 +213,7 @@ const Dashboard = () => {
                   options={sortOptions}
                 />
               </div>
-              <div css={styles.sortDropdownContainer}>
+              <div css={styles.dropdownContainer}>
                 <Dropdown
                   selected={filterValues["compare_graph"]}
                   setSelected={(val) => handleSingleSelectChange(val, "compare_graph")}
@@ -225,7 +225,8 @@ const Dashboard = () => {
         </div>
         <div css={styles.bottomPanel}>
           {showSummary ? (repoData.length > 0) && <SummaryPanel data={repoData}
-                                                                sortOptions={sortOptions} customTopics={customTopics}/>
+                                                                orderBy={filterValues["order_by"]}
+                                                                customTopics={customTopics}/>
             : repoData.map(repo => (
               <ProjectCard key={repoData["owner_name"] + "/" + repoData["current_name"]}
                            data={repo}

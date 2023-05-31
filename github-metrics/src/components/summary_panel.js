@@ -5,23 +5,13 @@ import React from "react";
 
 import {LineGraph} from "./graph";
 import {css} from "@emotion/react";
-import {Dropdown} from "@eto/eto-ui-components";
 
-import {keyToTitle} from "./utils";
+import {keyToTitle, sortMapping} from "./utils";
 
 
 const styles = {
   card: css`
     padding: 20px;
-  `,
-  summaryContainer: css`
-    margin-top: 5px;
-    position: sticky;
-    top: 0;
-    z-index: 200;
-    background-color: white;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-    verticalAlign: top;
   `,
   summaryContainerLabel: css`
     display: inline-block;
@@ -29,15 +19,10 @@ const styles = {
     font-weight: bold;
     padding-bottom: 16px;
   `,
-  summaryContainerFilter: css`
-    display: inline-block;
-  `
 };
 
 const SummaryPanel = (props) => {
-  const {data, sortOptions, customTopics} = props;
-  const [orderBy, setOrderBy] = React.useState(
-    sortOptions.map(opt => opt.val).includes("num_references") ? "num_references" : "stargazers_count");
+  const {data, orderBy, customTopics} = props;
   const customTopicMap = {};
   for(let topic of customTopics){
     customTopicMap[topic["val"]] = topic["text"];
@@ -77,19 +62,9 @@ const SummaryPanel = (props) => {
 
   return (
     <div css={styles.card}>
-      <div css={styles.summaryContainer}>
-        <div css={styles.summaryContainerLabel}>
-          Displaying top 5 selected repos, ordered by
-        </div>
-        <div css={styles.summaryContainerFilter}>
-          <Dropdown
-            selected={orderBy}
-            setSelected={val => setOrderBy(val)}
-            inputLabel={"Order by"}
-            options={sortOptions}
-          />
-        </div>
-      </div>
+      <h2 css={styles.summaryContainerLabel}>
+        Displaying the top 5 selected software repositories, ordered by {sortMapping[orderBy].toLowerCase()}.
+      </h2>
       <h3>Contributor activity</h3>
       <LineGraph title={keyToTitle["push_dates"]} showLegend={true}
                  traces={getTrace("push_dates")}/>
