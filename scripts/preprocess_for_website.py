@@ -219,16 +219,6 @@ def get_grouped_license(raw_license: str) -> str:
     return LICENSE_TO_GROUP[raw_license]
 
 
-def add_grouped_languages(languages: set, rows: list) -> None:
-    """
-    Groups all languages that appear fewer than 20 times into "Other". Also
-    maps null languages
-    :param languages: Set of languages appearing in the data
-    :param rows: Rows to add grouped languages to
-    :return: None (mutates rows)
-    """
-
-
 def clean_row(raw_row: dict) -> dict:
     """
     Clean up raw data, normalizing strings and removing unused keys
