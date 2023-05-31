@@ -381,7 +381,15 @@ def write_config(config_fi: str) -> None:
     :return: None
     """
     with open(config_fi, mode="w") as f:
-        f.write(json.dumps({"start_year": START_YEAR, "end_year": END_YEAR}))
+        f.write(
+            json.dumps(
+                {
+                    "start_year": START_YEAR,
+                    "end_year": END_YEAR,
+                    "last_updated": datetime.now().strftime("%B %d, %Y"),
+                }
+            )
+        )
 
 
 if __name__ == "__main__":
