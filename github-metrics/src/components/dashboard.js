@@ -4,10 +4,6 @@ The container component for the list view and summary view
 import React, {useEffect} from "react";
 import {css} from "@emotion/react";
 import Typography from "@mui/material/Typography";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import PropTypes from "prop-types";
-import { styled } from "@mui/material/styles";
 import { ButtonStyled, Dropdown } from "@eto/eto-ui-components";
 
 import "core-js/features/url";
@@ -15,6 +11,7 @@ import "core-js/features/url-search-params";
 
 import ProjectCard from "./project_card";
 import SummaryPanel from "./summary_panel";
+import StyledSwitch from "./styled_switch";
 import {id_to_repo, field_to_repos, fields} from "../data/constants";
 import {sortMapping, keyToTitle} from "./utils";
 
@@ -43,6 +40,13 @@ const styles = {
   sortDropdownContainer: css`
     display: inline-block;
   `,
+  moreFilters: css`
+    vertical-align: bottom;
+    margin: 0px 5px 8px 5px;
+  `,
+  switchContainer: css`
+    float: right;
+  `
 };
 
 function TabPanel(props) {
@@ -65,30 +69,6 @@ function TabPanel(props) {
   );
 }
 
-const StyledTabs = styled(Tabs)({
-  "& .MuiTabs-indicator": {
-    backgroundColor: "var(--bright-blue)"
-  },
-  "& .Mui-selected": {
-    color: "var(--dark-blue)",
-    fontWeight: "bold",
-    backgroundColor: "var(--bright-blue-light)",
-  }
-});
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
-
 const Dashboard = () => {
   useEffect(() => {
     mkRepoData(defaultFilterValues);
@@ -104,8 +84,8 @@ const Dashboard = () => {
 
   const [filterValues, setFilterValues] = React.useState({...defaultFilterValues});
   const [repoData, setRepoData] = React.useState([]);
-  const [tabValue, setTabValue] = React.useState(1);
   const [moreFilters, setMoreFilters] = React.useState(false);
+  const [showSummary, setShowSummary] = React.useState(false);
 
   const compareOptions = Object.entries(keyToTitle).map(e => ({"val": e[0], "text": e[1]}));
 
@@ -188,14 +168,11 @@ const Dashboard = () => {
 
   return (
     <div style={{backgroundColor: "white"}} id={"dashboard"}>
-      <div css={styles.tabContainer}>
-        <StyledTabs value={tabValue} onChange={(evt, newValue) => {setTabValue(newValue)}} aria-label="OSS tracker tabs">
-          <Tab label="Field summary" {...a11yProps(0)} />
-          <Tab label="Project list" {...a11yProps(1)} />
-        </StyledTabs>
-      </div>
       <div>
         <div css={styles.topPanel}>
+          <div css={styles.switchContainer}>
+            List <StyledSwitch checked={showSummary} onChange={() => setShowSummary(!showSummary)}/> Comparison
+          </div>
           <div>
             <div css={styles.sortDropdownContainer}>
               <Dropdown
@@ -223,7 +200,9 @@ const Dashboard = () => {
                 />
               </div>
             </>}
-            <ButtonStyled style={{verticalAlign: "bottom", marginBottom: "8px"}} onClick={()=>setMoreFilters(!moreFilters)}>{moreFilters ? "Hide" : "Show"} Detail Filters</ButtonStyled>
+            <ButtonStyled css={styles.moreFilters} onClick={()=>setMoreFilters(!moreFilters)}>
+              {moreFilters ? "Hide" : "Show"} Detail Filters
+            </ButtonStyled>
           </div>
           <div>
               <div css={styles.sortDropdownContainer}>
@@ -245,20 +224,17 @@ const Dashboard = () => {
           </div>
         </div>
         <div css={styles.bottomPanel}>
-          <TabPanel value={tabValue} index={0}>
-            {repoData.length > 0 && <SummaryPanel data={repoData}
-                                                  sortOptions={sortOptions} customTopics={customTopics}/>}
-          </TabPanel>
-          <TabPanel value={tabValue} index={1}>
-            {repoData.map(repo => (
-              <ProjectCard key={repoData["owner_name"]+"/"+repoData["current_name"]}
-                        data={repo}
-                        field={filterValues["field_of_study"]}
-                        graph_key={filterValues["compare_graph"]}
-                        graph_title={keyToTitle[filterValues["compare_graph"]]}
-                        isCurated={isCuratedField(filterValues["field_of_study"])}/>
-            ))}
-          </TabPanel>
+          {showSummary ? (repoData.length > 0) && <SummaryPanel data={repoData}
+                                                                sortOptions={sortOptions} customTopics={customTopics}/>
+            : repoData.map(repo => (
+              <ProjectCard key={repoData["owner_name"] + "/" + repoData["current_name"]}
+                           data={repo}
+                           field={filterValues["field_of_study"]}
+                           graph_key={filterValues["compare_graph"]}
+                           graph_title={keyToTitle[filterValues["compare_graph"]]}
+                           isCurated={isCuratedField(filterValues["field_of_study"])}/>
+            ))
+          }
         </div>
       </div>
     </div>
