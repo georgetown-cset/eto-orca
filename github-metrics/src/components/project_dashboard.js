@@ -31,15 +31,25 @@ const styles = {
     font-size: 80%;
   `,
   description: css`
-    display: inline-block;
-    width: 49%;
     vertical-align: top;
     padding-right: 5px;
   `,
   metadataContainer: css`
     display: inline-block;
-    width: 50%;
+    width: 350px;
     vertical-align: top;
+    border: 3px solid var(--bright-blue);
+    padding: 10px 20px 30px 20px;
+    margin: 10px;
+    text-align: left;
+    min-height: 175px;
+  `,
+  introStats: css`
+    text-align: center;
+    margin: 10px 0px;
+  `,
+  fieldList: css`
+    margin: 0;
   `
 };
 
@@ -100,8 +110,23 @@ const ProjectDashboard = () => {
              {data["description"]}
            </div>
          </div>
-         <div css={styles.metadataContainer}>
-          <ProjectMetadata data={data}/>
+         <div css={styles.introStats}>
+           <div css={styles.metadataContainer}>
+            <h3>Basic Statistics</h3>
+            <ProjectMetadata data={data}/>
+           </div>
+           {"num_references" in data &&
+           <div css={styles.metadataContainer}>
+             <h3>Most Frequently Citing Fields</h3>
+             <ul css={styles.fieldList}>
+               {Object.keys(data["num_references"]).sort((a, b) =>
+                 data["num_references"][b] - data["num_references"][a]
+               ).slice(0, 5).map(field => <li>
+                 {field} ({data["num_references"][field]} citation{data["num_references"][field] === 1 ? "" : "s"})
+               </li>)}
+             </ul>
+           </div>
+           }
          </div>
        </div>
      </div>
