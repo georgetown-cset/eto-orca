@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Project metadata renders correctly with no references 1`] = `
-{
+Object {
   "asFragment": [Function],
   "baseElement": <body>
     <div>
@@ -26,10 +26,10 @@ exports[`Project metadata renders correctly with no references 1`] = `
             <span
               class="css-1kzx35s-emph"
             >
-              Contributors
+              Watchers
             </span>
             : 
-            45
+            0
           </span>
         </div>
         <div
@@ -45,6 +45,17 @@ exports[`Project metadata renders correctly with no references 1`] = `
             </span>
             : 
             56
+          </span>
+          <span
+            class="css-mmmexm-metaSection"
+          >
+            <span
+              class="css-1kzx35s-emph"
+            >
+              Contributors
+            </span>
+            : 
+            45
           </span>
         </div>
         <div
@@ -128,10 +139,10 @@ exports[`Project metadata renders correctly with no references 1`] = `
           <span
             class="css-1kzx35s-emph"
           >
-            Contributors
+            Watchers
           </span>
           : 
-          45
+          0
         </span>
       </div>
       <div
@@ -147,6 +158,17 @@ exports[`Project metadata renders correctly with no references 1`] = `
           </span>
           : 
           56
+        </span>
+        <span
+          class="css-mmmexm-metaSection"
+        >
+          <span
+            class="css-1kzx35s-emph"
+          >
+            Contributors
+          </span>
+          : 
+          45
         </span>
       </div>
       <div
@@ -262,7 +284,7 @@ exports[`Project metadata renders correctly with no references 1`] = `
 `;
 
 exports[`Project metadata renders correctly with references 1`] = `
-{
+Object {
   "asFragment": [Function],
   "baseElement": <body>
     <div>
@@ -287,10 +309,21 @@ exports[`Project metadata renders correctly with references 1`] = `
             <span
               class="css-1kzx35s-emph"
             >
-              Contributors
+              Watchers
             </span>
             : 
-            45
+            0
+          </span>
+          <span
+            class="css-mmmexm-metaSection"
+          >
+            <span
+              class="css-1kzx35s-emph"
+            >
+              References
+            </span>
+            : 
+            76
           </span>
         </div>
         <div
@@ -313,10 +346,10 @@ exports[`Project metadata renders correctly with references 1`] = `
             <span
               class="css-1kzx35s-emph"
             >
-              References
+              Contributors
             </span>
             : 
-            76
+            45
           </span>
         </div>
         <div
@@ -400,10 +433,21 @@ exports[`Project metadata renders correctly with references 1`] = `
           <span
             class="css-1kzx35s-emph"
           >
-            Contributors
+            Watchers
           </span>
           : 
-          45
+          0
+        </span>
+        <span
+          class="css-mmmexm-metaSection"
+        >
+          <span
+            class="css-1kzx35s-emph"
+          >
+            References
+          </span>
+          : 
+          76
         </span>
       </div>
       <div
@@ -426,10 +470,10 @@ exports[`Project metadata renders correctly with references 1`] = `
           <span
             class="css-1kzx35s-emph"
           >
-            References
+            Contributors
           </span>
           : 
-          76
+          45
         </span>
       </div>
       <div
