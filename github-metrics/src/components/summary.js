@@ -8,7 +8,7 @@ import {css} from "@emotion/react";
 
 import {keyToTitle, sortMapping, getRepoName, sortByKey} from "./utils";
 import HighlightBox from "./highlight_box";
-import {ExternalLink} from "@eto/eto-ui-components";
+import {Accordion, Dropdown, ExternalLink} from "@eto/eto-ui-components";
 
 
 const styles = {
@@ -21,6 +21,14 @@ const styles = {
     font-weight: bold;
     padding-bottom: 16px;
   `,
+  dropdownContainer: css`
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0px 0px 5px 5px;
+  `,
+  dropdownIntro: css`
+    vertical-align: middle;
+  `
 };
 
 const StatBox = ({stat, data, field=null}) => {
@@ -42,7 +50,11 @@ const StatBox = ({stat, data, field=null}) => {
 };
 
 const Summary = (props) => {
-  const {data, orderBy, field, isCurated, customTopics} = props;
+  const {data, sortOptions, field, isCurated, customTopics} = props;
+
+  const [orderBy, setOrderBy] = React.useState("stargazers_count");
+  const [expanded, setExpanded] = React.useState(["push_dates"]);
+
   const customTopicMap = {};
   for(let topic of customTopics){
     customTopicMap[topic["val"]] = topic["text"];
@@ -84,10 +96,48 @@ const Summary = (props) => {
     return traces;
   };
 
+  const accordionDetails = [
+    {
+      "id": "push_dates",
+      "name": keyToTitle["push_dates"],
+      "content": <LineGraph title={keyToTitle["push_dates"]} showLegend={true}
+                 traces={getTrace("push_dates")}/>
+    },
+    {
+      "id": "open_to_closed",
+      "name": "Ratio of issues closed to opened over time",
+      "content": <LineGraph title={"Ratio of issues closed to opened over time"}
+                            showLegend={true} forceInteger={false}
+                            traces={getTrace("issue_dates", val => val[1] === 0 ? 0 : val[2]/val[1])}/>
+    },
+    {
+      "id": "new_vs_returning",
+      "name": "Ratio of new vs returning contributors over time",
+      "content": <LineGraph title={"Ratio of new vs returning contributors over time"}
+                            showLegend={true}
+                            traces={getTrace("commit_dates", val => val[2] === 0 ? 0 : val[1]/val[2])}/>
+    },
+    {
+      "id": "pct_contribution",
+      "name": "Cumulative percentage of contributions by number of contributors",
+      "content": <LineGraph title={"Cumulative percentage of contributions by number of contributors"}
+                            showLegend={true}
+                            traces={getContribTrace("contrib_counts")}
+                            normalizeTime={false}/>
+    },
+    {
+      "id": "star_dates",
+      "name": keyToTitle["star_dates"],
+      "content": <LineGraph title={keyToTitle["star_dates"]}
+                            showLegend={true}
+                            traces={getTrace("star_dates")}/>
+    }
+  ];
+
   return (
     <div css={styles.card}>
       <h1 css={styles.summaryContainerLabel}>
-        Currently tracking {data.length} software repositories {isCurated ? "related to" : "used for research into"} {fieldName}.
+        Currently tracking <strong>{data.length}</strong> software repositories {isCurated ? "related to" : "used for research into"} <strong>{fieldName}</strong>.
       </h1>
       <div>
         <StatBox stat={"stargazers_count"} data={data}/>
@@ -95,27 +145,22 @@ const Summary = (props) => {
         {isCurated ? <StatBox stat={"open_issues"} data={data}/> : <StatBox stat={"num_references"} data={data} field={field}/>}
       </div>
       <h2 css={styles.summaryContainerLabel}>
-        Displaying the top 5 selected software repositories, ordered by {sortMapping[orderBy].toLowerCase()}.
+        <span css={styles.dropdownIntro}>Trends over time for top repos by</span>
+        <div css={styles.dropdownContainer}>
+          <Dropdown
+            selected={orderBy}
+            setSelected={(val) => setOrderBy(val)}
+            inputLabel={"Order by"}
+            options={sortOptions}
+          />
+        </div>
       </h2>
-      <h3>Contributor activity</h3>
-      <LineGraph title={keyToTitle["push_dates"]} showLegend={true}
-                 traces={getTrace("push_dates")}/>
-      <LineGraph title={"Ratio of issues closed to opened over time"}
-                 showLegend={true} forceInteger={false}
-                 traces={getTrace("issue_dates",
-                   val => val[1] === 0 ? 0 : val[2]/val[1])}/>
-      <LineGraph title={"Ratio of new vs returning contributors over time"}
-                 showLegend={true}
-                 traces={getTrace("commit_dates",
-                   val => val[2] === 0 ? 0 : val[1]/val[2])}/>
-      <LineGraph title={"Cumulative percentage of contributions by number of contributors"}
-                 showLegend={true}
-                 traces={getContribTrace("contrib_counts")}
-                 normalizeTime={false}/>
-      <h3>User activity</h3>
-      <LineGraph title={keyToTitle["star_dates"]}
-                 showLegend={true}
-                 traces={getTrace("star_dates")}/>
+        <Accordion
+          key={JSON.stringify(expanded)}
+          panels={accordionDetails}
+          expanded={expanded}
+          setExpanded={(newExpanded) => setExpanded(newExpanded)} headingVariant={"h6"}
+        />
     </div>
   );
 };

@@ -17,11 +17,6 @@ import {id_to_repo, field_to_repos, fields} from "../data/constants";
 import {sortMapping, keyToTitle, getRepoName} from "./utils";
 
 const styles = {
-  tabContainer: css`
-    background-color: white;
-    border-color: divider;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  `,
   topPanel: css`
     text-align: left;
     padding: 20px;
@@ -229,7 +224,7 @@ const Dashboard = () => {
               <Summary data={repoData}
                             field={filterValues["field_of_study"]}
                             isCurated={isCuratedField(filterValues["field_of_study"])}
-                            orderBy={filterValues["order_by"]}
+                            sortOptions={sortOptions}
                             customTopics={customTopics}/> :
             <div>
               {repoData.slice((currPage-1)*PAGE_SIZE, currPage*PAGE_SIZE).map(repo => (
