@@ -53,7 +53,7 @@ const styles = {
   `
 };
 
-const ProjectDashboard = () => {
+const ProjectDetails = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     if(urlParams.get("project_id") !== null){
@@ -146,4 +146,4 @@ const ProjectDashboard = () => {
   );
 };
 
-export default ProjectDashboard;
+export default ProjectDetails;

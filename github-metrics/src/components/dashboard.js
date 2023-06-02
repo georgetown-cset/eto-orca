@@ -3,7 +3,6 @@ The container component for the list view and summary view
  */
 import React, {useEffect} from "react";
 import {css} from "@emotion/react";
-import Typography from "@mui/material/Typography";
 import Pagination from "@mui/material/Pagination";
 import {styled} from "@mui/material/styles";
 import { ButtonStyled, Dropdown } from "@eto/eto-ui-components";
