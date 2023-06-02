@@ -342,6 +342,7 @@ def write_data(input_dir: str, output_js: str) -> None:
     language_to_canonical_name = {}
     for lang in language_counts:
         lower_lang = lang.lower()
+        # Take the lexicographically first language name as the "canonical" name
         if (
             lower_lang not in language_to_canonical_name
             or language_to_canonical_name[lower_lang] > lang
