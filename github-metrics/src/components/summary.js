@@ -28,6 +28,13 @@ const styles = {
   `,
   dropdownIntro: css`
     vertical-align: middle;
+  `,
+  statListElt: css`
+    line-height: 1.5;
+    list-style-type: none;
+  `,
+  statList: css`
+    padding-left: 0px;
   `
 };
 
@@ -36,10 +43,10 @@ const StatBox = ({stat, data, field=null}) => {
 
   return (
     <HighlightBox title={"Top repositories by " + fmtStat}>
-      <ul>
+      <ul css={styles.statList}>
         {!!data.length && sortByKey(data, stat, field).slice(0, 5).map((row) =>
-          <li>
-            <ExternalLink href={"https://github.com/" + getRepoName(row)}>
+          <li css={styles.statListElt}>
+            <ExternalLink href={`/project?project_id=${row['id']}`}>
               {getRepoName(row)}
             </ExternalLink> ({stat === "num_references" ? row["num_references"][field] : row[stat]} {fmtStat})
           </li>
