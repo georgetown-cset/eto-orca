@@ -4,17 +4,14 @@ The container component for the list view and summary view
 import React, {useEffect} from "react";
 import {css} from "@emotion/react";
 import Typography from "@mui/material/Typography";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import PropTypes from "prop-types";
-import { styled } from "@mui/material/styles";
-import { Dropdown } from "@eto/eto-ui-components";
+import { ButtonStyled, Dropdown } from "@eto/eto-ui-components";
 
 import "core-js/features/url";
 import "core-js/features/url-search-params";
 
 import ProjectCard from "./project_card";
 import SummaryPanel from "./summary_panel";
+import StyledSwitch from "./styled_switch";
 import {id_to_repo, field_to_repos, fields} from "../data/constants";
 import {sortMapping, keyToTitle} from "./utils";
 
@@ -22,43 +19,33 @@ const styles = {
   tabContainer: css`
     background-color: white;
     border-color: divider;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12)
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   `,
-  leftPanel: css`
+  topPanel: css`
     text-align: left;
     padding: 20px;
-    width: 25%;
-    display: inline-block;
+    display: block;
     vertical-align: top;
-    @media (max-width: 1300px) {
-      width: 100%;
-      display: block;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-    }
-  `,
-  rightPanel: css`
-    width: 70%;
-    min-height: 80vh;
-    display: inline-block;
-    @media (max-width: 1300px) {
-      width: 95%;
-      margin: auto;
-      display: block;
-    }
-  `,
-  filterDropdownContainer: css`
-    margin: 15px 0px 10px 20px;
-  `,
-  sortDropdownContainer: css`
-    display: inline-block;
-  `,
-  sortConfig: css`
-    margin-top: 5px;
     position: sticky;
     top: 0;
     z-index: 200;
-    background-color: white;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12)
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    background-color: var(--bright-blue-lightest);
+  `,
+  bottomPanel: css`
+    display: block;
+    margin: 0px auto;
+    max-width: 1300px;
+  `,
+  dropdownContainer: css`
+    display: inline-block;
+  `,
+  moreFilters: css`
+    vertical-align: bottom;
+    margin: 0px 5px 8px 5px;
+  `,
+  switchContainer: css`
+    float: right;
   `
 };
 
@@ -82,30 +69,6 @@ function TabPanel(props) {
   );
 }
 
-const StyledTabs = styled(Tabs)({
-  "& .MuiTabs-indicator": {
-    backgroundColor: "var(--bright-blue)"
-  },
-  "& .Mui-selected": {
-    color: "var(--dark-blue)",
-    fontWeight: "bold",
-    backgroundColor: "var(--bright-blue-light)",
-  }
-});
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
-
 const Dashboard = () => {
   useEffect(() => {
     mkRepoData(defaultFilterValues);
@@ -115,19 +78,20 @@ const Dashboard = () => {
     "field_of_study": "ai_safety",
     "order_by": "stargazers_count",
     "compare_graph": "push_dates",
-    "language": "All",
-    "license": "All"
+    "language_group": "All",
+    "license_group": "All"
   };
 
   const [filterValues, setFilterValues] = React.useState({...defaultFilterValues});
   const [repoData, setRepoData] = React.useState([]);
-  const [tabValue, setTabValue] = React.useState(1);
+  const [moreFilters, setMoreFilters] = React.useState(false);
+  const [showSummary, setShowSummary] = React.useState(false);
 
   const compareOptions = Object.entries(keyToTitle).map(e => ({"val": e[0], "text": e[1]}));
 
   const customTopics = [
     {"val": "ai_safety", "text": "AI Safety"},
-    {"val": "asr", "text": "Speech Recognition (curated)"},
+    {"val": "asr", "text": "Speech Recognition"},
     {"val": "riscv", "text": "RISC-V"}
   ];
 
@@ -138,7 +102,7 @@ const Dashboard = () => {
       const repo = id_to_repo[key];
       repo["id"] = key;
       let addRepo = true;
-      for(let filt of ["language", "license"]){
+      for(let filt of ["language_group", "license_group"]){
         if(!((filt === ignoreFilter) || (filters[filt] === "All") || (filters[filt] === repo[filt]))){
           addRepo = false;
         }
@@ -161,6 +125,8 @@ const Dashboard = () => {
   const repoSortFn = (repo, filters) => {
     if(filters["order_by"] === "num_references"){
       return repo["num_references"][filters["field_of_study"]]
+    } else if(["created_at", "pushed_at"].includes(filters["order_by"])){
+      return new Date(repo[filters["order_by"]])
     }
     return repo[filters["order_by"]]
   };
@@ -185,7 +151,7 @@ const Dashboard = () => {
       if((filterValues["order_by"] === "num_references") && isCuratedField(value)){
         updatedFilterValues["order_by"] = "stargazers_count";
       }
-      for(let filteredKey of ["language", "license"]){
+      for(let filteredKey of ["language_group", "license_group"]){
         updatedFilterValues[filteredKey] = "All";
       }
     }
@@ -194,61 +160,52 @@ const Dashboard = () => {
   };
 
   const getFOSOptions = () => {
-    const options = [{"header": "Curated Fields"}].concat(customTopics);
-    options.push({"header": "Automated Field Detection"});
+    const options = [{"header": <span>Display projects <em>related to</em></span>}].concat(customTopics);
+    options.push({"header": <span>Display projects <em>used for research into</em></span>});
     const autoFields = fields.filter(f => !isCuratedField(f)).sort().map(f => ({"text": f, "val": f}));
     return options.concat(autoFields);
   };
 
   return (
     <div style={{backgroundColor: "white"}} id={"dashboard"}>
-      <div css={styles.tabContainer}>
-        <StyledTabs value={tabValue} onChange={(evt, newValue) => {setTabValue(newValue)}} aria-label="OSS tracker tabs">
-          <Tab label="Field summary" {...a11yProps(0)} />
-          <Tab label="Project list" {...a11yProps(1)} />
-        </StyledTabs>
-      </div>
       <div>
-        <div css={styles.leftPanel}>
+        <div css={styles.topPanel}>
+          <div css={styles.switchContainer}>
+            List <StyledSwitch checked={showSummary} onChange={() => setShowSummary(!showSummary)}/> Comparison
+          </div>
           <div>
-            <h3>Select a subject</h3>
-            <div css={styles.filterDropdownContainer}>
+            <div css={styles.dropdownContainer}>
               <Dropdown
                 selected={filterValues["field_of_study"]}
                 setSelected={(val) => handleSingleSelectChange(val, "field_of_study")}
-                inputLabel={"Field of study"}
+                inputLabel={"Application Topic"}
                 options={getFOSOptions()}
               />
             </div>
+            {moreFilters && <>
+              <div css={styles.dropdownContainer}>
+                <Dropdown
+                  selected={filterValues["language_group"]}
+                  setSelected={(val) => handleSingleSelectChange(val, "language_group")}
+                  inputLabel={"Top programming language"}
+                  options={getFilterOptions("language_group").map(lang => ({"text": lang, "val": lang}))}
+                />
+              </div>
+              <div css={styles.dropdownContainer}>
+                <Dropdown
+                  selected={filterValues["license_group"]}
+                  setSelected={(val) => handleSingleSelectChange(val, "license_group")}
+                  inputLabel={"License"}
+                  options={getFilterOptions("license_group").map(lang => ({"text": lang, "val": lang}))}
+                />
+              </div>
+            </>}
+            <ButtonStyled css={styles.moreFilters} onClick={()=>setMoreFilters(!moreFilters)}>
+              {moreFilters ? "Hide" : "Show"} Detail Filters
+            </ButtonStyled>
           </div>
           <div>
-            <h3>Filter further</h3>
-            <div css={styles.filterDropdownContainer}>
-              <Dropdown
-                selected={filterValues["language"]}
-                setSelected={(val) => handleSingleSelectChange(val, "language")}
-                inputLabel={"Top programming language"}
-                options={getFilterOptions("language").map(lang => ({"text": lang, "val": lang}))}
-              />
-            </div>
-            <div css={styles.filterDropdownContainer}>
-              <Dropdown
-                selected={filterValues["license"]}
-                setSelected={(val) => handleSingleSelectChange(val, "license")}
-                inputLabel={"License"}
-                options={getFilterOptions("license").map(lang => ({"text": lang, "val": lang}))}
-              />
-            </div>
-          </div>
-        </div>
-        <div css={styles.rightPanel}>
-          <TabPanel value={tabValue} index={0}>
-            {repoData.length > 0 && <SummaryPanel data={repoData}
-                                                  sortOptions={sortOptions} customTopics={customTopics}/>}
-          </TabPanel>
-          <TabPanel value={tabValue} index={1}>
-            <div css={styles.sortConfig}>
-              <div css={styles.sortDropdownContainer}>
+              <div css={styles.dropdownContainer}>
                 <Dropdown
                   selected={filterValues["order_by"]}
                   setSelected={(val) => handleSingleSelectChange(val, "order_by")}
@@ -256,7 +213,7 @@ const Dashboard = () => {
                   options={sortOptions}
                 />
               </div>
-              <div css={styles.sortDropdownContainer}>
+              <div css={styles.dropdownContainer}>
                 <Dropdown
                   selected={filterValues["compare_graph"]}
                   setSelected={(val) => handleSingleSelectChange(val, "compare_graph")}
@@ -264,16 +221,21 @@ const Dashboard = () => {
                   options={compareOptions}
                 />
               </div>
-            </div>
-            {repoData.map(repo => (
-              <ProjectCard key={repoData["owner_name"]+"/"+repoData["current_name"]}
-                        data={repo}
-                        field={filterValues["field_of_study"]}
-                        graph_key={filterValues["compare_graph"]}
-                        graph_title={keyToTitle[filterValues["compare_graph"]]}
-                        isCurated={isCuratedField(filterValues["field_of_study"])}/>
-            ))}
-          </TabPanel>
+          </div>
+        </div>
+        <div css={styles.bottomPanel}>
+          {showSummary ? (repoData.length > 0) && <SummaryPanel data={repoData}
+                                                                orderBy={filterValues["order_by"]}
+                                                                customTopics={customTopics}/>
+            : repoData.map(repo => (
+              <ProjectCard key={repoData["owner_name"] + "/" + repoData["current_name"]}
+                           data={repo}
+                           field={filterValues["field_of_study"]}
+                           graph_key={filterValues["compare_graph"]}
+                           graph_title={keyToTitle[filterValues["compare_graph"]]}
+                           isCurated={isCuratedField(filterValues["field_of_study"])}/>
+            ))
+          }
         </div>
       </div>
     </div>

@@ -27,13 +27,13 @@ const styles = {
 const ProjectMetadata = (props) => {
   const {data, showNumReferences=false, field=null} = props;
 
-  const getValue = (sort_key) => {
-    if(data[sort_key] === null) {
+  const getValue = (key) => {
+    if(!data[key]) {
       return 0;
-    } else if(showNumReferences && (sort_key === "num_references")){
-      return data[sort_key][field];
+    } else if(showNumReferences && (key === "num_references")){
+      return data[key][field];
     }
-    return data[sort_key];
+    return data[key];
   };
 
   const metaGroups = [
