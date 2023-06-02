@@ -11,7 +11,7 @@ import "core-js/features/url";
 import "core-js/features/url-search-params";
 
 import ProjectCard from "./project_card";
-import SummaryPanel from "./summary_panel";
+import Summary from "./summary";
 import StyledSwitch from "./styled_switch";
 import {id_to_repo, field_to_repos, fields} from "../data/constants";
 import {sortMapping, keyToTitle} from "./utils";
@@ -226,7 +226,7 @@ const Dashboard = () => {
         <div css={styles.bottomPanel}>
           {(repoData.length > 0) && (
             showSummary ?
-              <SummaryPanel data={repoData}
+              <Summary data={repoData}
                             field={filterValues["field_of_study"]}
                             isCurated={isCuratedField(filterValues["field_of_study"])}
                             orderBy={filterValues["order_by"]}

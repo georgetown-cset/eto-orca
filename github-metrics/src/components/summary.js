@@ -21,7 +21,7 @@ const styles = {
   `,
 };
 
-const SummaryPanel = (props) => {
+const Summary = (props) => {
   const {data, orderBy, field, isCurated, customTopics} = props;
   const customTopicMap = {};
   for(let topic of customTopics){
@@ -96,4 +96,4 @@ const SummaryPanel = (props) => {
   );
 };
 
-export default SummaryPanel;
+export default Summary;
