@@ -4,6 +4,8 @@ The container component for the list view and summary view
 import React, {useEffect} from "react";
 import {css} from "@emotion/react";
 import Typography from "@mui/material/Typography";
+import Pagination from "@mui/material/Pagination";
+import {styled} from "@mui/material/styles";
 import { ButtonStyled, Dropdown } from "@eto/eto-ui-components";
 
 import "core-js/features/url";
@@ -46,28 +48,22 @@ const styles = {
   `,
   switchContainer: css`
     float: right;
+  `,
+  paginationContainer: css`
+    margin: 10px auto 30px auto;
+    text-align: center;
+  `,
+  // come back later and center the pagination in a less janky way
+  paginationWrapper: css`
+    display: inline-block;
   `
 };
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <div>
-          <Typography component={"div"}>{children}</Typography>
-        </div>
-      )}
-    </div>
-  );
-}
+const StyledPagination = styled(Pagination)(({ theme }) => ({
+  "button": {
+    fontFamily: "GTZirkonLight, sans-serif"
+  }
+}));
 
 const Dashboard = () => {
   useEffect(() => {
@@ -86,6 +82,10 @@ const Dashboard = () => {
   const [repoData, setRepoData] = React.useState([]);
   const [moreFilters, setMoreFilters] = React.useState(false);
   const [showSummary, setShowSummary] = React.useState(false);
+  const [currPage, setCurrPage] = React.useState(1);
+
+  const PAGE_SIZE = 10;
+  const contentContainer = React.createRef();
 
   const compareOptions = Object.entries(keyToTitle).map(e => ({"val": e[0], "text": e[1]}));
 
@@ -134,7 +134,7 @@ const Dashboard = () => {
   const mkRepoData = (filters) => {
     const newRepoData = getSelectedRepos(filters);
     newRepoData.sort((a, b) => repoSortFn(b, filters) - repoSortFn(a, filters));
-    setRepoData(newRepoData.slice(0, 20));
+    setRepoData(newRepoData);
   };
 
   const isCuratedField = (field) => {
@@ -167,7 +167,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div style={{backgroundColor: "white"}} id={"dashboard"}>
+    <div style={{backgroundColor: "white"}} id={"dashboard"} ref={contentContainer}>
       <div>
         <div css={styles.topPanel}>
           <div css={styles.switchContainer}>
@@ -224,18 +224,31 @@ const Dashboard = () => {
           </div>
         </div>
         <div css={styles.bottomPanel}>
-          {showSummary ? (repoData.length > 0) && <SummaryPanel data={repoData}
-                                                                orderBy={filterValues["order_by"]}
-                                                                customTopics={customTopics}/>
-            : repoData.map(repo => (
-              <ProjectCard key={repoData["owner_name"] + "/" + repoData["current_name"]}
-                           data={repo}
-                           field={filterValues["field_of_study"]}
-                           graph_key={filterValues["compare_graph"]}
-                           graph_title={keyToTitle[filterValues["compare_graph"]]}
-                           isCurated={isCuratedField(filterValues["field_of_study"])}/>
-            ))
-          }
+          {(repoData.length > 0) && (
+            showSummary ?
+              <SummaryPanel data={repoData}
+                            orderBy={filterValues["order_by"]}
+                            customTopics={customTopics}/> :
+            <div>
+              {repoData.slice((currPage-1)*PAGE_SIZE, currPage*PAGE_SIZE).map(repo => (
+                <ProjectCard key={repoData["owner_name"] + "/" + repoData["current_name"]}
+                             data={repo}
+                             field={filterValues["field_of_study"]}
+                             graph_key={filterValues["compare_graph"]}
+                             graph_title={keyToTitle[filterValues["compare_graph"]]}
+                             isCurated={isCuratedField(filterValues["field_of_study"])}/>
+              ))}
+              <div>
+              <div css={styles.paginationContainer}>
+                <div css={styles.paginationWrapper}>
+                  <StyledPagination page={currPage}
+                                    onChange={(_, page) => {setCurrPage(page);contentContainer.current.scrollIntoView()}}
+                                    count={Math.ceil(repoData.length/PAGE_SIZE)}/>
+                </div>
+              </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
