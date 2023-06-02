@@ -157,6 +157,7 @@ const Dashboard = () => {
     }
     setFilterValues(updatedFilterValues);
     mkRepoData(updatedFilterValues);
+    setCurrPage(1);
   };
 
   const getFOSOptions = () => {
