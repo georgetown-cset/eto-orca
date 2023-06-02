@@ -228,6 +228,8 @@ const Dashboard = () => {
           {(repoData.length > 0) && (
             showSummary ?
               <SummaryPanel data={repoData}
+                            field={filterValues["field_of_study"]}
+                            isCurated={isCuratedField(filterValues["field_of_study"])}
                             orderBy={filterValues["order_by"]}
                             customTopics={customTopics}/> :
             <div>

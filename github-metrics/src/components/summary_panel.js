@@ -22,16 +22,24 @@ const styles = {
 };
 
 const SummaryPanel = (props) => {
-  const {data, orderBy, customTopics} = props;
+  const {data, orderBy, field, isCurated, customTopics} = props;
   const customTopicMap = {};
   for(let topic of customTopics){
     customTopicMap[topic["val"]] = topic["text"];
   }
+  let fieldName = field;
+  if(field in customTopicMap){
+    fieldName = customTopicMap[field];
+  }
+  fieldName = fieldName.toLowerCase();
+  for(let [patt, capitalized] of [[/(\b)ai(\b)/, "$1AI$2"], [/risc-v/, "RISC-V"]]){
+    fieldName = fieldName.replace(patt, capitalized);
+  }
+  const traceData = [...data];
+  traceData.sort((r1, r2) => r2[orderBy] - r1[orderBy]);
+  const topFive = traceData.slice(0, 5);
 
   const getTrace = (key, yMap = val => val[1]) => {
-    const traceData = [...data];
-    traceData.sort((r1, r2) => r2[orderBy] - r1[orderBy]);
-    const topFive = traceData.slice(0, 5);
     return topFive.map(row => ({
       x: row[key].map(val => val[0]),
       y: row[key].map(val => yMap(val)),
@@ -40,9 +48,6 @@ const SummaryPanel = (props) => {
   };
 
   const getContribTrace = (key) => {
-    const traceData = [...data];
-    traceData.sort((r1, r2) => r2[orderBy] - r1[orderBy]);
-    const topFive = traceData.slice(0, 5);
     const traces = [];
     for(let row of topFive){
       const x = [];
@@ -62,6 +67,9 @@ const SummaryPanel = (props) => {
 
   return (
     <div css={styles.card}>
+      <h1 css={styles.summaryContainerLabel}>
+        Currently tracking {data.length} software repositories {isCurated ? "related to" : "used for research into"} {fieldName}.
+      </h1>
       <h2 css={styles.summaryContainerLabel}>
         Displaying the top 5 selected software repositories, ordered by {sortMapping[orderBy].toLowerCase()}.
       </h2>
