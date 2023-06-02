@@ -6,7 +6,9 @@ import React from "react";
 import {LineGraph} from "./graph";
 import {css} from "@emotion/react";
 
-import {keyToTitle, sortMapping} from "./utils";
+import {keyToTitle, sortMapping, getRepoName, sortByKey} from "./utils";
+import HighlightBox from "./highlight_box";
+import {ExternalLink} from "@eto/eto-ui-components";
 
 
 const styles = {
@@ -19,6 +21,24 @@ const styles = {
     font-weight: bold;
     padding-bottom: 16px;
   `,
+};
+
+const StatBox = ({stat, data, field=null}) => {
+  const fmtStat = sortMapping[stat].toLowerCase();
+
+  return (
+    <HighlightBox title={"Top repositories by " + fmtStat}>
+      <ul>
+        {!!data.length && sortByKey(data, stat, field).slice(0, 5).map((row) =>
+          <li>
+            <ExternalLink href={"https://github.com/" + getRepoName(row)}>
+              {getRepoName(row)}
+            </ExternalLink> ({stat === "num_references" ? row["num_references"][field] : row[stat]} {fmtStat})
+          </li>
+        )}
+      </ul>
+    </HighlightBox>
+  )
 };
 
 const Summary = (props) => {
@@ -35,15 +55,14 @@ const Summary = (props) => {
   for(let [patt, capitalized] of [[/(\b)ai(\b)/, "$1AI$2"], [/risc-v/, "RISC-V"]]){
     fieldName = fieldName.replace(patt, capitalized);
   }
-  const traceData = [...data];
-  traceData.sort((r1, r2) => r2[orderBy] - r1[orderBy]);
-  const topFive = traceData.slice(0, 5);
+
+  const topFive = sortByKey(data, orderBy, field).slice(0, 5);
 
   const getTrace = (key, yMap = val => val[1]) => {
     return topFive.map(row => ({
       x: row[key].map(val => val[0]),
       y: row[key].map(val => yMap(val)),
-      name: row["owner_name"]+"/"+row["current_name"]
+      name: getRepoName(row)
     }))
   };
 
@@ -59,7 +78,7 @@ const Summary = (props) => {
       traces.push({
         x: x,
         y: y,
-        name: row["owner_name"]+"/"+row["current_name"]
+        name: getRepoName(row)
       })
     }
     return traces;
@@ -70,6 +89,11 @@ const Summary = (props) => {
       <h1 css={styles.summaryContainerLabel}>
         Currently tracking {data.length} software repositories {isCurated ? "related to" : "used for research into"} {fieldName}.
       </h1>
+      <div>
+        <StatBox stat={"stargazers_count"} data={data}/>
+        <StatBox stat={"num_contributors"} data={data}/>
+        {isCurated ? <StatBox stat={"open_issues"} data={data}/> : <StatBox stat={"num_references"} data={data} field={field}/>}
+      </div>
       <h2 css={styles.summaryContainerLabel}>
         Displaying the top 5 selected software repositories, ordered by {sortMapping[orderBy].toLowerCase()}.
       </h2>

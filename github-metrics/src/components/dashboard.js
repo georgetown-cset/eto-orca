@@ -14,7 +14,7 @@ import ProjectCard from "./project_card";
 import Summary from "./summary";
 import StyledSwitch from "./styled_switch";
 import {id_to_repo, field_to_repos, fields} from "../data/constants";
-import {sortMapping, keyToTitle} from "./utils";
+import {sortMapping, keyToTitle, getRepoName} from "./utils";
 
 const styles = {
   tabContainer: css`
@@ -132,7 +132,7 @@ const Dashboard = () => {
 
   const mkRepoData = (filters) => {
     const newRepoData = getSelectedRepos(filters);
-    newRepoData.sort((a, b) => repoSortFn(b, filters) - repoSortFn(a, filters));
+    newRepoData.sort((a, b) => repoSortFn(b, filters) - repoSortFn(a, filters)).filter(r => !repoSortFn(r, filters));
     setRepoData(newRepoData);
   };
 
@@ -233,7 +233,7 @@ const Dashboard = () => {
                             customTopics={customTopics}/> :
             <div>
               {repoData.slice((currPage-1)*PAGE_SIZE, currPage*PAGE_SIZE).map(repo => (
-                <ProjectCard key={repoData["owner_name"] + "/" + repoData["current_name"]}
+                <ProjectCard key={getRepoName(repoData)}
                              data={repo}
                              field={filterValues["field_of_study"]}
                              graph_key={filterValues["compare_graph"]}

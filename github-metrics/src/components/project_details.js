@@ -12,7 +12,7 @@ import {css} from "@emotion/react";
 import {BarGraph, LineGraph} from "./graph";
 import ProjectMetadata from "./project_metadata";
 
-import {keyToTitle, getCountryTraces, getBarTraces, getX, getY} from "./utils";
+import {keyToTitle, getCountryTraces, getBarTraces, getX, getY, getRepoName} from "./utils";
 import HighlightBox from "./highlight_box";
 
 const styles = {
@@ -54,7 +54,7 @@ const ProjectDetails = () => {
   }, []);
 
   const [data, setData] = React.useState({});
-  const repo_name = data["owner_name"]+"/"+data["current_name"];
+  const repo_name = getRepoName(data);
 
   const contribGraphs = [
     ["push_dates", "line"],

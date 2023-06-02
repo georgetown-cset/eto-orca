@@ -86,4 +86,18 @@ const getY = (ary) => {
   return ary.map(elt => elt[1])
 };
 
-export {sortMapping, metaMapping, keyToTitle, getCountryTraces, getBarTraces, getX, getY};
+const getRepoName = (row) => {
+  return row["owner_name"]+"/"+row["current_name"];
+};
+
+const sortByKey = (toSort, key, field=null) => {
+  const sorted = [...toSort];
+  if(key === "num_references"){
+    sorted.sort((r1, r2) => r2[key][field] - r1[key][field]).filter(r => !r[key][field]);
+  } else {
+    sorted.sort((r1, r2) => r2[key] - r1[key]);
+  }
+  return sorted;
+};
+
+export {sortMapping, metaMapping, keyToTitle, getCountryTraces, getBarTraces, getX, getY, getRepoName, sortByKey};
