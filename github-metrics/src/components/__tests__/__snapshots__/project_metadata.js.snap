@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Project metadata renders correctly with no references 1`] = `
-Object {
+{
   "asFragment": [Function],
   "baseElement": <body>
     <div>
@@ -284,7 +284,7 @@ Object {
 `;
 
 exports[`Project metadata renders correctly with references 1`] = `
-Object {
+{
   "asFragment": [Function],
   "baseElement": <body>
     <div>
