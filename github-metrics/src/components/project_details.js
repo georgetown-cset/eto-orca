@@ -13,6 +13,7 @@ import {BarGraph, LineGraph} from "./graph";
 import ProjectMetadata from "./project_metadata";
 
 import {keyToTitle, getCountryTraces, getBarTraces, getX, getY} from "./utils";
+import HighlightBox from "./highlight_box";
 
 const styles = {
   dashboardContainer: css`
@@ -33,16 +34,6 @@ const styles = {
   description: css`
     vertical-align: top;
     padding-right: 5px;
-  `,
-  metadataContainer: css`
-    display: inline-block;
-    width: 350px;
-    vertical-align: top;
-    border: 3px solid var(--bright-blue);
-    padding: 10px 20px 30px 20px;
-    margin: 10px;
-    text-align: left;
-    min-height: 175px;
   `,
   introStats: css`
     text-align: center;
@@ -111,13 +102,11 @@ const ProjectDetails = () => {
            </div>
          </div>
          <div css={styles.introStats}>
-           <div css={styles.metadataContainer}>
-            <h3>Basic Statistics</h3>
-            <ProjectMetadata data={data}/>
-           </div>
+           <HighlightBox title={"Basic Statistics"}>
+             <ProjectMetadata data={data}/>
+           </HighlightBox>
            {"num_references" in data &&
-           <div css={styles.metadataContainer}>
-             <h3>Most Frequently Citing Fields</h3>
+           <HighlightBox title={"Most Frequently Citing Fields"}>
              <ul css={styles.fieldList}>
                {Object.keys(data["num_references"]).sort((a, b) =>
                  data["num_references"][b] - data["num_references"][a]
@@ -125,7 +114,7 @@ const ProjectDetails = () => {
                  {field} ({data["num_references"][field]} citation{data["num_references"][field] === 1 ? "" : "s"})
                </li>)}
              </ul>
-           </div>
+           </HighlightBox>
            }
          </div>
        </div>
