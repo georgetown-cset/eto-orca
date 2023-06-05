@@ -7,7 +7,7 @@ import "core-js/features/url";
 import "core-js/features/url-search-params";
 
 import {id_to_repo} from "../data/constants";
-import {ExternalLink} from "@eto/eto-ui-components";
+import {Accordion, ExternalLink} from "@eto/eto-ui-components";
 import {css} from "@emotion/react";
 import {BarGraph, LineGraph} from "./graph";
 import ProjectMetadata from "./project_metadata";
@@ -54,18 +54,8 @@ const ProjectDetails = () => {
   }, []);
 
   const [data, setData] = React.useState({});
+  const [expanded, setExpanded] = React.useState(["push_dates"]);
   const repo_name = getRepoName(data);
-
-  const contribGraphs = [
-    ["push_dates", "line"],
-    ["issue_dates", "bar"],
-    ["commit_dates", "bar"],
-    ["contrib_counts", "bar"],
-  ];
-  const userGraphs = [
-    ["star_dates", "line"],
-    ["downloads", "multi-line"]
-  ];
 
   const getGraphs = (meta) => {
     if(meta[1] === "bar"){
@@ -78,6 +68,23 @@ const ProjectDetails = () => {
     return <LineGraph traces={getCountryTraces(data[meta[0]])} title={keyToTitle[meta[0]]}
                       showLegend={true}/>;
   };
+
+  const graphConfig = [
+    ["push_dates", "line"],
+    ["downloads", "multi-line"],
+    ["issue_dates", "bar"],
+    ["commit_dates", "bar"],
+    ["contrib_counts", "bar"],
+    ["star_dates", "line"],
+  ];
+
+  const accordionDetails = graphConfig.filter(cfg => (cfg[0] in data) && (data[cfg[0]].length > 0)).map(cfg => (
+    {
+      "id": cfg[0],
+      "name": keyToTitle[cfg[0]],
+      "content" : getGraphs(cfg)
+    }
+  ));
 
   return (
    <div css={styles.dashboardContainer} id={"project-dashboard"}>
@@ -119,18 +126,12 @@ const ProjectDetails = () => {
          </div>
        </div>
      </div>
-     <div>
-       <h3>Contributor activity</h3>
-       {Object.keys(data).length > 0 && contribGraphs.map(meta =>
-         getGraphs(meta)
-       )}
-     </div>
-     <div>
-       <h3>User activity</h3>
-       {Object.keys(data).length > 0 && userGraphs.map(meta =>
-         getGraphs(meta)
-       )}
-     </div>
+     <Accordion
+       key={JSON.stringify(expanded)}
+       panels={accordionDetails}
+       expanded={expanded}
+       setExpanded={(newExpanded) => setExpanded(newExpanded)} headingVariant={"h6"}
+     />
    </div>
   );
 };
