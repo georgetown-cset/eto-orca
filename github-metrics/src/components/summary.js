@@ -47,7 +47,7 @@ const StatBox = ({stat, data, field=null, fieldName=null}) => {
       <ul css={styles.statList}>
         {!!data.length && sortByKey(data, stat, field).slice(0, 5).map((row) =>
           <li css={styles.statListElt}>
-            <ExternalLink href={`/project?project_name=${getRepoName(row)}`}>
+            <ExternalLink href={`/project?name=${getRepoName(row)}`}>
               {getRepoName(row)}
             </ExternalLink> ({stat === "num_references" ? row["num_references"][field] : row[stat]} {fmtStat})
           </li>

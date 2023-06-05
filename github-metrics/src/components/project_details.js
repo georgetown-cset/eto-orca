@@ -51,8 +51,8 @@ const styles = {
 const ProjectDetails = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    if(urlParams.get("project_name") !== null){
-      const project_name = urlParams.get("project_name");
+    if(urlParams.get("name") !== null){
+      const project_name = urlParams.get("name");
       const project_id = name_to_id[project_name];
       setData(id_to_repo[project_id]);
     }

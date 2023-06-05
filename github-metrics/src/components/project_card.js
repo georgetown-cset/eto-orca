@@ -91,7 +91,7 @@ const ProjectCard = (props) => {
         </div>
       </div>
       <div css={styles.buttonContainer}>
-        <ButtonStyled style={{width: "100%"}} href={`/project?project_name=${repo_name}`} target={"_blank"} rel={"noopener"}>>> Full profile</ButtonStyled>
+        <ButtonStyled style={{width: "100%"}} href={`/project?name=${repo_name}`} target={"_blank"} rel={"noopener"}>>> Full profile</ButtonStyled>
       </div>
     </div>
   )
