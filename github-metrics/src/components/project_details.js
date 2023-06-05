@@ -41,6 +41,9 @@ const styles = {
   `,
   fieldList: css`
     margin: 0;
+  `,
+  graphHeader: css`
+    margin: 20px 20px 10px 20px;
   `
 };
 
@@ -65,24 +68,36 @@ const ProjectDetails = () => {
       return <LineGraph traces={[{x: getX(data[meta[0]]), y: getY(data[meta[0]])}]}
                  title={keyToTitle[meta[0]]} />
     }
-    return <LineGraph traces={getCountryTraces(data[meta[0]])} title={keyToTitle[meta[0]]}
-                      showLegend={true}/>;
+    return <LineGraph traces={getCountryTraces(data[meta[0]])}
+                      showLegend={true} title={"PyPI downloads over time"}/>;
   };
 
   const graphConfig = [
-    ["push_dates", "line"],
-    ["downloads", "multi-line"],
-    ["issue_dates", "bar"],
-    ["commit_dates", "bar"],
-    ["contrib_counts", "bar"],
-    ["star_dates", "line"],
+    ["push_dates", "line", <span>This graph shows the number of commits made to the main branch of the repository each year.</span>],
+    ["downloads", "multi-line", <span>
+      This graph shows the number of package downloads from PyPI per year, with country affiliations as reported in
+      the BigQuery dataset bigquery-public-data.pypi.file_downloads. Note that automated downloads may inflate these counts.
+    </span>],
+    ["issue_dates", "bar", <span>
+      This graph compares the number of issues opened per year to the number of issues closed. A high ratio of new
+      issues opened to issues closed might indicate the project needs more maintenance capacity.
+    </span>],
+    ["commit_dates", "bar", <span>
+      This graph compares the number of contributors who made a commit for the first time in a given year to
+      the number of contributors that had made a commit in a previous year.
+    </span>],
+    ["contrib_counts", "bar", <span>This graph shows the percentage of commits authored by each of the top 20 contributors to the project.</span>],
+    ["star_dates", "line", <span>This graph shows the number of new star events that occurred during each year we track.</span>],
   ];
 
   const accordionDetails = graphConfig.filter(cfg => (cfg[0] in data) && (data[cfg[0]].length > 0)).map(cfg => (
     {
       "id": cfg[0],
       "name": keyToTitle[cfg[0]],
-      "content" : getGraphs(cfg)
+      "content" : <div>
+        <div css={styles.graphHeader}>{cfg[2]}</div>
+        {getGraphs(cfg)}
+      </div>
     }
   ));
 
