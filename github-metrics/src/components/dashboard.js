@@ -132,6 +132,13 @@ const Dashboard = () => {
   const sortOptions = Object.entries(sortMapping).map(e => ({"val": e[0], "text": e[1]})).filter(
     obj => (!isCuratedField(filterValues["field_of_study"]) || (obj["val"] !== "num_references")));
 
+  const handleFilterUpdate = (updated) => {
+    setFilterValues(updated);
+    mkRepoData(updated);
+    setCurrPage(1);
+    contentContainer.current.scrollIntoView();
+  };
+
   const handleSingleSelectChange = (value, key) => {
     const updatedFilterValues = {...filterValues};
     updatedFilterValues[key] = value;
@@ -143,9 +150,7 @@ const Dashboard = () => {
         updatedFilterValues[filteredKey] = "All";
       }
     }
-    setFilterValues(updatedFilterValues);
-    mkRepoData(updatedFilterValues);
-    setCurrPage(1);
+    handleFilterUpdate(updatedFilterValues);
   };
 
   const getFOSOptions = () => {
@@ -190,9 +195,14 @@ const Dashboard = () => {
               </div>
             </>}
             {!showSummary &&
-            <ButtonStyled css={styles.moreFilters} onClick={() => setMoreFilters(!moreFilters)}>
-              {moreFilters ? "Hide" : "Show"} Detail Filters
-            </ButtonStyled>
+            <>
+              <ButtonStyled css={styles.moreFilters} onClick={() => setMoreFilters(!moreFilters)}>
+                {moreFilters ? "Hide" : "Show"} Detail Filters
+              </ButtonStyled>
+              <ButtonStyled css={styles.moreFilters} onClick={() => handleFilterUpdate({...defaultFilterValues})}>
+                Reset
+              </ButtonStyled>
+            </>
             }
           </div>
           {!showSummary &&
