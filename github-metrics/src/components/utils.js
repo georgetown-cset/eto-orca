@@ -24,6 +24,16 @@ const keyToTitle = {
   "downloads": "PyPI downloads over time"
 };
 
+const customTopics = [
+  {"val": "ai_safety", "text": "AI Safety"},
+  {"val": "asr", "text": "Speech Recognition"},
+  {"val": "riscv", "text": "RISC-V"}
+];
+const customTopicMap = {};
+for(let topic of customTopics){
+  customTopicMap[topic["val"]] = topic["text"];
+}
+
 // returns data traces for country comparison graphs
 const getCountryTraces = (graphData) => {
   const nameToYearToCounts = {};
@@ -100,4 +110,16 @@ const sortByKey = (toSort, key, field=null) => {
   return sorted;
 };
 
-export {sortMapping, metaMapping, keyToTitle, getCountryTraces, getBarTraces, getX, getY, getRepoName, sortByKey};
+const cleanFieldName = (field) => {
+  let clean = field;
+  if(field in customTopicMap){
+    clean = customTopicMap[field];
+  }
+  clean = clean.toLowerCase();
+  for(let [patt, capitalized] of [[/(\b)ai(\b)/, "$1AI$2"], [/risc-v/, "RISC-V"]]){
+    clean = clean.replace(patt, capitalized);
+  }
+  return clean;
+};
+
+export {sortMapping, metaMapping, keyToTitle, getCountryTraces, getBarTraces, getX, getY, getRepoName, sortByKey, cleanFieldName, customTopics};

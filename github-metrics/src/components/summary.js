@@ -6,7 +6,7 @@ import React from "react";
 import {LineGraph} from "./graph";
 import {css} from "@emotion/react";
 
-import {keyToTitle, sortMapping, getRepoName, sortByKey} from "./utils";
+import {keyToTitle, sortMapping, getRepoName, sortByKey, customTopics, cleanFieldName} from "./utils";
 import HighlightBox from "./highlight_box";
 import {Accordion, Dropdown, ExternalLink} from "@eto/eto-ui-components";
 
@@ -58,24 +58,12 @@ const StatBox = ({stat, data, field=null, fieldName=null}) => {
 };
 
 const Summary = (props) => {
-  const {data, sortOptions, field, isCurated, customTopics} = props;
+  const {data, sortOptions, field, isCurated} = props;
 
   const [orderBy, setOrderBy] = React.useState("stargazers_count");
   const [expanded, setExpanded] = React.useState(["push_dates"]);
 
-  const customTopicMap = {};
-  for(let topic of customTopics){
-    customTopicMap[topic["val"]] = topic["text"];
-  }
-  let fieldName = field;
-  if(field in customTopicMap){
-    fieldName = customTopicMap[field];
-  }
-  fieldName = fieldName.toLowerCase();
-  for(let [patt, capitalized] of [[/(\b)ai(\b)/, "$1AI$2"], [/risc-v/, "RISC-V"]]){
-    fieldName = fieldName.replace(patt, capitalized);
-  }
-
+  const fieldName = cleanFieldName(field);
   const topFive = sortByKey(data, orderBy, field).slice(0, 5);
 
   const getTrace = (key, yMap = val => val[1]) => {

@@ -14,7 +14,7 @@ import ProjectCard from "./project_card";
 import Summary from "./summary";
 import StyledSwitch from "./styled_switch";
 import {id_to_repo, field_to_repos, fields} from "../data/constants";
-import {sortMapping, keyToTitle, getRepoName} from "./utils";
+import {sortMapping, keyToTitle, getRepoName, customTopics} from "./utils";
 
 const styles = {
   topPanel: css`
@@ -82,12 +82,6 @@ const Dashboard = () => {
   const contentContainer = React.createRef();
 
   const compareOptions = Object.entries(keyToTitle).map(e => ({"val": e[0], "text": e[1]}));
-
-  const customTopics = [
-    {"val": "ai_safety", "text": "AI Safety"},
-    {"val": "asr", "text": "Speech Recognition"},
-    {"val": "riscv", "text": "RISC-V"}
-  ];
 
   const getSelectedRepos = (filters, ignoreFilter = null) => {
     const relKeys = field_to_repos[filters["field_of_study"]];
@@ -228,8 +222,7 @@ const Dashboard = () => {
               <Summary data={repoData}
                             field={filterValues["field_of_study"]}
                             isCurated={isCuratedField(filterValues["field_of_study"])}
-                            sortOptions={sortOptions}
-                            customTopics={customTopics}/> :
+                            sortOptions={sortOptions}/> :
             <div>
               {repoData.slice((currPage-1)*PAGE_SIZE, currPage*PAGE_SIZE).map(repo => (
                 <ProjectCard key={getRepoName(repoData)}

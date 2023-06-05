@@ -39,7 +39,7 @@ describe("Project metadata", () => {
       />
     );
     expect(card).toMatchSnapshot();
-    expect(card.queryAllByText("References")).toHaveLength(1);
+    expect(card.queryAllByText("references", {exact: false})).toHaveLength(1);
   });
 
 });

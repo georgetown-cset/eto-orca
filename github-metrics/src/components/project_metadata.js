@@ -8,7 +8,7 @@ import { css } from "@emotion/react";
 import "core-js/features/url";
 import "core-js/features/url-search-params";
 
-import {metaMapping} from "./utils";
+import {cleanFieldName, metaMapping} from "./utils";
 
 
 const styles = {
@@ -49,7 +49,7 @@ const ProjectMetadata = (props) => {
           {group.map(option => ((showNumReferences) || (option !== "num_references")) && (
             <span css={styles.metaSection} key={option}>
               {option === "num_references" ?
-                <span>{getValue(option)} references in <strong>{field}</strong> articles</span>
+                <span>{getValue(option)} references in <strong>{cleanFieldName(field)}</strong> articles</span>
               :
                 <span><strong>{metaMapping[option]}</strong>: {getValue(option)}</span>
               }
