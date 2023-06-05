@@ -6,7 +6,8 @@ import React, {useEffect} from "react";
 import "core-js/features/url";
 import "core-js/features/url-search-params";
 
-import {id_to_repo} from "../data/constants";
+import id_to_repo from "../data/id_to_repo";
+import name_to_id from "../data/name_to_id";
 import {Accordion, ExternalLink} from "@eto/eto-ui-components";
 import {css} from "@emotion/react";
 import {BarGraph, LineGraph} from "./graph";
@@ -50,8 +51,9 @@ const styles = {
 const ProjectDetails = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    if(urlParams.get("project_id") !== null){
-      const project_id = urlParams.get("project_id");
+    if(urlParams.get("project_name") !== null){
+      const project_name = urlParams.get("project_name");
+      const project_id = name_to_id[project_name];
       setData(id_to_repo[project_id]);
     }
   }, []);

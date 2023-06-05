@@ -13,7 +13,9 @@ import "core-js/features/url-search-params";
 import ProjectCard from "./project_card";
 import Summary from "./summary";
 import StyledSwitch from "./styled_switch";
-import {id_to_repo, field_to_repos, fields} from "../data/constants";
+import id_to_repo from "../data/id_to_repo";
+import field_to_repos from "../data/field_to_repos";
+import fields from "../data/fields";
 import {sortMapping, keyToTitle, getRepoName, customTopics} from "./utils";
 
 const styles = {

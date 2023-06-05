@@ -6,7 +6,7 @@ import React from "react";
 import {LineGraph} from "./graph";
 import {css} from "@emotion/react";
 
-import {keyToTitle, sortMapping, getRepoName, sortByKey, customTopics, cleanFieldName} from "./utils";
+import {keyToTitle, sortMapping, getRepoName, sortByKey, cleanFieldName} from "./utils";
 import HighlightBox from "./highlight_box";
 import {Accordion, Dropdown, ExternalLink} from "@eto/eto-ui-components";
 
@@ -47,7 +47,7 @@ const StatBox = ({stat, data, field=null, fieldName=null}) => {
       <ul css={styles.statList}>
         {!!data.length && sortByKey(data, stat, field).slice(0, 5).map((row) =>
           <li css={styles.statListElt}>
-            <ExternalLink href={`/project?project_id=${row['id']}`}>
+            <ExternalLink href={`/project?project_name=${getRepoName(row)}`}>
               {getRepoName(row)}
             </ExternalLink> ({stat === "num_references" ? row["num_references"][field] : row[stat]} {fmtStat})
           </li>
