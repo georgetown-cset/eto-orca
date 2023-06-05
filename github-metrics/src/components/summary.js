@@ -38,11 +38,12 @@ const styles = {
   `
 };
 
-const StatBox = ({stat, data, field=null}) => {
+const StatBox = ({stat, data, field=null, fieldName=null}) => {
   const fmtStat = sortMapping[stat].toLowerCase();
+  const title = `Top repositories by ${stat === "num_references" ? fieldName+" references" : fmtStat}`;
 
   return (
-    <HighlightBox title={"Top repositories by " + fmtStat}>
+    <HighlightBox title={title}>
       <ul css={styles.statList}>
         {!!data.length && sortByKey(data, stat, field).slice(0, 5).map((row) =>
           <li css={styles.statListElt}>
@@ -149,7 +150,9 @@ const Summary = (props) => {
       <div>
         <StatBox stat={"stargazers_count"} data={data}/>
         <StatBox stat={"num_contributors"} data={data}/>
-        {isCurated ? <StatBox stat={"open_issues"} data={data}/> : <StatBox stat={"num_references"} data={data} field={field}/>}
+        {isCurated ?
+          <StatBox stat={"open_issues"} data={data}/> :
+          <StatBox stat={"num_references"} data={data} field={field} fieldName={fieldName}/>}
       </div>
       <h2 css={styles.summaryContainerLabel}>
         <span css={styles.dropdownIntro}>Trends over time for top repos by</span>

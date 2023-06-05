@@ -10,7 +10,7 @@ const styles = {
     padding: 10px 20px 30px 20px;
     margin: 10px;
     text-align: left;
-    min-height: 175px;
+    min-height: 225px;
   `
 };
 
