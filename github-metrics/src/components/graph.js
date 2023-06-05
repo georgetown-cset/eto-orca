@@ -6,16 +6,11 @@ import {PlotlyDefaults} from "@eto/eto-ui-components";
 import config from "../data/config.json";
 
 const colors = [
-  "#7AC4A5",
-  "#F17F4C",
-  "#15AFD0",
-  "#B42025",
-  "#839DC5",
-  "#E5BF21",
-  "#3C8786",
-  "#7C336F",
-  "#003DA6",
-  "#B53A6D",
+  "rgb(126, 252, 231)",
+  "rgb(255, 170, 128)",
+  "rgb(234, 128, 255)",
+  "rgb(128, 149, 255)",
+  "rgb(252, 231, 126)"
 ];
 
 const Plot = lazy(() => import('react-plotly.js'));
