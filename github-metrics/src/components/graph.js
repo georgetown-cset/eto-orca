@@ -113,6 +113,7 @@ const BarGraph = (props) => {
   const layout = plotlyDefaults.layout;
   layout.showlegend = traces.length > 1;
   layout.barmode = "group";
+  layout.xaxis.dtick = 1;
   layout.margin = {t: traces.length === 1 ? 50 : 80, r: 50, b: 50, l: 50, pad: 4};
   if(title) {
     layout.title = title;
