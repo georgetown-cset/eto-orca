@@ -177,7 +177,7 @@ const Dashboard = () => {
                 options={getFOSOptions()}
               />
             </div>
-            {moreFilters && <>
+            {moreFilters && !showSummary && <>
               <div css={styles.dropdownContainer}>
                 <Dropdown
                   selected={filterValues["language_group"]}
@@ -195,28 +195,32 @@ const Dashboard = () => {
                 />
               </div>
             </>}
-            <ButtonStyled css={styles.moreFilters} onClick={()=>setMoreFilters(!moreFilters)}>
+            {!showSummary &&
+            <ButtonStyled css={styles.moreFilters} onClick={() => setMoreFilters(!moreFilters)}>
               {moreFilters ? "Hide" : "Show"} Detail Filters
             </ButtonStyled>
+            }
           </div>
+          {!showSummary &&
           <div>
-              <div css={styles.dropdownContainer}>
-                <Dropdown
-                  selected={filterValues["order_by"]}
-                  setSelected={(val) => handleSingleSelectChange(val, "order_by")}
-                  inputLabel={"Order by"}
-                  options={sortOptions}
-                />
-              </div>
-              <div css={styles.dropdownContainer}>
-                <Dropdown
-                  selected={filterValues["compare_graph"]}
-                  setSelected={(val) => handleSingleSelectChange(val, "compare_graph")}
-                  inputLabel={"Compare"}
-                  options={compareOptions}
-                />
-              </div>
+            <div css={styles.dropdownContainer}>
+              <Dropdown
+                selected={filterValues["order_by"]}
+                setSelected={(val) => handleSingleSelectChange(val, "order_by")}
+                inputLabel={"Order by"}
+                options={sortOptions}
+              />
+            </div>
+            <div css={styles.dropdownContainer}>
+              <Dropdown
+                selected={filterValues["compare_graph"]}
+                setSelected={(val) => handleSingleSelectChange(val, "compare_graph")}
+                inputLabel={"Compare"}
+                options={compareOptions}
+              />
+            </div>
           </div>
+          }
         </div>
         <div css={styles.bottomPanel}>
           {(repoData.length > 0) && (
