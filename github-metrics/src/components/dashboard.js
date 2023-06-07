@@ -16,7 +16,7 @@ import StyledSwitch from "./styled_switch";
 import id_to_repo from "../data/id_to_repo";
 import field_to_repos from "../data/field_to_repos";
 import fields from "../data/fields";
-import {sortMapping, keyToTitle, getRepoName, customTopics} from "./utils";
+import {sortMapping, keyToTitle, getRepoName, customTopics, sortByKey} from "./utils";
 
 const styles = {
   topPanel: css`
@@ -130,15 +130,6 @@ const Dashboard = () => {
     return ["All"].concat(opts);
   };
 
-  const repoSortFn = (repo, filters) => {
-    if(filters["order_by"] === "num_references"){
-      return repo["num_references"][filters["field_of_study"]]
-    } else if(["created_at", "pushed_at"].includes(filters["order_by"])){
-      return new Date(repo[filters["order_by"]])
-    }
-    return repo[filters["order_by"]]
-  };
-
   const mkRepoData = (filters, currShowSummary=showSummary) => {
     let relevantFilters = filters;
     // if we're currently showing the summary, only filter by the field
@@ -146,8 +137,8 @@ const Dashboard = () => {
       relevantFilters = {...defaultFilterValues};
       relevantFilters["field_of_study"] = filters["field_of_study"]
     }
-    const newRepoData = getSelectedRepos(relevantFilters);
-    newRepoData.sort((a, b) => repoSortFn(b, relevantFilters) - repoSortFn(a, relevantFilters)).filter(r => !repoSortFn(r, relevantFilters));
+    let newRepoData = getSelectedRepos(relevantFilters);
+    newRepoData = sortByKey(newRepoData, relevantFilters["order_by"], relevantFilters["field_of_study"]);
     setRepoData(newRepoData);
   };
 
