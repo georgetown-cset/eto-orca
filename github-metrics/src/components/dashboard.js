@@ -71,6 +71,8 @@ const Dashboard = () => {
       }
     }
     setFilterValues(updatedFilterValues);
+    setMoreFilters(urlParams.has(MORE_FILTERS) && urlParams.get(MORE_FILTERS));
+    setShowSummary(urlParams.has(SHOW_SUMMARY) && urlParams.get(SHOW_SUMMARY));
     mkRepoData(updatedFilterValues);
   }, []);
 
@@ -82,13 +84,21 @@ const Dashboard = () => {
     "license_group": "All"
   };
 
+  const PAGE_SIZE = 10;
+  const MORE_FILTERS = "more_filters";
+  const SHOW_SUMMARY = "show_summary";
+
   const [filterValues, setFilterValues] = React.useState({...defaultFilterValues});
   const [repoData, setRepoData] = React.useState([]);
   const [moreFilters, setMoreFilters] = React.useState(false);
   const [showSummary, setShowSummary] = React.useState(false);
   const [currPage, setCurrPage] = React.useState(1);
 
-  const PAGE_SIZE = 10;
+  const toggleToState = {
+    [MORE_FILTERS]: [moreFilters, setMoreFilters],
+    [SHOW_SUMMARY]: [showSummary, setShowSummary]
+  };
+
   const contentContainer = React.createRef();
 
   const compareOptions = Object.entries(keyToTitle).map(e => ({"val": e[0], "text": e[1]}));
@@ -157,6 +167,8 @@ const Dashboard = () => {
     for(let key in updated){
       if(updated[key] !== defaultFilterValues[key]) {
         urlParams.set(key, updated[key]);
+      } else {
+        urlParams.delete(key);
       }
     }
     const params = urlParams.toString().length > 0 ? "?" + urlParams.toString() : "";
@@ -184,10 +196,21 @@ const Dashboard = () => {
     return options.concat(autoFields);
   };
 
-  const updateView = () => {
-    const newShowSummary = !showSummary;
-    mkRepoData({...filterValues}, newShowSummary);
-    setShowSummary(newShowSummary);
+  const updateToggle = (name) => {
+    const [state, setter] = toggleToState[name];
+    const urlParams = new URLSearchParams(window.location.search);
+    const newState = !state;
+    if(newState) {
+      urlParams.set(name, newState)
+    } else {
+      urlParams.delete(name);
+    }
+    const params = urlParams.toString().length > 0 ? "?" + urlParams.toString() : "";
+    window.history.replaceState(null, null, window.location.pathname + params);
+    setter(newState);
+    if(name === SHOW_SUMMARY){
+      mkRepoData({...filterValues}, newState);
+    }
   };
 
   return (
@@ -195,7 +218,7 @@ const Dashboard = () => {
       <div>
         <div css={styles.topPanel}>
           <div css={styles.switchContainer}>
-            List <StyledSwitch checked={showSummary} onChange={() => updateView()}/> Comparison
+            List <StyledSwitch checked={showSummary} onChange={() => updateToggle(SHOW_SUMMARY)}/> Comparison
           </div>
           <div>
             <div css={styles.dropdownContainer}>
@@ -226,7 +249,7 @@ const Dashboard = () => {
             </>}
             {!showSummary &&
             <>
-              <ButtonStyled css={styles.moreFilters} onClick={() => setMoreFilters(!moreFilters)}>
+              <ButtonStyled css={styles.moreFilters} onClick={() => updateToggle(MORE_FILTERS)}>
                 {moreFilters ? "Hide" : "Show"} Detail Filters
               </ButtonStyled>
               <ButtonStyled css={styles.moreFilters} onClick={() => handleFilterUpdate({...defaultFilterValues})}>
