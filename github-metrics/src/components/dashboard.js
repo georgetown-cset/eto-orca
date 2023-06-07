@@ -63,7 +63,15 @@ const StyledPagination = styled(Pagination)(({ theme }) => ({
 
 const Dashboard = () => {
   useEffect(() => {
-    mkRepoData(defaultFilterValues);
+    const updatedFilterValues = {...defaultFilterValues};
+    const urlParams = new URLSearchParams(window.location.search);
+    for(let key in defaultFilterValues){
+      if (urlParams.has(key) && urlParams.get(key) !== null) {
+        updatedFilterValues[key] = urlParams.get(key)
+      }
+    }
+    setFilterValues(updatedFilterValues);
+    mkRepoData(updatedFilterValues);
   }, []);
 
   const defaultFilterValues = {
@@ -121,9 +129,15 @@ const Dashboard = () => {
     return repo[filters["order_by"]]
   };
 
-  const mkRepoData = (filters) => {
-    const newRepoData = getSelectedRepos(filters);
-    newRepoData.sort((a, b) => repoSortFn(b, filters) - repoSortFn(a, filters)).filter(r => !repoSortFn(r, filters));
+  const mkRepoData = (filters, currShowSummary=showSummary) => {
+    let relevantFilters = filters;
+    // if we're currently showing the summary, only filter by the field
+    if(currShowSummary){
+      relevantFilters = {...defaultFilterValues};
+      relevantFilters["field_of_study"] = filters["field_of_study"]
+    }
+    const newRepoData = getSelectedRepos(relevantFilters);
+    newRepoData.sort((a, b) => repoSortFn(b, relevantFilters) - repoSortFn(a, relevantFilters)).filter(r => !repoSortFn(r, relevantFilters));
     setRepoData(newRepoData);
   };
 
@@ -139,6 +153,14 @@ const Dashboard = () => {
     mkRepoData(updated);
     setCurrPage(1);
     contentContainer.current.scrollIntoView();
+    const urlParams = new URLSearchParams(window.location.search);
+    for(let key in updated){
+      if(updated[key] !== defaultFilterValues[key]) {
+        urlParams.set(key, updated[key]);
+      }
+    }
+    const params = urlParams.toString().length > 0 ? "?" + urlParams.toString() : "";
+    window.history.replaceState(null, null, window.location.pathname + params);
   };
 
   const handleSingleSelectChange = (value, key) => {
@@ -162,12 +184,18 @@ const Dashboard = () => {
     return options.concat(autoFields);
   };
 
+  const updateView = () => {
+    const newShowSummary = !showSummary;
+    mkRepoData({...filterValues}, newShowSummary);
+    setShowSummary(newShowSummary);
+  };
+
   return (
     <div style={{backgroundColor: "white"}} id={"dashboard"} ref={contentContainer}>
       <div>
         <div css={styles.topPanel}>
           <div css={styles.switchContainer}>
-            List <StyledSwitch checked={showSummary} onChange={() => setShowSummary(!showSummary)}/> Comparison
+            List <StyledSwitch checked={showSummary} onChange={() => updateView()}/> Comparison
           </div>
           <div>
             <div css={styles.dropdownContainer}>
