@@ -104,6 +104,8 @@ const sortByKey = (toSort, key, field=null) => {
   const sorted = [...toSort];
   if(key === "num_references"){
     sorted.sort((r1, r2) => r2[key][field] - r1[key][field]).filter(r => !r[key][field]);
+  } else if(["created_at", "pushed_at"].includes(key)){
+    sorted.sort((r1, r2) => new Date(r2[key]) - new Date(r1[key]));
   } else {
     sorted.sort((r1, r2) => r2[key] - r1[key]);
   }

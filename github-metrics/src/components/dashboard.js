@@ -16,7 +16,7 @@ import StyledSwitch from "./styled_switch";
 import id_to_repo from "../data/id_to_repo";
 import field_to_repos from "../data/field_to_repos";
 import fields from "../data/fields";
-import {sortMapping, keyToTitle, getRepoName, customTopics} from "./utils";
+import {sortMapping, keyToTitle, getRepoName, customTopics, sortByKey} from "./utils";
 
 const styles = {
   topPanel: css`
@@ -63,7 +63,17 @@ const StyledPagination = styled(Pagination)(({ theme }) => ({
 
 const Dashboard = () => {
   useEffect(() => {
-    mkRepoData(defaultFilterValues);
+    const updatedFilterValues = {...defaultFilterValues};
+    const urlParams = new URLSearchParams(window.location.search);
+    for(let key in defaultFilterValues){
+      if (urlParams.has(key) && urlParams.get(key) !== null) {
+        updatedFilterValues[key] = urlParams.get(key)
+      }
+    }
+    setFilterValues(updatedFilterValues);
+    setMoreFilters(urlParams.has(MORE_FILTERS) && urlParams.get(MORE_FILTERS));
+    setShowSummary(urlParams.has(SHOW_SUMMARY) && urlParams.get(SHOW_SUMMARY));
+    mkRepoData(updatedFilterValues);
   }, []);
 
   const defaultFilterValues = {
@@ -74,13 +84,21 @@ const Dashboard = () => {
     "license_group": "All"
   };
 
+  const PAGE_SIZE = 10;
+  const MORE_FILTERS = "more_filters";
+  const SHOW_SUMMARY = "show_summary";
+
   const [filterValues, setFilterValues] = React.useState({...defaultFilterValues});
   const [repoData, setRepoData] = React.useState([]);
   const [moreFilters, setMoreFilters] = React.useState(false);
   const [showSummary, setShowSummary] = React.useState(false);
   const [currPage, setCurrPage] = React.useState(1);
 
-  const PAGE_SIZE = 10;
+  const toggleToState = {
+    [MORE_FILTERS]: [moreFilters, setMoreFilters],
+    [SHOW_SUMMARY]: [showSummary, setShowSummary]
+  };
+
   const contentContainer = React.createRef();
 
   const compareOptions = Object.entries(keyToTitle).map(e => ({"val": e[0], "text": e[1]}));
@@ -112,18 +130,15 @@ const Dashboard = () => {
     return ["All"].concat(opts);
   };
 
-  const repoSortFn = (repo, filters) => {
-    if(filters["order_by"] === "num_references"){
-      return repo["num_references"][filters["field_of_study"]]
-    } else if(["created_at", "pushed_at"].includes(filters["order_by"])){
-      return new Date(repo[filters["order_by"]])
+  const mkRepoData = (filters, currShowSummary=showSummary) => {
+    let relevantFilters = filters;
+    // if we're currently showing the summary, only filter by the field
+    if(currShowSummary){
+      relevantFilters = {...defaultFilterValues};
+      relevantFilters["field_of_study"] = filters["field_of_study"]
     }
-    return repo[filters["order_by"]]
-  };
-
-  const mkRepoData = (filters) => {
-    const newRepoData = getSelectedRepos(filters);
-    newRepoData.sort((a, b) => repoSortFn(b, filters) - repoSortFn(a, filters)).filter(r => !repoSortFn(r, filters));
+    let newRepoData = getSelectedRepos(relevantFilters);
+    newRepoData = sortByKey(newRepoData, relevantFilters["order_by"], relevantFilters["field_of_study"]);
     setRepoData(newRepoData);
   };
 
@@ -139,6 +154,16 @@ const Dashboard = () => {
     mkRepoData(updated);
     setCurrPage(1);
     contentContainer.current.scrollIntoView();
+    const urlParams = new URLSearchParams(window.location.search);
+    for(let key in updated){
+      if(updated[key] !== defaultFilterValues[key]) {
+        urlParams.set(key, updated[key]);
+      } else {
+        urlParams.delete(key);
+      }
+    }
+    const params = urlParams.toString().length > 0 ? "?" + urlParams.toString() : "";
+    window.history.replaceState(null, null, window.location.pathname + params);
   };
 
   const handleSingleSelectChange = (value, key) => {
@@ -162,12 +187,29 @@ const Dashboard = () => {
     return options.concat(autoFields);
   };
 
+  const updateToggle = (name) => {
+    const [state, setter] = toggleToState[name];
+    const urlParams = new URLSearchParams(window.location.search);
+    const newState = !state;
+    if(newState) {
+      urlParams.set(name, newState)
+    } else {
+      urlParams.delete(name);
+    }
+    const params = urlParams.toString().length > 0 ? "?" + urlParams.toString() : "";
+    window.history.replaceState(null, null, window.location.pathname + params);
+    setter(newState);
+    if(name === SHOW_SUMMARY){
+      mkRepoData({...filterValues}, newState);
+    }
+  };
+
   return (
     <div style={{backgroundColor: "white"}} id={"dashboard"} ref={contentContainer}>
       <div>
         <div css={styles.topPanel}>
           <div css={styles.switchContainer}>
-            List <StyledSwitch checked={showSummary} onChange={() => setShowSummary(!showSummary)}/> Comparison
+            List <StyledSwitch checked={showSummary} onChange={() => updateToggle(SHOW_SUMMARY)}/> Comparison
           </div>
           <div>
             <div css={styles.dropdownContainer}>
@@ -198,7 +240,7 @@ const Dashboard = () => {
             </>}
             {!showSummary &&
             <>
-              <ButtonStyled css={styles.moreFilters} onClick={() => setMoreFilters(!moreFilters)}>
+              <ButtonStyled css={styles.moreFilters} onClick={() => updateToggle(MORE_FILTERS)}>
                 {moreFilters ? "Hide" : "Show"} Detail Filters
               </ButtonStyled>
               <ButtonStyled css={styles.moreFilters} onClick={() => handleFilterUpdate({...defaultFilterValues})}>

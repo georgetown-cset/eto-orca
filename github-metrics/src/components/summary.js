@@ -1,7 +1,7 @@
 /*
 Summary metrics for top five repos within current selection
  */
-import React from "react";
+import React, {useEffect} from "react";
 
 import {LineGraph} from "./graph";
 import {css} from "@emotion/react";
@@ -35,12 +35,29 @@ const styles = {
   `,
   statList: css`
     padding-left: 0px;
+  `,
+  statDetail: css`
+    padding-left: 10px;
   `
 };
 
-const StatBox = ({stat, data, field=null, fieldName=null}) => {
+const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
   const fmtStat = sortMapping[stat].toLowerCase();
   const title = `Top repositories by ${stat === "num_references" ? fieldName+" references" : fmtStat}`;
+  const yearlyRepoStats = {};
+  if(yearly !== null) {
+    for (let repoStat of yearly) {
+      const numYears = repoStat.y.length;
+      const change = (100*(repoStat.y[numYears - 1] - repoStat.y[numYears - 2]) / repoStat.y[numYears - 2]).toFixed(2);
+      const prettyChange = `${change < 0 ? "" : "+"}${change}`
+      yearlyRepoStats[repoStat.name] = {
+        numYears: numYears,
+        change: prettyChange,
+        startYear: repoStat.x[numYears - 2],
+        endYear: repoStat.x[numYears - 1]
+      };
+    }
+  }
 
   return (
     <HighlightBox title={title}>
@@ -49,7 +66,12 @@ const StatBox = ({stat, data, field=null, fieldName=null}) => {
           <li css={styles.statListElt}>
             <ExternalLink href={`/project?name=${getRepoName(row)}`}>
               {getRepoName(row)}
-            </ExternalLink> ({stat === "num_references" ? row["num_references"][field] : row[stat]} {fmtStat})
+            </ExternalLink><br/>
+            <span css={styles.statDetail}>
+              {stat === "num_references" ?
+                <span>{row["num_references"][field]} {fmtStat}</span> :
+                <span><strong>{row[stat]}</strong> {fmtStat} (<strong>{yearlyRepoStats[getRepoName(row)].change}</strong>%, {yearlyRepoStats[getRepoName(row)].startYear}-{yearlyRepoStats[getRepoName(row)].endYear})</span>}
+            </span>
           </li>
         )}
       </ul>
@@ -57,16 +79,23 @@ const StatBox = ({stat, data, field=null, fieldName=null}) => {
   )
 };
 
-const Summary = (props) => {
-  const {data, sortOptions, field, isCurated} = props;
+const Summary = ({data, sortOptions, field, isCurated}) => {
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if(urlParams.has(ORDER_BY_URL_PARAM) && urlParams.get(ORDER_BY_URL_PARAM)){
+      setOrderBy(urlParams.get(ORDER_BY_URL_PARAM));
+    }
+  }, []);
 
-  const [orderBy, setOrderBy] = React.useState("stargazers_count");
+  const DEFAULT_ORDER_BY = "stargazers_count";
+  const ORDER_BY_URL_PARAM = "summary_order";
+  const [orderBy, setOrderBy] = React.useState(DEFAULT_ORDER_BY);
   const [expanded, setExpanded] = React.useState(["push_dates"]);
 
   const fieldName = cleanFieldName(field);
-  const topFive = sortByKey(data, orderBy, field).slice(0, 5);
 
-  const getTrace = (key, yMap = val => val[1]) => {
+  const getTrace = (key, yMap = val => val[1], currOrderBy=orderBy) => {
+    const topFive = sortByKey(data, currOrderBy, field).slice(0, 5);
     return topFive.map(row => ({
       x: row[key].map(val => val[0]),
       y: row[key].map(val => yMap(val)),
@@ -75,6 +104,7 @@ const Summary = (props) => {
   };
 
   const getContribTrace = (key) => {
+    const topFive = sortByKey(data, orderBy, field).slice(0, 5);
     const traces = [];
     for(let row of topFive){
       const x = [];
@@ -130,16 +160,28 @@ const Summary = (props) => {
     }
   ];
 
+  const updateOrderBy = (newSort) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if(newSort !== DEFAULT_ORDER_BY) {
+      urlParams.set(ORDER_BY_URL_PARAM, newSort)
+    } else {
+      urlParams.delete(ORDER_BY_URL_PARAM);
+    }
+    const params = urlParams.toString().length > 0 ? "?" + urlParams.toString() : "";
+    window.history.replaceState(null, null, window.location.pathname + params);
+    setOrderBy(newSort);
+  };
+
   return (
     <div css={styles.card}>
       <h1 css={styles.summaryContainerLabel}>
         Currently tracking <strong>{data.length}</strong> software repositories {isCurated ? "related to" : "used for research into"} <strong>{fieldName}</strong>.
       </h1>
       <div>
-        <StatBox stat={"stargazers_count"} data={data}/>
-        <StatBox stat={"num_contributors"} data={data}/>
+        <StatBox stat={"stargazers_count"} yearly={getTrace("star_dates", val => val[1], "stargazers_count")} data={data}/>
+        <StatBox stat={"num_contributors"} yearly={getTrace("commit_dates", val => val[1]+val[2], "num_contributors")} data={data}/>
         {isCurated ?
-          <StatBox stat={"open_issues"} data={data}/> :
+          <StatBox stat={"open_issues"} yearly={getTrace("issue_dates", val => val[2], "open_issues")} data={data}/> :
           <StatBox stat={"num_references"} data={data} field={field} fieldName={fieldName}/>}
       </div>
       <h2 css={styles.summaryContainerLabel}>
@@ -147,7 +189,7 @@ const Summary = (props) => {
         <div css={styles.dropdownContainer}>
           <Dropdown
             selected={orderBy}
-            setSelected={(val) => setOrderBy(val)}
+            setSelected={(val) => updateOrderBy(val)}
             inputLabel={"Order by"}
             options={sortOptions}
           />

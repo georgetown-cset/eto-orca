@@ -42,9 +42,14 @@ const styles = {
   `,
   fieldList: css`
     margin: 0;
+    padding-left: 0px;
   `,
   graphHeader: css`
     margin: 20px 20px 10px 20px;
+  `,
+  fieldListElt: css`
+    line-height: 1.5;
+    list-style-type: none;
   `
 };
 
@@ -134,7 +139,7 @@ const ProjectDetails = () => {
              <ul css={styles.fieldList}>
                {Object.keys(data["num_references"]).sort((a, b) =>
                  data["num_references"][b] - data["num_references"][a]
-               ).slice(0, 5).map(field => <li>
+               ).slice(0, 5).map(field => <li css={styles.fieldListElt}>
                  {field} ({data["num_references"][field]} citation{data["num_references"][field] === 1 ? "" : "s"})
                </li>)}
              </ul>

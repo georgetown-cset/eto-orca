@@ -7,10 +7,10 @@ exports[`Project metadata renders correctly with no references 1`] = `
     <div>
       <div>
         <div
-          class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+          class="css-kq7hyf-sortOption"
         >
           <span
-            class="css-mmmexm-metaSection"
+            class="css-1xpyfpg-metaSection"
           >
             <span>
               <strong>
@@ -21,7 +21,7 @@ exports[`Project metadata renders correctly with no references 1`] = `
             </span>
           </span>
           <span
-            class="css-mmmexm-metaSection"
+            class="css-1xpyfpg-metaSection"
           >
             <span>
               <strong>
@@ -33,13 +33,13 @@ exports[`Project metadata renders correctly with no references 1`] = `
           </span>
         </div>
         <div
-          class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+          class="css-kq7hyf-sortOption"
         />
         <div
-          class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+          class="css-kq7hyf-sortOption"
         >
           <span
-            class="css-mmmexm-metaSection"
+            class="css-1xpyfpg-metaSection"
           >
             <span>
               <strong>
@@ -50,7 +50,7 @@ exports[`Project metadata renders correctly with no references 1`] = `
             </span>
           </span>
           <span
-            class="css-mmmexm-metaSection"
+            class="css-1xpyfpg-metaSection"
           >
             <span>
               <strong>
@@ -62,10 +62,10 @@ exports[`Project metadata renders correctly with no references 1`] = `
           </span>
         </div>
         <div
-          class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+          class="css-kq7hyf-sortOption"
         >
           <span
-            class="css-mmmexm-metaSection"
+            class="css-1xpyfpg-metaSection"
           >
             <span>
               <strong>
@@ -75,8 +75,12 @@ exports[`Project metadata renders correctly with no references 1`] = `
               2023-01-01
             </span>
           </span>
+        </div>
+        <div
+          class="css-kq7hyf-sortOption"
+        >
           <span
-            class="css-mmmexm-metaSection"
+            class="css-1xpyfpg-metaSection"
           >
             <span>
               <strong>
@@ -88,10 +92,10 @@ exports[`Project metadata renders correctly with no references 1`] = `
           </span>
         </div>
         <div
-          class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+          class="css-kq7hyf-sortOption"
         >
           <span
-            class="css-mmmexm-metaSection"
+            class="css-1xpyfpg-metaSection"
           >
             <span>
               <strong>
@@ -103,10 +107,10 @@ exports[`Project metadata renders correctly with no references 1`] = `
           </span>
         </div>
         <div
-          class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+          class="css-kq7hyf-sortOption"
         >
           <span
-            class="css-mmmexm-metaSection"
+            class="css-1xpyfpg-metaSection"
           >
             <span>
               <strong>
@@ -123,10 +127,10 @@ exports[`Project metadata renders correctly with no references 1`] = `
   "container": <div>
     <div>
       <div
-        class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+        class="css-kq7hyf-sortOption"
       >
         <span
-          class="css-mmmexm-metaSection"
+          class="css-1xpyfpg-metaSection"
         >
           <span>
             <strong>
@@ -137,7 +141,7 @@ exports[`Project metadata renders correctly with no references 1`] = `
           </span>
         </span>
         <span
-          class="css-mmmexm-metaSection"
+          class="css-1xpyfpg-metaSection"
         >
           <span>
             <strong>
@@ -149,13 +153,13 @@ exports[`Project metadata renders correctly with no references 1`] = `
         </span>
       </div>
       <div
-        class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+        class="css-kq7hyf-sortOption"
       />
       <div
-        class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+        class="css-kq7hyf-sortOption"
       >
         <span
-          class="css-mmmexm-metaSection"
+          class="css-1xpyfpg-metaSection"
         >
           <span>
             <strong>
@@ -166,7 +170,7 @@ exports[`Project metadata renders correctly with no references 1`] = `
           </span>
         </span>
         <span
-          class="css-mmmexm-metaSection"
+          class="css-1xpyfpg-metaSection"
         >
           <span>
             <strong>
@@ -178,10 +182,10 @@ exports[`Project metadata renders correctly with no references 1`] = `
         </span>
       </div>
       <div
-        class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+        class="css-kq7hyf-sortOption"
       >
         <span
-          class="css-mmmexm-metaSection"
+          class="css-1xpyfpg-metaSection"
         >
           <span>
             <strong>
@@ -191,8 +195,12 @@ exports[`Project metadata renders correctly with no references 1`] = `
             2023-01-01
           </span>
         </span>
+      </div>
+      <div
+        class="css-kq7hyf-sortOption"
+      >
         <span
-          class="css-mmmexm-metaSection"
+          class="css-1xpyfpg-metaSection"
         >
           <span>
             <strong>
@@ -204,10 +212,10 @@ exports[`Project metadata renders correctly with no references 1`] = `
         </span>
       </div>
       <div
-        class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+        class="css-kq7hyf-sortOption"
       >
         <span
-          class="css-mmmexm-metaSection"
+          class="css-1xpyfpg-metaSection"
         >
           <span>
             <strong>
@@ -219,10 +227,10 @@ exports[`Project metadata renders correctly with no references 1`] = `
         </span>
       </div>
       <div
-        class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+        class="css-kq7hyf-sortOption"
       >
         <span
-          class="css-mmmexm-metaSection"
+          class="css-1xpyfpg-metaSection"
         >
           <span>
             <strong>
@@ -296,10 +304,10 @@ exports[`Project metadata renders correctly with references 1`] = `
     <div>
       <div>
         <div
-          class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+          class="css-kq7hyf-sortOption"
         >
           <span
-            class="css-mmmexm-metaSection"
+            class="css-1xpyfpg-metaSection"
           >
             <span>
               <strong>
@@ -310,7 +318,7 @@ exports[`Project metadata renders correctly with references 1`] = `
             </span>
           </span>
           <span
-            class="css-mmmexm-metaSection"
+            class="css-1xpyfpg-metaSection"
           >
             <span>
               <strong>
@@ -322,10 +330,10 @@ exports[`Project metadata renders correctly with references 1`] = `
           </span>
         </div>
         <div
-          class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+          class="css-kq7hyf-sortOption"
         >
           <span
-            class="css-mmmexm-metaSection"
+            class="css-1xpyfpg-metaSection"
           >
             <span>
               76
@@ -338,10 +346,10 @@ exports[`Project metadata renders correctly with references 1`] = `
           </span>
         </div>
         <div
-          class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+          class="css-kq7hyf-sortOption"
         >
           <span
-            class="css-mmmexm-metaSection"
+            class="css-1xpyfpg-metaSection"
           >
             <span>
               <strong>
@@ -352,7 +360,7 @@ exports[`Project metadata renders correctly with references 1`] = `
             </span>
           </span>
           <span
-            class="css-mmmexm-metaSection"
+            class="css-1xpyfpg-metaSection"
           >
             <span>
               <strong>
@@ -364,10 +372,10 @@ exports[`Project metadata renders correctly with references 1`] = `
           </span>
         </div>
         <div
-          class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+          class="css-kq7hyf-sortOption"
         >
           <span
-            class="css-mmmexm-metaSection"
+            class="css-1xpyfpg-metaSection"
           >
             <span>
               <strong>
@@ -377,8 +385,12 @@ exports[`Project metadata renders correctly with references 1`] = `
               2023-01-01
             </span>
           </span>
+        </div>
+        <div
+          class="css-kq7hyf-sortOption"
+        >
           <span
-            class="css-mmmexm-metaSection"
+            class="css-1xpyfpg-metaSection"
           >
             <span>
               <strong>
@@ -390,10 +402,10 @@ exports[`Project metadata renders correctly with references 1`] = `
           </span>
         </div>
         <div
-          class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+          class="css-kq7hyf-sortOption"
         >
           <span
-            class="css-mmmexm-metaSection"
+            class="css-1xpyfpg-metaSection"
           >
             <span>
               <strong>
@@ -405,10 +417,10 @@ exports[`Project metadata renders correctly with references 1`] = `
           </span>
         </div>
         <div
-          class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+          class="css-kq7hyf-sortOption"
         >
           <span
-            class="css-mmmexm-metaSection"
+            class="css-1xpyfpg-metaSection"
           >
             <span>
               <strong>
@@ -425,10 +437,10 @@ exports[`Project metadata renders correctly with references 1`] = `
   "container": <div>
     <div>
       <div
-        class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+        class="css-kq7hyf-sortOption"
       >
         <span
-          class="css-mmmexm-metaSection"
+          class="css-1xpyfpg-metaSection"
         >
           <span>
             <strong>
@@ -439,7 +451,7 @@ exports[`Project metadata renders correctly with references 1`] = `
           </span>
         </span>
         <span
-          class="css-mmmexm-metaSection"
+          class="css-1xpyfpg-metaSection"
         >
           <span>
             <strong>
@@ -451,10 +463,10 @@ exports[`Project metadata renders correctly with references 1`] = `
         </span>
       </div>
       <div
-        class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+        class="css-kq7hyf-sortOption"
       >
         <span
-          class="css-mmmexm-metaSection"
+          class="css-1xpyfpg-metaSection"
         >
           <span>
             76
@@ -467,10 +479,10 @@ exports[`Project metadata renders correctly with references 1`] = `
         </span>
       </div>
       <div
-        class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+        class="css-kq7hyf-sortOption"
       >
         <span
-          class="css-mmmexm-metaSection"
+          class="css-1xpyfpg-metaSection"
         >
           <span>
             <strong>
@@ -481,7 +493,7 @@ exports[`Project metadata renders correctly with references 1`] = `
           </span>
         </span>
         <span
-          class="css-mmmexm-metaSection"
+          class="css-1xpyfpg-metaSection"
         >
           <span>
             <strong>
@@ -493,10 +505,10 @@ exports[`Project metadata renders correctly with references 1`] = `
         </span>
       </div>
       <div
-        class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+        class="css-kq7hyf-sortOption"
       >
         <span
-          class="css-mmmexm-metaSection"
+          class="css-1xpyfpg-metaSection"
         >
           <span>
             <strong>
@@ -506,8 +518,12 @@ exports[`Project metadata renders correctly with references 1`] = `
             2023-01-01
           </span>
         </span>
+      </div>
+      <div
+        class="css-kq7hyf-sortOption"
+      >
         <span
-          class="css-mmmexm-metaSection"
+          class="css-1xpyfpg-metaSection"
         >
           <span>
             <strong>
@@ -519,10 +535,10 @@ exports[`Project metadata renders correctly with references 1`] = `
         </span>
       </div>
       <div
-        class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+        class="css-kq7hyf-sortOption"
       >
         <span
-          class="css-mmmexm-metaSection"
+          class="css-1xpyfpg-metaSection"
         >
           <span>
             <strong>
@@ -534,10 +550,10 @@ exports[`Project metadata renders correctly with references 1`] = `
         </span>
       </div>
       <div
-        class="MuiTypography-root MuiTypography-body2 css-rqgorj-MuiTypography-root-sortOption"
+        class="css-kq7hyf-sortOption"
       >
         <span
-          class="css-mmmexm-metaSection"
+          class="css-1xpyfpg-metaSection"
         >
           <span>
             <strong>

@@ -33,7 +33,7 @@ const styles = {
     vertical-align: top;
   `,
   dataDesc: css`
-    margin: 15px 0px;
+    margin: 10px 0px 15px 0px;
   `,
   ghLink: css`
     display: inline-block;
@@ -58,13 +58,13 @@ const ProjectCard = (props) => {
 
   const getGraph = () => {
     if(["issue_dates", "commit_dates", "contrib_counts"].includes(graph_key)){
-      return <BarGraph traces={getBarTraces(graph_key, data)} title={graph_title} height={"250px"}
+      return <BarGraph traces={getBarTraces(graph_key, data)} title={graph_title} height={"300px"}
                        normalizeTime={graph_key !== "contrib_counts"}/>;
     } else if(["country_contributions", "org_contributions", "downloads"].includes(graph_key)){
-      return <LineGraph traces={getCountryTraces(data[graph_key])} title={graph_title} height={"250px"} showLegend={true}/>;
+      return <LineGraph traces={getCountryTraces(data[graph_key])} title={graph_title} height={"300px"} showLegend={true}/>;
     }
     return <LineGraph traces={[{x: getX(data[graph_key]), y: getY(data[graph_key])}]}
-                       title={graph_title} height={"250px"}/>;
+                       title={graph_title} height={"300px"}/>;
   };
 
   return (
@@ -81,9 +81,9 @@ const ProjectCard = (props) => {
             </span>
             }
           </span>
-          <Typography component={"p"} variant={"body2"} css={styles.dataDesc}>
+          <div css={styles.dataDesc}>
             {data["description"]}
-          </Typography>
+          </div>
           <ProjectMetadata data={data} showNumReferences={!isCurated} field={field}/>
         </div>
         <div css={styles.rightPanel}>
