@@ -74,8 +74,8 @@ const Dashboard = () => {
   }, []);
 
   const defaultFilterValues = {
-    "field_of_study": "ai_safety",
-    "order_by": "stargazers_count",
+    "field_of_study": "Machine learning",
+    "order_by": "num_references",
     "compare_graph": "push_dates",
     "language_group": "All",
     "license_group": "All"
