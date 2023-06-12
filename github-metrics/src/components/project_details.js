@@ -19,7 +19,7 @@ import HighlightBox from "./highlight_box";
 const styles = {
   dashboardContainer: css`
     margin: 20px auto;
-    max-width: 1000px;
+    max-width: 1300px;
   `,
   backLink: css`
     text-align: right;
@@ -53,6 +53,11 @@ const styles = {
   `,
   metadataWrapper: css`
     margin-bottom: 20px;
+  `,
+  headerContainer: css`
+    @media (max-width: 1020px) {
+      padding: 0px 20px;
+    }
   `
 };
 
@@ -113,10 +118,10 @@ const ProjectDetails = () => {
 
   return (
    <div css={styles.dashboardContainer} id={"project-dashboard"}>
-     <div css={styles.backLink}>
-      <a href={"/"}>Back to listing page</a>
-     </div>
-     <div>
+     <div css={styles.headerContainer}>
+       <div css={styles.backLink}>
+        <a href={"/"}>Back to listing page</a>
+       </div>
        <h2 css={styles.ghLink}>
          <ExternalLink href={"https://github.com/"+repo_name}>{repo_name}</ExternalLink>
        </h2>

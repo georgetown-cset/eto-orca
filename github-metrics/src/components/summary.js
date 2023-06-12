@@ -13,7 +13,7 @@ import {Accordion, Dropdown, ExternalLink} from "@eto/eto-ui-components";
 
 const styles = {
   card: css`
-    padding: 20px;
+    padding: 20px 0px;
   `,
   summaryContainerLabel: css`
     display: inline-block;
@@ -38,6 +38,12 @@ const styles = {
   `,
   statDetail: css`
     padding-left: 10px;
+  `,
+  statWrapper: css`
+    text-align: center;
+  `,
+  headerContainer: css`
+    margin: 0 20px;
   `
 };
 
@@ -174,33 +180,35 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
 
   return (
     <div css={styles.card}>
-      <h1 css={styles.summaryContainerLabel}>
-        Currently tracking <strong>{data.length}</strong> software repositories {isCurated ? "related to" : "used for research into"} <strong>{fieldName}</strong>.
-      </h1>
-      <div>
-        <StatBox stat={"stargazers_count"} yearly={getTrace("star_dates", val => val[1], "stargazers_count")} data={data}/>
-        <StatBox stat={"num_contributors"} yearly={getTrace("commit_dates", val => val[1]+val[2], "num_contributors")} data={data}/>
-        {isCurated ?
-          <StatBox stat={"open_issues"} yearly={getTrace("issue_dates", val => val[2], "open_issues")} data={data}/> :
-          <StatBox stat={"num_references"} data={data} field={field} fieldName={fieldName}/>}
-      </div>
-      <h2 css={styles.summaryContainerLabel}>
-        <span css={styles.dropdownIntro}>Trends over time for top repos by</span>
-        <div css={styles.dropdownContainer}>
-          <Dropdown
-            selected={orderBy}
-            setSelected={(val) => updateOrderBy(val)}
-            inputLabel={"Order by"}
-            options={sortOptions}
-          />
+      <div css={styles.headerContainer}>
+        <h1 css={styles.summaryContainerLabel}>
+          Currently tracking <strong>{data.length}</strong> software repositories {isCurated ? "related to" : "used for research into"} <strong>{fieldName}</strong>.
+        </h1>
+        <div css={styles.statWrapper}>
+          <StatBox stat={"stargazers_count"} yearly={getTrace("star_dates", val => val[1], "stargazers_count")} data={data}/>
+          <StatBox stat={"num_contributors"} yearly={getTrace("commit_dates", val => val[1]+val[2], "num_contributors")} data={data}/>
+          {isCurated ?
+            <StatBox stat={"open_issues"} yearly={getTrace("issue_dates", val => val[2], "open_issues")} data={data}/> :
+            <StatBox stat={"num_references"} data={data} field={field} fieldName={fieldName}/>}
         </div>
-      </h2>
-        <Accordion
-          key={JSON.stringify(expanded)}
-          panels={accordionDetails}
-          expanded={expanded}
-          setExpanded={(newExpanded) => setExpanded(newExpanded)} headingVariant={"h6"}
-        />
+        <h2 css={styles.summaryContainerLabel}>
+          <span css={styles.dropdownIntro}>Trends over time for top repos by</span>
+          <div css={styles.dropdownContainer}>
+            <Dropdown
+              selected={orderBy}
+              setSelected={(val) => updateOrderBy(val)}
+              inputLabel={"Order by"}
+              options={sortOptions}
+            />
+          </div>
+        </h2>
+      </div>
+      <Accordion
+        key={JSON.stringify(expanded)}
+        panels={accordionDetails}
+        expanded={expanded}
+        setExpanded={(newExpanded) => setExpanded(newExpanded)} headingVariant={"h6"}
+      />
     </div>
   );
 };

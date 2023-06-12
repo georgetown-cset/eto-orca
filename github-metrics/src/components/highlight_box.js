@@ -11,6 +11,10 @@ const styles = {
     margin: 10px;
     text-align: left;
     min-height: 350px;
+    @media (max-width: 870px) {
+      width: 80%;
+      margin: 10px auto;
+    }
   `,
   tallBox: css`
     min-height: 350px;

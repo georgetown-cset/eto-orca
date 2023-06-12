@@ -1,8 +1,9 @@
 /*
 Line and bar graphs used in various other components
  */
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useLayoutEffect } from "react";
 import {PlotlyDefaults} from "@eto/eto-ui-components";
+import {css} from "@emotion/react";
 import config from "../data/config.json";
 
 const colors = [
@@ -13,9 +14,21 @@ const colors = [
   "rgb(252, 231, 126)"
 ];
 
+const styles = {
+  title: css`
+    text-align: center;
+    font-family: GTZirkonMedium;
+    margin: 30px 0 0 0;
+  `,
+  noData: css`
+    text-align: center;
+    margin-bottom: 20px;
+  `
+};
+
 const Plot = lazy(() => import('react-plotly.js'));
 const isSSR = typeof window === "undefined";
-const noData = <div style={{textAlign: "center"}}>No graph data available</div>;
+const noData = <div css={styles.noData}>No graph data available</div>;
 
 const cleanTraces = (x, y) => {
   const [clean_x, clean_y] = [[], []];
@@ -33,6 +46,14 @@ const cleanTraces = (x, y) => {
 
 const LineGraph = (props) => {
   const {traces, title, height, showLegend=false, normalizeTime=true, forceInteger=true} = props;
+  const [screenWidth, setScreenWidth] = React.useState(window.innerWidth);
+  const handleSize = () => {
+    setScreenWidth(window.innerWidth);
+  };
+  useLayoutEffect(() => {
+	  setScreenWidth(window.innerWidth);
+	  window.addEventListener("resize", handleSize);
+  }, []);
 
   const traceMetadata = [];
   let maxY = -1;
@@ -59,18 +80,28 @@ const LineGraph = (props) => {
   const layout = plotlyDefaults.layout;
   const legendVisible = showLegend || (traces.length > 1);
   layout.showlegend = legendVisible;
-  layout.margin = {t: traces.length === 1 ? 50: 80, r: 50, b: 50, l: 50, pad: 4};
+  layout.margin = {t: 10, r: 50, b: 50, l: 50, pad: 4};
   layout.xaxis.dtick = 1;
   layout.yaxis.rangemode = "tozero";
-  if(title) {
-    layout.title = title;
-  }
   if(!forceInteger){
     layout["yaxis"]["dtick"] = null;
+  }
+  if(screenWidth < 750) {
+    layout.legend = {
+      orientation: "h",
+      xanchor: "center",
+      y: 1.5,
+      x: 0.5
+    };
   }
 
   return (
     <>
+      {title &&
+        <div css={styles.title}>
+          {title}
+        </div>
+      }
       { !isSSR &&
         <Suspense fallback={<div>Loading graph...</div>}>
           {((traces.length === 0) || (traces[0].x.length === 0)) ? noData :
@@ -114,13 +145,15 @@ const BarGraph = (props) => {
   layout.showlegend = traces.length > 1;
   layout.barmode = "group";
   layout.xaxis.dtick = 1;
-  layout.margin = {t: traces.length === 1 ? 50 : 80, r: 50, b: 50, l: 50, pad: 4};
-  if(title) {
-    layout.title = title;
-  }
+  layout.margin = {t: 10, r: 50, b: 50, l: 50, pad: 4};
 
   return (
     <>
+      {title &&
+        <div css={styles.title}>
+          {title}
+        </div>
+      }
       { !isSSR &&
         <Suspense fallback={<div>Loading graph...</div>}>
           {(traces.length === 0 || traces[0].x.length === 0) ? noData :
