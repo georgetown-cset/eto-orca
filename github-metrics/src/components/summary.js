@@ -60,7 +60,7 @@ const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
   }
 
   return (
-    <HighlightBox title={title}>
+    <HighlightBox title={title} isTall={true}>
       <ul css={styles.statList}>
         {!!data.length && sortByKey(data, stat, field).slice(0, 5).map((row) =>
           <li css={styles.statListElt}>
