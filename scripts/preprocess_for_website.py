@@ -241,6 +241,8 @@ def clean_row(raw_row: dict) -> dict:
     for key in INT_KEYS:
         if (key not in row) or not row[key]:
             row[key] = 0
+    if "description" in row:
+        row["description"] = row["description"].replace("\ufffd", "").strip()
     return row
 
 
