@@ -47,11 +47,8 @@ const styles = {
   `,
   paginationContainer: css`
     margin: 10px auto 30px auto;
-    text-align: center;
-  `,
-  // come back later and center the pagination in a less janky way
-  paginationWrapper: css`
-    display: inline-block;
+    display: flex;
+    justify-content: center;
   `
 };
 
@@ -288,11 +285,9 @@ const Dashboard = () => {
               ))}
               <div>
               <div css={styles.paginationContainer}>
-                <div css={styles.paginationWrapper}>
-                  <StyledPagination page={currPage}
-                                    onChange={(_, page) => {setCurrPage(page);contentContainer.current.scrollIntoView()}}
-                                    count={Math.ceil(repoData.length/PAGE_SIZE)}/>
-                </div>
+                <StyledPagination page={currPage}
+                                  onChange={(_, page) => {setCurrPage(page);contentContainer.current.scrollIntoView()}}
+                                  count={Math.ceil(repoData.length/PAGE_SIZE)}/>
               </div>
               </div>
             </div>
