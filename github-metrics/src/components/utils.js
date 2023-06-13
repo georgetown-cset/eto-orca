@@ -1,7 +1,7 @@
 /*
 Miscellaneous utilities and shared functionality
  */
-const sortMapping = {
+export const sortMapping = {
   "stargazers_count": "Stars",
   "subscribers_count": "Watchers",
   "num_contributors": "Contributors",
@@ -11,11 +11,11 @@ const sortMapping = {
   "num_references": "References"
 };
 
-const metaMapping = {...sortMapping};
+export const metaMapping = {...sortMapping};
 metaMapping["license"] = "License";
 metaMapping["language"] = "Top Programming Language";
 
-const keyToTitle = {
+export const keyToTitle = {
   "star_dates": "Stars over time",
   "push_dates": "Commits over time",
   "issue_dates": "Issues over time",
@@ -24,7 +24,7 @@ const keyToTitle = {
   "downloads": "PyPI downloads over time"
 };
 
-const customTopics = [
+export const customTopics = [
   {"val": "ai_safety", "text": "AI Safety"},
   {"val": "asr", "text": "Speech Recognition"},
   {"val": "riscv", "text": "RISC-V"}
@@ -35,7 +35,7 @@ for(let topic of customTopics){
 }
 
 // returns data traces for country comparison graphs
-const getCountryTraces = (graphData) => {
+export const getCountryTraces = (graphData) => {
   const nameToYearToCounts = {};
   const countryCounts = {};
   for(let elt of graphData){
@@ -71,7 +71,7 @@ const barTraceNames = {
 };
 
 // returns bar graph traces
-const getBarTraces = (key, data) => {
+export const getBarTraces = (key, data) => {
   const barData = data[key];
   const traceData = [];
   const yTrans = y => key !== "contrib_counts" ? y : 100*y/data["num_commits"];
@@ -88,19 +88,19 @@ const getBarTraces = (key, data) => {
   return traceData;
 };
 
-const getX = (ary) => {
+export const getX = (ary) => {
   return ary.map(elt => elt[0])
 };
 
-const getY = (ary) => {
+export const getY = (ary) => {
   return ary.map(elt => elt[1])
 };
 
-const getRepoName = (row) => {
+export const getRepoName = (row) => {
   return row["owner_name"]+"/"+row["current_name"];
 };
 
-const sortByKey = (toSort, key, field=null) => {
+export const sortByKey = (toSort, key, field=null) => {
   const sorted = [...toSort];
   if(key === "num_references"){
     sorted.sort((r1, r2) => r2[key][field] - r1[key][field]).filter(r => !r[key][field]);
@@ -112,7 +112,7 @@ const sortByKey = (toSort, key, field=null) => {
   return sorted;
 };
 
-const cleanFieldName = (field) => {
+export const cleanFieldName = (field) => {
   let clean = field;
   if(field in customTopicMap){
     clean = customTopicMap[field];
@@ -123,5 +123,3 @@ const cleanFieldName = (field) => {
   }
   return clean;
 };
-
-export {sortMapping, metaMapping, keyToTitle, getCountryTraces, getBarTraces, getX, getY, getRepoName, sortByKey, cleanFieldName, customTopics};
