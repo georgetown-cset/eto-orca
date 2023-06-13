@@ -3,7 +3,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import {AppWrapper, ErrorBoundary} from "@eto/eto-ui-components";
 
-const ProjectDashboard = React.lazy(() => import("../components/project_dashboard"));
+const ProjectDetails = React.lazy(() => import("../components/project_details"));
 
 const Project = () => {
   useEffect(() => {
@@ -19,7 +19,7 @@ const Project = () => {
         {(typeof window !== "undefined") &&
           <React.Suspense fallback={<div style={{textAlign: "center"}}><CircularProgress/></div>}>
             <ErrorBoundary>
-              <ProjectDashboard/>
+              <ProjectDetails/>
             </ErrorBoundary>
           </React.Suspense>
         }

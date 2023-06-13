@@ -12,7 +12,7 @@ import "core-js/features/url-search-params";
 import {LineGraph, BarGraph} from "./graph";
 import ProjectMetadata from "./project_metadata";
 
-import {getCountryTraces, getBarTraces, getX, getY} from "./utils";
+import {getCountryTraces, getBarTraces, getX, getY, getRepoName} from "./utils";
 
 
 const styles = {
@@ -33,7 +33,7 @@ const styles = {
     vertical-align: top;
   `,
   dataDesc: css`
-    margin: 15px 0px;
+    margin: 10px 0px 15px 0px;
   `,
   ghLink: css`
     display: inline-block;
@@ -54,17 +54,17 @@ const styles = {
 const ProjectCard = (props) => {
   const {data, field, graph_key, graph_title, isCurated} = props;
 
-  const repo_name = data["owner_name"]+"/"+data["current_name"];
+  const repo_name = getRepoName(data);
 
   const getGraph = () => {
     if(["issue_dates", "commit_dates", "contrib_counts"].includes(graph_key)){
-      return <BarGraph traces={getBarTraces(graph_key, data)} title={graph_title} height={"250px"}
+      return <BarGraph traces={getBarTraces(graph_key, data)} title={graph_title} height={"300px"}
                        normalizeTime={graph_key !== "contrib_counts"}/>;
     } else if(["country_contributions", "org_contributions", "downloads"].includes(graph_key)){
-      return <LineGraph traces={getCountryTraces(data[graph_key])} title={graph_title} height={"250px"} showLegend={true}/>;
+      return <LineGraph traces={getCountryTraces(data[graph_key])} title={graph_title} height={"300px"} showLegend={true}/>;
     }
     return <LineGraph traces={[{x: getX(data[graph_key]), y: getY(data[graph_key])}]}
-                       title={graph_title} height={"250px"}/>;
+                       title={graph_title} height={"300px"}/>;
   };
 
   return (
@@ -81,9 +81,9 @@ const ProjectCard = (props) => {
             </span>
             }
           </span>
-          <Typography component={"p"} variant={"body2"} css={styles.dataDesc}>
+          <div css={styles.dataDesc}>
             {data["description"]}
-          </Typography>
+          </div>
           <ProjectMetadata data={data} showNumReferences={!isCurated} field={field}/>
         </div>
         <div css={styles.rightPanel}>
@@ -91,7 +91,7 @@ const ProjectCard = (props) => {
         </div>
       </div>
       <div css={styles.buttonContainer}>
-        <ButtonStyled style={{width: "100%"}} href={`/project?project_id=${data['id']}`} target={"_blank"} rel={"noopener"}>>> Full profile</ButtonStyled>
+        <ButtonStyled style={{width: "100%"}} href={`/project?name=${repo_name}`} target={"_blank"} rel={"noopener"}>&gt;&gt; Full profile</ButtonStyled>
       </div>
     </div>
   )

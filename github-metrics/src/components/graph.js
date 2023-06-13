@@ -6,16 +6,11 @@ import {PlotlyDefaults} from "@eto/eto-ui-components";
 import config from "../data/config.json";
 
 const colors = [
-  "#7AC4A5",
-  "#F17F4C",
-  "#15AFD0",
-  "#B42025",
-  "#839DC5",
-  "#E5BF21",
-  "#3C8786",
-  "#7C336F",
-  "#003DA6",
-  "#B53A6D",
+  "rgb(126, 252, 231)",
+  "rgb(255, 170, 128)",
+  "rgb(234, 128, 255)",
+  "rgb(128, 149, 255)",
+  "rgb(252, 231, 126)"
 ];
 
 const Plot = lazy(() => import('react-plotly.js'));
@@ -64,8 +59,9 @@ const LineGraph = (props) => {
   const layout = plotlyDefaults.layout;
   const legendVisible = showLegend || (traces.length > 1);
   layout.showlegend = legendVisible;
-  layout.margin = {t: height ? 50 : 100, r: 50, b: 50, l: 50, pad: 4};
+  layout.margin = {t: traces.length === 1 ? 50: 80, r: 50, b: 50, l: 50, pad: 4};
   layout.xaxis.dtick = 1;
+  layout.yaxis.rangemode = "tozero";
   if(title) {
     layout.title = title;
   }
@@ -117,7 +113,8 @@ const BarGraph = (props) => {
   const layout = plotlyDefaults.layout;
   layout.showlegend = traces.length > 1;
   layout.barmode = "group";
-  layout.margin = {t: height ? 50 : 100, r: 50, b: 50, l: 50, pad: 4};
+  layout.xaxis.dtick = 1;
+  layout.margin = {t: traces.length === 1 ? 50 : 80, r: 50, b: 50, l: 50, pad: 4};
   if(title) {
     layout.title = title;
   }

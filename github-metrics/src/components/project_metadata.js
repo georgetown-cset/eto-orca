@@ -8,16 +8,14 @@ import { css } from "@emotion/react";
 import "core-js/features/url";
 import "core-js/features/url-search-params";
 
-import {metaMapping} from "./utils";
+import {cleanFieldName, metaMapping} from "./utils";
 
 
 const styles = {
-  emph: css`
-    font-weight: bold;
-  `,
   metaSection: css`
     word-wrap: nobreak;
     margin-right: 10px;
+    line-height: 1.5;
   `,
   sortOption: css`
     margin-right: 10px;
@@ -37,9 +35,11 @@ const ProjectMetadata = (props) => {
   };
 
   const metaGroups = [
-    ["stargazers_count", "num_contributors"],
-    ["open_issues", "num_references"],
-    ["created_at", "pushed_at"],
+    ["stargazers_count", "subscribers_count"],
+    ["num_references"],
+    ["open_issues", "num_contributors"],
+    ["created_at"],
+    ["pushed_at"],
     ["license"],
     ["language"]
   ];
@@ -47,13 +47,17 @@ const ProjectMetadata = (props) => {
   return (
     <div>
       {metaGroups.map((group, group_idx) => (
-        <Typography component={"div"} variant={"body2"} css={styles.sortOption} key={`meta-group-${group_idx}`}>
+        <div css={styles.sortOption} key={`meta-group-${group_idx}`}>
           {group.map(option => ((showNumReferences) || (option !== "num_references")) && (
             <span css={styles.metaSection} key={option}>
-              <span css={styles.emph}>{metaMapping[option]}</span>: {getValue(option)}
+              {option === "num_references" ?
+                <span>{getValue(option)} references in <strong>{cleanFieldName(field)}</strong> articles</span>
+              :
+                <span><strong>{metaMapping[option]}</strong>: {getValue(option)}</span>
+              }
             </span>
           ))}
-        </Typography>
+        </div>
       ))}
     </div>
   )

@@ -1,6 +1,9 @@
 import React, {useEffect} from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import {AppWrapper, ExternalLink, InfoCard} from "@eto/eto-ui-components";
+import { useStaticQuery, graphql } from "gatsby";
+
+import config from "../data/config.json";
 
 /* Set the body margin and padding to 0 here */
 import "../styles/styles.css";
@@ -11,6 +14,14 @@ const IndexPage = () => {
     document.title = "Open-Source Software for Emerging Technology Metrics";
     document.documentElement.lang = "en";
   }, []);
+
+  const data = useStaticQuery(graphql`
+    query {
+      site {
+        buildTime(formatString: "MMMM DD, YYYY")
+      }
+    }
+  `);
 
   return (
     <AppWrapper>
@@ -31,6 +42,9 @@ const IndexPage = () => {
           <div style={{marginBottom: "10px"}}>
           At the moment, this project only includes GitHub data, but in the future we hope to expand to other repository
             hosting services. Data sources include: <ExternalLink href={"https://console.cloud.google.com/bigquery?project=githubarchive&page=project"}>Github Archive</ExternalLink>, <ExternalLink href={"https://console.cloud.google.com/marketplace/product/gcp-public-data-pypi/pypi?_ga=2.174631522.-1309707215.1607703367"}>PyPI</ExternalLink>, and our <ExternalLink href={"https://eto.tech/dataset-docs/mac/"}>merged academic corpus</ExternalLink>.
+          </div>
+          <div>
+            Website last updated on {data.site.buildTime}. Data last updated on {config.last_updated}.
           </div>
         </div>}
         documentationLink={"https://eto.tech/tool-docs/oss-tracker"}

@@ -325,11 +325,11 @@ def read_rows(input_dir: str) -> tuple:
     return field_to_repos, language_counts, id_to_repo
 
 
-def write_data(input_dir: str, output_js: str) -> None:
+def write_data(input_dir: str, output_dir: str) -> None:
     """
     Reads repo metadata, cleans it up, writes it out for the webapp
     :param input_dir: Directory of repo metadata as jsonl BQ exports
-    :param output_js: File where output js objects should be written
+    :param output_dir: Directory where output json should be written for the webapp
     :return: None
     """
     field_to_repos, language_counts, id_to_repo = read_rows(input_dir)
@@ -368,11 +368,18 @@ def write_data(input_dir: str, output_js: str) -> None:
         if language_counts[language] < 20:
             language = "Other"
         id_to_repo[repo_id]["language_group"] = language
-    with open(output_js, mode="w") as f:
-        f.write(f"const id_to_repo = {json.dumps(id_to_repo)};\n")
-        f.write(f"const field_to_repos = {json.dumps(field_to_repos)};\n")
-        f.write(f"const fields = {json.dumps(list(sizeable_fields))};\n")
-        f.write("export {id_to_repo, field_to_repos, fields};")
+    name_to_id = {
+        id_to_repo[id]["owner_name"] + "/" + id_to_repo[id]["current_name"]: id
+        for id in id_to_repo
+    }
+    for out_fi, data in [
+        ("id_to_repo", id_to_repo),
+        ("name_to_id", name_to_id),
+        ("field_to_repos", field_to_repos),
+        ("fields", list(sizeable_fields)),
+    ]:
+        with open(os.path.join(output_dir, out_fi + ".json"), mode="w") as f:
+            f.write(json.dumps(data))
 
 
 def write_config(config_fi: str) -> None:
@@ -382,21 +389,23 @@ def write_config(config_fi: str) -> None:
     :return: None
     """
     with open(config_fi, mode="w") as f:
-        f.write(json.dumps({"start_year": START_YEAR, "end_year": END_YEAR}))
+        f.write(
+            json.dumps(
+                {
+                    "start_year": START_YEAR,
+                    "end_year": END_YEAR,
+                    "last_updated": datetime.now().strftime("%B %d, %Y"),
+                }
+            )
+        )
 
 
 if __name__ == "__main__":
     default_data_dir = os.path.join("github-metrics", "src", "data")
     parser = argparse.ArgumentParser()
     parser.add_argument("--input_dir", default="gh_website_stats")
-    parser.add_argument(
-        "--output_js",
-        default=os.path.join(default_data_dir, "constants.js"),
-    )
-    parser.add_argument(
-        "--config", default=os.path.join(default_data_dir, "config.json")
-    )
+    parser.add_argument("--data_dir", default=default_data_dir)
     args = parser.parse_args()
 
-    write_data(args.input_dir, args.output_js)
-    write_config(args.config)
+    write_data(args.input_dir, args.data_dir)
+    write_config(os.path.join(args.data_dir, "config.json"))
