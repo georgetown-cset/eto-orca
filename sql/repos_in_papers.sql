@@ -23,7 +23,7 @@ pwc AS (
 
 pwc_arxiv_s2 AS (
   SELECT
-    merged_id,
+    merged_id AS new_merged_id,
     dataset,
     full_text
   FROM (
@@ -52,6 +52,19 @@ pwc_arxiv_s2 AS (
     ON
       ft.id = article_links.orig_id ),
 
+mapped_pwc_arxiv_s2 AS (
+  SELECT DISTINCT
+    merged_id_v2 AS merged_id,
+    dataset,
+    full_text
+  FROM
+    pwc_arxiv_s2
+  LEFT JOIN
+    gcp_cset_links_v3_flatstart.merged_id_crosswalk
+    ON pwc_arxiv_s2.new_merged_id = merged_id_crosswalk.merged_id_v3
+  WHERE merged_id_v2 IS NOT NULL
+),
+
 agg_repos AS (
   SELECT
     merged_id,
@@ -63,7 +76,7 @@ agg_repos AS (
       dataset,
       full_text
     FROM
-      pwc_arxiv_s2
+      mapped_pwc_arxiv_s2
     UNION ALL
     SELECT
       merged_id,
