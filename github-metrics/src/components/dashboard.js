@@ -77,7 +77,7 @@ const Dashboard = () => {
   }, []);
 
   const defaultFilterValues = {
-    "field_of_study": "Machine learning",
+    "field_of_study": `Computer science${FIELD_DELIMITER}Artificial intelligence`,
     "order_by": "num_references",
     "compare_graph": "push_dates",
     "language_group": "All",

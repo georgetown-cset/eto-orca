@@ -124,7 +124,7 @@ export const cleanFieldName = (field) => {
   for(let [patt, capitalized] of [[/(\b)ai(\b)/, "$1AI$2"], [/risc-v/, "RISC-V"]]){
     clean = clean.replace(patt, capitalized);
   }
-  return clean.split(FIELD_DELIMITER)[1];
+  return cleanFieldKey(clean);
 };
 
 export const cleanFieldKey = (rawField) => {
