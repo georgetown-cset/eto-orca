@@ -6,7 +6,7 @@ import React, {useEffect} from "react";
 import {LineGraph} from "./graph";
 import {css} from "@emotion/react";
 
-import {keyToTitle, sortMapping, getRepoName, sortByKey, cleanFieldName} from "./utils";
+import {keyToTitle, sortMapping, getRepoName, sortByKey, cleanFieldName, cleanFieldKey} from "./utils";
 import HighlightBox from "./highlight_box";
 import {Accordion, Dropdown, ExternalLink} from "@eto/eto-ui-components";
 
@@ -55,7 +55,7 @@ const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
     for (let repoStat of yearly) {
       const numYears = repoStat.y.length;
       const change = (100*(repoStat.y[numYears - 1] - repoStat.y[numYears - 2]) / repoStat.y[numYears - 2]).toFixed(2);
-      const prettyChange = `${change < 0 ? "" : "+"}${change}`
+      const prettyChange = `${change < 0 ? "" : "+"}${change}`;
       yearlyRepoStats[repoStat.name] = {
         numYears: numYears,
         change: prettyChange,
@@ -75,7 +75,7 @@ const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
             </ExternalLink><br/>
             <span css={styles.statDetail}>
               {stat === "num_references" ?
-                <span>{row["num_references"][field]} {fmtStat}</span> :
+                <span>{row["num_references"][cleanFieldKey(field)]} {fmtStat}</span> :
                 <span><strong>{row[stat]}</strong> {fmtStat} (<strong>{yearlyRepoStats[getRepoName(row)].change}</strong>%, {yearlyRepoStats[getRepoName(row)].startYear}-{yearlyRepoStats[getRepoName(row)].endYear})</span>}
             </span>
           </li>

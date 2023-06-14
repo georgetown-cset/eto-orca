@@ -1,4 +1,5 @@
 import argparse
+import csv
 import json
 import os
 from datetime import datetime
@@ -402,6 +403,22 @@ def write_config(config_fi: str) -> None:
         )
 
 
+def write_field_mapping(data_dir: str) -> None:
+    """
+    Update mapping from level0 to child level1 fields
+    :param data_dir: Field containing raw mapping as csv, with one row per level0-level1 pair
+    :return: None
+    """
+    level0to1 = {}
+    with open(os.path.join("static_data", "level0to1.csv")) as f:
+        for line in csv.DictReader(f):
+            level0to1[line["parent"]] = level0to1.get(line["parent"], []) + [
+                line["child"]
+            ]
+    with open(os.path.join(data_dir, "level0to1.json"), mode="w") as f:
+        f.write(json.dumps(level0to1))
+
+
 if __name__ == "__main__":
     default_data_dir = os.path.join("github-metrics", "src", "data")
     parser = argparse.ArgumentParser()
@@ -409,5 +426,6 @@ if __name__ == "__main__":
     parser.add_argument("--data_dir", default=default_data_dir)
     args = parser.parse_args()
 
+    write_field_mapping(args.data_dir)
     write_data(args.input_dir, args.data_dir)
     write_config(os.path.join(args.data_dir, "config.json"))

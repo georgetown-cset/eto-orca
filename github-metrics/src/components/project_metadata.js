@@ -8,7 +8,7 @@ import { css } from "@emotion/react";
 import "core-js/features/url";
 import "core-js/features/url-search-params";
 
-import {cleanFieldName, metaMapping} from "./utils";
+import {cleanFieldKey, cleanFieldName, metaMapping} from "./utils";
 
 
 const styles = {
@@ -29,7 +29,7 @@ const ProjectMetadata = (props) => {
     if(!data[key]) {
       return 0;
     } else if(showNumReferences && (key === "num_references")){
-      return data[key][field];
+      return data[key][cleanFieldKey(field)];
     }
     return data[key];
   };
