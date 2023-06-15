@@ -8,7 +8,8 @@ export const sortMapping = {
   "created_at": "Created",
   "pushed_at": "Last Commit",
   "open_issues": "Open Issues",
-  "num_references": "References"
+  "num_references": "References",
+  "relevance": "Relevance"
 };
 
 export const metaMapping = {...sortMapping};
@@ -35,6 +36,8 @@ for(let topic of customTopics){
 }
 
 export const FIELD_DELIMITER = "---";
+
+export const FIELD_KEYS = ["num_references", "relevance"];
 
 // returns data traces for country comparison graphs
 export const getCountryTraces = (graphData) => {
@@ -104,7 +107,7 @@ export const getRepoName = (row) => {
 
 export const sortByKey = (toSort, key, field=null) => {
   const sorted = [...toSort];
-  if(key === "num_references"){
+  if(FIELD_KEYS.includes(key)){
     const cleanField = cleanFieldKey(field);
     sorted.sort((r1, r2) => r2[key][cleanField] - r1[key][cleanField]).filter(r => !r[key][cleanField]);
   } else if(["created_at", "pushed_at"].includes(key)){

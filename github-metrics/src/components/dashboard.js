@@ -17,7 +17,16 @@ import id_to_repo from "../data/id_to_repo";
 import field_to_repos from "../data/field_to_repos";
 import fields from "../data/fields";
 import level0to1 from "../data/level0to1";
-import {sortMapping, keyToTitle, getRepoName, customTopics, sortByKey, cleanFieldKey, FIELD_DELIMITER} from "./utils";
+import {
+  sortMapping,
+  keyToTitle,
+  getRepoName,
+  customTopics,
+  sortByKey,
+  cleanFieldKey,
+  FIELD_DELIMITER,
+  FIELD_KEYS
+} from "./utils";
 
 const setFields = new Set(fields);
 
@@ -148,7 +157,7 @@ const Dashboard = () => {
   };
 
   const sortOptions = Object.entries(sortMapping).map(e => ({"val": e[0], "text": e[1]})).filter(
-    obj => (!isCuratedField(filterValues["field_of_study"]) || (obj["val"] !== "num_references")));
+    obj => (!isCuratedField(filterValues["field_of_study"]) || !FIELD_KEYS.includes(obj["val"])));
 
   const handleFilterUpdate = (updated) => {
     setFilterValues(updated);
@@ -171,7 +180,7 @@ const Dashboard = () => {
     const updatedFilterValues = {...filterValues};
     updatedFilterValues[key] = value;
     if(key === "field_of_study"){
-      if((filterValues["order_by"] === "num_references") && isCuratedField(value)){
+      if(FIELD_KEYS.includes(filterValues["order_by"]) && isCuratedField(value)){
         updatedFilterValues["order_by"] = "stargazers_count";
       }
       for(let filteredKey of ["language_group", "license_group"]){

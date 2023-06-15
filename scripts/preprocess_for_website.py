@@ -1,6 +1,7 @@
 import argparse
 import csv
 import json
+import math
 import os
 from datetime import datetime
 from typing import Tuple
@@ -18,6 +19,25 @@ from scripts.constants import (
 NOW = datetime.now()
 END_YEAR = NOW.year if NOW.month > 6 else NOW.year - 1
 START_YEAR = END_YEAR - 6
+
+
+def add_repo_tfidf(id_to_repo: dict, num_fields: int) -> None:
+    """
+    Gets a tfidf-inspired score for each repo. In this case, the "terms" are repo mentions, and the "documents"
+    are fields. See also https://en.wikipedia.org/wiki/Tf%E2%80%93idf
+    :param id_to_repo: Dict mapping repo ids to (among other metadata) counts of occurrences in papers within fields
+    :param num_fields: The number of total fields
+    :return: None (mutates id_to_repo)
+    """
+    for id in id_to_repo:
+        field_counts = id_to_repo[id]["num_references"]
+        df = len(field_counts)
+        # df may be 0 for repos we didn't extract from literature mentions
+        idf = round(math.log(num_fields / (df + 1)), 2)
+        id_to_repo[id]["relevance"] = {}
+        for field in field_counts:
+            tf = field_counts[field]
+            id_to_repo[id]["relevance"][field] = tf * idf
 
 
 def get_counts(dates: list, transform=lambda x: x) -> list:
@@ -375,6 +395,7 @@ def write_data(input_dir: str, output_dir: str) -> None:
         id_to_repo[id]["owner_name"] + "/" + id_to_repo[id]["current_name"]: id
         for id in id_to_repo
     }
+    add_repo_tfidf(id_to_repo, len(field_to_repos))
     for out_fi, data in [
         ("id_to_repo", id_to_repo),
         ("name_to_id", name_to_id),

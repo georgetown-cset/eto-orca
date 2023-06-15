@@ -49,7 +49,7 @@ const styles = {
 
 const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
   const fmtStat = sortMapping[stat].toLowerCase();
-  const title = `Top repositories by ${stat === "num_references" ? fieldName+" references" : fmtStat}`;
+  const title = `Top repositories by ${stat === "relevance" ? `relevance to ${fieldName}` : fmtStat}`;
   const yearlyRepoStats = {};
   if(yearly !== null) {
     for (let repoStat of yearly) {
@@ -74,8 +74,8 @@ const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
               {getRepoName(row)}
             </ExternalLink><br/>
             <span css={styles.statDetail}>
-              {stat === "num_references" ?
-                <span>{row["num_references"][cleanFieldKey(field)]} {fmtStat}</span> :
+              {stat === "relevance" ?
+                <span>{row["relevance"][cleanFieldKey(field)].toFixed(2)} {fmtStat} ({row["num_references"][cleanFieldKey(field)]} references)</span> :
                 <span><strong>{row[stat]}</strong> {fmtStat} (<strong>{yearlyRepoStats[getRepoName(row)].change}</strong>%, {yearlyRepoStats[getRepoName(row)].startYear}-{yearlyRepoStats[getRepoName(row)].endYear})</span>}
             </span>
           </li>
@@ -189,7 +189,7 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
           <StatBox stat={"num_contributors"} yearly={getTrace("commit_dates", val => val[1]+val[2], "num_contributors")} data={data}/>
           {isCurated ?
             <StatBox stat={"open_issues"} yearly={getTrace("issue_dates", val => val[2], "open_issues")} data={data}/> :
-            <StatBox stat={"num_references"} data={data} field={field} fieldName={fieldName}/>}
+            <StatBox stat={"relevance"} data={data} field={field} fieldName={fieldName}/>}
         </div>
         <h2 css={styles.summaryContainerLabel}>
           <span css={styles.dropdownIntro}>Trends over time for top repos by</span>

@@ -8,7 +8,7 @@ import { css } from "@emotion/react";
 import "core-js/features/url";
 import "core-js/features/url-search-params";
 
-import {cleanFieldKey, cleanFieldName, metaMapping} from "./utils";
+import {cleanFieldKey, cleanFieldName, FIELD_KEYS, metaMapping} from "./utils";
 
 
 const styles = {
@@ -28,7 +28,7 @@ const ProjectMetadata = (props) => {
   const getValue = (key) => {
     if(!data[key]) {
       return 0;
-    } else if(showNumReferences && (key === "num_references")){
+    } else if(showNumReferences && FIELD_KEYS.includes(key)){
       return data[key][cleanFieldKey(field)];
     }
     return data[key];
@@ -51,7 +51,7 @@ const ProjectMetadata = (props) => {
           {group.map(option => ((showNumReferences) || (option !== "num_references")) && (
             <span css={styles.metaSection} key={option}>
               {option === "num_references" ?
-                <span>{getValue(option)} references in <strong>{cleanFieldName(field)}</strong> articles</span>
+                <span>{getValue(option)} references in <strong>{cleanFieldName(field)}</strong> articles ({getValue("relevance")} relevance)</span>
               :
                 <span><strong>{metaMapping[option]}</strong>: {getValue(option)}</span>
               }
