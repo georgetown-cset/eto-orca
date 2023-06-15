@@ -33,11 +33,11 @@ def add_repo_tfidf(id_to_repo: dict, num_fields: int) -> None:
         field_counts = id_to_repo[id]["num_references"]
         df = len(field_counts)
         # df may be 0 for repos we didn't extract from literature mentions
-        idf = round(math.log(num_fields / (df + 1)), 2)
+        idf = math.log(num_fields / (df + 1))
         id_to_repo[id]["relevance"] = {}
         for field in field_counts:
             tf = field_counts[field]
-            id_to_repo[id]["relevance"][field] = tf * idf
+            id_to_repo[id]["relevance"][field] = round(tf * idf, 2)
 
 
 def get_counts(dates: list, transform=lambda x: x) -> list:
