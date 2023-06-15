@@ -34,7 +34,8 @@ describe("Project metadata", () => {
           "pushed_at": "2023-03-14",
           "license": "MIT",
           "language": "Python",
-          "num_references": {"Algebraic Geometry": 76}
+          "num_references": {"Algebraic Geometry": 76},
+          "relevance": {"Algebraic Geometry": 42.42}
         }}
       />
     );

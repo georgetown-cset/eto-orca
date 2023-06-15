@@ -341,7 +341,9 @@ exports[`Project metadata renders correctly with references 1`] = `
               <strong>
                 algebraic geometry
               </strong>
-               articles
+               articles (
+              42.42
+               relevance)
             </span>
           </span>
         </div>
@@ -474,7 +476,9 @@ exports[`Project metadata renders correctly with references 1`] = `
             <strong>
               algebraic geometry
             </strong>
-             articles
+             articles (
+            42.42
+             relevance)
           </span>
         </span>
       </div>
