@@ -51,7 +51,7 @@ const ProjectMetadata = (props) => {
           {group.map(option => ((showNumReferences) || (option !== "num_references")) && (
             <span css={styles.metaSection} key={option}>
               {option === "num_references" ?
-                <span>{getValue(option)} references in <strong>{cleanFieldName(field)}</strong> articles ({getValue("relevance")} relevance)</span>
+                <span>{getValue(option)} references in <strong>{cleanFieldName(field)}</strong> articles ({getValue("relevance").toFixed(2)} relevance)</span>
               :
                 <span><strong>{metaMapping[option]}</strong>: {getValue(option)}</span>
               }
