@@ -58,3 +58,30 @@ LICENSE_TO_GROUP = {
     "zlib License": OTHER_LICENSE,
     None: "No license detected",
 }
+
+# TODO: great swathes are copied from cat-tracker, consolidate into shared utility in future
+MANUAL_COUNTRY_MAPPING = {
+    "Venezuela, Bolivarian Republic of": "Venezuela",
+    "Macao": "Macau",
+    "Viet Nam": "Vietnam",
+    "Cayman Islands": "Cayman Islands (the)",
+    "China": "China (mainland)",
+    "Eswatini": "Swaziland",
+    "Korea, Republic of": "South Korea",
+    "Korea": "South Korea",
+    "Korea, Democratic People's Republic of": "North Korea",
+    "Lao People's Democratic Republic": "Laos",
+    "Bolivia, Plurinational State of": "Bolivia",
+    "Palestine, State of": "Palestine",
+    "Sao Tome and Principe": "São Tomé and Príncipe",
+    "Syrian Arab Republic": "Syria",
+    "Reunion": "Réunion",
+    "Russian Federation": "Russia",
+    "Iran, Islamic Republic of": "Iran",
+    "Taiwan, Province of China": "Taiwan",
+    "Netherlands Antilles": "Netherlands",
+    "Bonaire, Sint Eustatius and Saba": "Netherlands",
+    "Cote Ivoire": "Côte d'Ivoire",
+    "Côte d''Ivoire": "Côte d'Ivoire",
+    "Macedonia": "North Macedonia",
+}
