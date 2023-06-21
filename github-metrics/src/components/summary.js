@@ -75,7 +75,7 @@ const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
             </ExternalLink><br/>
             <span css={styles.statDetail}>
               {stat === "relevance" ?
-                <span>{row["relevance"][cleanFieldKey(field)].toFixed(2)} {fmtStat} ({row["num_references"][cleanFieldKey(field)]} references)</span> :
+                <span><strong>{row["relevance"][cleanFieldKey(field)].toFixed(2)}</strong> {fmtStat} (<strong>{row["num_references"][cleanFieldKey(field)]}</strong> references)</span> :
                 <span><strong>{row[stat]}</strong> {fmtStat} (<strong>{yearlyRepoStats[getRepoName(row)].change}</strong>%, {yearlyRepoStats[getRepoName(row)].startYear}-{yearlyRepoStats[getRepoName(row)].endYear})</span>}
             </span>
           </li>

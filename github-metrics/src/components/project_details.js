@@ -150,7 +150,7 @@ const ProjectDetails = () => {
                {Object.keys(data["num_references"]).length > 0 ? Object.keys(data["num_references"]).sort((a, b) =>
                  data["num_references"][b] - data["num_references"][a]
                ).slice(0, 5).map(field => <li css={styles.fieldListElt}>
-                 {field} ({data["num_references"][field]} citation{data["num_references"][field] === 1 ? "" : "s"})
+                 {field} (<strong>{data["num_references"][field]}</strong> citation{data["num_references"][field] === 1 ? "" : "s"})
                </li>) : <span>No references found</span>}
              </ul>
            </HighlightBox>
