@@ -7,16 +7,26 @@ const styles = {
     width: 350px;
     vertical-align: top;
     border: 3px solid var(--bright-blue);
-    padding: 10px 20px 30px 20px;
+    padding: 10px 20px;
     margin: 10px;
     text-align: left;
-    min-height: 225px;
+    min-height: 350px;
+    @media (max-width: 870px) {
+      width: 80%;
+      margin: 10px auto;
+    }
+  `,
+  tallBox: css`
+    min-height: 350px;
+  `,
+  shortBox: css`
+    min-height: 270px;
   `
 };
 
-const HighlightBox = ({title, children}) => {
+const HighlightBox = ({title, isTall=false, children}) => {
   return (
-    <div css={styles.wrapper}>
+    <div css={[styles.wrapper, isTall ? styles.tallBox : styles.shortBox]}>
       <h3>{title}</h3>
       {children}
     </div>

@@ -6,14 +6,14 @@ import React, {useEffect} from "react";
 import {LineGraph} from "./graph";
 import {css} from "@emotion/react";
 
-import {keyToTitle, sortMapping, getRepoName, sortByKey, cleanFieldName} from "./utils";
+import {keyToTitle, sortMapping, getRepoName, sortByKey, cleanFieldName, cleanFieldKey} from "./utils";
 import HighlightBox from "./highlight_box";
 import {Accordion, Dropdown, ExternalLink} from "@eto/eto-ui-components";
 
 
 const styles = {
   card: css`
-    padding: 20px;
+    padding: 20px 0px;
   `,
   summaryContainerLabel: css`
     display: inline-block;
@@ -38,18 +38,24 @@ const styles = {
   `,
   statDetail: css`
     padding-left: 10px;
+  `,
+  statWrapper: css`
+    text-align: center;
+  `,
+  headerContainer: css`
+    margin: 0 20px;
   `
 };
 
 const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
   const fmtStat = sortMapping[stat].toLowerCase();
-  const title = `Top repositories by ${stat === "num_references" ? fieldName+" references" : fmtStat}`;
+  const title = `Top repositories by ${stat === "relevance" ? `relevance to ${fieldName}` : fmtStat}`;
   const yearlyRepoStats = {};
   if(yearly !== null) {
     for (let repoStat of yearly) {
       const numYears = repoStat.y.length;
       const change = (100*(repoStat.y[numYears - 1] - repoStat.y[numYears - 2]) / repoStat.y[numYears - 2]).toFixed(2);
-      const prettyChange = `${change < 0 ? "" : "+"}${change}`
+      const prettyChange = `${change < 0 ? "" : "+"}${change}`;
       yearlyRepoStats[repoStat.name] = {
         numYears: numYears,
         change: prettyChange,
@@ -60,7 +66,7 @@ const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
   }
 
   return (
-    <HighlightBox title={title}>
+    <HighlightBox title={title} isTall={true}>
       <ul css={styles.statList}>
         {!!data.length && sortByKey(data, stat, field).slice(0, 5).map((row) =>
           <li css={styles.statListElt}>
@@ -68,8 +74,8 @@ const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
               {getRepoName(row)}
             </ExternalLink><br/>
             <span css={styles.statDetail}>
-              {stat === "num_references" ?
-                <span>{row["num_references"][field]} {fmtStat}</span> :
+              {stat === "relevance" ?
+                <span>{row["relevance"][cleanFieldKey(field)].toFixed(2)} {fmtStat} ({row["num_references"][cleanFieldKey(field)]} references)</span> :
                 <span><strong>{row[stat]}</strong> {fmtStat} (<strong>{yearlyRepoStats[getRepoName(row)].change}</strong>%, {yearlyRepoStats[getRepoName(row)].startYear}-{yearlyRepoStats[getRepoName(row)].endYear})</span>}
             </span>
           </li>
@@ -174,33 +180,35 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
 
   return (
     <div css={styles.card}>
-      <h1 css={styles.summaryContainerLabel}>
-        Currently tracking <strong>{data.length}</strong> software repositories {isCurated ? "related to" : "used for research into"} <strong>{fieldName}</strong>.
-      </h1>
-      <div>
-        <StatBox stat={"stargazers_count"} yearly={getTrace("star_dates", val => val[1], "stargazers_count")} data={data}/>
-        <StatBox stat={"num_contributors"} yearly={getTrace("commit_dates", val => val[1]+val[2], "num_contributors")} data={data}/>
-        {isCurated ?
-          <StatBox stat={"open_issues"} yearly={getTrace("issue_dates", val => val[2], "open_issues")} data={data}/> :
-          <StatBox stat={"num_references"} data={data} field={field} fieldName={fieldName}/>}
-      </div>
-      <h2 css={styles.summaryContainerLabel}>
-        <span css={styles.dropdownIntro}>Trends over time for top repos by</span>
-        <div css={styles.dropdownContainer}>
-          <Dropdown
-            selected={orderBy}
-            setSelected={(val) => updateOrderBy(val)}
-            inputLabel={"Order by"}
-            options={sortOptions}
-          />
+      <div css={styles.headerContainer}>
+        <h1 css={styles.summaryContainerLabel}>
+          Currently tracking <strong>{data.length}</strong> software repositories {isCurated ? "related to" : "used for research into"} <strong>{fieldName}</strong>.
+        </h1>
+        <div css={styles.statWrapper}>
+          <StatBox stat={"stargazers_count"} yearly={getTrace("star_dates", val => val[1], "stargazers_count")} data={data}/>
+          <StatBox stat={"num_contributors"} yearly={getTrace("commit_dates", val => val[1]+val[2], "num_contributors")} data={data}/>
+          {isCurated ?
+            <StatBox stat={"open_issues"} yearly={getTrace("issue_dates", val => val[2], "open_issues")} data={data}/> :
+            <StatBox stat={"relevance"} data={data} field={field} fieldName={fieldName}/>}
         </div>
-      </h2>
-        <Accordion
-          key={JSON.stringify(expanded)}
-          panels={accordionDetails}
-          expanded={expanded}
-          setExpanded={(newExpanded) => setExpanded(newExpanded)} headingVariant={"h6"}
-        />
+        <h2 css={styles.summaryContainerLabel}>
+          <span css={styles.dropdownIntro}>Trends over time for top repos by</span>
+          <div css={styles.dropdownContainer}>
+            <Dropdown
+              selected={orderBy}
+              setSelected={(val) => updateOrderBy(val)}
+              inputLabel={"Order by"}
+              options={sortOptions}
+            />
+          </div>
+        </h2>
+      </div>
+      <Accordion
+        key={JSON.stringify(expanded)}
+        panels={accordionDetails}
+        expanded={expanded}
+        setExpanded={(newExpanded) => setExpanded(newExpanded)} headingVariant={"h6"}
+      />
     </div>
   );
 };

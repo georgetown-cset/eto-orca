@@ -26,11 +26,17 @@ const styles = {
     display: inline-block;
     vertical-align: top;
     padding-bottom: 20px;
+    @media (max-width: 700px) {
+      width: 100%;
+    }
   `,
   rightPanel: css`
     width: 59%;
     display: inline-block;
     vertical-align: top;
+    @media (max-width: 700px) {
+      width: 100%;
+    }
   `,
   dataDesc: css`
     margin: 10px 0px 15px 0px;

@@ -8,7 +8,8 @@ export const sortMapping = {
   "created_at": "Created",
   "pushed_at": "Last Commit",
   "open_issues": "Open Issues",
-  "num_references": "References"
+  "num_references": "References",
+  "relevance": "Relevance"
 };
 
 export const metaMapping = {...sortMapping};
@@ -33,6 +34,10 @@ const customTopicMap = {};
 for(let topic of customTopics){
   customTopicMap[topic["val"]] = topic["text"];
 }
+
+export const FIELD_DELIMITER = "---";
+
+export const FIELD_KEYS = ["num_references", "relevance"];
 
 // returns data traces for country comparison graphs
 export const getCountryTraces = (graphData) => {
@@ -102,8 +107,9 @@ export const getRepoName = (row) => {
 
 export const sortByKey = (toSort, key, field=null) => {
   const sorted = [...toSort];
-  if(key === "num_references"){
-    sorted.sort((r1, r2) => r2[key][field] - r1[key][field]).filter(r => !r[key][field]);
+  if(FIELD_KEYS.includes(key)){
+    const cleanField = cleanFieldKey(field);
+    sorted.sort((r1, r2) => r2[key][cleanField] - r1[key][cleanField]).filter(r => !r[key][cleanField]);
   } else if(["created_at", "pushed_at"].includes(key)){
     sorted.sort((r1, r2) => new Date(r2[key]) - new Date(r1[key]));
   } else {
@@ -121,5 +127,9 @@ export const cleanFieldName = (field) => {
   for(let [patt, capitalized] of [[/(\b)ai(\b)/, "$1AI$2"], [/risc-v/, "RISC-V"]]){
     clean = clean.replace(patt, capitalized);
   }
-  return clean;
+  return cleanFieldKey(clean);
+};
+
+export const cleanFieldKey = (rawField) => {
+  return rawField.includes(FIELD_DELIMITER) ? rawField.split(FIELD_DELIMITER)[1] : rawField;
 };

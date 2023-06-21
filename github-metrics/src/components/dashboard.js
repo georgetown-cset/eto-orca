@@ -16,7 +16,19 @@ import StyledSwitch from "./styled_switch";
 import id_to_repo from "../data/id_to_repo";
 import field_to_repos from "../data/field_to_repos";
 import fields from "../data/fields";
-import {sortMapping, keyToTitle, getRepoName, customTopics, sortByKey} from "./utils";
+import level0to1 from "../data/level0to1";
+import {
+  sortMapping,
+  keyToTitle,
+  getRepoName,
+  customTopics,
+  sortByKey,
+  cleanFieldKey,
+  FIELD_DELIMITER,
+  FIELD_KEYS
+} from "./utils";
+
+const setFields = new Set(fields);
 
 const styles = {
   topPanel: css`
@@ -74,8 +86,8 @@ const Dashboard = () => {
   }, []);
 
   const defaultFilterValues = {
-    "field_of_study": "ai_safety",
-    "order_by": "stargazers_count",
+    "field_of_study": `Computer science${FIELD_DELIMITER}Artificial intelligence`,
+    "order_by": "num_references",
     "compare_graph": "push_dates",
     "language_group": "All",
     "license_group": "All"
@@ -101,7 +113,8 @@ const Dashboard = () => {
   const compareOptions = Object.entries(keyToTitle).map(e => ({"val": e[0], "text": e[1]}));
 
   const getSelectedRepos = (filters, ignoreFilter = null) => {
-    const relKeys = field_to_repos[filters["field_of_study"]];
+    const field = cleanFieldKey(filters["field_of_study"]);
+    const relKeys = field_to_repos[field];
     const newRepoData = [];
     for(let key of relKeys){
       const repo = id_to_repo[key];
@@ -144,7 +157,7 @@ const Dashboard = () => {
   };
 
   const sortOptions = Object.entries(sortMapping).map(e => ({"val": e[0], "text": e[1]})).filter(
-    obj => (!isCuratedField(filterValues["field_of_study"]) || (obj["val"] !== "num_references")));
+    obj => (!isCuratedField(filterValues["field_of_study"]) || !FIELD_KEYS.includes(obj["val"])));
 
   const handleFilterUpdate = (updated) => {
     setFilterValues(updated);
@@ -167,7 +180,7 @@ const Dashboard = () => {
     const updatedFilterValues = {...filterValues};
     updatedFilterValues[key] = value;
     if(key === "field_of_study"){
-      if((filterValues["order_by"] === "num_references") && isCuratedField(value)){
+      if(FIELD_KEYS.includes(filterValues["order_by"]) && isCuratedField(value)){
         updatedFilterValues["order_by"] = "stargazers_count";
       }
       for(let filteredKey of ["language_group", "license_group"]){
@@ -180,8 +193,19 @@ const Dashboard = () => {
   const getFOSOptions = () => {
     const options = [{"header": <span>Display projects <em>related to</em></span>}].concat(customTopics);
     options.push({"header": <span>Display projects <em>used for research into</em></span>});
-    const autoFields = fields.filter(f => !isCuratedField(f)).sort().map(f => ({"text": f, "val": f}));
-    return options.concat(autoFields);
+    const level0Fields = [...Object.keys(level0to1)];
+    level0Fields.sort();
+    for(let level0 of level0Fields){
+      options.push({"header": level0});
+      const level1Fields = level0to1[level0];
+      level1Fields.sort();
+      for(let level1 of level1Fields){
+        if(!isCuratedField(level1) && setFields.has(level1)){
+          options.push({"text": level1, "val": `${level0}${FIELD_DELIMITER}${level1}`})
+        }
+      }
+    }
+    return options;
   };
 
   const updateToggle = (name) => {

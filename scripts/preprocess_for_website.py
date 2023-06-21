@@ -1,5 +1,7 @@
 import argparse
+import csv
 import json
+import math
 import os
 from datetime import datetime
 from typing import Tuple
@@ -17,6 +19,25 @@ from scripts.constants import (
 NOW = datetime.now()
 END_YEAR = NOW.year if NOW.month > 6 else NOW.year - 1
 START_YEAR = END_YEAR - 6
+
+
+def add_repo_tfidf(id_to_repo: dict, num_fields: int) -> None:
+    """
+    Gets a tfidf-inspired score for each repo. In this case, the "terms" are repo mentions, and the "documents"
+    are fields. See also https://en.wikipedia.org/wiki/Tf%E2%80%93idf
+    :param id_to_repo: Dict mapping repo ids to (among other metadata) counts of occurrences in papers within fields
+    :param num_fields: The number of total fields
+    :return: None (mutates id_to_repo)
+    """
+    for id in id_to_repo:
+        field_counts = id_to_repo[id]["num_references"]
+        df = len(field_counts)
+        # df may be 0 for repos we didn't extract from literature mentions
+        idf = math.log(num_fields / (df + 1))
+        id_to_repo[id]["relevance"] = {}
+        for field in field_counts:
+            tf = field_counts[field]
+            id_to_repo[id]["relevance"][field] = round(tf * idf, 2)
 
 
 def get_counts(dates: list, transform=lambda x: x) -> list:
@@ -241,6 +262,8 @@ def clean_row(raw_row: dict) -> dict:
     for key in INT_KEYS:
         if (key not in row) or not row[key]:
             row[key] = 0
+    if "description" in row:
+        row["description"] = row["description"].replace("\ufffd", "").strip()
     return row
 
 
@@ -372,6 +395,7 @@ def write_data(input_dir: str, output_dir: str) -> None:
         id_to_repo[id]["owner_name"] + "/" + id_to_repo[id]["current_name"]: id
         for id in id_to_repo
     }
+    add_repo_tfidf(id_to_repo, len(field_to_repos))
     for out_fi, data in [
         ("id_to_repo", id_to_repo),
         ("name_to_id", name_to_id),
@@ -400,6 +424,22 @@ def write_config(config_fi: str) -> None:
         )
 
 
+def write_field_mapping(data_dir: str) -> None:
+    """
+    Update mapping from level0 to child level1 fields
+    :param data_dir: Field containing raw mapping as csv, with one row per level0-level1 pair
+    :return: None
+    """
+    level0to1 = {}
+    with open(os.path.join("static_data", "level0to1.csv")) as f:
+        for line in csv.DictReader(f):
+            level0to1[line["parent"]] = level0to1.get(line["parent"], []) + [
+                line["child"]
+            ]
+    with open(os.path.join(data_dir, "level0to1.json"), mode="w") as f:
+        f.write(json.dumps(level0to1))
+
+
 if __name__ == "__main__":
     default_data_dir = os.path.join("github-metrics", "src", "data")
     parser = argparse.ArgumentParser()
@@ -407,5 +447,6 @@ if __name__ == "__main__":
     parser.add_argument("--data_dir", default=default_data_dir)
     args = parser.parse_args()
 
+    write_field_mapping(args.data_dir)
     write_data(args.input_dir, args.data_dir)
     write_config(os.path.join(args.data_dir, "config.json"))
