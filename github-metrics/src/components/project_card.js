@@ -2,7 +2,6 @@
 The project card component displayed for each repo in the list view
  */
 import React from "react";
-import Typography from "@mui/material/Typography";
 import { css } from "@emotion/react";
 import {ButtonStyled, ExternalLink} from "@eto/eto-ui-components";
 

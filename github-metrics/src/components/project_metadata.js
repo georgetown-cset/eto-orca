@@ -2,7 +2,6 @@
 Basic project metadata, currently displayed in a few lines of text
  */
 import React from "react";
-import Typography from "@mui/material/Typography";
 import { css } from "@emotion/react";
 
 import "core-js/features/url";

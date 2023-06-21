@@ -83,6 +83,7 @@ const Dashboard = () => {
     setMoreFilters(urlParams.has(MORE_FILTERS) && urlParams.get(MORE_FILTERS));
     setShowSummary(urlParams.has(SHOW_SUMMARY) && urlParams.get(SHOW_SUMMARY));
     mkRepoData(updatedFilterValues);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const defaultFilterValues = {
