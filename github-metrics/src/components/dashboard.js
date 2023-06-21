@@ -6,6 +6,7 @@ import {css} from "@emotion/react";
 import Pagination from "@mui/material/Pagination";
 import {styled} from "@mui/material/styles";
 import { ButtonStyled, Dropdown } from "@eto/eto-ui-components";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
 import "core-js/features/url";
 import "core-js/features/url-search-params";
@@ -24,11 +25,14 @@ import {
   customTopics,
   sortByKey,
   cleanFieldKey,
+  cleanFieldName,
   FIELD_DELIMITER,
   FIELD_KEYS
 } from "./utils";
 
 const setFields = new Set(fields);
+
+const narrowScreenThreshold = 800;
 
 const styles = {
   topPanel: css`
@@ -38,7 +42,7 @@ const styles = {
     vertical-align: top;
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
     background-color: var(--bright-blue-lightest);
-    @media (min-width: 700px){
+    @media (min-width: ${narrowScreenThreshold}px){
       position: sticky;
       top: 0;
       z-index: 200;
@@ -48,6 +52,14 @@ const styles = {
     display: block;
     margin: 0px auto;
     max-width: 1300px;
+  `,
+  filterContainer: css`
+    display: block;
+    width: 100%;
+    @media (min-width: ${narrowScreenThreshold}px){
+      display: inline-block;
+      width: 58%;
+    }
   `,
   dropdownContainer: css`
     display: inline-block;
@@ -68,6 +80,27 @@ const styles = {
     margin: 10px auto 30px auto;
     display: flex;
     justify-content: center;
+  `,
+  filterIcon: css`
+    height: 20px;
+    vertical-align: bottom;
+  `,
+  filterDescriptionContainer: css`
+    width: 100%;
+    display: block;
+    margin-top: 10px;
+    text-align: left;
+    @media (min-width: ${narrowScreenThreshold}px){
+      display: inline-block;
+      width: 40%;
+      vertical-align: bottom;
+      margin-top: 0px;
+      text-align: right;
+    }
+  `,
+  buttonContainer: css`
+    display: inline-block;
+    vertical-align: bottom;
   `
 };
 
@@ -233,73 +266,107 @@ const Dashboard = () => {
     }
   };
 
+  const getFilterSummary = () => {
+    const language = filterValues["language_group"];
+    const license = filterValues["license_group"];
+    const languageFiltered = language !== "All";
+    const licenseFiltered = license !== "All";
+    let suffix = (languageFiltered || licenseFiltered) ? " " : "";
+    if(languageFiltered){
+      let languageBlurb = `written in ${language}`;
+      if(language.toLowerCase() === "other"){
+        languageBlurb = "written in an uncommon programming language";
+      }
+      if(language.toLowerCase() === "no language detected"){
+        languageBlurb = "where no programming language was successfully detected";
+      }
+      suffix += languageBlurb;
+    }
+    if(licenseFiltered){
+      let licenseBlurb = `${languageFiltered ? " and" : "that are"} ${license} licensed`;
+      if(license.toLowerCase() === "other"){
+        licenseBlurb = " that have an uncommon license";
+      }
+      if(license.toLowerCase() === "no license detected"){
+        licenseBlurb = ` where no license was successfully detected`;
+      }
+      suffix += licenseBlurb;
+    }
+    return (<div>
+      <FilterAltIcon css={styles.filterIcon}/> Showing {repoData.length} repositories in {cleanFieldName(filterValues["field_of_study"])}{suffix}.
+    </div>)
+  };
+
   return (
     <div style={{backgroundColor: "white"}} id={"dashboard"} ref={contentContainer}>
       <div>
         <div css={styles.topPanel}>
-          <div>
-            <div css={[styles.dropdownContainer, styles.topicContainer]}>
-              <Dropdown
-                selected={filterValues["field_of_study"]}
-                setSelected={(val) => handleSingleSelectChange(val, "field_of_study")}
-                inputLabel={"Application Topic"}
-                options={getFOSOptions()}
-              />
-            </div>
-            <div css={styles.switchContainer}>
-              List <StyledSwitch checked={showSummary} onChange={() => updateToggle(SHOW_SUMMARY)}/> Comparison
-            </div>
-          </div>
-          <div>
-            {moreFilters && !showSummary && <>
-              <div css={styles.dropdownContainer}>
+          <div css={styles.filterContainer}>
+            <div>
+              <div css={[styles.dropdownContainer, styles.topicContainer]}>
                 <Dropdown
-                  selected={filterValues["language_group"]}
-                  setSelected={(val) => handleSingleSelectChange(val, "language_group")}
-                  inputLabel={"Top programming language"}
-                  options={getFilterOptions("language_group").map(lang => ({"text": lang, "val": lang}))}
+                  selected={filterValues["field_of_study"]}
+                  setSelected={(val) => handleSingleSelectChange(val, "field_of_study")}
+                  inputLabel={"Application Topic"}
+                  options={getFOSOptions()}
                 />
               </div>
-              <div css={styles.dropdownContainer}>
-                <Dropdown
-                  selected={filterValues["license_group"]}
-                  setSelected={(val) => handleSingleSelectChange(val, "license_group")}
-                  inputLabel={"License"}
-                  options={getFilterOptions("license_group").map(lang => ({"text": lang, "val": lang}))}
-                />
+              <div css={styles.switchContainer}>
+                List <StyledSwitch checked={showSummary} onChange={() => updateToggle(SHOW_SUMMARY)}/> Comparison
               </div>
-            </>}
+            </div>
+            <div>
+              {moreFilters && !showSummary && <>
+                <div css={styles.dropdownContainer}>
+                  <Dropdown
+                    selected={filterValues["language_group"]}
+                    setSelected={(val) => handleSingleSelectChange(val, "language_group")}
+                    inputLabel={"Top programming language"}
+                    options={getFilterOptions("language_group").map(lang => ({"text": lang, "val": lang}))}
+                  />
+                </div>
+                <div css={styles.dropdownContainer}>
+                  <Dropdown
+                    selected={filterValues["license_group"]}
+                    setSelected={(val) => handleSingleSelectChange(val, "license_group")}
+                    inputLabel={"License"}
+                    options={getFilterOptions("license_group").map(lang => ({"text": lang, "val": lang}))}
+                  />
+                </div>
+              </>}
+              {!showSummary &&
+              <div css={styles.buttonContainer}>
+                <ButtonStyled css={styles.moreFilters} onClick={() => updateToggle(MORE_FILTERS)}>
+                  {moreFilters ? "Hide" : "Show"} Detail Filters
+                </ButtonStyled>
+                <ButtonStyled css={styles.moreFilters} onClick={() => handleFilterUpdate({...defaultFilterValues})}>
+                  Reset
+                </ButtonStyled>
+              </div>
+              }
+            </div>
             {!showSummary &&
-            <>
-              <ButtonStyled css={styles.moreFilters} onClick={() => updateToggle(MORE_FILTERS)}>
-                {moreFilters ? "Hide" : "Show"} Detail Filters
-              </ButtonStyled>
-              <ButtonStyled css={styles.moreFilters} onClick={() => handleFilterUpdate({...defaultFilterValues})}>
-                Reset
-              </ButtonStyled>
-            </>
+            <div>
+              <div css={styles.dropdownContainer}>
+                <Dropdown
+                  selected={filterValues["order_by"]}
+                  setSelected={(val) => handleSingleSelectChange(val, "order_by")}
+                  inputLabel={"Order by"}
+                  options={sortOptions}
+                />
+              </div>
+              <div css={styles.dropdownContainer}>
+                <Dropdown
+                  selected={filterValues["compare_graph"]}
+                  setSelected={(val) => handleSingleSelectChange(val, "compare_graph")}
+                  inputLabel={"Compare"}
+                  options={compareOptions}
+                />
+              </div>
+            </div>
             }
           </div>
-          {!showSummary &&
-          <div>
-            <div css={styles.dropdownContainer}>
-              <Dropdown
-                selected={filterValues["order_by"]}
-                setSelected={(val) => handleSingleSelectChange(val, "order_by")}
-                inputLabel={"Order by"}
-                options={sortOptions}
-              />
-            </div>
-            <div css={styles.dropdownContainer}>
-              <Dropdown
-                selected={filterValues["compare_graph"]}
-                setSelected={(val) => handleSingleSelectChange(val, "compare_graph")}
-                inputLabel={"Compare"}
-                options={compareOptions}
-              />
-            </div>
-          </div>
-          }
+          {!showSummary && <div css={styles.filterDescriptionContainer}>{getFilterSummary()}</div>}
         </div>
         <div css={styles.bottomPanel}>
           {(repoData.length > 0) && (
