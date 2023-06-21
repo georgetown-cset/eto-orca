@@ -6,7 +6,7 @@ import React, {useEffect} from "react";
 import {LineGraph} from "./graph";
 import {css} from "@emotion/react";
 
-import {keyToTitle, sortMapping, getRepoName, sortByKey, cleanFieldName, cleanFieldKey} from "./utils";
+import {keyToTitle, sortMapping, getRepoName, sortByKey, cleanFieldName, cleanFieldKey, FIELD_KEYS} from "./utils";
 import HighlightBox from "./highlight_box";
 import {Accordion, Dropdown, ExternalLink} from "@eto/eto-ui-components";
 
@@ -89,7 +89,13 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     if(urlParams.has(ORDER_BY_URL_PARAM) && urlParams.get(ORDER_BY_URL_PARAM)){
-      setOrderBy(urlParams.get(ORDER_BY_URL_PARAM));
+      const urlOrder = urlParams.get(ORDER_BY_URL_PARAM);
+      if(FIELD_KEYS.includes(urlOrder) && isCurated){
+        // override the url order if it's not applicable to the selected field
+        setOrderBy(DEFAULT_ORDER_BY);
+      } else {
+        setOrderBy(urlOrder);
+      }
     }
   }, []);
 

@@ -302,7 +302,7 @@ const Dashboard = () => {
         <div css={styles.bottomPanel}>
           {(repoData.length > 0) && (
             showSummary ?
-              <Summary data={repoData}
+              <Summary key={`summary-${filterValues["field_of_study"]}`} data={repoData}
                             field={filterValues["field_of_study"]}
                             isCurated={isCuratedField(filterValues["field_of_study"])}
                             sortOptions={sortOptions}/> :
