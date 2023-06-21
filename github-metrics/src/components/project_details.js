@@ -145,13 +145,13 @@ const ProjectDetails = () => {
            </div>
          </div>
          <div css={styles.introStats}>
-           <HighlightBox title={"Basic Statistics"}>
+           <HighlightBox title={"Basic statistics"}>
              <div css={styles.metadataWrapper}>
               <ProjectMetadata data={data}/>
              </div>
            </HighlightBox>
            {"num_references" in data &&
-           <HighlightBox title={"Most Frequently Citing Fields"}>
+           <HighlightBox title={"Most frequently citing fields"}>
              <ul css={styles.fieldList}>
                {Object.keys(data["num_references"]).length > 0 ? Object.keys(data["num_references"]).sort((a, b) =>
                  data["num_references"][b] - data["num_references"][a]
