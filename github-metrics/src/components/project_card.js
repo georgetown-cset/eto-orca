@@ -59,6 +59,11 @@ const styles = {
     height: 15px;
     vertical-align: bottom;
     margin: 0 4px 2px 0;
+  `,
+  noPyPi: css`
+    font-weight: bold;
+    text-align: center;
+    margin-top: 22px;
   `
 };
 
@@ -68,6 +73,9 @@ const ProjectCard = (props) => {
   const repo_name = getRepoName(data);
 
   const getGraph = () => {
+    if((graph_key === "downloads") && (data[graph_key].length === 0)){
+      return <div css={styles.noPyPi}>No PyPi data available.</div>
+    }
     if(["issue_dates", "commit_dates", "contrib_counts"].includes(graph_key)){
       return <BarGraph traces={getBarTraces(graph_key, data)} title={graph_title} height={"300px"}
                        normalizeTime={graph_key !== "contrib_counts"}/>;
