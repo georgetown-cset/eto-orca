@@ -15,6 +15,7 @@ import ProjectMetadata from "./project_metadata";
 
 import {keyToTitle, getCountryTraces, getBarTraces, getX, getY, getRepoName} from "./utils";
 import HighlightBox from "./highlight_box";
+import githubLogo from "../images/github-mark.png";
 
 const styles = {
   dashboardContainer: css`
@@ -58,6 +59,11 @@ const styles = {
     @media (max-width: 1020px) {
       padding: 0px 20px;
     }
+  `,
+  githubLogo: css`
+    height: 25px;
+    vertical-align: bottom;
+    margin: 0 4px 2px 0;
   `
 };
 
@@ -123,7 +129,7 @@ const ProjectDetails = () => {
         <a href={"/"}>Back to listing page</a>
        </div>
        <h2 css={styles.ghLink}>
-         <ExternalLink href={"https://github.com/"+repo_name}>{repo_name}</ExternalLink>
+         <ExternalLink href={"https://github.com/"+repo_name}><img src={githubLogo} css={styles.githubLogo}/>{repo_name}</ExternalLink>
        </h2>
         {data["has_deps_dev"] &&
         <span css={styles.depsLink}>

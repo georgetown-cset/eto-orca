@@ -12,6 +12,7 @@ import {LineGraph, BarGraph} from "./graph";
 import ProjectMetadata from "./project_metadata";
 
 import {getCountryTraces, getBarTraces, getX, getY, getRepoName} from "./utils";
+import githubLogo from "../images/github-mark.png";
 
 
 const styles = {
@@ -53,6 +54,11 @@ const styles = {
   `,
   metadataContainer: css`
     padding: 20px 20px 0px 20px;
+  `,
+  githubLogo: css`
+    height: 15px;
+    vertical-align: bottom;
+    margin: 0 4px 2px 0;
   `
 };
 
@@ -77,7 +83,7 @@ const ProjectCard = (props) => {
       <div css={styles.metadataContainer}>
         <div css={styles.leftPanel}>
           <span>
-            <h4 css={styles.ghLink}><ExternalLink href={"https://github.com/"+repo_name}>{repo_name}</ExternalLink></h4>
+            <h4 css={styles.ghLink}><ExternalLink href={"https://github.com/"+repo_name}><img src={githubLogo} css={styles.githubLogo}/>{repo_name}</ExternalLink></h4>
             {data["has_deps_dev"] &&
             <span css={styles.depsLink}>
               <ExternalLink href={"https://deps.dev/project/github/" + data["owner_name"] + "%2F" + data["current_name"]}>
