@@ -36,11 +36,13 @@ const styles = {
     padding: 20px;
     display: block;
     vertical-align: top;
-    position: sticky;
-    top: 0;
-    z-index: 200;
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
     background-color: var(--bright-blue-lightest);
+    @media (min-width: 700px){
+      position: sticky;
+      top: 0;
+      z-index: 200;
+    }
   `,
   bottomPanel: css`
     display: block;
