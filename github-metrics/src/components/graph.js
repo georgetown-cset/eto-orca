@@ -51,8 +51,8 @@ const LineGraph = (props) => {
     setScreenWidth(window.innerWidth);
   };
   useLayoutEffect(() => {
-	  setScreenWidth(window.innerWidth);
-	  window.addEventListener("resize", handleSize);
+    setScreenWidth(window.innerWidth);
+    window.addEventListener("resize", handleSize);
   }, []);
 
   const traceMetadata = [];
