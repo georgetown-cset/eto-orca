@@ -50,12 +50,17 @@ const styles = {
   dropdownContainer: css`
     display: inline-block;
   `,
+  switchContainer: css`
+    display: inline-block;
+    vertical-align: bottom;
+    margin: 0 0 5px 5px;
+  `,
+  topicContainer: css`
+    margin: 0 5px 5px 0;
+  `,
   moreFilters: css`
     vertical-align: bottom;
     margin: 0px 5px 8px 5px;
-  `,
-  switchContainer: css`
-    float: right;
   `,
   paginationContainer: css`
     margin: 10px auto 30px auto;
@@ -230,11 +235,8 @@ const Dashboard = () => {
     <div style={{backgroundColor: "white"}} id={"dashboard"} ref={contentContainer}>
       <div>
         <div css={styles.topPanel}>
-          <div css={styles.switchContainer}>
-            List <StyledSwitch checked={showSummary} onChange={() => updateToggle(SHOW_SUMMARY)}/> Comparison
-          </div>
           <div>
-            <div css={styles.dropdownContainer}>
+            <div css={[styles.dropdownContainer, styles.topicContainer]}>
               <Dropdown
                 selected={filterValues["field_of_study"]}
                 setSelected={(val) => handleSingleSelectChange(val, "field_of_study")}
@@ -242,6 +244,11 @@ const Dashboard = () => {
                 options={getFOSOptions()}
               />
             </div>
+            <div css={styles.switchContainer}>
+              List <StyledSwitch checked={showSummary} onChange={() => updateToggle(SHOW_SUMMARY)}/> Comparison
+            </div>
+          </div>
+          <div>
             {moreFilters && !showSummary && <>
               <div css={styles.dropdownContainer}>
                 <Dropdown
