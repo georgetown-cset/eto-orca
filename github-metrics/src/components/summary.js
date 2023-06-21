@@ -1,5 +1,5 @@
 /*
-Summary metrics for top five repos within current selection
+Summary metrics for top five repositories within current selection
  */
 import React, {useEffect} from "react";
 
@@ -198,7 +198,7 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
             <StatBox stat={"relevance"} data={data} field={field} fieldName={fieldName}/>}
         </div>
         <h2 css={styles.summaryContainerLabel}>
-          <span css={styles.dropdownIntro}>Trends over time for top repos by</span>
+          <span css={styles.dropdownIntro}>Trends over time for top repositories by</span>
           <div css={styles.dropdownContainer}>
             <Dropdown
               selected={orderBy}
