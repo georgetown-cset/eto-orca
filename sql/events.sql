@@ -7,12 +7,16 @@ relevant_repos AS (
     SELECT CONCAT(owner_name, "/", matched_name) AS repo_name
     FROM
       staging_github_metrics.repos_with_full_meta
-    UNION ALL
+    UNION DISTINCT
     SELECT CONCAT(owner_name, "/", current_name) AS repo_name
     FROM
       staging_github_metrics.repos_with_full_meta
     WHERE
-      current_name IS NOT NULL) ),
+      current_name IS NOT NULL
+    UNION DISTINCT
+    SELECT repo AS repo_name
+    FROM
+      staging_github_metrics.repos_in_papers) ),
 
 curr_data AS (
   SELECT
@@ -195,7 +199,46 @@ curr_data AS (
     id,
     other
   FROM
-    `githubarchive.month.202302` )
+    `githubarchive.month.202302`
+  UNION ALL
+  SELECT
+    type,
+    public,
+    payload,
+    repo,
+    actor,
+    org,
+    created_at,
+    id,
+    other
+  FROM
+    `githubarchive.month.202303`
+  UNION ALL
+  SELECT
+    type,
+    public,
+    payload,
+    repo,
+    actor,
+    org,
+    created_at,
+    id,
+    other
+  FROM
+    `githubarchive.month.202304`
+  UNION ALL
+  SELECT
+    type,
+    public,
+    payload,
+    repo,
+    actor,
+    org,
+    created_at,
+    id,
+    other
+  FROM
+    `githubarchive.month.202305` )
 
 SELECT
   *

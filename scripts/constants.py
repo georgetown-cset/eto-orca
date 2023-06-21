@@ -50,6 +50,7 @@ LICENSE_TO_GROUP = {
     "Mozilla Public License 2.0": OTHER_LICENSE,
     "Open Data Commons Open Database License v1.0": OTHER_LICENSE,
     "Other": OTHER_LICENSE,
+    "PostgreSQL License": OTHER_LICENSE,
     "The Unlicense": OTHER_LICENSE,
     "Universal Permissive License v1.0": OTHER_LICENSE,
     "University of Illinois/NCSA Open Source License": OTHER_LICENSE,

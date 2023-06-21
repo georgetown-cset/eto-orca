@@ -29,7 +29,8 @@ const ProjectMetadata = (props) => {
     if(!data[key]) {
       return 0;
     } else if(showNumReferences && FIELD_KEYS.includes(key)){
-      return data[key][cleanFieldKey(field)];
+      const cleanField = cleanFieldKey(field);
+      return !(cleanField in data[key]) ? 0 : data[key][cleanField];
     }
     return data[key];
   };
