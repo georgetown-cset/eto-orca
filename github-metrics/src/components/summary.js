@@ -49,7 +49,7 @@ const styles = {
 
 const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
   const fmtStat = sortMapping[stat].toLowerCase();
-  const title = `Top repositories by ${stat === "relevance" ? `relevance to ${fieldName}` : fmtStat}`;
+  const title = `Top repositories by ${stat === "relevance" ? `relevance to ${fieldName} research` : fmtStat}`;
   const yearlyRepoStats = {};
   if(yearly !== null) {
     for (let repoStat of yearly) {
