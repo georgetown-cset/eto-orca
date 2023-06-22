@@ -126,7 +126,7 @@ const ProjectDetails = () => {
    <div css={styles.dashboardContainer} id={"project-dashboard"}>
      <div css={styles.headerContainer}>
        <div css={styles.backLink}>
-        <a href={"/"}>Back to listing page</a>
+        <a href={"/"}>Back to main page</a>
        </div>
        <h2 css={styles.ghLink}>
          <ExternalLink href={"https://github.com/"+repo_name}><img src={githubLogo} css={styles.githubLogo}/>{repo_name}</ExternalLink>
