@@ -48,6 +48,17 @@ const IndexPage = () => {
           </div>
         </div>}
         documentationLink={"https://eto.tech/tool-docs/oss-tracker"}
+        sidebarTitle={"Quick guide"}
+        sidebarContent={<div>
+          <p>
+            In the default <strong>summary view</strong>, you can compare the top five repositories in a field of study, ordered by a metric
+            you choose. Switch to the <strong>list view</strong> to view high-level metrics for each repository in the field.
+          </p>
+          <p>
+            Click on a repository link
+            to view the <strong>detail view</strong> where you can see all metrics we collect about a particular repository.
+          </p>
+        </div>}
       />
       {(typeof window !== "undefined") &&
         <React.Suspense fallback={<div style={{textAlign: "center"}}><CircularProgress/></div>}>

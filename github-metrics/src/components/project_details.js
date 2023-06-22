@@ -56,9 +56,7 @@ const styles = {
     margin-bottom: 20px;
   `,
   headerContainer: css`
-    @media (max-width: 1020px) {
-      padding: 0px 20px;
-    }
+    padding: 0px 20px;
   `,
   githubLogo: css`
     height: 25px;
