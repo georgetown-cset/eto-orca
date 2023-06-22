@@ -78,56 +78,64 @@ const ProjectDetails = () => {
         setData([])
       } else {
         const project_id = name_to_id[project_name];
-        setData(id_to_repo[project_id]);
+        const newData = id_to_repo[project_id];
+        setRepoName(getRepoName(newData));
+        setData(newData);
+        updateAccordionDetails(newData);
       }
     }
   }, []);
 
   const [data, setData] = React.useState({});
-  const [expanded, setExpanded] = React.useState(["push_dates"]);
-  const repo_name = getRepoName(data);
+  const [expanded, setExpanded] = React.useState(null);
+  const [accordionDetails, setAccordionDetails] = React.useState([]);
+  const [repoName, setRepoName] = React.useState(null);
 
-  const getGraphs = (meta) => {
-    const graphTitle = `${keyToTitle[meta[0]]} in ${repo_name}`;
+  const getGraphs = (meta, currData) => {
+    const currName = getRepoName(currData);
+    const graphTitle = `${keyToTitle[meta[0]]} in ${currName}`;
     if(meta[1] === "bar"){
-      return <BarGraph traces={getBarTraces(meta[0], data)} title={graphTitle}
+      return <BarGraph traces={getBarTraces(meta[0], currData)} title={graphTitle}
                                         normalizeTime={meta[0] !== "contrib_counts"}/>
     } else if(meta[1] === "line") {
-      return <LineGraph traces={[{x: getX(data[meta[0]]), y: getY(data[meta[0]])}]}
+      return <LineGraph traces={[{x: getX(currData[meta[0]]), y: getY(currData[meta[0]])}]}
                  title={graphTitle} />
     }
-    return <LineGraph traces={getCountryTraces(data[meta[0]])}
-                      showLegend={true} title={`PyPI downloads over time in ${repo_name}`}/>;
+    return <LineGraph traces={getCountryTraces(currData[meta[0]])}
+                      showLegend={true} title={`PyPI downloads over time in ${currName}`}/>;
   };
 
-  const graphConfig = [
-    ["push_dates", "line", <span>This graph shows the number of commits made to the main branch of the repository each year.</span>],
-    ["downloads", "multi-line", <span>
-      This graph shows the number of package downloads from PyPI per year, with country affiliations as reported in
-      the BigQuery dataset bigquery-public-data.pypi.file_downloads. Note that automated downloads may inflate these counts.
-    </span>],
-    ["issue_dates", "bar", <span>
-      This graph compares the number of issues opened per year to the number of issues closed. A high ratio of new
-      issues opened to issues closed might indicate the project needs more maintenance capacity.
-    </span>],
-    ["commit_dates", "bar", <span>
-      This graph compares the number of contributors who made a commit for the first time in a given year to
-      the number of contributors that had made a commit in a previous year.
-    </span>],
-    ["contrib_counts", "bar", <span>This graph shows the percentage of commits authored by each of the top 20 contributors to the project.</span>],
-    ["star_dates", "line", <span>This graph shows the number of new stars added during each year we track.</span>],
-  ];
-
-  const accordionDetails = graphConfig.filter(cfg => (cfg[0] in data) && (data[cfg[0]].length > 0)).map(cfg => (
-    {
-      "id": cfg[0],
-      "name": keyToTitle[cfg[0]],
-      "content" : <div>
-        <div css={styles.graphHeader}>{cfg[2]}</div>
-        {getGraphs(cfg)}
-      </div>
-    }
-  ));
+  const updateAccordionDetails = (currData) => {
+    const graphConfig = [
+      ["push_dates", "line", <span>This graph shows the number of commits made to the main branch of the repository each year.</span>],
+      ["downloads", "multi-line", <span>
+        This graph shows the number of package downloads from PyPI per year, with country affiliations as reported in
+        the BigQuery dataset bigquery-public-data.pypi.file_downloads. Note that automated downloads may inflate these counts.
+      </span>],
+      ["issue_dates", "bar", <span>
+        This graph compares the number of issues opened per year to the number of issues closed. A high ratio of new
+        issues opened to issues closed might indicate the project needs more maintenance capacity.
+      </span>],
+      ["commit_dates", "bar", <span>
+        This graph compares the number of contributors who made a commit for the first time in a given year to
+        the number of contributors that had made a commit in a previous year.
+      </span>],
+      ["contrib_counts", "bar", <span>This graph shows the percentage of commits authored by each of the top 20 contributors to the project.</span>],
+      ["star_dates", "line", <span>This graph shows the number of new stars added during each year we track.</span>],
+    ];
+    const newDetails = graphConfig.filter(cfg => (cfg[0] in currData) && (currData[cfg[0]].length > 0)).map(cfg => (
+      {
+        "id": cfg[0],
+        "name": keyToTitle[cfg[0]],
+        "content" : <div>
+          <div css={styles.graphHeader}>{cfg[2]}</div>
+          {getGraphs(cfg, currData)}
+        </div>
+      }
+    ));
+    setAccordionDetails(newDetails);
+    setExpanded([newDetails[0].id]);
+  };
 
   return (
     (data.length === 0) ?
@@ -140,8 +148,8 @@ const ProjectDetails = () => {
             <a href={"/"}>Back to main page</a>
           </div>
           <h2 css={styles.ghLink}>
-            <ExternalLink href={"https://github.com/" + repo_name}><img src={githubLogo}
-                                                                        css={styles.githubLogo}/>{repo_name}
+            <ExternalLink href={"https://github.com/" + repoName}><img src={githubLogo}
+                                                                        css={styles.githubLogo}/>{repoName}
             </ExternalLink>
           </h2>
           {data["has_deps_dev"] &&
@@ -181,7 +189,7 @@ const ProjectDetails = () => {
           key={JSON.stringify(expanded)}
           panels={accordionDetails}
           expanded={expanded}
-          setExpanded={(newExpanded) => setExpanded(newExpanded)} headingVariant={"h6"}
+          updateExpanded={(newExpanded) => setExpanded(newExpanded)} headingVariant={"h6"}
         />
       </div>
   );

@@ -213,7 +213,7 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
         key={JSON.stringify(expanded)}
         panels={accordionDetails}
         expanded={expanded}
-        setExpanded={(newExpanded) => setExpanded(newExpanded)} headingVariant={"h6"}
+        updateExpanded={(newExpanded) => setExpanded(newExpanded)} headingVariant={"h6"}
       />
     </div>
   );
