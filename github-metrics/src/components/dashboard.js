@@ -312,7 +312,7 @@ const Dashboard = () => {
                 />
               </div>
               <div css={styles.switchContainer}>
-                Comparison <StyledSwitch checked={showList} onChange={() => updateToggle(SHOW_LIST)}/> List
+                Summary <StyledSwitch checked={showList} onChange={() => updateToggle(SHOW_LIST)}/> List
               </div>
             </div>
             <div>
