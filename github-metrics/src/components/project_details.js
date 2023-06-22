@@ -108,7 +108,7 @@ const ProjectDetails = () => {
       the number of contributors that had made a commit in a previous year.
     </span>],
     ["contrib_counts", "bar", <span>This graph shows the percentage of commits authored by each of the top 20 contributors to the project.</span>],
-    ["star_dates", "line", <span>This graph shows the number of new star events that occurred during each year we track.</span>],
+    ["star_dates", "line", <span>This graph shows the number of new stars added during each year we track.</span>],
   ];
 
   const accordionDetails = graphConfig.filter(cfg => (cfg[0] in data) && (data[cfg[0]].length > 0)).map(cfg => (
