@@ -82,15 +82,16 @@ const ProjectDetails = () => {
   const repo_name = getRepoName(data);
 
   const getGraphs = (meta) => {
+    const graphTitle = `${keyToTitle[meta[0]]} in ${repo_name}`;
     if(meta[1] === "bar"){
-      return <BarGraph traces={getBarTraces(meta[0], data)} title={keyToTitle[meta[0]]}
+      return <BarGraph traces={getBarTraces(meta[0], data)} title={graphTitle}
                                         normalizeTime={meta[0] !== "contrib_counts"}/>
     } else if(meta[1] === "line") {
       return <LineGraph traces={[{x: getX(data[meta[0]]), y: getY(data[meta[0]])}]}
-                 title={keyToTitle[meta[0]]} />
+                 title={graphTitle} />
     }
     return <LineGraph traces={getCountryTraces(data[meta[0]])}
-                      showLegend={true} title={"PyPI downloads over time"}/>;
+                      showLegend={true} title={`PyPI downloads over time in ${repo_name}`}/>;
   };
 
   const graphConfig = [
