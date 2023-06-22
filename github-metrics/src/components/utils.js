@@ -5,10 +5,10 @@ export const sortMapping = {
   "stargazers_count": "Stars",
   "subscribers_count": "Watchers",
   "num_contributors": "Contributors",
-  "created_at": "Created",
-  "pushed_at": "Last Commit",
-  "open_issues": "Open Issues",
-  "num_references": "References",
+  "created_at": "Date created",
+  "pushed_at": "Last commit date",
+  "open_issues": "Open issues",
+  "num_references": "References in research",
   "relevance": "Relevance"
 };
 
