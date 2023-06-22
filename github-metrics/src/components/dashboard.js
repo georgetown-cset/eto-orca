@@ -67,7 +67,7 @@ const styles = {
   switchContainer: css`
     display: inline-block;
     vertical-align: bottom;
-    margin: 0 0 5px 5px;
+    margin: 0 15px 5px 5px;
   `,
   topicContainer: css`
     margin: 0 5px 5px 0;
@@ -314,6 +314,16 @@ const Dashboard = () => {
               <div css={styles.switchContainer}>
                 Summary <StyledSwitch checked={showList} onChange={() => updateToggle(SHOW_LIST)}/> List
               </div>
+              {showList &&
+              <div css={styles.buttonContainer}>
+                <ButtonStyled css={styles.moreFilters} onClick={() => updateToggle(MORE_FILTERS)}>
+                  {moreFilters ? "Hide" : "Show"} Extra Filters
+                </ButtonStyled>
+                <ButtonStyled css={styles.moreFilters} onClick={() => handleFilterUpdate({...defaultFilterValues})}>
+                  Reset
+                </ButtonStyled>
+              </div>
+              }
             </div>
             <div>
               {moreFilters && showList && <>
@@ -334,16 +344,6 @@ const Dashboard = () => {
                   />
                 </div>
               </>}
-              {showList &&
-              <div css={styles.buttonContainer}>
-                <ButtonStyled css={styles.moreFilters} onClick={() => updateToggle(MORE_FILTERS)}>
-                  {moreFilters ? "Hide" : "Show"} Detail Filters
-                </ButtonStyled>
-                <ButtonStyled css={styles.moreFilters} onClick={() => handleFilterUpdate({...defaultFilterValues})}>
-                  Reset
-                </ButtonStyled>
-              </div>
-              }
             </div>
             {showList &&
             <div>
