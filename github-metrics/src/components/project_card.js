@@ -51,7 +51,6 @@ const styles = {
   `,
   buttonContainer: css`
     text-align: center;
-    color: white;
   `,
   metadataContainer: css`
     padding: 20px 20px 0px 20px;
@@ -111,7 +110,7 @@ const ProjectCard = (props) => {
         </div>
       </div>
       <div css={styles.buttonContainer}>
-        <ButtonStyled style={{width: "100%"}} href={`/project?name=${repo_name}`} target={"_blank"} rel={"noopener"}>&gt;&gt; Full profile</ButtonStyled>
+        <ButtonStyled style={{width: "100%", color: "white"}} href={`/project?name=${repo_name}`} target={"_blank"} rel={"noopener"}>&gt;&gt; Full profile</ButtonStyled>
       </div>
     </div>
   )

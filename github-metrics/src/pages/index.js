@@ -26,17 +26,17 @@ const IndexPage = () => {
   return (
     <AppWrapper>
       <InfoCard
-        title={<div style={{fontFamily: "GTZirkonBold, sans-serif !important"}}>Open-Source Software in Emerging Technology Metrics</div>}
+        title={<div style={{fontFamily: "GTZirkonBold, sans-serif !important"}}>Open-source software in research fields</div>}
         description={<div>
           <div style={{marginBottom: "10px"}}>
-          This tool is meant to enable comparative analysis of Open-Source Software (OSS) used in emerging technology (ET) areas.
-          OSS projects are associated with an ET area either through manual curation (see the "Curated Field" section of the Field of Study
-          dropdown below) or through automated retrieval (see the "Automated Field Detection" section of the Field of Study dropdown).
+          This tool is meant to enable comparative analysis of Open-Source Software (OSS) used in research fields of study.
+          OSS projects are associated with a field of study either through manual curation (see the "used for research into" section of the "Application topic"
+          dropdown below) or through automated retrieval (see the "related to" section of the "Application topic" dropdown).
           </div>
           <div style={{ marginBottom: "10px"}}>
           In the automated
-          retrieval method, we affiliate any OSS project that is mentioned in the title, abstract, arXiv or CNKI fulltext, or Papers with Code
-          references of an article with that article. We assign each article to its top three fields of study, then
+          retrieval method, we affiliate any OSS project that is mentioned in the title, abstract, arXiv or Semantic Scholar fulltext, or Papers with Code
+          references of an article with that article. We assign each article to its top three <ExternalLink href={"https://aclanthology.org/2022.sdp-1.12/"}>fields of study</ExternalLink>, then
           affiliate each OSS project with fields of study containing at least three papers that reference the OSS project.
           </div>
           <div style={{marginBottom: "10px"}}>
