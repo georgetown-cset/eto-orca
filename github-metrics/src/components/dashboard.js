@@ -321,7 +321,7 @@ const Dashboard = () => {
                   <Dropdown
                     selected={filterValues["language_group"]}
                     setSelected={(val) => handleSingleSelectChange(val, "language_group")}
-                    inputLabel={"Top programming language"}
+                    inputLabel={"Filter by top programming language"}
                     options={getFilterOptions("language_group").map(lang => ({"text": lang, "val": lang}))}
                   />
                 </div>
@@ -329,7 +329,7 @@ const Dashboard = () => {
                   <Dropdown
                     selected={filterValues["license_group"]}
                     setSelected={(val) => handleSingleSelectChange(val, "license_group")}
-                    inputLabel={"License"}
+                    inputLabel={"Filter by license"}
                     options={getFilterOptions("license_group").map(lang => ({"text": lang, "val": lang}))}
                   />
                 </div>
