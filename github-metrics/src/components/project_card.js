@@ -51,6 +51,7 @@ const styles = {
   `,
   buttonContainer: css`
     text-align: center;
+    color: white;
   `,
   metadataContainer: css`
     padding: 20px 20px 0px 20px;
