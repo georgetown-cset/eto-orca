@@ -121,7 +121,7 @@ const Dashboard = () => {
     }
     setFilterValues(updatedFilterValues);
     setMoreFilters(urlParams.has(MORE_FILTERS) && urlParams.get(MORE_FILTERS));
-    setShowSummary(urlParams.has(SHOW_SUMMARY) && urlParams.get(SHOW_SUMMARY));
+    setShowList(urlParams.has(SHOW_LIST) && urlParams.get(SHOW_LIST));
     mkRepoData(updatedFilterValues);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -136,17 +136,17 @@ const Dashboard = () => {
 
   const PAGE_SIZE = 10;
   const MORE_FILTERS = "more_filters";
-  const SHOW_SUMMARY = "show_summary";
+  const SHOW_LIST = "show_list";
 
   const [filterValues, setFilterValues] = React.useState({...defaultFilterValues});
   const [repoData, setRepoData] = React.useState([]);
   const [moreFilters, setMoreFilters] = React.useState(false);
-  const [showSummary, setShowSummary] = React.useState(false);
+  const [showList, setShowList] = React.useState(false);
   const [currPage, setCurrPage] = React.useState(1);
 
   const toggleToState = {
     [MORE_FILTERS]: [moreFilters, setMoreFilters],
-    [SHOW_SUMMARY]: [showSummary, setShowSummary]
+    [SHOW_LIST]: [showList, setShowList]
   };
 
   const contentContainer = React.createRef();
@@ -181,10 +181,10 @@ const Dashboard = () => {
     return ["All"].concat(opts);
   };
 
-  const mkRepoData = (filters, currShowSummary=showSummary) => {
+  const mkRepoData = (filters, currShowList=showList) => {
     let relevantFilters = filters;
     // if we're currently showing the summary, only filter by the field
-    if(currShowSummary){
+    if(!currShowList){
       relevantFilters = {...defaultFilterValues};
       relevantFilters["field_of_study"] = filters["field_of_study"]
     }
@@ -261,7 +261,7 @@ const Dashboard = () => {
     const params = urlParams.toString().length > 0 ? "?" + urlParams.toString() : "";
     window.history.replaceState(null, null, window.location.pathname + params);
     setter(newState);
-    if(name === SHOW_SUMMARY){
+    if(name === SHOW_LIST){
       mkRepoData({...filterValues}, newState);
     }
   };
@@ -293,7 +293,7 @@ const Dashboard = () => {
       suffix += licenseBlurb;
     }
     return (<div>
-      <FilterAltIcon css={styles.filterIcon}/> Showing {repoData.length} repositories in {cleanFieldName(filterValues["field_of_study"])}{suffix}.
+      <FilterAltIcon css={styles.filterIcon}/> Showing {repoData.length} repositories referenced in {cleanFieldName(filterValues["field_of_study"])} articles{suffix}.
     </div>)
   };
 
@@ -312,11 +312,11 @@ const Dashboard = () => {
                 />
               </div>
               <div css={styles.switchContainer}>
-                List <StyledSwitch checked={showSummary} onChange={() => updateToggle(SHOW_SUMMARY)}/> Comparison
+                Comparison <StyledSwitch checked={showList} onChange={() => updateToggle(SHOW_LIST)}/> List
               </div>
             </div>
             <div>
-              {moreFilters && !showSummary && <>
+              {moreFilters && showList && <>
                 <div css={styles.dropdownContainer}>
                   <Dropdown
                     selected={filterValues["language_group"]}
@@ -334,7 +334,7 @@ const Dashboard = () => {
                   />
                 </div>
               </>}
-              {!showSummary &&
+              {showList &&
               <div css={styles.buttonContainer}>
                 <ButtonStyled css={styles.moreFilters} onClick={() => updateToggle(MORE_FILTERS)}>
                   {moreFilters ? "Hide" : "Show"} Detail Filters
@@ -345,7 +345,7 @@ const Dashboard = () => {
               </div>
               }
             </div>
-            {!showSummary &&
+            {showList &&
             <div>
               <div css={styles.dropdownContainer}>
                 <Dropdown
@@ -366,11 +366,11 @@ const Dashboard = () => {
             </div>
             }
           </div>
-          {!showSummary && <div css={styles.filterDescriptionContainer}>{getFilterSummary()}</div>}
+          {showList && <div css={styles.filterDescriptionContainer}>{getFilterSummary()}</div>}
         </div>
         <div css={styles.bottomPanel}>
           {(repoData.length > 0) && (
-            showSummary ?
+            !showList ?
               <Summary key={`summary-${filterValues["field_of_study"]}`} data={repoData}
                             field={filterValues["field_of_study"]}
                             isCurated={isCuratedField(filterValues["field_of_study"])}
