@@ -62,6 +62,10 @@ const styles = {
     height: 25px;
     vertical-align: bottom;
     margin: 0 4px 2px 0;
+  `,
+  noData: css`
+    text-align: center;
+    margin: 20px;
   `
 };
 
@@ -70,8 +74,12 @@ const ProjectDetails = () => {
     const urlParams = new URLSearchParams(window.location.search);
     if(urlParams.get("name") !== null){
       const project_name = urlParams.get("name");
-      const project_id = name_to_id[project_name];
-      setData(id_to_repo[project_id]);
+      if(!(project_name in name_to_id)){
+        setData([])
+      } else {
+        const project_id = name_to_id[project_name];
+        setData(id_to_repo[project_id]);
+      }
     }
   }, []);
 
@@ -122,54 +130,60 @@ const ProjectDetails = () => {
   ));
 
   return (
-   <div css={styles.dashboardContainer} id={"project-dashboard"}>
-     <div css={styles.headerContainer}>
-       <div css={styles.backLink}>
-        <a href={"/"}>Back to main page</a>
-       </div>
-       <h2 css={styles.ghLink}>
-         <ExternalLink href={"https://github.com/"+repo_name}><img src={githubLogo} css={styles.githubLogo}/>{repo_name}</ExternalLink>
-       </h2>
-        {data["has_deps_dev"] &&
-        <span css={styles.depsLink}>
-          <ExternalLink href={"https://deps.dev/project/github/" + data["owner_name"] + "%2F" + data["current_name"]}>
-            [deps.dev]
-          </ExternalLink>
-        </span>
-        }
-       <div>
-         <div css={styles.description}>
-           <div>
-             {data["description"]}
-           </div>
-         </div>
-         <div css={styles.introStats}>
-           <HighlightBox title={"Basic statistics"}>
-             <div css={styles.metadataWrapper}>
-              <ProjectMetadata data={data}/>
-             </div>
-           </HighlightBox>
-           {"num_references" in data &&
-           <HighlightBox title={"Most frequently citing fields"}>
-             <ul css={styles.fieldList}>
-               {Object.keys(data["num_references"]).length > 0 ? Object.keys(data["num_references"]).sort((a, b) =>
-                 data["num_references"][b] - data["num_references"][a]
-               ).slice(0, 5).map(field => <li css={styles.fieldListElt}>
-                 {field} (<strong>{data["num_references"][field]}</strong> citation{data["num_references"][field] === 1 ? "" : "s"})
-               </li>) : <span>No references found</span>}
-             </ul>
-           </HighlightBox>
-           }
-         </div>
-       </div>
-     </div>
-     <Accordion
-       key={JSON.stringify(expanded)}
-       panels={accordionDetails}
-       expanded={expanded}
-       setExpanded={(newExpanded) => setExpanded(newExpanded)} headingVariant={"h6"}
-     />
-   </div>
+    (data.length === 0) ?
+      <div css={styles.noData}>
+        No data available for <strong>{(new URLSearchParams(window.location.search)).get("name")}</strong>. <a href={"/"}>Click to return to main page.</a>
+      </div> :
+      <div css={styles.dashboardContainer} id={"project-dashboard"}>
+        <div css={styles.headerContainer}>
+          <div css={styles.backLink}>
+            <a href={"/"}>Back to main page</a>
+          </div>
+          <h2 css={styles.ghLink}>
+            <ExternalLink href={"https://github.com/" + repo_name}><img src={githubLogo}
+                                                                        css={styles.githubLogo}/>{repo_name}
+            </ExternalLink>
+          </h2>
+          {data["has_deps_dev"] &&
+          <span css={styles.depsLink}>
+        <ExternalLink href={"https://deps.dev/project/github/" + data["owner_name"] + "%2F" + data["current_name"]}>
+          [deps.dev]
+        </ExternalLink>
+      </span>
+          }
+          <div>
+            <div css={styles.description}>
+              <div>
+                {data["description"]}
+              </div>
+            </div>
+            <div css={styles.introStats}>
+              <HighlightBox title={"Basic statistics"}>
+                <div css={styles.metadataWrapper}>
+                  <ProjectMetadata data={data}/>
+                </div>
+              </HighlightBox>
+              {"num_references" in data &&
+              <HighlightBox title={"Most frequently citing fields"}>
+                <ul css={styles.fieldList}>
+                  {Object.keys(data["num_references"]).length > 0 ? Object.keys(data["num_references"]).sort((a, b) =>
+                    data["num_references"][b] - data["num_references"][a]
+                  ).slice(0, 5).map(field => <li css={styles.fieldListElt}>
+                    {field} (<strong>{data["num_references"][field]}</strong> citation{data["num_references"][field] === 1 ? "" : "s"})
+                  </li>) : <span>No references found</span>}
+                </ul>
+              </HighlightBox>
+              }
+            </div>
+          </div>
+        </div>
+        <Accordion
+          key={JSON.stringify(expanded)}
+          panels={accordionDetails}
+          expanded={expanded}
+          setExpanded={(newExpanded) => setExpanded(newExpanded)} headingVariant={"h6"}
+        />
+      </div>
   );
 };
 
