@@ -3,6 +3,7 @@ The project card component displayed for each repo in the list view
  */
 import React from "react";
 import { css } from "@emotion/react";
+import LaunchIcon from "@mui/icons-material/Launch";
 import {ButtonStyled, ExternalLink} from "@eto/eto-ui-components";
 
 import "core-js/features/url";
@@ -64,6 +65,15 @@ const styles = {
     font-weight: bold;
     text-align: center;
     margin-top: 22px;
+  `,
+  repoIcon: css`
+    height: 16px;
+    vertical-align: bottom;
+    display: inline-block;
+  `,
+  depsIcon: css`
+    height: 13px;
+    vertical-align: bottom;
   `
 };
 
@@ -91,11 +101,11 @@ const ProjectCard = (props) => {
       <div css={styles.metadataContainer}>
         <div css={styles.leftPanel}>
           <span>
-            <h4 css={styles.ghLink}><ExternalLink href={"https://github.com/"+repo_name}><img src={githubLogo} css={styles.githubLogo}/>{repo_name}</ExternalLink></h4>
+            <h4 css={styles.ghLink}><ExternalLink href={"https://github.com/"+repo_name}><img src={githubLogo} css={styles.githubLogo}/>{repo_name}<LaunchIcon css={styles.repoIcon}/></ExternalLink></h4>
             {data["has_deps_dev"] &&
             <span css={styles.depsLink}>
               <ExternalLink href={"https://deps.dev/project/github/" + data["owner_name"] + "%2F" + data["current_name"]}>
-                [deps.dev]
+                deps.dev<LaunchIcon css={styles.depsIcon}/>
               </ExternalLink>
             </span>
             }

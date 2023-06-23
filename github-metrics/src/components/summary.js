@@ -8,7 +8,7 @@ import {css} from "@emotion/react";
 
 import {keyToTitle, sortMapping, getRepoName, sortByKey, cleanFieldName, cleanFieldKey, FIELD_KEYS} from "./utils";
 import HighlightBox from "./highlight_box";
-import {Accordion, Dropdown, ExternalLink} from "@eto/eto-ui-components";
+import {Accordion, Dropdown} from "@eto/eto-ui-components";
 
 
 const styles = {
@@ -70,9 +70,9 @@ const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
       <ul css={styles.statList}>
         {!!data.length && sortByKey(data, stat, field).slice(0, 5).map((row) =>
           <li css={styles.statListElt}>
-            <ExternalLink href={`/project?name=${getRepoName(row)}`}>
+            <a href={`/project?name=${getRepoName(row)}`}>
               {getRepoName(row)}
-            </ExternalLink><br/>
+            </a><br/>
             <span css={styles.statDetail}>
               {stat === "relevance" ?
                 <span><strong>{row["relevance"][cleanFieldKey(field)].toFixed(2)}</strong> {fmtStat} (<strong>{row["num_references"][cleanFieldKey(field)]}</strong> references)</span> :

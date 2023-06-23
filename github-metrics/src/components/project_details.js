@@ -10,6 +10,7 @@ import id_to_repo from "../data/id_to_repo";
 import name_to_id from "../data/name_to_id";
 import {Accordion, ExternalLink} from "@eto/eto-ui-components";
 import {css} from "@emotion/react";
+import LaunchIcon from "@mui/icons-material/Launch";
 import {BarGraph, LineGraph} from "./graph";
 import ProjectMetadata from "./project_metadata";
 
@@ -66,6 +67,16 @@ const styles = {
   noData: css`
     text-align: center;
     margin: 20px;
+  `,
+  repoIcon: css`
+    height: 22px;
+    vertical-align: bottom;
+    display: inline-block;
+    padding-left: 3px;
+  `,
+  depsIcon: css`
+    height: 13px;
+    vertical-align: bottom;
   `
 };
 
@@ -148,14 +159,14 @@ const ProjectDetails = () => {
             <a href={"/"}>Back to main page</a>
           </div>
           <h2 css={styles.ghLink}>
-            <ExternalLink href={"https://github.com/" + repoName}><img src={githubLogo}
-                                                                        css={styles.githubLogo}/>{repoName}
+            <ExternalLink href={"https://github.com/" + repoName}>
+              <img src={githubLogo} css={styles.githubLogo}/>{repoName}<LaunchIcon css={styles.repoIcon}/>
             </ExternalLink>
           </h2>
           {data["has_deps_dev"] &&
           <span css={styles.depsLink}>
         <ExternalLink href={"https://deps.dev/project/github/" + data["owner_name"] + "%2F" + data["current_name"]}>
-          [deps.dev]
+          deps.dev<LaunchIcon css={styles.depsIcon}/>
         </ExternalLink>
       </span>
           }
