@@ -23,8 +23,8 @@ pwc AS (
 
 pwc_arxiv_s2 AS (
   SELECT
-    merged_id AS new_merged_id,
-    dataset,
+    merged_id_v2 AS merged_id,
+    ft.dataset,
     full_text
   FROM (
     SELECT
@@ -48,35 +48,24 @@ pwc_arxiv_s2 AS (
     FROM
       pwc) AS ft
   LEFT JOIN
-    gcp_cset_links_v3_flatstart.article_links
+    gcp_cset_links_v3.merged_id_crosswalk
     ON
-      ft.id = article_links.orig_id ),
-
-mapped_pwc_arxiv_s2 AS (
-  SELECT DISTINCT
-    merged_id_v2 AS merged_id,
-    dataset,
-    full_text
-  FROM
-    pwc_arxiv_s2
-  LEFT JOIN
-    gcp_cset_links_v3_flatstart.merged_id_crosswalk
-    ON pwc_arxiv_s2.new_merged_id = merged_id_crosswalk.merged_id_v3
-  WHERE merged_id_v2 IS NOT NULL
-),
+      ft.id = merged_id_crosswalk.orig_id
+  WHERE
+    merged_id_v2 IS NOT NULL),
 
 agg_repos AS (
   SELECT
     merged_id,
     dataset,
-    github_metrics.GET_ALL_REPO_SLUGS(full_text) AS repos
+    github_metrics.get_all_repo_slugs(full_text) AS repos --noqa: L030
   FROM (
     SELECT
       merged_id,
       dataset,
       full_text
     FROM
-      mapped_pwc_arxiv_s2
+      pwc_arxiv_s2
     UNION ALL
     SELECT
       merged_id,

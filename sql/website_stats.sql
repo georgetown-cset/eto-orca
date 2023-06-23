@@ -1,31 +1,53 @@
 -- aggregate data for the webapp
 WITH
-repo_paper_meta AS (
-  SELECT
-    repo,
-    ARRAY_AGG(STRUCT(merged_id,
-        top_lvl1_fields AS fields)) AS paper_meta
+distinct_curated AS (
+  SELECT DISTINCT id
+  FROM
+    staging_github_metrics.curated_repos
+  LEFT JOIN
+    staging_github_metrics.repos_with_full_meta
+    ON
+      LOWER(CONCAT(owner_name, "/", matched_name)) = LOWER(repo)
+),
+
+distinct_repo_papers AS (
+  SELECT DISTINCT
+    id,
+    merged_id
   FROM
     staging_github_metrics.repos_in_papers
   CROSS JOIN
     UNNEST(merged_ids) AS merged_id
   LEFT JOIN
+    staging_github_metrics.repos_with_full_meta
+    ON
+      LOWER(CONCAT(owner_name, "/", matched_name)) = LOWER(repo)
+),
+
+repo_paper_meta AS (
+  SELECT
+    id,
+    ARRAY_AGG(STRUCT(merged_id,
+        top_lvl1_fields AS fields)) AS paper_meta
+  FROM
+    distinct_repo_papers
+  LEFT JOIN
     staging_github_metrics.top_level1_fields
     USING
       (merged_id)
   GROUP BY
-    repo
+    id
   UNION ALL
   -- hackily add in the curated repos along with fake fields
   SELECT
-    repo,
+    id,
     [
       STRUCT("p1" AS merged_id, [STRUCT("" AS name, 0.1 AS score)] AS fields), -- noqa: L029
       STRUCT("p1" AS merged_id, [STRUCT("" AS name, 0.1 AS score)] AS fields)  -- noqa: L029
     ] AS paper_meta
   FROM
-    staging_github_metrics.curated_repos
-  WHERE repo NOT IN (SELECT repo FROM staging_github_metrics.repos_in_papers)),
+    distinct_curated
+  WHERE id NOT IN (SELECT id FROM distinct_repo_papers)),
 
 repo_star_dates AS (
   SELECT
@@ -156,28 +178,52 @@ org_year AS (
   FROM
     org_year_disagg
   GROUP BY repo_id
+),
+
+canonical_meta AS (
+  SELECT
+    id,
+    MAX(owner_name) AS owner_name,
+    MAX(current_name) AS current_name,
+    MAX(open_issues) AS open_issues,
+    MAX(primary_programming_language) AS primary_programming_language,
+    MAX(ARRAY_TO_STRING(topics, ",")) AS topics,
+    MAX(stargazers_count) AS stargazers_count,
+    MAX(subscribers_count) AS subscribers_count,
+    MAX(num_releases) AS num_releases,
+    MAX(created_at) AS created_at,
+    MAX(updated_at) AS updated_at,
+    MAX(pushed_at) AS pushed_at,
+    MAX(num_contributors) AS num_contributors,
+    MAX(used_by) AS used_by,
+    MAX(license.name) AS license,
+    MAX(description) AS description,
+    CONCAT(
+      MAX(owner_name), "/", MAX(current_name)
+    ) IN (SELECT name FROM `bigquery-public-data.deps_dev_v1.Projects`) AS has_deps_dev -- noqa: L057
+  FROM
+    staging_github_metrics.repos_with_full_meta
+  GROUP BY
+    id
 )
 
 SELECT
   id,
   owner_name,
-  matched_name,
   current_name,
   open_issues,
   primary_programming_language,
-  topics,
+  SPLIT(topics, ",") AS topics,
   stargazers_count,
   subscribers_count,
   num_releases,
   created_at,
   updated_at,
   pushed_at,
-  ultimate_fork_of,
-  sources,
   paper_meta,
   num_contributors,
   used_by,
-  license.name AS license,
+  license,
   star_dates,
   repo_pushes.events AS push_events,
   issues.events AS issue_events,
@@ -189,11 +235,10 @@ SELECT
     owner_name, "/", current_name
   ) IN (SELECT name FROM `bigquery-public-data.deps_dev_v1.Projects`) AS has_deps_dev -- noqa: L057
 FROM
-  staging_github_metrics.repos_with_full_meta
-LEFT JOIN
   repo_paper_meta
-  ON
-    LOWER(CONCAT(owner_name, "/", matched_name)) = LOWER(repo)
+LEFT JOIN
+  canonical_meta
+  USING (id)
 LEFT JOIN
   repo_star_dates
   ON
@@ -226,5 +271,5 @@ WHERE
   ) AND (
     (
       ARRAY_LENGTH(paper_meta) > 1
-    ) OR CONCAT(owner_name, "/", matched_name) IN (SELECT repo FROM staging_github_metrics.curated_repos)
+    ) OR CONCAT(owner_name, "/", current_name) IN (SELECT repo FROM staging_github_metrics.curated_repos)
   )

@@ -19,9 +19,9 @@ WITH yearly_country_counts AS (
 
 SELECT
   repo,
-  summary,
+  max(summary) AS summary,
   array_agg(STRUCT(year, country_code, num_downloads)) AS downloads
 FROM
   yearly_country_counts
 GROUP BY
-  repo, summary
+  repo

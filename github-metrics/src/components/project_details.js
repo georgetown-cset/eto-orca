@@ -10,11 +10,13 @@ import id_to_repo from "../data/id_to_repo";
 import name_to_id from "../data/name_to_id";
 import {Accordion, ExternalLink} from "@eto/eto-ui-components";
 import {css} from "@emotion/react";
+import LaunchIcon from "@mui/icons-material/Launch";
 import {BarGraph, LineGraph} from "./graph";
 import ProjectMetadata from "./project_metadata";
 
 import {keyToTitle, getCountryTraces, getBarTraces, getX, getY, getRepoName} from "./utils";
 import HighlightBox from "./highlight_box";
+import githubLogo from "../images/github-mark.png";
 
 const styles = {
   dashboardContainer: css`
@@ -55,9 +57,26 @@ const styles = {
     margin-bottom: 20px;
   `,
   headerContainer: css`
-    @media (max-width: 1020px) {
-      padding: 0px 20px;
-    }
+    padding: 0px 20px;
+  `,
+  githubLogo: css`
+    height: 25px;
+    vertical-align: bottom;
+    margin: 0 4px 2px 0;
+  `,
+  noData: css`
+    text-align: center;
+    margin: 20px;
+  `,
+  repoIcon: css`
+    height: 22px;
+    vertical-align: bottom;
+    display: inline-block;
+    padding-left: 3px;
+  `,
+  depsIcon: css`
+    height: 13px;
+    vertical-align: bottom;
   `
 };
 
@@ -66,105 +85,124 @@ const ProjectDetails = () => {
     const urlParams = new URLSearchParams(window.location.search);
     if(urlParams.get("name") !== null){
       const project_name = urlParams.get("name");
-      const project_id = name_to_id[project_name];
-      setData(id_to_repo[project_id]);
+      if(!(project_name in name_to_id)){
+        setData([])
+      } else {
+        const project_id = name_to_id[project_name];
+        const newData = id_to_repo[project_id];
+        setRepoName(getRepoName(newData));
+        setData(newData);
+        updateAccordionDetails(newData);
+      }
     }
   }, []);
 
   const [data, setData] = React.useState({});
-  const [expanded, setExpanded] = React.useState(["push_dates"]);
-  const repo_name = getRepoName(data);
+  const [expanded, setExpanded] = React.useState(null);
+  const [accordionDetails, setAccordionDetails] = React.useState([]);
+  const [repoName, setRepoName] = React.useState(null);
 
-  const getGraphs = (meta) => {
+  const getGraphs = (meta, currData) => {
+    const currName = getRepoName(currData);
+    const graphTitle = `${keyToTitle[meta[0]]} in ${currName}`;
     if(meta[1] === "bar"){
-      return <BarGraph traces={getBarTraces(meta[0], data)} title={keyToTitle[meta[0]]}
+      return <BarGraph traces={getBarTraces(meta[0], currData)} title={graphTitle}
                                         normalizeTime={meta[0] !== "contrib_counts"}/>
     } else if(meta[1] === "line") {
-      return <LineGraph traces={[{x: getX(data[meta[0]]), y: getY(data[meta[0]])}]}
-                 title={keyToTitle[meta[0]]} />
+      return <LineGraph traces={[{x: getX(currData[meta[0]]), y: getY(currData[meta[0]])}]}
+                 title={graphTitle} />
     }
-    return <LineGraph traces={getCountryTraces(data[meta[0]])}
-                      showLegend={true} title={"PyPI downloads over time"}/>;
+    return <LineGraph traces={getCountryTraces(currData[meta[0]])}
+                      showLegend={true} title={`PyPI downloads over time in ${currName}`}/>;
   };
 
-  const graphConfig = [
-    ["push_dates", "line", <span>This graph shows the number of commits made to the main branch of the repository each year.</span>],
-    ["downloads", "multi-line", <span>
-      This graph shows the number of package downloads from PyPI per year, with country affiliations as reported in
-      the BigQuery dataset bigquery-public-data.pypi.file_downloads. Note that automated downloads may inflate these counts.
-    </span>],
-    ["issue_dates", "bar", <span>
-      This graph compares the number of issues opened per year to the number of issues closed. A high ratio of new
-      issues opened to issues closed might indicate the project needs more maintenance capacity.
-    </span>],
-    ["commit_dates", "bar", <span>
-      This graph compares the number of contributors who made a commit for the first time in a given year to
-      the number of contributors that had made a commit in a previous year.
-    </span>],
-    ["contrib_counts", "bar", <span>This graph shows the percentage of commits authored by each of the top 20 contributors to the project.</span>],
-    ["star_dates", "line", <span>This graph shows the number of new star events that occurred during each year we track.</span>],
-  ];
-
-  const accordionDetails = graphConfig.filter(cfg => (cfg[0] in data) && (data[cfg[0]].length > 0)).map(cfg => (
-    {
-      "id": cfg[0],
-      "name": keyToTitle[cfg[0]],
-      "content" : <div>
-        <div css={styles.graphHeader}>{cfg[2]}</div>
-        {getGraphs(cfg)}
-      </div>
-    }
-  ));
+  const updateAccordionDetails = (currData) => {
+    const graphConfig = [
+      ["push_dates", "line", <span>This graph shows the number of commits made to the main branch of the repository each year.</span>],
+      ["downloads", "multi-line", <span>
+        This graph shows the number of package downloads from PyPI per year, with country affiliations as reported in
+        the BigQuery dataset bigquery-public-data.pypi.file_downloads. Note that automated downloads may inflate these counts.
+      </span>],
+      ["issue_dates", "bar", <span>
+        This graph compares the number of issues opened per year to the number of issues closed. A high ratio of new
+        issues opened to issues closed might indicate the project needs more maintenance capacity.
+      </span>],
+      ["commit_dates", "bar", <span>
+        This graph compares the number of contributors who made a commit for the first time in a given year to
+        the number of contributors that had made a commit in a previous year.
+      </span>],
+      ["contrib_counts", "bar", <span>This graph shows the percentage of commits authored by each of the top 20 contributors to the project.</span>],
+      ["star_dates", "line", <span>This graph shows the number of new stars added during each year we track.</span>],
+    ];
+    const newDetails = graphConfig.filter(cfg => (cfg[0] in currData) && (currData[cfg[0]].length > 0)).map(cfg => (
+      {
+        "id": cfg[0],
+        "name": keyToTitle[cfg[0]],
+        "content" : <div>
+          <div css={styles.graphHeader}>{cfg[2]}</div>
+          {getGraphs(cfg, currData)}
+        </div>
+      }
+    ));
+    setAccordionDetails(newDetails);
+    setExpanded([newDetails[0].id]);
+  };
 
   return (
-   <div css={styles.dashboardContainer} id={"project-dashboard"}>
-     <div css={styles.headerContainer}>
-       <div css={styles.backLink}>
-        <a href={"/"}>Back to listing page</a>
-       </div>
-       <h2 css={styles.ghLink}>
-         <ExternalLink href={"https://github.com/"+repo_name}>{repo_name}</ExternalLink>
-       </h2>
-        {data["has_deps_dev"] &&
-        <span css={styles.depsLink}>
-          <ExternalLink href={"https://deps.dev/project/github/" + data["owner_name"] + "%2F" + data["current_name"]}>
-            [deps.dev]
-          </ExternalLink>
-        </span>
-        }
-       <div>
-         <div css={styles.description}>
-           <div>
-             {data["description"]}
-           </div>
-         </div>
-         <div css={styles.introStats}>
-           <HighlightBox title={"Basic Statistics"}>
-             <div css={styles.metadataWrapper}>
-              <ProjectMetadata data={data}/>
-             </div>
-           </HighlightBox>
-           {"num_references" in data &&
-           <HighlightBox title={"Most Frequently Citing Fields"}>
-             <ul css={styles.fieldList}>
-               {Object.keys(data["num_references"]).length > 0 ? Object.keys(data["num_references"]).sort((a, b) =>
-                 data["num_references"][b] - data["num_references"][a]
-               ).slice(0, 5).map(field => <li css={styles.fieldListElt}>
-                 {field} ({data["num_references"][field]} citation{data["num_references"][field] === 1 ? "" : "s"})
-               </li>) : <span>No references found</span>}
-             </ul>
-           </HighlightBox>
-           }
-         </div>
-       </div>
-     </div>
-     <Accordion
-       key={JSON.stringify(expanded)}
-       panels={accordionDetails}
-       expanded={expanded}
-       setExpanded={(newExpanded) => setExpanded(newExpanded)} headingVariant={"h6"}
-     />
-   </div>
+    (data.length === 0) ?
+      <div css={styles.noData}>
+        No data available for <strong>{(new URLSearchParams(window.location.search)).get("name")}</strong>. <a href={"/"}>Click to return to main page.</a>
+      </div> :
+      <div css={styles.dashboardContainer} id={"project-dashboard"}>
+        <div css={styles.headerContainer}>
+          <div css={styles.backLink}>
+            <a href={"/"}>Back to main page</a>
+          </div>
+          <h2 css={styles.ghLink}>
+            <ExternalLink href={"https://github.com/" + repoName}>
+              <img src={githubLogo} css={styles.githubLogo}/>{repoName}<LaunchIcon css={styles.repoIcon}/>
+            </ExternalLink>
+          </h2>
+          {data["has_deps_dev"] &&
+          <span css={styles.depsLink}>
+        <ExternalLink href={"https://deps.dev/project/github/" + data["owner_name"] + "%2F" + data["current_name"]}>
+          deps.dev<LaunchIcon css={styles.depsIcon}/>
+        </ExternalLink>
+      </span>
+          }
+          <div>
+            <div css={styles.description}>
+              <div>
+                {data["description"]}
+              </div>
+            </div>
+            <div css={styles.introStats}>
+              <HighlightBox title={"Basic statistics"}>
+                <div css={styles.metadataWrapper}>
+                  <ProjectMetadata data={data}/>
+                </div>
+              </HighlightBox>
+              {"num_references" in data &&
+              <HighlightBox title={"Most frequently citing fields"}>
+                <ul css={styles.fieldList}>
+                  {Object.keys(data["num_references"]).length > 0 ? Object.keys(data["num_references"]).sort((a, b) =>
+                    data["num_references"][b] - data["num_references"][a]
+                  ).slice(0, 5).map(field => <li css={styles.fieldListElt}>
+                    {field} (<strong>{data["num_references"][field]}</strong> citation{data["num_references"][field] === 1 ? "" : "s"})
+                  </li>) : <span>No references found</span>}
+                </ul>
+              </HighlightBox>
+              }
+            </div>
+          </div>
+        </div>
+        <Accordion
+          key={JSON.stringify(expanded)}
+          panels={accordionDetails}
+          expanded={expanded}
+          updateExpanded={(newExpanded) => setExpanded(newExpanded)} headingVariant={"h6"}
+        />
+      </div>
   );
 };
 

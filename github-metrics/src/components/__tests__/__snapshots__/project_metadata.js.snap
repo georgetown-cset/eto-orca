@@ -43,7 +43,7 @@ exports[`Project metadata renders correctly with no references 1`] = `
           >
             <span>
               <strong>
-                Open Issues
+                Open issues
               </strong>
               : 
               56
@@ -69,7 +69,7 @@ exports[`Project metadata renders correctly with no references 1`] = `
           >
             <span>
               <strong>
-                Created
+                Date created
               </strong>
               : 
               2023-01-01
@@ -84,7 +84,7 @@ exports[`Project metadata renders correctly with no references 1`] = `
           >
             <span>
               <strong>
-                Last Commit
+                Last commit date
               </strong>
               : 
               2023-03-14
@@ -163,7 +163,7 @@ exports[`Project metadata renders correctly with no references 1`] = `
         >
           <span>
             <strong>
-              Open Issues
+              Open issues
             </strong>
             : 
             56
@@ -189,7 +189,7 @@ exports[`Project metadata renders correctly with no references 1`] = `
         >
           <span>
             <strong>
-              Created
+              Date created
             </strong>
             : 
             2023-01-01
@@ -204,7 +204,7 @@ exports[`Project metadata renders correctly with no references 1`] = `
         >
           <span>
             <strong>
-              Last Commit
+              Last commit date
             </strong>
             : 
             2023-03-14
@@ -355,7 +355,7 @@ exports[`Project metadata renders correctly with references 1`] = `
           >
             <span>
               <strong>
-                Open Issues
+                Open issues
               </strong>
               : 
               56
@@ -381,7 +381,7 @@ exports[`Project metadata renders correctly with references 1`] = `
           >
             <span>
               <strong>
-                Created
+                Date created
               </strong>
               : 
               2023-01-01
@@ -396,7 +396,7 @@ exports[`Project metadata renders correctly with references 1`] = `
           >
             <span>
               <strong>
-                Last Commit
+                Last commit date
               </strong>
               : 
               2023-03-14
@@ -490,7 +490,7 @@ exports[`Project metadata renders correctly with references 1`] = `
         >
           <span>
             <strong>
-              Open Issues
+              Open issues
             </strong>
             : 
             56
@@ -516,7 +516,7 @@ exports[`Project metadata renders correctly with references 1`] = `
         >
           <span>
             <strong>
-              Created
+              Date created
             </strong>
             : 
             2023-01-01
@@ -531,7 +531,7 @@ exports[`Project metadata renders correctly with references 1`] = `
         >
           <span>
             <strong>
-              Last Commit
+              Last commit date
             </strong>
             : 
             2023-03-14

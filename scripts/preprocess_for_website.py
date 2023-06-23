@@ -12,6 +12,7 @@ from tqdm import tqdm
 from scripts.constants import (
     INT_KEYS,
     LICENSE_TO_GROUP,
+    MANUAL_COUNTRY_MAPPING,
     MIN_FIELD_REFERENCES,
     UNUSED_KEYS,
 )
@@ -95,7 +96,7 @@ def reformat_downloads(downloads: list) -> list:
         if "country_code" in dl:
             country_obj = pycountry.countries.get(alpha_2=dl["country_code"])
             if country_obj:
-                country = country_obj.name
+                country = MANUAL_COUNTRY_MAPPING.get(country_obj.name, country_obj.name)
         year = int(dl["year"])
         if (year >= START_YEAR) and (year <= END_YEAR):
             reformatted_downloads.append([year, country, int(dl["num_downloads"])])

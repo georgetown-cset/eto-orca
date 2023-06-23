@@ -30,6 +30,17 @@ const Plot = lazy(() => import('react-plotly.js'));
 const isSSR = typeof window === "undefined";
 const noData = <div css={styles.noData}>No graph data available</div>;
 
+const getHoverTemplate = (maxY, numTraces) => {
+  // show trace name if more than one trace
+  const suffix = numTraces > 1 ? "" : "<extra></extra>";
+
+  // scientific notation looks weird for values < 1, but checking the minimum
+  // value doesn't work for graphs where values may be 0 some years and in the
+  // thousands other years, so we'll use this heuristic to catch most cases
+  // where we might have fractional values
+  return (maxY < 10 ? "%{y:,.3f}" : "%{y:,.3s}")+suffix;
+};
+
 const cleanTraces = (x, y) => {
   const [clean_x, clean_y] = [[], []];
   const x_to_y = {};
@@ -71,7 +82,8 @@ const LineGraph = (props) => {
       type: "scatter",
       mode: "lines",
       marker: {color: colors[idx]},
-      legendgroup: trace.name
+      legendgroup: trace.name,
+      hovertemplate: getHoverTemplate(traceMaxY, traces.length)
     });
   }
 
@@ -135,7 +147,8 @@ const BarGraph = (props) => {
       name: trace.name,
       type: "bar",
       marker: {color: colors[idx]},
-      legendgroup: trace.name
+      legendgroup: trace.name,
+      hovertemplate: getHoverTemplate(traceMaxY, traces.length)
     });
   }
 

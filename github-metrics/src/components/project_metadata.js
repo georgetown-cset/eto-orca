@@ -2,7 +2,6 @@
 Basic project metadata, currently displayed in a few lines of text
  */
 import React from "react";
-import Typography from "@mui/material/Typography";
 import { css } from "@emotion/react";
 
 import "core-js/features/url";
@@ -29,7 +28,8 @@ const ProjectMetadata = (props) => {
     if(!data[key]) {
       return 0;
     } else if(showNumReferences && FIELD_KEYS.includes(key)){
-      return data[key][cleanFieldKey(field)];
+      const cleanField = cleanFieldKey(field);
+      return !(cleanField in data[key]) ? 0 : data[key][cleanField];
     }
     return data[key];
   };

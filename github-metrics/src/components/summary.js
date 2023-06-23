@@ -1,14 +1,14 @@
 /*
-Summary metrics for top five repos within current selection
+Summary metrics for top five repositories within current selection
  */
 import React, {useEffect} from "react";
 
 import {LineGraph} from "./graph";
 import {css} from "@emotion/react";
 
-import {keyToTitle, sortMapping, getRepoName, sortByKey, cleanFieldName, cleanFieldKey} from "./utils";
+import {keyToTitle, sortMapping, getRepoName, sortByKey, cleanFieldName, cleanFieldKey, FIELD_KEYS} from "./utils";
 import HighlightBox from "./highlight_box";
-import {Accordion, Dropdown, ExternalLink} from "@eto/eto-ui-components";
+import {Accordion, Dropdown} from "@eto/eto-ui-components";
 
 
 const styles = {
@@ -49,7 +49,7 @@ const styles = {
 
 const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
   const fmtStat = sortMapping[stat].toLowerCase();
-  const title = `Top repositories by ${stat === "relevance" ? `relevance to ${fieldName}` : fmtStat}`;
+  const title = `Top repositories by ${stat === "relevance" ? `relevance to ${fieldName} research` : fmtStat}`;
   const yearlyRepoStats = {};
   if(yearly !== null) {
     for (let repoStat of yearly) {
@@ -70,12 +70,12 @@ const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
       <ul css={styles.statList}>
         {!!data.length && sortByKey(data, stat, field).slice(0, 5).map((row) =>
           <li css={styles.statListElt}>
-            <ExternalLink href={`/project?name=${getRepoName(row)}`}>
+            <a href={`/project?name=${getRepoName(row)}`}>
               {getRepoName(row)}
-            </ExternalLink><br/>
+            </a><br/>
             <span css={styles.statDetail}>
               {stat === "relevance" ?
-                <span>{row["relevance"][cleanFieldKey(field)].toFixed(2)} {fmtStat} ({row["num_references"][cleanFieldKey(field)]} references)</span> :
+                <span><strong>{row["relevance"][cleanFieldKey(field)].toFixed(2)}</strong> {fmtStat} (<strong>{row["num_references"][cleanFieldKey(field)]}</strong> references)</span> :
                 <span><strong>{row[stat]}</strong> {fmtStat} (<strong>{yearlyRepoStats[getRepoName(row)].change}</strong>%, {yearlyRepoStats[getRepoName(row)].startYear}-{yearlyRepoStats[getRepoName(row)].endYear})</span>}
             </span>
           </li>
@@ -89,7 +89,13 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     if(urlParams.has(ORDER_BY_URL_PARAM) && urlParams.get(ORDER_BY_URL_PARAM)){
-      setOrderBy(urlParams.get(ORDER_BY_URL_PARAM));
+      const urlOrder = urlParams.get(ORDER_BY_URL_PARAM);
+      if(FIELD_KEYS.includes(urlOrder) && isCurated){
+        // override the url order if it's not applicable to the selected field
+        setOrderBy(DEFAULT_ORDER_BY);
+      } else {
+        setOrderBy(urlOrder);
+      }
     }
   }, []);
 
@@ -192,7 +198,7 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
             <StatBox stat={"relevance"} data={data} field={field} fieldName={fieldName}/>}
         </div>
         <h2 css={styles.summaryContainerLabel}>
-          <span css={styles.dropdownIntro}>Trends over time for top repos by</span>
+          <span css={styles.dropdownIntro}>Trends over time for top repositories by</span>
           <div css={styles.dropdownContainer}>
             <Dropdown
               selected={orderBy}
@@ -207,7 +213,7 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
         key={JSON.stringify(expanded)}
         panels={accordionDetails}
         expanded={expanded}
-        setExpanded={(newExpanded) => setExpanded(newExpanded)} headingVariant={"h6"}
+        updateExpanded={(newExpanded) => setExpanded(newExpanded)} headingVariant={"h6"}
       />
     </div>
   );
