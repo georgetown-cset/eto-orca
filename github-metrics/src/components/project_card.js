@@ -4,7 +4,7 @@ The project card component displayed for each repo in the list view
 import React from "react";
 import { css } from "@emotion/react";
 import LaunchIcon from "@mui/icons-material/Launch";
-import {ButtonStyled, ExternalLink} from "@eto/eto-ui-components";
+import {ButtonStyled, ExternalLink, breakpointStops} from "@eto/eto-ui-components";
 
 import "core-js/features/url";
 import "core-js/features/url-search-params";
@@ -27,7 +27,7 @@ const styles = {
     display: inline-block;
     vertical-align: top;
     padding-bottom: 20px;
-    @media (max-width: 700px) {
+    @media (max-width: ${breakpointStops.tablet_small}px) {
       width: 100%;
     }
   `,
@@ -35,7 +35,7 @@ const styles = {
     width: 59%;
     display: inline-block;
     vertical-align: top;
-    @media (max-width: 700px) {
+    @media (max-width: ${breakpointStops.tablet_small}px) {
       width: 100%;
     }
   `,

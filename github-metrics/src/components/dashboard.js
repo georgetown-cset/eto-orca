@@ -5,7 +5,7 @@ import React, {useEffect} from "react";
 import {css} from "@emotion/react";
 import Pagination from "@mui/material/Pagination";
 import {styled} from "@mui/material/styles";
-import { ButtonStyled, Dropdown } from "@eto/eto-ui-components";
+import { ButtonStyled, Dropdown, breakpointStops } from "@eto/eto-ui-components";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
 import "core-js/features/url";
@@ -32,8 +32,6 @@ import {
 
 const setFields = new Set(fields);
 
-const narrowScreenThreshold = 800;
-
 const styles = {
   topPanel: css`
     text-align: left;
@@ -42,7 +40,7 @@ const styles = {
     vertical-align: top;
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
     background-color: var(--bright-blue-lightest);
-    @media (min-width: ${narrowScreenThreshold}px){
+    @media (min-width: ${breakpointStops.tablet_small}px){
       position: sticky;
       top: 0;
       z-index: 200;
@@ -56,7 +54,7 @@ const styles = {
   filterContainer: css`
     display: block;
     width: 100%;
-    @media (min-width: ${narrowScreenThreshold}px){
+    @media (min-width: ${breakpointStops.tablet_small}px){
       display: inline-block;
       width: 58%;
     }
@@ -90,7 +88,7 @@ const styles = {
     display: block;
     margin-top: 10px;
     text-align: left;
-    @media (min-width: ${narrowScreenThreshold}px){
+    @media (min-width: ${breakpointStops.tablet_small}px){
       display: inline-block;
       width: 40%;
       vertical-align: bottom;

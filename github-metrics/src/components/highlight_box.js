@@ -1,5 +1,6 @@
 import React from "react";
 import {css} from "@emotion/react";
+import {breakpointStops} from "@eto/eto-ui-components";
 
 const styles = {
   wrapper: css`
@@ -11,7 +12,7 @@ const styles = {
     margin: 10px;
     text-align: left;
     min-height: 350px;
-    @media (max-width: 870px) {
+    @media (max-width: ${breakpointStops.tablet_regular}px) {
       width: 80%;
       margin: 10px auto;
     }
