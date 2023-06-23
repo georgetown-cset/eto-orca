@@ -49,7 +49,7 @@ const styles = {
 
 const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
   const fmtStat = sortMapping[stat].toLowerCase();
-  const title = `Top repositories by ${stat === "relevance" ? `relevance to ${fieldName} research` : fmtStat}`;
+  const title = <span>Top repositories by <strong>{stat === "relevance" ? `relevance to ${fieldName} research` : fmtStat}</strong></span>;
   const yearlyRepoStats = {};
   if(yearly !== null) {
     for (let repoStat of yearly) {
@@ -191,11 +191,11 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
           Currently tracking <strong>{data.length}</strong> software repositories {isCurated ? "related to" : "used for research into"} <strong>{fieldName}</strong>.
         </h1>
         <div css={styles.statWrapper}>
-          <StatBox stat={"stargazers_count"} yearly={getTrace("star_dates", val => val[1], "stargazers_count")} data={data}/>
-          <StatBox stat={"num_contributors"} yearly={getTrace("commit_dates", val => val[1]+val[2], "num_contributors")} data={data}/>
           {isCurated ?
             <StatBox stat={"open_issues"} yearly={getTrace("issue_dates", val => val[2], "open_issues")} data={data}/> :
             <StatBox stat={"relevance"} data={data} field={field} fieldName={fieldName}/>}
+          <StatBox stat={"stargazers_count"} yearly={getTrace("star_dates", val => val[1], "stargazers_count")} data={data}/>
+          <StatBox stat={"num_contributors"} yearly={getTrace("commit_dates", val => val[1]+val[2], "num_contributors")} data={data}/>
         </div>
         <h2 css={styles.summaryContainerLabel}>
           <span css={styles.dropdownIntro}>Trends over time for top repositories by</span>
