@@ -11,7 +11,7 @@ const Dashboard = React.lazy(() => import("../components/dashboard"));
 
 const IndexPage = () => {
   useEffect(() => {
-    document.title = "Open-Source Software for Emerging Technology Metrics";
+    document.title = "ETO ORCA";
     document.documentElement.lang = "en";
   }, []);
 
@@ -26,10 +26,10 @@ const IndexPage = () => {
   return (
     <AppWrapper>
       <InfoCard
-        title={<div style={{fontFamily: "GTZirkonBold, sans-serif !important"}}>Open-source software in research fields</div>}
+        title={<div style={{fontFamily: "GTZirkonBold, sans-serif !important"}}>ORCA: Open-source software Research and Community Activity</div>}
         description={<div>
           <div style={{marginBottom: "10px"}}>
-          This tool is meant to enable comparative analysis of Open-Source Software (OSS) used in research fields of study.
+          ORCA is meant to enable comparative analysis of Open-Source Software (OSS) used in research fields of study.
           OSS projects are associated with a field of study either through manual curation (see the "used for research into" section of the "Application topic"
           dropdown below) or through automated retrieval (see the "related to" section of the "Application topic" dropdown).
           </div>
@@ -40,7 +40,7 @@ const IndexPage = () => {
           affiliate each OSS project with fields of study containing at least three papers that reference the OSS project.
           </div>
           <div style={{marginBottom: "10px"}}>
-          At the moment, this project only includes GitHub data, but in the future we hope to expand to other repository
+          At the moment, ORCA only includes GitHub data, but in the future we hope to expand to other repository
             hosting services. Data sources include: <ExternalLink href={"https://console.cloud.google.com/bigquery?project=githubarchive&page=project"}>Github Archive</ExternalLink>, <ExternalLink href={"https://console.cloud.google.com/marketplace/product/gcp-public-data-pypi/pypi?_ga=2.174631522.-1309707215.1607703367"}>PyPI</ExternalLink>, and our <ExternalLink href={"https://eto.tech/dataset-docs/mac/"}>merged academic corpus</ExternalLink>.
           </div>
           <div>
