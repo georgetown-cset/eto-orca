@@ -29,6 +29,7 @@ import {
   FIELD_DELIMITER,
   FIELD_KEYS
 } from "./utils";
+import tooltips from "../data/tooltips";
 
 const setFields = new Set(fields);
 
@@ -306,6 +307,7 @@ const Dashboard = () => {
                   selected={filterValues["field_of_study"]}
                   setSelected={(val) => handleSingleSelectChange(val, "field_of_study")}
                   inputLabel={"Application Topic"}
+                  tooltip={tooltips.application_topic}
                   options={getFOSOptions()}
                 />
               </div>

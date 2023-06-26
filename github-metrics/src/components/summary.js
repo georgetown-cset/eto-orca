@@ -8,7 +8,8 @@ import {css} from "@emotion/react";
 
 import {keyToTitle, sortMapping, getRepoName, sortByKey, cleanFieldName, cleanFieldKey, FIELD_KEYS} from "./utils";
 import HighlightBox from "./highlight_box";
-import {Accordion, Dropdown} from "@eto/eto-ui-components";
+import {Accordion, Dropdown, HelpTooltip} from "@eto/eto-ui-components";
+import tooltips from "../data/tooltips";
 
 
 const styles = {
@@ -49,7 +50,9 @@ const styles = {
 
 const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
   const fmtStat = sortMapping[stat].toLowerCase();
-  const title = <span>Top repositories by <strong>{stat === "relevance" ? `relevance to ${fieldName} research` : fmtStat}</strong></span>;
+  const title = <span>
+    Top repositories by <strong>{stat === "relevance" ? <span>relevance to {fieldName} research <HelpTooltip text={tooltips.relevance}/></span> : fmtStat}</strong>
+  </span>;
   const yearlyRepoStats = {};
   if(yearly !== null) {
     for (let repoStat of yearly) {

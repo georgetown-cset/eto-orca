@@ -1,0 +1,5 @@
+{
+  "relevance": "Relevance is a TIFIDF-based metric, where terms are repository mentions and documents are fields - i.e. we calculate (number of articles mentioning a repository within a field) * log(number of total fields / (number of fields mentioning the repository + 1)).",
+  "application_topic": "Articles in the Merged Academic Corpus are automatically tagged with research fields of study. Choose one of those fields of study under the 'used for research into' heading to see repositories mentioned in its papers, or choose a field under the 'related to' heading to see repositories in manually curated sets of repositories.",
+  "references": "We say that an article references a repository if we find a mention of that repository in the article's title, abstract, or fulltext (where available), or if the article is affiliated with the repository in Papers with Code."
+}
