@@ -31,7 +31,7 @@ pwc AS (
 
 pwc_arxiv_s2 AS (
   SELECT
-    merged_id_v2 AS merged_id,
+    merged_id,
     ft.dataset,
     full_text
   FROM (
@@ -56,12 +56,12 @@ pwc_arxiv_s2 AS (
     FROM
       pwc) AS ft
   LEFT JOIN
-    gcp_cset_links_v3.merged_id_crosswalk
+    gcp_cset_links_v3.article_links
     ON
-      ft.id = merged_id_crosswalk.orig_id
+      ft.id = article_links.orig_id
   INNER JOIN
     valid_v2_ids
-    ON merged_id = merged_id_v2),
+    USING (merged_id)),
 
 agg_repos AS (
   SELECT
