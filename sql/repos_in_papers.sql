@@ -96,16 +96,57 @@ agg_repos AS (
       gcp_cset_links_v2.corpus_merged
     INNER JOIN
       valid_v2_ids
-      USING (merged_id)))
+      USING (merged_id))),
+
+stack_repo_dois AS (
+  SELECT
+    repo_name AS repo,
+    LOWER(doi) AS doi
+  FROM
+    thestack.readmes
+  CROSS JOIN UNNEST(REGEXP_EXTRACT_ALL(content, r"(?i)\b10.\d{4,9}/[-._;()/:A-Z0-9]+\b")) AS doi
+),
+
+stack_merged_ids AS (
+  SELECT DISTINCT
+    merged_id,
+    "stack" AS dataset,
+    repo
+  FROM stack_repo_dois
+  INNER JOIN gcp_cset_links_v2.all_metadata_with_cld2_lid
+    ON doi = clean_doi
+  LEFT JOIN gcp_cset_links_v2.article_links
+    ON id = orig_id
+  INNER JOIN
+    valid_v2_ids
+    USING (merged_id)
+),
+
+merged_data AS (
+  SELECT
+    repo,
+    dataset,
+    merged_id
+  FROM
+    stack_merged_ids
+  UNION ALL
+  SELECT
+    repo,
+    dataset,
+    merged_id
+  FROM
+    agg_repos
+  CROSS JOIN
+    UNNEST(repos) AS repo
+)
+
 
 SELECT
   repo,
   ARRAY_AGG(DISTINCT(dataset)) AS datasets,
   ARRAY_AGG(DISTINCT(merged_id)) AS merged_ids
 FROM
-  agg_repos
-CROSS JOIN
-  UNNEST(repos) AS repo
+  merged_data
 WHERE
   merged_id IS NOT NULL
 GROUP BY
