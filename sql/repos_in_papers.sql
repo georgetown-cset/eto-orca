@@ -1,5 +1,13 @@
 -- get repo mentions in arXiv fulltext, semantic scholar fulltext, Papers with Code, and paper titles/abstracts
 WITH
+valid_v2_ids AS (
+  SELECT DISTINCT merged_id_v2 AS merged_id
+  FROM
+    gcp_cset_links_v3.merged_id_crosswalk
+  WHERE
+    merged_id_v3 IS NOT NULL
+),
+
 arxiv_ft AS (
   SELECT
     id,
@@ -51,8 +59,9 @@ pwc_arxiv_s2 AS (
     gcp_cset_links_v3.merged_id_crosswalk
     ON
       ft.id = merged_id_crosswalk.orig_id
-  WHERE
-    merged_id_v2 IS NOT NULL),
+  INNER JOIN
+    valid_v2_ids
+    ON merged_id = merged_id_v2),
 
 agg_repos AS (
   SELECT
@@ -84,7 +93,10 @@ agg_repos AS (
         "-"
       ) AS full_text
     FROM
-      gcp_cset_links_v2.corpus_merged))
+      gcp_cset_links_v2.corpus_merged
+    INNER JOIN
+      valid_v2_ids
+      USING (merged_id)))
 
 SELECT
   repo,
