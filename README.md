@@ -14,7 +14,7 @@ At this point, we will have full metadata for repos we retrieved using the githu
 by topic, at the moment), but not for repos that only appear in papers or other sources. The next script
 grabs the default metadata retrieved from the github API for repos that don't already have it
 
-* Run `PYTHONPATH='.' python3 scripts/backfill_top_level_repo_metadata.py`
+* Run `PYTHONPATH='.' python3 scripts/backfill_top_level_repo_data.py`
 
 Now, we are going to scrape some additional metadata from GitHub itself, including text of README.md files
 which we can use to do further analysis.
