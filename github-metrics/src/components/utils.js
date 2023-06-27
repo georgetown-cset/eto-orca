@@ -4,6 +4,7 @@ Miscellaneous utilities and shared functionality
 export const sortMapping = {
   "stargazers_count": "Stars",
   "subscribers_count": "Watchers",
+  "criticality_score": "Criticality score",
   "num_contributors": "Contributors",
   "created_at": "Date created",
   "pushed_at": "Last commit date",

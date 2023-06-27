@@ -30,12 +30,14 @@ const ProjectMetadata = (props) => {
     } else if(showNumReferences && FIELD_KEYS.includes(key)){
       const cleanField = cleanFieldKey(field);
       return !(cleanField in data[key]) ? 0 : data[key][cleanField];
+    } else if(key === "criticality_score"){
+      return data[key].toFixed(2);
     }
     return data[key];
   };
 
   const metaGroups = [
-    ["stargazers_count", "subscribers_count"],
+    ["stargazers_count", "subscribers_count", "criticality_score"],
     ["num_references"],
     ["open_issues", "num_contributors"],
     ["created_at"],

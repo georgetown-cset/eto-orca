@@ -56,7 +56,7 @@ pwc_arxiv_s2 AS (
     FROM
       pwc) AS ft
   LEFT JOIN
-    gcp_cset_links_v3.article_links
+    gcp_cset_links_v2.article_links
     ON
       ft.id = article_links.orig_id
   INNER JOIN

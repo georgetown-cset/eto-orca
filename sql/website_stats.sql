@@ -213,6 +213,7 @@ SELECT
   current_name,
   open_issues,
   primary_programming_language,
+  default_score AS criticality_score,
   SPLIT(topics, ",") AS topics,
   stargazers_count,
   subscribers_count,
@@ -265,6 +266,12 @@ LEFT JOIN
     CONCAT(
       owner_name, "/", current_name
     ) = pypi_over_time.repo
+LEFT JOIN
+  `openssf.criticality_score_cron.criticality-score-v0-latest` AS openssf --noqa: L057, L031
+  ON
+    github_metrics.GET_FIRST_REPO_SLUG(
+      openssf.repo.url --noqa: L031
+    ) = CONCAT(owner_name, "/", current_name)
 WHERE
   (
     stargazers_count >= 10
