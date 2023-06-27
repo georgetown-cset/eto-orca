@@ -14,7 +14,7 @@ field_name_scores AS (
     ON
       field_id = field.id
   WHERE
-    level = 1),
+    (level = 1)),
 
 field_order AS (
   SELECT
@@ -31,5 +31,14 @@ SELECT
 FROM
   field_order
 WHERE
-  row_num < 4
+  (
+    row_num < 4
+  ) AND (
+    merged_id IN (
+      SELECT merged_id
+      FROM
+        gcp_cset_links_v2.corpus_merged
+      WHERE (title_english IS NOT NULL) AND (abstract_english IS NOT NULL) AND (LENGTH(abstract_english) > 500)
+    )
+  )
 GROUP BY merged_id

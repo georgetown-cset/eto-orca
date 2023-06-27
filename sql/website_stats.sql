@@ -269,8 +269,8 @@ LEFT JOIN
 LEFT JOIN
   `openssf.criticality_score_cron.criticality-score-v0-latest` AS openssf --noqa: L057, L031
   ON
-    github_metrics.GET_FIRST_REPO_SLUG(
-      openssf.repo.url --noqa: L031
+    github_metrics.get_first_repo_slug( --noqa: L030
+      openssf.repo.url
     ) = CONCAT(owner_name, "/", current_name)
 WHERE
   (
