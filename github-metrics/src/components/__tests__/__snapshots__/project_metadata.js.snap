@@ -31,6 +31,17 @@ exports[`Project metadata renders correctly with no references 1`] = `
               0
             </span>
           </span>
+          <span
+            class="css-1xpyfpg-metaSection"
+          >
+            <span>
+              <strong>
+                Criticality score
+              </strong>
+              : 
+              0
+            </span>
+          </span>
         </div>
         <div
           class="css-kq7hyf-sortOption"
@@ -146,6 +157,17 @@ exports[`Project metadata renders correctly with no references 1`] = `
           <span>
             <strong>
               Watchers
+            </strong>
+            : 
+            0
+          </span>
+        </span>
+        <span
+          class="css-1xpyfpg-metaSection"
+        >
+          <span>
+            <strong>
+              Criticality score
             </strong>
             : 
             0
@@ -328,6 +350,17 @@ exports[`Project metadata renders correctly with references 1`] = `
               0
             </span>
           </span>
+          <span
+            class="css-1xpyfpg-metaSection"
+          >
+            <span>
+              <strong>
+                Criticality score
+              </strong>
+              : 
+              0
+            </span>
+          </span>
         </div>
         <div
           class="css-kq7hyf-sortOption"
@@ -458,6 +491,17 @@ exports[`Project metadata renders correctly with references 1`] = `
           <span>
             <strong>
               Watchers
+            </strong>
+            : 
+            0
+          </span>
+        </span>
+        <span
+          class="css-1xpyfpg-metaSection"
+        >
+          <span>
+            <strong>
+              Criticality score
             </strong>
             : 
             0
