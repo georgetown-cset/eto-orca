@@ -38,7 +38,10 @@ WHERE
       SELECT merged_id
       FROM
         gcp_cset_links_v2.corpus_merged
-      WHERE (title_english IS NOT NULL) AND (abstract_english IS NOT NULL) AND (LENGTH(abstract_english) > 500)
+      WHERE
+        (
+          title_english IS NOT NULL
+        ) AND (abstract_english IS NOT NULL) AND (LENGTH(abstract_english) > 500) AND (year > 2010)
     )
   )
 GROUP BY merged_id

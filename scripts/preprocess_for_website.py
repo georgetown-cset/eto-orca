@@ -311,7 +311,7 @@ def read_rows(input_dir: str) -> tuple:
     for line in tqdm(get_lines(input_dir)):
         repo_id = line.pop("id")
         repo_name = line["owner_name"] + "/" + line["current_name"]
-        if (repo_name in ["bitcoin/bips", "ethereum/wiki"]) or (repo_name in seen_ids):
+        if repo_name in seen_ids:
             continue
         seen_ids.add(repo_name)
         row = clean_row(line)
@@ -333,15 +333,17 @@ def read_rows(input_dir: str) -> tuple:
                 row["num_references"][field_name] += 1
                 if row["num_references"][field_name] >= MIN_FIELD_REFERENCES:
                     field_to_repos[field_name].add(repo_id)
-        if not (
-            repo_name in curated_repos
-            or any(
-                [
-                    row["num_references"][field] >= MIN_FIELD_REFERENCES
-                    for field in row["num_references"]
-                ]
+        if (
+            not (
+                repo_name in curated_repos
+                or any(
+                    [
+                        row["num_references"][field] >= MIN_FIELD_REFERENCES
+                        for field in row["num_references"]
+                    ]
+                )
             )
-        ):
+        ) and not (repo_name.lower() == "parsl/parsl"):
             continue
         row["language"] = row.get("language", "No language detected")
         language_counts[row["language"]] = language_counts.get(row["language"], 0) + 1

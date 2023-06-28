@@ -222,6 +222,7 @@ SELECT
   updated_at,
   pushed_at,
   paper_meta,
+  articles AS top_articles,
   num_contributors,
   used_by,
   license,
@@ -272,11 +273,18 @@ LEFT JOIN
     github_metrics.get_first_repo_slug( --noqa: L030
       openssf.repo.url
     ) = CONCAT(owner_name, "/", current_name)
+LEFT JOIN
+  staging_github_metrics.top_cited_repo_citers
+  USING (id)
 WHERE
   (
     stargazers_count >= 10
   ) AND (
     (
       ARRAY_LENGTH(paper_meta) > 1
-    ) OR CONCAT(owner_name, "/", current_name) IN (SELECT repo FROM staging_github_metrics.curated_repos)
+    ) OR CONCAT(
+      owner_name, "/", current_name
+    ) IN (
+      SELECT repo FROM staging_github_metrics.curated_repos
+    ) OR LOWER(CONCAT(owner_name, "/", current_name)) = "parsl/parsl"
   )

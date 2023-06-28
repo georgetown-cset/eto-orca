@@ -50,7 +50,7 @@ select
   struct(full_metadata.source.owner.login as owner_name,
     full_metadata.source.name as repo_name) as ultimate_fork_of
 from
-  staging_github_metrics.repos_with_full_meta_raw
+  staging_github_metrics.repos_with_full_meta_raw_for_app
 left join
   contributor_counts
   on

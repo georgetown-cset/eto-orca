@@ -14,6 +14,8 @@ where
   (
     repo is not null
   ) and (
-    repo in (select concat(owner_name, "/", full_metadata.name) from staging_github_metrics.repos_with_full_meta_raw)
+    repo in (
+      select concat(owner_name, "/", full_metadata.name) from staging_github_metrics.repos_with_full_meta_raw_for_app
+    )
   )
   and meta_rank = 1
