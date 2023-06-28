@@ -180,6 +180,22 @@ org_year AS (
   GROUP BY repo_id
 ),
 
+canonical_pypi AS (
+  SELECT
+    id,
+    downloads,
+    summary,
+    ROW_NUMBER() OVER (PARTITION BY id) AS ranking
+  FROM
+    staging_github_metrics.repos_with_full_meta_for_app
+  INNER JOIN
+    staging_github_metrics.pypi_over_time
+    ON
+      CONCAT(
+        owner_name, "/", matched_name
+      ) = pypi_over_time.repo
+),
+
 canonical_meta AS (
   SELECT
     id,
@@ -232,7 +248,7 @@ SELECT
   country_year_contributions,
   org_year_contributions,
   downloads,
-  COALESCE(description, pypi_over_time.summary) AS description,
+  COALESCE(description, canonical_pypi.summary) AS description,
   CONCAT(
     owner_name, "/", current_name
   ) IN (SELECT name FROM `bigquery-public-data.deps_dev_v1.Projects`) AS has_deps_dev -- noqa: L057
@@ -262,12 +278,6 @@ LEFT JOIN
   ON
     id = org_year.repo_id
 LEFT JOIN
-  staging_github_metrics.pypi_over_time
-  ON
-    CONCAT(
-      owner_name, "/", current_name
-    ) = pypi_over_time.repo
-LEFT JOIN
   `openssf.criticality_score_cron.criticality-score-v0-latest` AS openssf --noqa: L057, L031
   ON
     github_metrics.get_first_repo_slug( --noqa: L030
@@ -275,6 +285,9 @@ LEFT JOIN
     ) = CONCAT(owner_name, "/", current_name)
 LEFT JOIN
   staging_github_metrics.top_cited_repo_citers
+  USING (id)
+LEFT JOIN
+  canonical_pypi
   USING (id)
 WHERE
   (
@@ -287,4 +300,4 @@ WHERE
     ) IN (
       SELECT repo FROM staging_github_metrics.curated_repos
     ) OR LOWER(CONCAT(owner_name, "/", current_name)) = "parsl/parsl"
-  )
+  ) AND ((ranking = 1) OR (ranking IS NULL))
