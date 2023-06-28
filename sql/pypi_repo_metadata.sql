@@ -13,7 +13,10 @@ select * except(meta_rank) from candidate_metadata
 where
   (
     repo is not null
-  ) and (
+  )
+  -- this appears to be due to project squatting by projects which, if nothing else, are no longer hosted on pypi.
+  -- I'm not sure what a more automated method of removing these would be
+  and (repo != "torvalds/linux") and (
     repo in (
       select concat(owner_name, "/", full_metadata.name) from staging_github_metrics.repos_with_full_meta_raw_for_app
     )

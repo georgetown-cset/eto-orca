@@ -5,7 +5,7 @@ distinct_curated AS (
   FROM
     staging_github_metrics.curated_repos
   LEFT JOIN
-    staging_github_metrics.repos_with_full_meta
+    staging_github_metrics.repos_with_full_meta_for_app
     ON
       LOWER(CONCAT(owner_name, "/", matched_name)) = LOWER(repo)
 ),
@@ -19,7 +19,7 @@ distinct_repo_papers AS (
   CROSS JOIN
     UNNEST(merged_ids) AS merged_id
   LEFT JOIN
-    staging_github_metrics.repos_with_full_meta
+    staging_github_metrics.repos_with_full_meta_for_app
     ON
       LOWER(CONCAT(owner_name, "/", matched_name)) = LOWER(repo)
 ),
@@ -202,7 +202,7 @@ canonical_meta AS (
       MAX(owner_name), "/", MAX(current_name)
     ) IN (SELECT name FROM `bigquery-public-data.deps_dev_v1.Projects`) AS has_deps_dev -- noqa: L057
   FROM
-    staging_github_metrics.repos_with_full_meta
+    staging_github_metrics.repos_with_full_meta_for_app
   GROUP BY
     id
 )
@@ -232,7 +232,7 @@ SELECT
   country_year_contributions,
   org_year_contributions,
   downloads,
-  COALESCE(pypi_over_time.summary, description) AS description,
+  COALESCE(description, pypi_over_time.summary) AS description,
   CONCAT(
     owner_name, "/", current_name
   ) IN (SELECT name FROM `bigquery-public-data.deps_dev_v1.Projects`) AS has_deps_dev -- noqa: L057
