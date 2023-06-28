@@ -311,7 +311,7 @@ def read_rows(input_dir: str) -> tuple:
     for line in tqdm(get_lines(input_dir)):
         repo_id = line.pop("id")
         repo_name = line["owner_name"] + "/" + line["current_name"]
-        if repo_name in seen_ids:
+        if (repo_name in ["bitcoin/bips", "ethereum/wiki"]) or (repo_name in seen_ids):
             continue
         seen_ids.add(repo_name)
         row = clean_row(line)
