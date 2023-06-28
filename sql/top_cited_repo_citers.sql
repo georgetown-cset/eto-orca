@@ -73,9 +73,7 @@ deduplicated_articles as (
 
 select
   id,
-  struct(
-    array_agg(struct(title, link, year, citations, source) order by citations desc limit 10) as articles
-  ) as articles
+  array_agg(struct(title, link, year, citations, source) order by citations desc limit 10) as articles
 from
   deduplicated_articles
 where year >= 2010

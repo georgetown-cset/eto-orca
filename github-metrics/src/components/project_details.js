@@ -77,6 +77,12 @@ const styles = {
   depsIcon: css`
     height: 13px;
     vertical-align: bottom;
+  `,
+  article: css`
+    margin: 20px 40px;
+  `,
+  articleMeta: css`
+    font-style: italic;
   `
 };
 
@@ -116,6 +122,15 @@ const ProjectDetails = () => {
                       showLegend={true} title={`PyPI downloads over time in ${currName}`}/>;
   };
 
+  const getTopArticles = (articles) => {
+    return <div>
+      {articles.map(article => <div css={styles.article}>
+        <div><strong>{article.link ? <ExternalLink href={article.link}>{article.title}<LaunchIcon css={styles.depsIcon}/></ExternalLink> : <span>{article.title}</span>}</strong></div>
+        <div css={styles.articleMeta}>{article.year}: {article.source}. {article.citations} citations.</div>
+      </div>)}
+    </div>
+  }
+
   const updateAccordionDetails = (currData) => {
     const graphConfig = [
       ["push_dates", "line", <span>This graph shows the number of commits made to the main branch of the repository each year.</span>],
@@ -134,7 +149,7 @@ const ProjectDetails = () => {
       ["contrib_counts", "bar", <span>This graph shows the percentage of commits authored by each of the top 20 contributors to the project.</span>],
       ["star_dates", "line", <span>This graph shows the number of new stars added during each year we track.</span>],
     ];
-    const newDetails = graphConfig.filter(cfg => (cfg[0] in currData) && (currData[cfg[0]].length > 0)).map(cfg => (
+    const metricDetails = graphConfig.filter(cfg => (cfg[0] in currData) && (currData[cfg[0]].length > 0)).map(cfg => (
       {
         "id": cfg[0],
         "name": keyToTitle[cfg[0]],
@@ -144,8 +159,17 @@ const ProjectDetails = () => {
         </div>
       }
     ));
+    const newDetails = [];
+    if(("top_articles" in currData) && (currData["top_articles"].length > 0)){
+      newDetails.push({
+        "id": "top_articles",
+        "name": "Top-cited articles that mention this repository",
+        "content": getTopArticles(currData["top_articles"])
+      })
+    }
+    newDetails.push(...metricDetails)
     setAccordionDetails(newDetails);
-    setExpanded([newDetails[0].id]);
+    setExpanded([metricDetails[0].id]);
   };
 
   return (
