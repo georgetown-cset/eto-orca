@@ -28,7 +28,6 @@ export const keyToTitle = {
 
 export const customTopics = [
   {"val": "ai_safety", "text": "AI Safety"},
-  {"val": "asr", "text": "Speech Recognition"},
   {"val": "riscv", "text": "RISC-V"}
 ];
 const customTopicMap = {};
@@ -120,6 +119,9 @@ export const sortByKey = (toSort, key, field=null) => {
 };
 
 export const cleanFieldName = (field) => {
+  if(field === null){
+    return null;
+  }
   let clean = field;
   if(field in customTopicMap){
     clean = customTopicMap[field];
@@ -132,5 +134,8 @@ export const cleanFieldName = (field) => {
 };
 
 export const cleanFieldKey = (rawField) => {
+  if(rawField === null){
+    return null;
+  }
   return rawField.includes(FIELD_DELIMITER) ? rawField.split(FIELD_DELIMITER)[1] : rawField;
 };

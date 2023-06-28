@@ -5,7 +5,7 @@ import React, {useEffect} from "react";
 import {css} from "@emotion/react";
 import Pagination from "@mui/material/Pagination";
 import {styled} from "@mui/material/styles";
-import { ButtonStyled, Dropdown, breakpointStops } from "@eto/eto-ui-components";
+import { Autocomplete, ButtonStyled, Dropdown, breakpointStops } from "@eto/eto-ui-components";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
 import "core-js/features/url";
@@ -114,7 +114,7 @@ const Dashboard = () => {
     const updatedFilterValues = {...defaultFilterValues};
     const urlParams = new URLSearchParams(window.location.search);
     for(let key in defaultFilterValues){
-      if (urlParams.has(key) && urlParams.get(key) !== null) {
+      if (urlParams.has(key) && (urlParams.get(key) !== null) && (urlParams.get(key) !== "null")) {
         updatedFilterValues[key] = urlParams.get(key)
       }
     }
@@ -126,7 +126,7 @@ const Dashboard = () => {
   }, []);
 
   const defaultFilterValues = {
-    "field_of_study": `Computer science${FIELD_DELIMITER}Artificial intelligence`,
+    "field_of_study": `Artificial intelligence`,
     "order_by": "relevance",
     "compare_graph": "push_dates",
     "language_group": "All",
@@ -154,6 +154,9 @@ const Dashboard = () => {
 
   const getSelectedRepos = (filters, ignoreFilter = null) => {
     const field = cleanFieldKey(filters["field_of_study"]);
+    if(field === null){
+      return [];
+    }
     const relKeys = field_to_repos[field];
     const newRepoData = [];
     for(let key of relKeys){
@@ -231,20 +234,13 @@ const Dashboard = () => {
   };
 
   const getFOSOptions = () => {
-    const options = [{"header": <span>Display projects <em>related to</em></span>}].concat(customTopics);
-    options.push({"header": <span>Display projects <em>used for research into</em></span>});
-    const level0Fields = [...Object.keys(level0to1)];
-    level0Fields.sort();
-    for(let level0 of level0Fields){
-      options.push({"header": level0});
-      const level1Fields = level0to1[level0];
-      level1Fields.sort();
-      for(let level1 of level1Fields){
-        if(!isCuratedField(level1) && setFields.has(level1)){
-          options.push({"text": level1, "val": `${level0}${FIELD_DELIMITER}${level1}`})
-        }
+    const options = [...customTopics];
+    for(let field of fields){
+      if(!isCuratedField(field) && setFields.has(field)){
+        options.push({"text": field, "val": field})
       }
     }
+    options.sort((a, b) => a.text.localeCompare(b.text));
     return options;
   };
 
@@ -303,7 +299,7 @@ const Dashboard = () => {
           <div css={styles.filterContainer}>
             <div>
               <div css={[styles.dropdownContainer, styles.topicContainer]}>
-                <Dropdown
+                <Autocomplete
                   selected={filterValues["field_of_study"]}
                   setSelected={(val) => handleSingleSelectChange(val, "field_of_study")}
                   inputLabel={"Application Topic"}
