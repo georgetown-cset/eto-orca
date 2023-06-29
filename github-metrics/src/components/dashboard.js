@@ -310,7 +310,7 @@ const Dashboard = () => {
               {showList &&
               <div css={styles.buttonContainer}>
                 <ButtonStyled css={styles.moreFilters} onClick={() => updateToggle(MORE_FILTERS)}>
-                  {moreFilters ? "Hide" : "Show"} Extra Filters
+                  {moreFilters ? "Hide" : "Show"} Filters
                 </ButtonStyled>
                 <ButtonStyled css={styles.moreFilters} onClick={() => handleFilterUpdate({...defaultFilterValues})}>
                   Reset
