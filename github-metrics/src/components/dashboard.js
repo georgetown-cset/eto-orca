@@ -299,7 +299,7 @@ const Dashboard = () => {
                 <Autocomplete
                   selected={filterValues["field_of_study"]}
                   setSelected={(val) => handleSingleSelectChange(val, "field_of_study")}
-                  inputLabel={"Application Topic"}
+                  inputLabel={"Research field"}
                   tooltip={tooltips.application_topic}
                   options={getFOSOptions()}
                 />
