@@ -6,7 +6,7 @@ import React, {useEffect} from "react";
 import {LineGraph} from "./graph";
 import {css} from "@emotion/react";
 
-import {keyToTitle, sortMapping, getRepoName, sortByKey, cleanFieldName, cleanFieldKey, FIELD_KEYS} from "./utils";
+import {keyToTitle, sortMapping, getRepoName, sortByKey, cleanFieldName, FIELD_KEYS} from "./utils";
 import HighlightBox from "./highlight_box";
 import {Accordion, Dropdown, HelpTooltip} from "@eto/eto-ui-components";
 import tooltips from "../data/tooltips";
@@ -78,7 +78,7 @@ const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
             </a><br/>
             <span css={styles.statDetail}>
               {stat === "relevance" ?
-                <span><strong>{row["relevance"][cleanFieldKey(field)].toFixed(2)}</strong> {fmtStat} (<strong>{row["num_references"][cleanFieldKey(field)]}</strong> references)</span> :
+                <span><strong>{row["relevance"][field].toFixed(2)}</strong> {fmtStat} (<strong>{row["num_references"][field]}</strong> references)</span> :
                 <span><strong>{row[stat]}</strong> {fmtStat} (<strong>{yearlyRepoStats[getRepoName(row)].change}</strong>%, {yearlyRepoStats[getRepoName(row)].startYear}-{yearlyRepoStats[getRepoName(row)].endYear})</span>}
             </span>
           </li>

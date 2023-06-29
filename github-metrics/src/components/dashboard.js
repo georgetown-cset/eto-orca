@@ -17,16 +17,13 @@ import StyledSwitch from "./styled_switch";
 import id_to_repo from "../data/id_to_repo";
 import field_to_repos from "../data/field_to_repos";
 import fields from "../data/fields";
-import level0to1 from "../data/level0to1";
 import {
   sortMapping,
   keyToTitle,
   getRepoName,
   customTopics,
   sortByKey,
-  cleanFieldKey,
   cleanFieldName,
-  FIELD_DELIMITER,
   FIELD_KEYS
 } from "./utils";
 import tooltips from "../data/tooltips";
@@ -153,7 +150,7 @@ const Dashboard = () => {
   const compareOptions = Object.entries(keyToTitle).map(e => ({"val": e[0], "text": e[1]}));
 
   const getSelectedRepos = (filters, ignoreFilter = null) => {
-    const field = cleanFieldKey(filters["field_of_study"]);
+    const field = filters["field_of_study"];
     if(field === null){
       return [];
     }

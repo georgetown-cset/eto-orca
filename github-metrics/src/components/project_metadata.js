@@ -7,7 +7,7 @@ import { css } from "@emotion/react";
 import "core-js/features/url";
 import "core-js/features/url-search-params";
 
-import {cleanFieldKey, cleanFieldName, FIELD_KEYS, metaMapping} from "./utils";
+import {cleanFieldName, FIELD_KEYS, metaMapping} from "./utils";
 
 
 const styles = {
@@ -28,8 +28,7 @@ const ProjectMetadata = (props) => {
     if(!data[key]) {
       return 0;
     } else if(showNumReferences && FIELD_KEYS.includes(key)){
-      const cleanField = cleanFieldKey(field);
-      return !(cleanField in data[key]) ? 0 : data[key][cleanField];
+      return !(field in data[key]) ? 0 : data[key][field];
     } else if(key === "criticality_score"){
       return data[key].toFixed(2);
     }
