@@ -119,7 +119,7 @@ const Dashboard = () => {
     }
     setFilterValues(updatedFilterValues);
     setMoreFilters(urlParams.has(MORE_FILTERS) && urlParams.get(MORE_FILTERS));
-    const urlShowList = urlParams.has(SHOW_LIST) && urlParams.get(SHOW_LIST);
+    const urlShowList = urlParams.has(SHOW_LIST) && (urlParams.get(SHOW_LIST).toLowerCase() === "true");
     setShowList(urlShowList);
     mkRepoData(updatedFilterValues, urlShowList);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -379,7 +379,7 @@ const Dashboard = () => {
                             sortOptions={sortOptions}/> :
             <div>
               {repoData.slice((currPage-1)*PAGE_SIZE, currPage*PAGE_SIZE).map(repo => (
-                <ProjectCard key={getRepoName(repoData)}
+                <ProjectCard key={getRepoName(repo)}
                              data={repo}
                              field={filterValues["field_of_study"]}
                              graph_key={filterValues["compare_graph"]}

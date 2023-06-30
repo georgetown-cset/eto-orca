@@ -101,6 +101,7 @@ const ProjectDetails = () => {
         updateAccordionDetails(newData);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [data, setData] = React.useState({});
@@ -124,7 +125,7 @@ const ProjectDetails = () => {
 
   const getTopArticles = (articles) => {
     return <div>
-      {articles.map(article => <div css={styles.article}>
+      {articles.map(article => <div css={styles.article} key={article.title}>
         <div><strong>{article.link ? <ExternalLink href={article.link}>{article.title}<LaunchIcon css={styles.depsIcon}/></ExternalLink> : <span>{article.title}</span>}</strong></div>
         <div css={styles.articleMeta}>{article.year}{article.source ? `: ${article.source}`: ""}. {article.citations} citations.</div>
       </div>)}
@@ -162,7 +163,7 @@ const ProjectDetails = () => {
         "id": cfg[0],
         "name": keyToTitle[cfg[0]],
         "content" : <div>
-          <div css={styles.graphHeader}>{cfg[2]}</div>
+          <div css={styles.graphHeader} key={cfg[0]}>{cfg[2]}</div>
           {getGraphs(cfg, currData)}
         </div>
       }
@@ -211,7 +212,7 @@ const ProjectDetails = () => {
                 <ul css={styles.fieldList}>
                   {Object.keys(data["num_references"]).length > 0 ? Object.keys(data["num_references"]).sort((a, b) =>
                     data["num_references"][b] - data["num_references"][a]
-                  ).slice(0, 5).map(field => <li css={styles.fieldListElt}>
+                  ).slice(0, 5).map(field => <li css={styles.fieldListElt} key={field}>
                     <a href={"/?show_list=true&field_of_study="+field}>{field}</a> (<strong>{data["num_references"][field]}</strong> citation{data["num_references"][field] === 1 ? "" : "s"})
                   </li>) : <span>No references found</span>}
                 </ul>

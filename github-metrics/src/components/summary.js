@@ -74,7 +74,7 @@ const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
     <HighlightBox title={title} isTall={true}>
       <ul css={styles.statList}>
         {!!data.length && sortByKey(data, stat, field).slice(0, 5).map((row) =>
-          <li css={styles.statListElt}>
+          <li css={styles.statListElt} key={getRepoName(row)}>
             <a href={`/project?name=${getRepoName(row)}`}>
               {getRepoName(row)}
             </a><br/>
@@ -102,6 +102,7 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
         setOrderBy(urlOrder);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const DEFAULT_ORDER_BY = "stargazers_count";
@@ -205,10 +206,10 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
         </h1>
         <div css={styles.statWrapper}>
           {isCurated ?
-            <StatBox stat={"open_issues"} yearly={getTrace("issue_dates", val => val[2], "open_issues")} data={data}/> :
-            <StatBox stat={"relevance"} data={data} field={field} fieldName={fieldName}/>}
-          <StatBox stat={"stargazers_count"} yearly={getTrace("star_dates", val => val[1], "stargazers_count")} data={data}/>
-          <StatBox stat={"num_contributors"} yearly={getTrace("commit_dates", val => val[1]+val[2], "num_contributors")} data={data}/>
+            <StatBox key={"open_issues"} stat={"open_issues"} yearly={getTrace("issue_dates", val => val[2], "open_issues")} data={data}/> :
+            <StatBox key={"relevance"} stat={"relevance"} data={data} field={field} fieldName={fieldName}/>}
+          <StatBox key={"stargazers_count"} stat={"stargazers_count"} yearly={getTrace("star_dates", val => val[1], "stargazers_count")} data={data}/>
+          <StatBox key={"num_contributors"} stat={"num_contributors"} yearly={getTrace("commit_dates", val => val[1]+val[2], "num_contributors")} data={data}/>
         </div>
         <h2 css={styles.summaryContainerLabel}>
           <span css={styles.dropdownIntro}>Trends over time for top repositories by</span>
