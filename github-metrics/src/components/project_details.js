@@ -149,6 +149,14 @@ const ProjectDetails = () => {
       ["contrib_counts", "bar", <span>This graph shows the percentage of commits authored by each of the top 20 contributors to the project.</span>],
       ["star_dates", "bar", <span>This graph shows the number of new stars added during each year we track.</span>],
     ];
+    const newDetails = [];
+    if(("top_articles" in currData) && (currData["top_articles"].length > 0)){
+      newDetails.push({
+        "id": "top_articles",
+        "name": "Top-cited articles that mention this repository",
+        "content": getTopArticles(currData["top_articles"])
+      })
+    }
     const metricDetails = graphConfig.filter(cfg => (cfg[0] in currData) && (currData[cfg[0]].length > 0)).map(cfg => (
       {
         "id": cfg[0],
@@ -159,17 +167,9 @@ const ProjectDetails = () => {
         </div>
       }
     ));
-    const newDetails = [];
-    if(("top_articles" in currData) && (currData["top_articles"].length > 0)){
-      newDetails.push({
-        "id": "top_articles",
-        "name": "Top-cited articles that mention this repository",
-        "content": getTopArticles(currData["top_articles"])
-      })
-    }
-    newDetails.push(...metricDetails)
+    newDetails.push(...metricDetails);
     setAccordionDetails(newDetails);
-    setExpanded([metricDetails[0].id]);
+    setExpanded([newDetails[0].id, newDetails[1].id]);
   };
 
   return (
