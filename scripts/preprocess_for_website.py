@@ -358,13 +358,23 @@ def write_data(input_dir: str, output_dir: str) -> None:
     :param output_dir: Directory where output json should be written for the webapp
     :return: None
     """
+    # TODO: refactor, this is getting long
     field_to_repos, language_counts, id_to_repo = read_rows(input_dir)
-    sizeable_fields = {
-        field for field in field_to_repos.keys() if len(field_to_repos[field]) > 5
-    }
-    field_to_repos = {
-        fn: list(elts) for fn, elts in field_to_repos.items() if fn in sizeable_fields
-    }
+    with open(os.path.join("fields", "exclude.txt")) as f:
+        exclude = {line.strip() for line in f.readlines() if line.strip()}
+    with open(os.path.join("fields", "expected.txt")) as f:
+        expected = {line.strip() for line in f.readlines() if line.strip()}
+    sizeable_fields = set()
+    # need a copy of the field list to avoid RuntimeError: dictionary changed size during iteration
+    fields = {f for f in field_to_repos}
+    for field in fields:
+        if (field not in exclude) and (len(field_to_repos[field]) > 10):
+            if field not in expected:
+                print(f"Unexpected field: {field}")
+            sizeable_fields.add(field)
+            field_to_repos[field] = list(field_to_repos[field])
+        else:
+            field_to_repos.pop(field)
     language_to_canonical_name = {}
     for lang in language_counts:
         lower_lang = lang.lower()
@@ -398,7 +408,8 @@ def write_data(input_dir: str, output_dir: str) -> None:
         id_to_repo[id]["owner_name"] + "/" + id_to_repo[id]["current_name"]: id
         for id in id_to_repo
     }
-    add_repo_tfidf(id_to_repo, len(field_to_repos))
+    if len(field_to_repos) > 0:
+        add_repo_tfidf(id_to_repo, len(field_to_repos))
     for out_fi, data in [
         ("id_to_repo", id_to_repo),
         ("name_to_id", name_to_id),
