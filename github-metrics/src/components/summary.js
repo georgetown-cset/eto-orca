@@ -6,10 +6,9 @@ import React, {useEffect} from "react";
 import {LineGraph} from "./graph";
 import {css} from "@emotion/react";
 
-import {keyToTitle, sortMappingBlurb, getRepoName, sortByKey, cleanFieldName, FIELD_KEYS} from "./utils";
+import {keyToTitle, sortMappingBlurb, getRepoName, sortByKey, cleanFieldName, FIELD_KEYS, tooltips} from "./utils";
 import HighlightBox from "./highlight_box";
 import {Accordion, Dropdown, HelpTooltip} from "@eto/eto-ui-components";
-import {tooltips} from "../data/tooltips";
 
 
 const styles = {

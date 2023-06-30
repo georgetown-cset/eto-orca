@@ -14,8 +14,7 @@ import LaunchIcon from "@mui/icons-material/Launch";
 import {BarGraph, LineGraph} from "./graph";
 import ProjectMetadata from "./project_metadata";
 
-import {keyToTitle, getCountryTraces, getBarTraces, getX, getY, getRepoName} from "./utils";
-import {tooltips} from "../data/tooltips";
+import {keyToTitle, getCountryTraces, getBarTraces, getX, getY, getRepoName, tooltips} from "./utils";
 import HighlightBox from "./highlight_box";
 import githubLogo from "../images/github-mark.png";
 

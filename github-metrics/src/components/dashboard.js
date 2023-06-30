@@ -26,9 +26,9 @@ import {
   cleanFieldName,
   FIELD_KEYS,
   sources,
-  helpStyle
+  helpStyle,
+  tooltips
 } from "./utils";
-import {tooltips} from "../data/tooltips";
 
 const setFields = new Set(fields);
 

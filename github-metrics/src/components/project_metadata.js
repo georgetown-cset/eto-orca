@@ -5,8 +5,7 @@ import React from "react";
 import { css } from "@emotion/react";
 
 import {HelpTooltip} from "@eto/eto-ui-components";
-import {tooltips} from "../data/tooltips";
-import {helpStyle} from "./utils";
+import {helpStyle, tooltips} from "./utils";
 
 import "core-js/features/url";
 import "core-js/features/url-search-params";
