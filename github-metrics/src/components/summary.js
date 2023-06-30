@@ -29,6 +29,9 @@ const styles = {
   dropdownIntro: css`
     vertical-align: middle;
   `,
+  graphHeader: css`
+    margin: 20px 20px 10px 20px;
+  `,
   statListElt: css`
     line-height: 1.5;
     list-style-type: none;
@@ -160,10 +163,18 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
     {
       "id": "pct_contribution",
       "name": "Cumulative percentage of contributions by number of contributors",
-      "content": <LineGraph title={"Cumulative percentage of contributions by number of contributors"}
+      "content": (
+        <div>
+          <div css={styles.graphHeader}>
+            This graph shows the percentage of contributions that are made by the top 20 contributors. Repositories
+            with fewer than 20 contributors will show a partial line.
+          </div>
+          <LineGraph title={"Cumulative percentage of contributions by number of contributors"}
                             showLegend={true}
                             traces={getContribTrace("contrib_counts")}
                             normalizeTime={false}/>
+        </div>
+      )
     },
     {
       "id": "star_dates",
