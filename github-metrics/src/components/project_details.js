@@ -126,7 +126,7 @@ const ProjectDetails = () => {
     return <div>
       {articles.map(article => <div css={styles.article}>
         <div><strong>{article.link ? <ExternalLink href={article.link}>{article.title}<LaunchIcon css={styles.depsIcon}/></ExternalLink> : <span>{article.title}</span>}</strong></div>
-        <div css={styles.articleMeta}>{article.year}: {article.source}. {article.citations} citations.</div>
+        <div css={styles.articleMeta}>{article.year}{article.source ? `: ${article.source}`: ""}. {article.citations} citations.</div>
       </div>)}
     </div>
   }
@@ -212,7 +212,7 @@ const ProjectDetails = () => {
                   {Object.keys(data["num_references"]).length > 0 ? Object.keys(data["num_references"]).sort((a, b) =>
                     data["num_references"][b] - data["num_references"][a]
                   ).slice(0, 5).map(field => <li css={styles.fieldListElt}>
-                    {field} (<strong>{data["num_references"][field]}</strong> citation{data["num_references"][field] === 1 ? "" : "s"})
+                    <a href={"/?show_list=true&field_of_study="+field}>{field}</a> (<strong>{data["num_references"][field]}</strong> citation{data["num_references"][field] === 1 ? "" : "s"})
                   </li>) : <span>No references found</span>}
                 </ul>
               </HighlightBox>
