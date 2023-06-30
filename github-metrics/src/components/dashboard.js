@@ -353,7 +353,7 @@ const Dashboard = () => {
                 <Dropdown
                   selected={filterValues["order_by"]}
                   setSelected={(val) => handleSingleSelectChange(val, "order_by")}
-                  inputLabel={"Order by"}
+                  inputLabel={"Sort by"}
                   options={sortOptions}
                 />
               </div>
@@ -361,7 +361,7 @@ const Dashboard = () => {
                 <Dropdown
                   selected={filterValues["compare_graph"]}
                   setSelected={(val) => handleSingleSelectChange(val, "compare_graph")}
-                  inputLabel={"Compare by"}
+                  inputLabel={"Graph metric"}
                   options={compareOptions}
                 />
               </div>
