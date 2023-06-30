@@ -1,6 +1,11 @@
 /*
 Miscellaneous utilities and shared functionality
  */
+import React from "react";
+import {HelpTooltip} from "@eto/eto-ui-components";
+import {tooltips} from "../data/tooltips";
+
+export const helpStyle = {height: "20px", verticalAlign: "middle"};
 export const sortMapping = {
   "stargazers_count": "Stars",
   "subscribers_count": "Watchers",
@@ -9,9 +14,20 @@ export const sortMapping = {
   "created_at": "Date created",
   "pushed_at": "Last commit date",
   "open_issues": "Open issues",
-  "num_references": "References in research",
-  "relevance": "Relevance"
+  "num_references": <span>Mentions in research<HelpTooltip iconStyle={helpStyle} text={tooltips.mentions}/></span>,
+  "relevance": <span>Relevance<HelpTooltip iconStyle={helpStyle} text={tooltips.relevance}/></span>
 };
+export const sortMappingBlurb = {
+  "stargazers_count": "Stars",
+  "subscribers_count": "Watchers",
+  "criticality_score": "Criticality score",
+  "num_contributors": "Contributors",
+  "created_at": "Date created",
+  "pushed_at": "Last commit date",
+  "open_issues": "Open issues"
+};
+sortMappingBlurb["num_references"] = "Mention in research";
+sortMappingBlurb["relevance"] = "Relevance";
 
 export const metaMapping = {...sortMapping};
 metaMapping["license"] = "License";
@@ -22,7 +38,7 @@ export const keyToTitle = {
   "push_dates": "Commits over time",
   "issue_dates": "Issues over time",
   "commit_dates": "New vs returning contributors over time",
-  "contrib_counts": "Contribution percentages by ranked contributor",
+  "contrib_counts": "Contribution rankings",
   "downloads": "PyPI downloads over time"
 };
 
@@ -128,4 +144,9 @@ export const cleanFieldName = (field) => {
     clean = clean.replace(patt, capitalized);
   }
   return clean;
+};
+
+export const sources = {
+  "riscv": "CSET curation",
+  "ai_safety": "CSET curation"
 };

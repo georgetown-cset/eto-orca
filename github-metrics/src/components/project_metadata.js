@@ -4,6 +4,10 @@ Basic project metadata, currently displayed in a few lines of text
 import React from "react";
 import { css } from "@emotion/react";
 
+import {HelpTooltip} from "@eto/eto-ui-components";
+import {tooltips} from "../data/tooltips";
+import {helpStyle} from "./utils";
+
 import "core-js/features/url";
 import "core-js/features/url-search-params";
 
@@ -36,7 +40,8 @@ const ProjectMetadata = (props) => {
   };
 
   const metaGroups = [
-    ["stargazers_count", "subscribers_count", "criticality_score"],
+    ["stargazers_count", "subscribers_count"],
+    ["criticality_score"],
     ["num_references"],
     ["open_issues", "num_contributors"],
     ["created_at"],
@@ -45,6 +50,13 @@ const ProjectMetadata = (props) => {
     ["language"]
   ];
 
+  const getTooltip = (key) => {
+    if(key !== "criticality_score"){
+      return "";
+    }
+    return <HelpTooltip style={helpStyle} text={tooltips.criticality}/>
+  };
+
   return (
     <div>
       {metaGroups.map((group, group_idx) => (
@@ -52,9 +64,9 @@ const ProjectMetadata = (props) => {
           {group.map(option => ((showNumReferences) || (option !== "num_references")) && (
             <span css={styles.metaSection} key={option}>
               {option === "num_references" ?
-                <span>{getValue(option)} references in <strong>{cleanFieldName(field)}</strong> articles ({getValue("relevance").toFixed(2)} relevance)</span>
+                <span>{getValue(option)} mentions in <strong>{cleanFieldName(field)}</strong> articles ({getValue("relevance").toFixed(2)} relevance<HelpTooltip style={helpStyle} text={tooltips.relevance}/>)</span>
               :
-                <span><strong>{metaMapping[option]}</strong>: {getValue(option)}</span>
+                <span><strong>{metaMapping[option]}{getTooltip(option)}</strong>: {getValue(option)}</span>
               }
             </span>
           ))}

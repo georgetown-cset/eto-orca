@@ -5,7 +5,7 @@ import React, {useEffect} from "react";
 import {css} from "@emotion/react";
 import Pagination from "@mui/material/Pagination";
 import {styled} from "@mui/material/styles";
-import { Autocomplete, ButtonStyled, Dropdown, breakpointStops } from "@eto/eto-ui-components";
+import { Autocomplete, ButtonStyled, Dropdown, HelpTooltip, breakpointStops } from "@eto/eto-ui-components";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
 import "core-js/features/url";
@@ -24,9 +24,11 @@ import {
   customTopics,
   sortByKey,
   cleanFieldName,
-  FIELD_KEYS
+  FIELD_KEYS,
+  sources,
+  helpStyle
 } from "./utils";
-import tooltips from "../data/tooltips";
+import {tooltips} from "../data/tooltips";
 
 const setFields = new Set(fields);
 
@@ -79,7 +81,7 @@ const styles = {
   `,
   filterIcon: css`
     height: 20px;
-    vertical-align: bottom;
+    vertical-align: middle;
   `,
   filterDescriptionContainer: css`
     width: 100%;
@@ -284,9 +286,14 @@ const Dashboard = () => {
       }
       suffix += licenseBlurb;
     }
-    return (<div>
-      <FilterAltIcon css={styles.filterIcon}/> Showing {repoData.length} repositories referenced in {cleanFieldName(filterValues["field_of_study"])} articles{suffix}.
-    </div>)
+    return (
+      <div>
+        <FilterAltIcon css={styles.filterIcon}/> Showing {repoData.length} repositories {
+          isCuratedField(filterValues["field_of_study"]) ? <span>related to {cleanFieldName(filterValues["field_of_study"])} according to {sources[filterValues["field_of_study"]]}.</span> :
+            <span>mentioned in {cleanFieldName(filterValues["field_of_study"])} articles{suffix}.<HelpTooltip style={helpStyle} text={tooltips.number_of_mentions}/></span>
+          }
+      </div>
+    )
   };
 
   return (
@@ -299,7 +306,8 @@ const Dashboard = () => {
                 <Autocomplete
                   selected={filterValues["field_of_study"]}
                   setSelected={(val) => handleSingleSelectChange(val, "field_of_study")}
-                  inputLabel={"Research field"}
+                  id={"research-field"}
+                  inputLabel={<div>Research field<HelpTooltip iconStyle={helpStyle} text={tooltips.research_field}/></div>}
                   tooltip={tooltips.application_topic}
                   options={getFOSOptions()}
                 />

@@ -6,10 +6,10 @@ import React, {useEffect} from "react";
 import {LineGraph} from "./graph";
 import {css} from "@emotion/react";
 
-import {keyToTitle, sortMapping, getRepoName, sortByKey, cleanFieldName, FIELD_KEYS} from "./utils";
+import {keyToTitle, sortMappingBlurb, getRepoName, sortByKey, cleanFieldName, FIELD_KEYS} from "./utils";
 import HighlightBox from "./highlight_box";
 import {Accordion, Dropdown, HelpTooltip} from "@eto/eto-ui-components";
-import tooltips from "../data/tooltips";
+import {tooltips} from "../data/tooltips";
 
 
 const styles = {
@@ -49,7 +49,7 @@ const styles = {
 };
 
 const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
-  const fmtStat = sortMapping[stat].toLowerCase();
+  const fmtStat = sortMappingBlurb[stat].toLowerCase();
   const title = <span>
     Top repositories by <strong>{stat === "relevance" ? <span>relevance to {fieldName} research <HelpTooltip text={tooltips.relevance}/></span> : fmtStat}</strong>
   </span>;

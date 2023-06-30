@@ -8,13 +8,14 @@ import "core-js/features/url-search-params";
 
 import id_to_repo from "../data/id_to_repo";
 import name_to_id from "../data/name_to_id";
-import {Accordion, ExternalLink} from "@eto/eto-ui-components";
+import {Accordion, ExternalLink, HelpTooltip} from "@eto/eto-ui-components";
 import {css} from "@emotion/react";
 import LaunchIcon from "@mui/icons-material/Launch";
 import {BarGraph, LineGraph} from "./graph";
 import ProjectMetadata from "./project_metadata";
 
 import {keyToTitle, getCountryTraces, getBarTraces, getX, getY, getRepoName} from "./utils";
+import {tooltips} from "../data/tooltips";
 import HighlightBox from "./highlight_box";
 import githubLogo from "../images/github-mark.png";
 
@@ -207,7 +208,7 @@ const ProjectDetails = () => {
                 </div>
               </HighlightBox>
               {"num_references" in data &&
-              <HighlightBox title={"Most frequently citing fields"} isWide={true}>
+              <HighlightBox title={<span>Most frequently citing fields<HelpTooltip text={tooltips.field_references}/></span>} isWide={true}>
                 <ul css={styles.fieldList}>
                   {Object.keys(data["num_references"]).length > 0 ? Object.keys(data["num_references"]).sort((a, b) =>
                     data["num_references"][b] - data["num_references"][a]
