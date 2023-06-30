@@ -57,7 +57,7 @@ const styles = {
     padding: 20px 20px 0px 20px;
   `,
   githubLogo: css`
-    height: 15px;
+    height: 12px;
     vertical-align: bottom;
     margin: 0 4px 2px 0;
   `,
@@ -65,11 +65,6 @@ const styles = {
     font-weight: bold;
     text-align: center;
     margin-top: 22px;
-  `,
-  repoIcon: css`
-    height: 16px;
-    vertical-align: bottom;
-    display: inline-block;
   `,
   depsIcon: css`
     height: 13px;
@@ -101,7 +96,12 @@ const ProjectCard = (props) => {
       <div css={styles.metadataContainer}>
         <div css={styles.leftPanel}>
           <span>
-            <h4 css={styles.ghLink}><ExternalLink href={"https://github.com/"+repo_name}><img src={githubLogo} css={styles.githubLogo}/>{repo_name}<LaunchIcon css={styles.repoIcon}/></ExternalLink></h4>
+            <h4 css={styles.ghLink}><ExternalLink href={`/project?name=${repo_name}`}>{repo_name}</ExternalLink></h4>
+            <span css={styles.depsLink}>
+              <ExternalLink href={"https://github.com/"+repo_name}>
+                <img src={githubLogo} css={styles.githubLogo}/>GitHub<LaunchIcon css={styles.depsIcon}/>
+              </ExternalLink>
+            </span>
             {data["has_deps_dev"] &&
             <span css={styles.depsLink}>
               <ExternalLink href={"https://deps.dev/project/github/" + data["owner_name"] + "%2F" + data["current_name"]}>
