@@ -41,22 +41,27 @@ const getHoverTemplate = (maxY, numTraces) => {
   return (maxY < 10 ? "%{y:,.3f}" : "%{y:,.3s}")+suffix;
 };
 
-const cleanTraces = (x, y) => {
+const cleanTraces = (x, y, displayAllYears=false) => {
   const [clean_x, clean_y] = [[], []];
   const x_to_y = {};
   for(let [idx, x_value] of x.entries()){
     x_to_y[parseInt(x_value)] = y[idx];
   }
+  let seenNonzero = displayAllYears;
   for(let i = 0; i < (config.end_year+1 - config.start_year); i ++){
     const curr_year = config.start_year+i;
-    clean_x.push(curr_year);
-    clean_y.push((curr_year in x_to_y) && (x_to_y[curr_year] !== null) ? x_to_y[curr_year]: 0)
+    const nonZero = (curr_year in x_to_y) && (x_to_y[curr_year] !== null);
+    if(seenNonzero || nonZero) {
+      clean_x.push(curr_year);
+      clean_y.push(nonZero ? x_to_y[curr_year] : 0);
+      seenNonzero = true;
+    }
   }
   return [clean_x, clean_y];
 };
 
 const LineGraph = (props) => {
-  const {traces, title, height, showLegend=false, normalizeTime=true, forceInteger=true} = props;
+  const {traces, title, height, showLegend=false, normalizeTime=true, forceInteger=true, displayAllYears=false} = props;
   const [screenWidth, setScreenWidth] = React.useState(window.innerWidth);
   const handleSize = () => {
     setScreenWidth(window.innerWidth);
@@ -69,7 +74,7 @@ const LineGraph = (props) => {
   const traceMetadata = [];
   let maxY = -1;
   for(const [idx, trace] of traces.entries()) {
-    const [clean_x, clean_y] = normalizeTime ? cleanTraces(trace.x, trace.y) : [trace.x, trace.y];
+    const [clean_x, clean_y] = normalizeTime ? cleanTraces(trace.x, trace.y, displayAllYears) : [trace.x, trace.y];
 
     const traceMaxY = Math.max(...clean_y);
     if(traceMaxY > maxY){
@@ -136,7 +141,7 @@ const BarGraph = (props) => {
   const traceMetadata = [];
   let maxY = -1;
   for(const [idx, trace] of traces.entries()) {
-    const [clean_x, clean_y] = normalizeTime ? cleanTraces(trace.x, trace.y) : [trace.x, trace.y];
+    const [clean_x, clean_y] = normalizeTime ? cleanTraces(trace.x, trace.y, true) : [trace.x, trace.y];
     const traceMaxY = Math.max(...clean_y);
     if(traceMaxY > maxY){
       maxY = traceMaxY;

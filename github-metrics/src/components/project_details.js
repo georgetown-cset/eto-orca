@@ -133,7 +133,7 @@ const ProjectDetails = () => {
 
   const updateAccordionDetails = (currData) => {
     const graphConfig = [
-      ["push_dates", "line", <span>This graph shows the number of commits made to the main branch of the repository each year.</span>],
+      ["push_dates", "bar", <span>This graph shows the number of commits made to the main branch of the repository each year.</span>],
       ["downloads", "multi-line", <span>
         This graph shows the number of package downloads from PyPI per year, with country affiliations as reported in
         the BigQuery dataset bigquery-public-data.pypi.file_downloads. Note that automated downloads may inflate these counts.
@@ -147,7 +147,7 @@ const ProjectDetails = () => {
         the number of contributors that had made a commit in a previous year.
       </span>],
       ["contrib_counts", "bar", <span>This graph shows the percentage of commits authored by each of the top 20 contributors to the project.</span>],
-      ["star_dates", "line", <span>This graph shows the number of new stars added during each year we track.</span>],
+      ["star_dates", "bar", <span>This graph shows the number of new stars added during each year we track.</span>],
     ];
     const metricDetails = graphConfig.filter(cfg => (cfg[0] in currData) && (currData[cfg[0]].length > 0)).map(cfg => (
       {

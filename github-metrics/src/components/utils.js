@@ -94,7 +94,9 @@ export const getCountryTraces = (graphData) => {
 const barTraceNames = {
   "issue_dates": ["Opened", "Closed"],
   "commit_dates": ["New", "Returning"],
-  "contrib_counts": ["Num Contributions"]
+  "contrib_counts": ["Num Contributions"],
+  "push_dates": ["Num Commits"],
+  "star_dates": ["Num Stars"]
 };
 
 // returns bar graph traces

@@ -88,7 +88,7 @@ const ProjectCard = (props) => {
     } else if(["country_contributions", "org_contributions", "downloads"].includes(graph_key)){
       return <LineGraph traces={getCountryTraces(data[graph_key])} title={graph_title} height={"300px"} showLegend={true}/>;
     }
-    return <LineGraph traces={[{x: getX(data[graph_key]), y: getY(data[graph_key])}]}
+    return <BarGraph traces={[{x: getX(data[graph_key]), y: getY(data[graph_key])}]}
                        title={graph_title} height={"300px"}/>;
   };
 
