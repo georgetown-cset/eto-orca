@@ -119,8 +119,9 @@ const Dashboard = () => {
     }
     setFilterValues(updatedFilterValues);
     setMoreFilters(urlParams.has(MORE_FILTERS) && urlParams.get(MORE_FILTERS));
-    setShowList(urlParams.has(SHOW_LIST) && urlParams.get(SHOW_LIST));
-    mkRepoData(updatedFilterValues);
+    const urlShowList = urlParams.has(SHOW_LIST) && urlParams.get(SHOW_LIST);
+    setShowList(urlShowList);
+    mkRepoData(updatedFilterValues, urlShowList);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
