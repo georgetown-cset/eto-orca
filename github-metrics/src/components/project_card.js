@@ -41,6 +41,7 @@ const styles = {
   `,
   dataDesc: css`
     margin: 10px 0px 15px 0px;
+    overflow-wrap: break-word;
   `,
   ghLink: css`
     display: inline-block;
