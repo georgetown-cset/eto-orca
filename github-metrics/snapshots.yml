@@ -1,0 +1,3 @@
+- name: Project page
+  url: http://localhost:8000/project/?name=SeldonIO/alibi
+  waitForTimeout: 15000

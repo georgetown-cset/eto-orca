@@ -202,7 +202,7 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
     <div css={styles.card}>
       <div css={styles.headerContainer}>
         <h1 css={styles.summaryContainerLabel}>
-          Currently tracking <a href={window.location.href.includes("?") ? window.location.href+"&show_list=true" : window.location.href.replace(/\/.*/, "")+"/?show_list=true"}><strong>{data.length}</strong> software repositories</a> {isCurated ? "related to" : "used for research into"} <strong>{fieldName}</strong>.
+          Currently tracking <a href={window.location.href.includes("?") ? window.location.href+"&show_list=true" : window.location.href.replace(/\/.*/, "")+"/?show_list=true"}><strong>{data.length}</strong> software repositories</a> {isCurated ? "related to" : "mentioned in research into"} <strong>{fieldName}</strong>.
         </h1>
         <div css={styles.statWrapper}>
           {isCurated ?
