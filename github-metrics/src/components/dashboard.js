@@ -361,7 +361,7 @@ const Dashboard = () => {
                 <Dropdown
                   selected={filterValues["compare_graph"]}
                   setSelected={(val) => handleSingleSelectChange(val, "compare_graph")}
-                  inputLabel={"Graph metric"}
+                  inputLabel={"Show graphs for"}
                   options={compareOptions}
                 />
               </div>
