@@ -291,7 +291,7 @@ const Dashboard = () => {
       <div>
         <FilterAltIcon css={styles.filterIcon}/> Showing {repoData.length} repositories {
           isCuratedField(filterValues["field_of_study"]) ? <span>related to {cleanFieldName(filterValues["field_of_study"])} according to {sources[filterValues["field_of_study"]]}.</span> :
-            <span>mentioned in {cleanFieldName(filterValues["field_of_study"])} articles{suffix}.<HelpTooltip style={helpStyle} text={tooltips.number_of_mentions}/></span>
+            <span>mentioned in {cleanFieldName(filterValues["field_of_study"])} articles in our dataset{suffix}.<HelpTooltip style={helpStyle} text={tooltips.number_of_mentions}/></span>
           }
       </div>
     )
