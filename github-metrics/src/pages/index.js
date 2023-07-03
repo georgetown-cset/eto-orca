@@ -29,24 +29,13 @@ const IndexPage = () => {
         title={<div style={{fontFamily: "GTZirkonBold, sans-serif !important"}}>ORCA: Open-source software Research and Community Activity</div>}
         description={<div>
           <div style={{marginBottom: "10px"}}>
-          ORCA is meant to enable comparative analysis of Open-Source Software (OSS) used in research fields of study.
-          OSS projects are associated with a research field either through manual curation or through automated retrieval.
-          </div>
-          <div style={{ marginBottom: "10px"}}>
-          In the automated
-          retrieval method, we affiliate any OSS project that is mentioned in the title, abstract, arXiv or Semantic Scholar fulltext, or Papers with Code
-          references of an article with that article. We assign each article to its top three <ExternalLink href={"https://aclanthology.org/2022.sdp-1.12/"}>research fields</ExternalLink>, then
-          affiliate each OSS project with research fields containing at least three papers that reference the OSS project.
-          </div>
-          <div style={{marginBottom: "10px"}}>
-          At the moment, ORCA only includes GitHub data, but in the future we hope to expand to other repository
-            hosting services. Data sources include: <ExternalLink href={"https://console.cloud.google.com/bigquery?project=githubarchive&page=project"}>Github Archive</ExternalLink>, <ExternalLink href={"https://console.cloud.google.com/marketplace/product/gcp-public-data-pypi/pypi?_ga=2.174631522.-1309707215.1607703367"}>PyPI</ExternalLink>, and our <ExternalLink href={"https://eto.tech/dataset-docs/mac/"}>merged academic corpus</ExternalLink>.
+          ORCA compiles data on open-source software (OSS) used in science and technology research. Drawing on Github Archive, ETO’s Merged Academic Corpus, and many other data sources, ORCA tracks OSS usage, health, development activity, and community engagement across a wide range of software projects and research subjects. Use ORCA to compare OSS projects in a particular research area, track trends over time, and sort and filter projects by different metrics. <ExternalLink href={"https://eto.tech/tool-docs/orca"}>Read the docs >></ExternalLink>
           </div>
           <div>
             Website last updated on {data.site.buildTime}. Data last updated on {config.last_updated}.
           </div>
         </div>}
-        documentationLink={"https://eto.tech/tool-docs/oss-tracker"}
+        documentationLink={"https://eto.tech/tool-docs/orca"}
         sidebarTitle={"Quick guide"}
         sidebarContent={<div>
           <p>
