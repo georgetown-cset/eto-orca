@@ -46,8 +46,8 @@ export const keyToTitle = {
   "push_dates": "Commits over time",
   "issue_dates": "Issues over time",
   "commit_dates": "New vs returning contributors over time",
-  "contrib_counts": "Contribution rankings",
-  "downloads": "PyPI downloads over time"
+  "contrib_counts": "Contributor distribution",
+  "downloads": "PyPI downloads over time/by country"
 };
 
 export const customTopics = [
