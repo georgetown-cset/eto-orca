@@ -5,12 +5,12 @@ import React from "react";
 import {ExternalLink, HelpTooltip} from "@eto/eto-ui-components";
 
 export const tooltips = {
-  "relevance": "Sort projects by how relevant they are to the selected research field, according to our scoring method. <ExternalLink href={"https://tktk"}>Read more >></ExternalLink>",
+  "relevance": "Sort projects by how relevant they are to the selected research field, according to our scoring method. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>",
   "research_field": "Select a field to view related open-source software projects.",
-  "mentions": "Sort projects by how often they cite or are cited by are cited by articles in the selected research field. <ExternalLink href={"https://tktk"}>Read more >></ExternalLink>",
-  "criticality": "Sort projects by their OpenSSF scores, which measure overall influence and importance in the OSS ecosystem. <ExternalLink href={"https://tktk"}>Read more >></ExternalLink>",
-  "field_references": "Fields most often linked to this project. Based on direct citations in articles from the field and references in project README files. <ExternalLink href={"https://tktk"}>Read more >></ExternalLink>",
-  "number_of_mentions": "Each of the listed repositories is associated with at least one  SUBJECTSUBJECT_JM_REPLACE_TKTK article in ORCA's dataset. <ExternalLink href={"https://tktk"}>Read more >></ExternalLink>"
+  "mentions": "Sort projects by how often they mention or are mentioned by articles in the selected research field. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>",
+  "criticality": "Sort projects by their OpenSSF scores, which measure overall influence and importance in the OSS ecosystem. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>",
+  "field_references": "Fields most often linked to this project. Based on direct citations in articles from the field and references in project README files. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>",
+  "number_of_mentions": "Each of the listed repositories is associated with at least one #SUBJECT article in ORCA's dataset. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>"
 };
 
 export const helpStyle = {height: "20px", verticalAlign: "middle"};

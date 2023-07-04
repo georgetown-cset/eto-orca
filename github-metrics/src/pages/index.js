@@ -38,9 +38,7 @@ const IndexPage = () => {
         documentationLink={"https://eto.tech/tool-docs/orca"}
         sidebarTitle={"Quick guide"}
         sidebarContent={<div>
-          <p>
-           Use the "Research Field" dropdown to pick a field to browse ORCA defaults to <strong>summary view</strong>, a condensed view that presents key facts and figures for the top OSS projects associated with the research field you selected. Click the view toggle in the toolbar to switch to <strong>list view</strong>, which includes information on every OSS project associated with the research field you selected. Click on a project's “full profile” buttons to open in-depth data and graphs in <strong>detail view</strong>.
-          </p>
+          Use the "Research Field" dropdown to pick a field to browse. ORCA defaults to <strong>summary view</strong>, a condensed view that presents key facts and figures for the top OSS projects associated with the research field you selected. Click the view toggle in the toolbar to switch to <strong>list view</strong>, which includes information on every OSS project associated with the research field you selected. Click on a project's "full profile" buttons to open in-depth data and graphs in <strong>detail view</strong>.
         </div>}
       />
       {(typeof window !== "undefined") &&
