@@ -5,12 +5,12 @@ import React from "react";
 import {ExternalLink, HelpTooltip} from "@eto/eto-ui-components";
 
 export const tooltips = {
-  "relevance": "Relevance is a TIFIDF-based metric we use to rank repositories by their salience to the field, where terms are repository mentions and documents are fields - i.e. we calculate (number of articles mentioning a repository within a field) * log(number of total fields / (number of fields mentioning the repository + 1)).",
-  "research_field": "Select a research field to view relevant repositories, as determined by human curation or by automatic assignment based on article field of study tags.",
-  "mentions": "Selecting 'mentions' will order by the list by the number of mentions each repository received in the current research field. We say that an article mentions a repository if we find a mention of that repository in the article's title, abstract, or fulltext (where available), if the article is affiliated with the repository in Papers with Code, or if we find a link to the article's DOI in the repository's README, for articles that are part of The Stack.",
-  "criticality": <span>An <ExternalLink href={"https://github.com/ossf/criticality_score"}>OpenSSF measure</ExternalLink> of the project's overall influence and importance. We currently do not adjust this metric for importance to a particular field.</span>,
-  "field_references": "Number of mentions in articles that were automatically assigned to a field of study.",
-  "number_of_mentions": <span>We <ExternalLink href={"https://aclanthology.org/2022.sdp-1.12/"}>automatically assign</ExternalLink> papers to research fields, then count the number of repository mentions within papers in that field.</span>
+  "relevance": "Sort projects by how relevant they are to the selected research field, according to our scoring method. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>",
+  "research_field": "Select a field to view related open-source software projects.",
+  "mentions": "Sort projects by how often they mention or are mentioned by articles in the selected research field. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>",
+  "criticality": "Sort projects by their OpenSSF scores, which measure overall influence and importance in the OSS ecosystem. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>",
+  "field_references": "Fields most often linked to this project. Based on direct citations in articles from the field and references in project README files. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>",
+  "number_of_mentions": "Each of the listed repositories is associated with at least one #SUBJECT article in ORCA's dataset. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>"
 };
 
 export const helpStyle = {height: "20px", verticalAlign: "middle"};
@@ -46,8 +46,8 @@ export const keyToTitle = {
   "push_dates": "Commits over time",
   "issue_dates": "Issues over time",
   "commit_dates": "New vs returning contributors over time",
-  "contrib_counts": "Contribution rankings",
-  "downloads": "PyPI downloads over time"
+  "contrib_counts": "Contributor distribution",
+  "downloads": "PyPI downloads over time/by country"
 };
 
 export const customTopics = [

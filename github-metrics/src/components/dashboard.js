@@ -287,11 +287,12 @@ const Dashboard = () => {
       }
       suffix += licenseBlurb;
     }
+    const cleanField = cleanFieldName(filterValues["field_of_study"]);
     return (
       <div>
         <FilterAltIcon css={styles.filterIcon}/> Showing {repoData.length} repositories {
-          isCuratedField(filterValues["field_of_study"]) ? <span>related to {cleanFieldName(filterValues["field_of_study"])} according to {sources[filterValues["field_of_study"]]}.</span> :
-            <span>mentioned in {cleanFieldName(filterValues["field_of_study"])} articles{suffix}.<HelpTooltip style={helpStyle} text={tooltips.number_of_mentions}/></span>
+          isCuratedField(filterValues["field_of_study"]) ? <span>related to {cleanField} according to {sources[filterValues["field_of_study"]]}.</span> :
+            <span>mentioned in {cleanField} articles in our dataset{suffix}.<HelpTooltip style={helpStyle} text={tooltips.number_of_mentions.replace("#SUBJECT", cleanField)}/></span>
           }
       </div>
     )
@@ -361,7 +362,7 @@ const Dashboard = () => {
                 <Dropdown
                   selected={filterValues["compare_graph"]}
                   setSelected={(val) => handleSingleSelectChange(val, "compare_graph")}
-                  inputLabel={"Graph metric"}
+                  inputLabel={"Show graphs for"}
                   options={compareOptions}
                 />
               </div>
