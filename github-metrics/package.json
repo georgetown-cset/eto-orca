@@ -9,8 +9,8 @@
   "scripts": {
     "develop": "gatsby develop",
     "start": "gatsby develop",
-    "build": "gatsby build",
-    "serve": "gatsby serve",
+    "build": "NODE_OPTIONS=--max-old-space-size=8192 gatsby build",
+    "serve": "NODE_OPTIONS=--max-old-space-size=8192 gatsby serve",
     "clean": "gatsby clean",
     "test": "jest",
     "percy-snapshot": "npx percy snapshot snapshots.yml",

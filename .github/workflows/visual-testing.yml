@@ -42,7 +42,7 @@ jobs:
     - name: Run server
       run: |
         npm run build
-        npm run serve -- -p 8510 &
+        npm run serve -- -p 8000 &
       shell: bash
       working-directory: ${{ env.app-dir }}
     - name: Snapshot with Percy
