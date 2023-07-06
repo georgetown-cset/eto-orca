@@ -1,0 +1,11 @@
+SNL-WaterPower/WecOptTool
+SNL-WaterPower/CACTUS
+energy-modelling-toolkit/hydro-power-database
+MHKiT-Software/MHKiT-Python
+hydro-python/hydropowerlib
+NREL-SIIP/HydroPowerSimulations.jl
+simulatino/OpenHPL
+WEC-Sim/WEC-Sim
+BEMRosetta/BEMRosetta
+mancellin/capytaine
+swd-turner/reservoir

@@ -1,0 +1,9 @@
+MassimoCimmino/pygfunction
+wouterpeere/GHEtool
+charxie/multiphysics
+lanl/FEHM
+CalebBell/thermo
+waiwera/waiwera
+ICWallis/fractoolbox
+SmartTensors/GeoThermalCloud.jl
+ajacquey/golem

@@ -1,0 +1,10 @@
+iiasa/message_ix
+Libbum/DICE.jl
+iiasa/ENGAGE-netzero-analysis
+IAMconsortium/pyam
+JGCRI/gcam-core
+TNO/EXIOMOD-open
+pik-piam/remind
+pik-piam/mrremind
+pik-piam/edgeTransport
+openmodels/META-2021

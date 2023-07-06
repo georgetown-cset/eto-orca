@@ -1,0 +1,13 @@
+space-physics/lowtran
+RadiativeTransfer/RadiativeTransfer.jl
+atmtools/arts
+robintw/Py6S
+earth-system-radiation/rte-rrtmgp
+AER-RC/LBLRTM
+CliMA/RRTMGP.jl
+eradiate/eradiate
+slcs-jsc/jurassic
+tenstream/tenstream
+iodepo/odis-arch
+ReflectiveEarth/reflective-potential
+radis/radis

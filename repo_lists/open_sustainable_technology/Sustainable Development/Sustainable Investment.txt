@@ -1,0 +1,15 @@
+natcap/invest
+remindmodel/remind
+RaphaelPB/WHAT-IF
+My-Climate-Journey/climate-sustainability-investment-framework
+RMI-PACTA/r2dii.analysis
+OFBDABV/SBTi
+realimpat/Real-Impact-Tracker-Methodology
+fund-model/MimiFUND.jl
+opentaps/open-climate-investing
+NREL/ssc
+os-climate/os_c_data_commons
+Yuanchao-Xu/gfer
+wikirate/wikirate
+open-risk/equinox
+RMI-PACTA/PACTA_analysis

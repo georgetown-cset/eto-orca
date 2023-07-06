@@ -1,0 +1,17 @@
+ONEARMY/precious-plastic
+pedropro/TACO
+circularfashion/cf-circularity-id-standard
+sangminwoo/RecycleNet
+garythung/trashnet
+OpenLitterMap/openlittermap-web
+CMLPlatform/pycirk
+WWF-Deutschland/marine-plastic-explorer
+NASA-IMPACT/marine_debris_ML
+TheOceanCleanupAlgorithms/ADVECTOR
+surfriderfoundationeurope/The-Plastic-Origins-Project
+marine-debris/marine-debris.github.io
+wimlds-trojmiasto/detect-waste
+santiago-sanitation-systems/Santiago.jl
+CMLPlatform/ramascene
+CMLPlatform/CircuMAT
+SwolfPy-Project/swolfpy

@@ -1,0 +1,10 @@
+open-sdg/open-sdg
+sustainlab-group/sustainbench
+osdg-ai/osdg-tool
+GSA/sdg-indicators-usa
+SDG-InterfaceOntology/sdgio
+owid/sdg-tracker.org
+CMUSustainability/SDGmapR
+dwulff/text2sdg
+GoodDataHub/taxonomy4good
+Yingjie4Science/SDGdetector
