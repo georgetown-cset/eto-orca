@@ -6,7 +6,7 @@ import os
 import re
 
 import requests
-from utils import GH_LINK_REGEX, OUTPUT_PARENT
+from utils import GH_LINK_REGEX, OUTPUT_SCRAPER_PARENT, OUTPUT_WEBSITE_PARENT
 
 
 def scrape() -> None:
@@ -22,15 +22,19 @@ def scrape() -> None:
     start = "## WETO Software"
     end = "## Other Funding Status"
     seen_start, seen_end = False, False
-    with open(os.path.join(OUTPUT_PARENT, "weto.txt"), mode="w") as out:
-        for line in md_file.split("\n"):
-            line = line.strip()
-            seen_start |= line == start
-            seen_end |= line == end
-            if seen_start and not seen_end:
-                repo = re.search(GH_LINK_REGEX, line)
-                if repo:
-                    out.write(repo.group(0) + "\n")
+    out_website = open(os.path.join(OUTPUT_WEBSITE_PARENT, "weto.txt"), mode="w")
+    out_scraper = open(os.path.join(OUTPUT_SCRAPER_PARENT, "weto.txt"), mode="w")
+    for line in md_file.split("\n"):
+        line = line.strip()
+        seen_start |= line == start
+        seen_end |= line == end
+        if seen_start and not seen_end:
+            repo = re.search(GH_LINK_REGEX, line)
+            if repo:
+                out_scraper.write(repo.group(0) + "\n")
+                out_website.write(repo.group(2) + "\n")
+    out_website.close()
+    out_scraper.close()
 
 
 if __name__ == "__main__":
