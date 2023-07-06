@@ -2,8 +2,16 @@ import React, {useEffect} from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import {AppWrapper, ErrorBoundary} from "@eto/eto-ui-components";
+import {css} from "@emotion/react";
 
 const ProjectDetails = React.lazy(() => import("../components/project_details"));
+
+const styles = {
+  suspense: css`
+    text-align: center;
+    margin: 40px;
+  `
+};
 
 const Project = () => {
   useEffect(() => {
@@ -17,7 +25,7 @@ const Project = () => {
         backgroundColor: "white"
       }}>
         {(typeof window !== "undefined") &&
-          <React.Suspense fallback={<div style={{textAlign: "center"}}><CircularProgress/></div>}>
+          <React.Suspense fallback={<div css={styles.suspense}><CircularProgress/></div>}>
             <ErrorBoundary>
               <ProjectDetails/>
             </ErrorBoundary>

@@ -1,4 +1,6 @@
 import React, {useEffect} from "react";
+import {css} from "@emotion/react";
+
 import CircularProgress from "@mui/material/CircularProgress";
 import {AppWrapper, ExternalLink, InfoCard} from "@eto/eto-ui-components";
 import { useStaticQuery, graphql } from "gatsby";
@@ -8,6 +10,13 @@ import config from "../data/config.json";
 /* Set the body margin and padding to 0 here */
 import "../styles/styles.css";
 const Dashboard = React.lazy(() => import("../components/dashboard"));
+
+const styles = {
+  suspense: css`
+    text-align: center;
+    margin: 40px;
+  `
+};
 
 const IndexPage = () => {
   useEffect(() => {
@@ -42,7 +51,7 @@ const IndexPage = () => {
         </div>}
       />
       {(typeof window !== "undefined") &&
-        <React.Suspense fallback={<div style={{textAlign: "center"}}><CircularProgress/></div>}>
+        <React.Suspense fallback={<div css={styles.suspense}><CircularProgress/></div>}>
           <Dashboard/>
         </React.Suspense>
       }
