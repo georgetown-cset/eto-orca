@@ -15,7 +15,7 @@ export const tooltips = {
   "number_of_mentions": "Each of the listed repositories is associated with at least one article in the selecte field in ORCA's dataset. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>"
 };
 
-export const helpStyle = {height: "20px", verticalAlign: "middle"};
+export const helpStyle = {verticalAlign: "middle", marginBottom: "2px"};
 export const sortMapping = {
   "stargazers_count": "Stars",
   "subscribers_count": "Watchers",
