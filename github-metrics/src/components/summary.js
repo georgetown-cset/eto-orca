@@ -45,6 +45,9 @@ const styles = {
   statWrapper: css`
     text-align: center;
   `,
+  statTitle: css`
+    font-weight: normal;
+  `,
   headerContainer: css`
     margin: 0 20px;
   `
@@ -52,7 +55,7 @@ const styles = {
 
 const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
   const fmtStat = sortMappingBlurb[stat].toLowerCase();
-  const title = <span>
+  const title = <span css={styles.statTitle}>
     Top repositories by <strong>{stat === "relevance" ? <span>relevance to {fieldName} research <HelpTooltip text={tooltips.relevance}/></span> : fmtStat}</strong>
   </span>;
   const yearlyRepoStats = {};
