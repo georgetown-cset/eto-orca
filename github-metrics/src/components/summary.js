@@ -199,6 +199,20 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
     const params = urlParams.toString().length > 0 ? "?" + urlParams.toString() : "";
     window.history.replaceState(null, null, window.location.pathname + params);
     setOrderBy(newSort);
+    if (window.plausible) {
+      window.plausible("Set summary sort", {props: {
+        "sort_metric": newSort
+      }});
+    }
+  };
+
+  const setAndLogExpanded = (newExpanded) => {
+    if (window.plausible) {
+      window.plausible("Set summary accordion state", {props: {
+        "expanded": JSON.stringify(newExpanded)
+      }});
+    }
+    setExpanded(newExpanded)
   };
 
   return (
@@ -220,7 +234,7 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
             <Dropdown
               selected={orderBy}
               setSelected={(val) => updateOrderBy(val)}
-              inputLabel={"Order by"}
+              inputLabel={"Sort by"}
               options={sortOptions}
             />
           </div>
@@ -230,7 +244,7 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
         key={JSON.stringify(expanded)}
         panels={accordionDetails}
         expanded={expanded}
-        updateExpanded={(newExpanded) => setExpanded(newExpanded)} headingVariant={"h6"}
+        updateExpanded={(newExpanded) => setAndLogExpanded(newExpanded)} headingVariant={"h6"}
       />
     </div>
   );

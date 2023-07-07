@@ -16,5 +16,11 @@ module.exports = {
     options: {
       icon: "src/images/favicon.svg"
     },
+  },
+  {
+    resolve: "gatsby-plugin-plausible",
+    options: {
+      domain: "orca.eto.tech",
+    },
   },]
 };

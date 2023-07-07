@@ -65,7 +65,7 @@ const ProjectMetadata = (props) => {
               {option === "num_references" ?
                 <span>{getValue(option)} mentions in <strong>{cleanFieldName(field)}</strong> articles ({getValue("relevance").toFixed(2)} relevance<HelpTooltip style={helpStyle} text={tooltips.relevance_list}/>)</span>
               :
-                <span><strong>{metaMapping[option]}{getTooltip(option)}</strong>: {getValue(option)}</span>
+                <span><strong>{metaMapping[option]}</strong>: {getValue(option)}</span>
               }
             </span>
           ))}

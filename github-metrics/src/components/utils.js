@@ -10,7 +10,7 @@ export const tooltips = {
   "research_field": "Select a field to view related open-source software projects.",
   "mentions": "Sort projects by how often they mention or are mentioned by articles in the selected research field. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>",
   "criticality": "Sort projects by their OpenSSF criticality scores, which measure overall influence and importance in the OSS ecosystem. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>",
-  "criticality_list": "OpenSSF criticality scores, which measure overall influence and importance in the OSS ecosystem. <ExternalLink href={\"https://tktk\"}>Read more >>",
+  "criticality_list": "OpenSSF criticality score, which measures overall influence and importance in the OSS ecosystem. <ExternalLink href={\"https://tktk\"}>Read more >>",
   "field_references": "Fields most often linked to this project. Based on direct citations in articles from the field and references in project README files. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>",
   "number_of_mentions": "Each of the listed repositories is associated with at least one article in the selecte field in ORCA's dataset. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>"
 };
@@ -36,12 +36,14 @@ export const sortMappingBlurb = {
   "pushed_at": "Last commit date",
   "open_issues": "Open issues"
 };
-sortMappingBlurb["num_references"] = "Mention in research";
+sortMappingBlurb["num_references"] = "Mentions in research";
 sortMappingBlurb["relevance"] = "Relevance";
+sortMappingBlurb["criticality_score"] = "Criticality score";
 
 export const metaMapping = {...sortMapping};
 metaMapping["license"] = "License";
 metaMapping["language"] = "Top Programming Language";
+metaMapping["criticality_score"] = <span>Criticality score<HelpTooltip iconStyle={helpStyle} text={tooltips.criticality_list}/></span>;
 
 export const keyToTitle = {
   "star_dates": "Stars over time",

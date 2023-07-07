@@ -91,6 +91,11 @@ const ProjectDetails = () => {
     const urlParams = new URLSearchParams(window.location.search);
     if(urlParams.get("name") !== null){
       const project_name = urlParams.get("name");
+      if (window.plausible) {
+        window.plausible("Loaded project detail", {props: {
+          "project_name": project_name
+        }});
+      }
       if(!(project_name in name_to_id)){
         setData([])
       } else {
@@ -130,7 +135,7 @@ const ProjectDetails = () => {
         <div css={styles.articleMeta}>{article.year}{article.source ? `: ${article.source}`: ""}. {article.citations} citations.</div>
       </div>)}
     </div>
-  }
+  };
 
   const updateAccordionDetails = (currData) => {
     const graphConfig = [
@@ -170,7 +175,16 @@ const ProjectDetails = () => {
     ));
     newDetails.push(...metricDetails);
     setAccordionDetails(newDetails);
-    setExpanded([newDetails[0].id, newDetails[1].id]);
+    setAndLogExpanded([newDetails[0].id, newDetails[1].id]);
+  };
+
+  const setAndLogExpanded = (newExpanded) => {
+    if (window.plausible) {
+      window.plausible("Set detail accordion state", {props: {
+        "expanded": JSON.stringify(newExpanded)
+      }});
+    }
+    setExpanded(newExpanded)
   };
 
   return (
@@ -225,7 +239,7 @@ const ProjectDetails = () => {
           key={JSON.stringify(expanded)}
           panels={accordionDetails}
           expanded={expanded}
-          updateExpanded={(newExpanded) => setExpanded(newExpanded)} headingVariant={"h6"}
+          updateExpanded={(newExpanded) => setAndLogExpanded(newExpanded)} headingVariant={"h6"}
         />
       </div>
   );

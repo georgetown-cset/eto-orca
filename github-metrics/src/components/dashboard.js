@@ -118,6 +118,11 @@ const Dashboard = () => {
       }
     }
     setFilterValues(updatedFilterValues);
+    if (window.plausible) {
+      window.plausible("Set filters", {props: {
+        "filters": JSON.stringify(updatedFilterValues)
+      }});
+    }
     setMoreFilters(urlParams.has(MORE_FILTERS) && urlParams.get(MORE_FILTERS));
     const urlShowList = urlParams.has(SHOW_LIST) && (urlParams.get(SHOW_LIST).toLowerCase() === "true");
     setShowList(urlShowList);
@@ -203,6 +208,11 @@ const Dashboard = () => {
     obj => (!isCuratedField(filterValues["field_of_study"]) || !FIELD_KEYS.includes(obj["val"])));
 
   const handleFilterUpdate = (updated) => {
+    if (window.plausible) {
+      window.plausible("Set filters", {props: {
+        "filters": JSON.stringify(updated)
+      }});
+    }
     setFilterValues(updated);
     mkRepoData(updated);
     setCurrPage(1);
@@ -256,6 +266,12 @@ const Dashboard = () => {
     const params = urlParams.toString().length > 0 ? "?" + urlParams.toString() : "";
     window.history.replaceState(null, null, window.location.pathname + params);
     setter(newState);
+    if (window.plausible) {
+      window.plausible("Toggle updated", {props: {
+        "toggle": name,
+        "value": newState
+      }});
+    }
     if(name === SHOW_LIST){
       mkRepoData({...filterValues}, newState);
     }
