@@ -6,9 +6,9 @@ import React, {useEffect} from "react";
 import {LineGraph} from "./graph";
 import {css} from "@emotion/react";
 
-import {keyToTitle, sortMapping, getRepoName, sortByKey, cleanFieldName, cleanFieldKey, FIELD_KEYS} from "./utils";
+import {keyToTitle, sortMappingBlurb, getRepoName, sortByKey, cleanFieldName, FIELD_KEYS, tooltips} from "./utils";
 import HighlightBox from "./highlight_box";
-import {Accordion, Dropdown} from "@eto/eto-ui-components";
+import {Accordion, Dropdown, HelpTooltip} from "@eto/eto-ui-components";
 
 
 const styles = {
@@ -29,6 +29,9 @@ const styles = {
   dropdownIntro: css`
     vertical-align: middle;
   `,
+  graphHeader: css`
+    margin: 20px 20px 10px 20px;
+  `,
   statListElt: css`
     line-height: 1.5;
     list-style-type: none;
@@ -48,8 +51,10 @@ const styles = {
 };
 
 const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
-  const fmtStat = sortMapping[stat].toLowerCase();
-  const title = `Top repositories by ${stat === "relevance" ? `relevance to ${fieldName} research` : fmtStat}`;
+  const fmtStat = sortMappingBlurb[stat].toLowerCase();
+  const title = <span>
+    Top repositories by <strong>{stat === "relevance" ? <span>relevance to {fieldName} research <HelpTooltip text={tooltips.relevance}/></span> : fmtStat}</strong>
+  </span>;
   const yearlyRepoStats = {};
   if(yearly !== null) {
     for (let repoStat of yearly) {
@@ -69,14 +74,14 @@ const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
     <HighlightBox title={title} isTall={true}>
       <ul css={styles.statList}>
         {!!data.length && sortByKey(data, stat, field).slice(0, 5).map((row) =>
-          <li css={styles.statListElt}>
+          <li css={styles.statListElt} key={getRepoName(row)}>
             <a href={`/project?name=${getRepoName(row)}`}>
               {getRepoName(row)}
             </a><br/>
             <span css={styles.statDetail}>
               {stat === "relevance" ?
-                <span><strong>{row["relevance"][cleanFieldKey(field)].toFixed(2)}</strong> {fmtStat} (<strong>{row["num_references"][cleanFieldKey(field)]}</strong> references)</span> :
-                <span><strong>{row[stat]}</strong> {fmtStat} (<strong>{yearlyRepoStats[getRepoName(row)].change}</strong>%, {yearlyRepoStats[getRepoName(row)].startYear}-{yearlyRepoStats[getRepoName(row)].endYear})</span>}
+                <span><strong>{row["relevance"][field].toFixed(2)}</strong> {fmtStat} (<strong>{row["num_references"][field]}</strong> references)</span> :
+                <span><strong>{row[stat]}</strong> {fmtStat}{yearlyRepoStats[getRepoName(row)].startYear !== yearlyRepoStats[getRepoName(row)].endYear && <span> (<strong>{yearlyRepoStats[getRepoName(row)].change}</strong>%, {yearlyRepoStats[getRepoName(row)].startYear}-{yearlyRepoStats[getRepoName(row)].endYear})</span>}</span>}
             </span>
           </li>
         )}
@@ -97,6 +102,7 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
         setOrderBy(urlOrder);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const DEFAULT_ORDER_BY = "stargazers_count";
@@ -158,10 +164,18 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
     {
       "id": "pct_contribution",
       "name": "Cumulative percentage of contributions by number of contributors",
-      "content": <LineGraph title={"Cumulative percentage of contributions by number of contributors"}
+      "content": (
+        <div>
+          <div css={styles.graphHeader}>
+            This graph shows the percentage of contributions that are made by the top 20 contributors. Repositories
+            with fewer than 20 contributors will show a partial line.
+          </div>
+          <LineGraph title={"Cumulative percentage of contributions by number of contributors"}
                             showLegend={true}
                             traces={getContribTrace("contrib_counts")}
                             normalizeTime={false}/>
+        </div>
+      )
     },
     {
       "id": "star_dates",
@@ -188,14 +202,14 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
     <div css={styles.card}>
       <div css={styles.headerContainer}>
         <h1 css={styles.summaryContainerLabel}>
-          Currently tracking <strong>{data.length}</strong> software repositories {isCurated ? "related to" : "used for research into"} <strong>{fieldName}</strong>.
+          Currently tracking <a href={window.location.href.includes("?") ? window.location.href+"&show_list=true" : window.location.href.replace(/\/.*/, "")+"/?show_list=true"}><strong>{data.length}</strong> software repositories</a> {isCurated ? "related to" : "mentioned in research into"} <strong>{fieldName}</strong>.
         </h1>
         <div css={styles.statWrapper}>
-          <StatBox stat={"stargazers_count"} yearly={getTrace("star_dates", val => val[1], "stargazers_count")} data={data}/>
-          <StatBox stat={"num_contributors"} yearly={getTrace("commit_dates", val => val[1]+val[2], "num_contributors")} data={data}/>
           {isCurated ?
-            <StatBox stat={"open_issues"} yearly={getTrace("issue_dates", val => val[2], "open_issues")} data={data}/> :
-            <StatBox stat={"relevance"} data={data} field={field} fieldName={fieldName}/>}
+            <StatBox key={"open_issues"} stat={"open_issues"} yearly={getTrace("issue_dates", val => val[2], "open_issues")} data={data}/> :
+            <StatBox key={"relevance"} stat={"relevance"} data={data} field={field} fieldName={fieldName}/>}
+          <StatBox key={"stargazers_count"} stat={"stargazers_count"} yearly={getTrace("star_dates", val => val[1], "stargazers_count")} data={data}/>
+          <StatBox key={"num_contributors"} stat={"num_contributors"} yearly={getTrace("commit_dates", val => val[1]+val[2], "num_contributors")} data={data}/>
         </div>
         <h2 css={styles.summaryContainerLabel}>
           <span css={styles.dropdownIntro}>Trends over time for top repositories by</span>

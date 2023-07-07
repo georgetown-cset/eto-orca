@@ -1,0 +1,135 @@
+Acoustics
+Algebra
+Algorithm
+Analytical chemistry
+Anatomy
+Arithmetic
+Art history
+Artificial intelligence
+Astrobiology
+Astronomy
+Astrophysics
+Atmospheric sciences
+Atomic physics
+Automotive engineering
+Biochemistry
+Bioinformatics
+Biomedical engineering
+Calculus
+Cancer research
+Cartography
+Cell biology
+Classical mechanics
+Climatology
+Clinical psychology
+Cognitive psychology
+Cognitive science
+Combinatorial chemistry
+Combinatorics
+Communication
+Composite material
+Computational biology
+Computational chemistry
+Computational physics
+Computational science
+Computer architecture
+Computer engineering
+Computer graphics (images)
+Computer hardware
+Computer network
+Computer security
+Computer vision
+Condensed matter physics
+Control engineering
+Control theory
+Data mining
+Data science
+Database
+Development economics
+Developmental psychology
+Discrete mathematics
+Distributed computing
+Ecology
+Econometrics
+Economic policy
+Electrical engineering
+Embedded system
+Environmental planning
+Epistemology
+Evolutionary biology
+Finance
+Financial economics
+Financial system
+Forensic engineering
+Gender studies
+Genetics
+Geochemistry
+Geometry
+Geophysics
+Human\u2013computer interaction
+Immunology
+Information retrieval
+International economics
+Internet privacy
+Keynesian economics
+Knowledge management
+Law
+Library science
+Linguistics
+Literature
+Machine learning
+Mathematical analysis
+Mathematical economics
+Mathematical optimization
+Mechanics
+Media studies
+Medical education
+Meteorology
+Microeconomics
+Mining engineering
+Molecular biology
+Multimedia
+Natural language processing
+Neuroscience
+Nuclear magnetic resonance
+Nuclear physics
+Operating system
+Operations management
+Optics
+Parallel computing
+Particle physics
+Pattern recognition
+Pedagogy
+Pharmacology
+Process management
+Programming language
+Psychiatry
+Public relations
+Quantum electrodynamics
+Quantum mechanics
+Radiology
+Real-time computing
+Reliability engineering
+Remote sensing
+Risk analysis (engineering)
+Seismology
+Simulation
+Social psychology
+Social science
+Socioeconomics
+Software engineering
+Speech recognition
+Statistics
+Structural engineering
+Systems engineering
+Telecommunications
+Theoretical computer science
+Theoretical physics
+Topology
+Virology
+Visual arts
+World Wide Web
+Zoology
+ai_safety
+asr
+riscv

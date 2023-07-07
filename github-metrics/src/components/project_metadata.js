@@ -4,10 +4,13 @@ Basic project metadata, currently displayed in a few lines of text
 import React from "react";
 import { css } from "@emotion/react";
 
+import {HelpTooltip} from "@eto/eto-ui-components";
+import {helpStyle, tooltips} from "./utils";
+
 import "core-js/features/url";
 import "core-js/features/url-search-params";
 
-import {cleanFieldKey, cleanFieldName, FIELD_KEYS, metaMapping} from "./utils";
+import {cleanFieldName, FIELD_KEYS, metaMapping} from "./utils";
 
 
 const styles = {
@@ -28,14 +31,16 @@ const ProjectMetadata = (props) => {
     if(!data[key]) {
       return 0;
     } else if(showNumReferences && FIELD_KEYS.includes(key)){
-      const cleanField = cleanFieldKey(field);
-      return !(cleanField in data[key]) ? 0 : data[key][cleanField];
+      return !(field in data[key]) ? 0 : data[key][field];
+    } else if(key === "criticality_score"){
+      return data[key].toFixed(2);
     }
     return data[key];
   };
 
   const metaGroups = [
     ["stargazers_count", "subscribers_count"],
+    ["criticality_score"],
     ["num_references"],
     ["open_issues", "num_contributors"],
     ["created_at"],
@@ -44,6 +49,13 @@ const ProjectMetadata = (props) => {
     ["language"]
   ];
 
+  const getTooltip = (key) => {
+    if(key !== "criticality_score"){
+      return "";
+    }
+    return <HelpTooltip style={helpStyle} text={tooltips.criticality_list}/>
+  };
+
   return (
     <div>
       {metaGroups.map((group, group_idx) => (
@@ -51,9 +63,9 @@ const ProjectMetadata = (props) => {
           {group.map(option => ((showNumReferences) || (option !== "num_references")) && (
             <span css={styles.metaSection} key={option}>
               {option === "num_references" ?
-                <span>{getValue(option)} references in <strong>{cleanFieldName(field)}</strong> articles ({getValue("relevance").toFixed(2)} relevance)</span>
+                <span>{getValue(option)} mentions in <strong>{cleanFieldName(field)}</strong> articles ({getValue("relevance").toFixed(2)} relevance<HelpTooltip style={helpStyle} text={tooltips.relevance_list}/>)</span>
               :
-                <span><strong>{metaMapping[option]}</strong>: {getValue(option)}</span>
+                <span><strong>{metaMapping[option]}{getTooltip(option)}</strong>: {getValue(option)}</span>
               }
             </span>
           ))}

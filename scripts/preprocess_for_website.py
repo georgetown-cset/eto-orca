@@ -333,15 +333,17 @@ def read_rows(input_dir: str) -> tuple:
                 row["num_references"][field_name] += 1
                 if row["num_references"][field_name] >= MIN_FIELD_REFERENCES:
                     field_to_repos[field_name].add(repo_id)
-        if not (
-            repo_name in curated_repos
-            or any(
-                [
-                    row["num_references"][field] >= MIN_FIELD_REFERENCES
-                    for field in row["num_references"]
-                ]
+        if (
+            not (
+                repo_name in curated_repos
+                or any(
+                    [
+                        row["num_references"][field] >= MIN_FIELD_REFERENCES
+                        for field in row["num_references"]
+                    ]
+                )
             )
-        ):
+        ) and not (repo_name.lower() == "parsl/parsl"):
             continue
         row["language"] = row.get("language", "No language detected")
         language_counts[row["language"]] = language_counts.get(row["language"], 0) + 1
@@ -356,13 +358,23 @@ def write_data(input_dir: str, output_dir: str) -> None:
     :param output_dir: Directory where output json should be written for the webapp
     :return: None
     """
+    # TODO: refactor, this is getting long
     field_to_repos, language_counts, id_to_repo = read_rows(input_dir)
-    sizeable_fields = {
-        field for field in field_to_repos.keys() if len(field_to_repos[field]) > 5
-    }
-    field_to_repos = {
-        fn: list(elts) for fn, elts in field_to_repos.items() if fn in sizeable_fields
-    }
+    with open(os.path.join("fields", "exclude.txt")) as f:
+        exclude = {line.strip() for line in f.readlines() if line.strip()}
+    with open(os.path.join("fields", "expected.txt")) as f:
+        expected = {line.strip() for line in f.readlines() if line.strip()}
+    sizeable_fields = set()
+    # need a copy of the field list to avoid RuntimeError: dictionary changed size during iteration
+    fields = {f for f in field_to_repos}
+    for field in fields:
+        if (field not in exclude) and (len(field_to_repos[field]) > 10):
+            if field not in expected:
+                print(f"Unexpected field: {field}")
+            sizeable_fields.add(field)
+            field_to_repos[field] = list(field_to_repos[field])
+        else:
+            field_to_repos.pop(field)
     language_to_canonical_name = {}
     for lang in language_counts:
         lower_lang = lang.lower()
@@ -396,7 +408,8 @@ def write_data(input_dir: str, output_dir: str) -> None:
         id_to_repo[id]["owner_name"] + "/" + id_to_repo[id]["current_name"]: id
         for id in id_to_repo
     }
-    add_repo_tfidf(id_to_repo, len(field_to_repos))
+    if len(field_to_repos) > 0:
+        add_repo_tfidf(id_to_repo, len(field_to_repos))
     for out_fi, data in [
         ("id_to_repo", id_to_repo),
         ("name_to_id", name_to_id),
@@ -425,22 +438,6 @@ def write_config(config_fi: str) -> None:
         )
 
 
-def write_field_mapping(data_dir: str) -> None:
-    """
-    Update mapping from level0 to child level1 fields
-    :param data_dir: Field containing raw mapping as csv, with one row per level0-level1 pair
-    :return: None
-    """
-    level0to1 = {}
-    with open(os.path.join("static_data", "level0to1.csv")) as f:
-        for line in csv.DictReader(f):
-            level0to1[line["parent"]] = level0to1.get(line["parent"], []) + [
-                line["child"]
-            ]
-    with open(os.path.join(data_dir, "level0to1.json"), mode="w") as f:
-        f.write(json.dumps(level0to1))
-
-
 if __name__ == "__main__":
     default_data_dir = os.path.join("github-metrics", "src", "data")
     parser = argparse.ArgumentParser()
@@ -448,6 +445,5 @@ if __name__ == "__main__":
     parser.add_argument("--data_dir", default=default_data_dir)
     args = parser.parse_args()
 
-    write_field_mapping(args.data_dir)
     write_data(args.input_dir, args.data_dir)
     write_config(os.path.join(args.data_dir, "config.json"))

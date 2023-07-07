@@ -41,6 +41,7 @@ const styles = {
   `,
   dataDesc: css`
     margin: 10px 0px 15px 0px;
+    overflow-wrap: break-word;
   `,
   ghLink: css`
     display: inline-block;
@@ -57,7 +58,7 @@ const styles = {
     padding: 20px 20px 0px 20px;
   `,
   githubLogo: css`
-    height: 15px;
+    height: 12px;
     vertical-align: bottom;
     margin: 0 4px 2px 0;
   `,
@@ -65,11 +66,6 @@ const styles = {
     font-weight: bold;
     text-align: center;
     margin-top: 22px;
-  `,
-  repoIcon: css`
-    height: 16px;
-    vertical-align: bottom;
-    display: inline-block;
   `,
   depsIcon: css`
     height: 13px;
@@ -92,7 +88,7 @@ const ProjectCard = (props) => {
     } else if(["country_contributions", "org_contributions", "downloads"].includes(graph_key)){
       return <LineGraph traces={getCountryTraces(data[graph_key])} title={graph_title} height={"300px"} showLegend={true}/>;
     }
-    return <LineGraph traces={[{x: getX(data[graph_key]), y: getY(data[graph_key])}]}
+    return <BarGraph traces={[{x: getX(data[graph_key]), y: getY(data[graph_key])}]}
                        title={graph_title} height={"300px"}/>;
   };
 
@@ -101,7 +97,12 @@ const ProjectCard = (props) => {
       <div css={styles.metadataContainer}>
         <div css={styles.leftPanel}>
           <span>
-            <h4 css={styles.ghLink}><ExternalLink href={"https://github.com/"+repo_name}><img src={githubLogo} css={styles.githubLogo}/>{repo_name}<LaunchIcon css={styles.repoIcon}/></ExternalLink></h4>
+            <h4 css={styles.ghLink}><ExternalLink href={`/project?name=${repo_name}`}>{repo_name}</ExternalLink></h4>
+            <span css={styles.depsLink}>
+              <ExternalLink href={"https://github.com/"+repo_name}>
+                <img src={githubLogo} css={styles.githubLogo}/>GitHub<LaunchIcon css={styles.depsIcon}/>
+              </ExternalLink>
+            </span>
             {data["has_deps_dev"] &&
             <span css={styles.depsLink}>
               <ExternalLink href={"https://deps.dev/project/github/" + data["owner_name"] + "%2F" + data["current_name"]}>
@@ -120,7 +121,7 @@ const ProjectCard = (props) => {
         </div>
       </div>
       <div css={styles.buttonContainer}>
-        <ButtonStyled style={{width: "100%", color: "white"}} href={`/project?name=${repo_name}`} target={"_blank"} rel={"noopener"}>&gt;&gt; Full profile</ButtonStyled>
+        <ButtonStyled style={{width: "100%", color: "white"}} href={`/project?name=${repo_name}`} target={"_blank"} rel={"noopener"}>Full profile &gt;&gt;</ButtonStyled>
       </div>
     </div>
   )

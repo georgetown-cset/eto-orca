@@ -37,6 +37,7 @@ LICENSE_TO_GROUP = {
     "Do What The F*ck You Want To Public License": OTHER_LICENSE,
     "Eclipse Public License 1.0": OTHER_LICENSE,
     "Eclipse Public License 2.0": OTHER_LICENSE,
+    "Educational Community License v2.0": OTHER_LICENSE,
     "European Union Public License 1.1": OTHER_LICENSE,
     "European Union Public License 1.2": OTHER_LICENSE,
     "GNU Affero General Public License v3.0": "GNU",

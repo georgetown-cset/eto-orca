@@ -34,6 +34,30 @@ exports[`Project metadata renders correctly with no references 1`] = `
         </div>
         <div
           class="css-kq7hyf-sortOption"
+        >
+          <span
+            class="css-1xpyfpg-metaSection"
+          >
+            <span>
+              <strong>
+                Criticality score
+                <span>
+                  <img
+                    alt="Documentation"
+                    class="css-2bdo2t-HelpTooltip"
+                    data-mui-internal-clone-element="true"
+                    src=""
+                    style="height: 20px; vertical-align: middle; cursor: pointer; fill: var(--bright-blue);"
+                  />
+                </span>
+              </strong>
+              : 
+              0
+            </span>
+          </span>
+        </div>
+        <div
+          class="css-kq7hyf-sortOption"
         />
         <div
           class="css-kq7hyf-sortOption"
@@ -146,6 +170,30 @@ exports[`Project metadata renders correctly with no references 1`] = `
           <span>
             <strong>
               Watchers
+            </strong>
+            : 
+            0
+          </span>
+        </span>
+      </div>
+      <div
+        class="css-kq7hyf-sortOption"
+      >
+        <span
+          class="css-1xpyfpg-metaSection"
+        >
+          <span>
+            <strong>
+              Criticality score
+              <span>
+                <img
+                  alt="Documentation"
+                  class="css-2bdo2t-HelpTooltip"
+                  data-mui-internal-clone-element="true"
+                  src=""
+                  style="height: 20px; vertical-align: middle; cursor: pointer; fill: var(--bright-blue);"
+                />
+              </span>
             </strong>
             : 
             0
@@ -336,14 +384,48 @@ exports[`Project metadata renders correctly with references 1`] = `
             class="css-1xpyfpg-metaSection"
           >
             <span>
+              <strong>
+                Criticality score
+                <span>
+                  <img
+                    alt="Documentation"
+                    class="css-2bdo2t-HelpTooltip"
+                    data-mui-internal-clone-element="true"
+                    src=""
+                    style="height: 20px; vertical-align: middle; cursor: pointer; fill: var(--bright-blue);"
+                  />
+                </span>
+              </strong>
+              : 
+              0
+            </span>
+          </span>
+        </div>
+        <div
+          class="css-kq7hyf-sortOption"
+        >
+          <span
+            class="css-1xpyfpg-metaSection"
+          >
+            <span>
               76
-               references in 
+               mentions in 
               <strong>
                 algebraic geometry
               </strong>
                articles (
               42.42
-               relevance)
+               relevance
+              <span>
+                <img
+                  alt="Documentation"
+                  class="css-2bdo2t-HelpTooltip"
+                  data-mui-internal-clone-element="true"
+                  src=""
+                  style="height: 20px; vertical-align: middle; cursor: pointer; fill: var(--bright-blue);"
+                />
+              </span>
+              )
             </span>
           </span>
         </div>
@@ -471,14 +553,48 @@ exports[`Project metadata renders correctly with references 1`] = `
           class="css-1xpyfpg-metaSection"
         >
           <span>
+            <strong>
+              Criticality score
+              <span>
+                <img
+                  alt="Documentation"
+                  class="css-2bdo2t-HelpTooltip"
+                  data-mui-internal-clone-element="true"
+                  src=""
+                  style="height: 20px; vertical-align: middle; cursor: pointer; fill: var(--bright-blue);"
+                />
+              </span>
+            </strong>
+            : 
+            0
+          </span>
+        </span>
+      </div>
+      <div
+        class="css-kq7hyf-sortOption"
+      >
+        <span
+          class="css-1xpyfpg-metaSection"
+        >
+          <span>
             76
-             references in 
+             mentions in 
             <strong>
               algebraic geometry
             </strong>
              articles (
             42.42
-             relevance)
+             relevance
+            <span>
+              <img
+                alt="Documentation"
+                class="css-2bdo2t-HelpTooltip"
+                data-mui-internal-clone-element="true"
+                src=""
+                style="height: 20px; vertical-align: middle; cursor: pointer; fill: var(--bright-blue);"
+              />
+            </span>
+            )
           </span>
         </span>
       </div>

@@ -5,7 +5,7 @@ import React, {useEffect} from "react";
 import {css} from "@emotion/react";
 import Pagination from "@mui/material/Pagination";
 import {styled} from "@mui/material/styles";
-import { ButtonStyled, Dropdown, breakpointStops } from "@eto/eto-ui-components";
+import { Autocomplete, ButtonStyled, Dropdown, HelpTooltip, breakpointStops } from "@eto/eto-ui-components";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
 import "core-js/features/url";
@@ -17,17 +17,17 @@ import StyledSwitch from "./styled_switch";
 import id_to_repo from "../data/id_to_repo";
 import field_to_repos from "../data/field_to_repos";
 import fields from "../data/fields";
-import level0to1 from "../data/level0to1";
 import {
   sortMapping,
   keyToTitle,
   getRepoName,
   customTopics,
   sortByKey,
-  cleanFieldKey,
   cleanFieldName,
-  FIELD_DELIMITER,
-  FIELD_KEYS
+  FIELD_KEYS,
+  sources,
+  helpStyle,
+  tooltips
 } from "./utils";
 
 const setFields = new Set(fields);
@@ -81,7 +81,7 @@ const styles = {
   `,
   filterIcon: css`
     height: 20px;
-    vertical-align: bottom;
+    vertical-align: middle;
   `,
   filterDescriptionContainer: css`
     width: 100%;
@@ -113,19 +113,20 @@ const Dashboard = () => {
     const updatedFilterValues = {...defaultFilterValues};
     const urlParams = new URLSearchParams(window.location.search);
     for(let key in defaultFilterValues){
-      if (urlParams.has(key) && urlParams.get(key) !== null) {
+      if (urlParams.has(key) && (urlParams.get(key) !== null) && (urlParams.get(key) !== "null")) {
         updatedFilterValues[key] = urlParams.get(key)
       }
     }
     setFilterValues(updatedFilterValues);
     setMoreFilters(urlParams.has(MORE_FILTERS) && urlParams.get(MORE_FILTERS));
-    setShowList(urlParams.has(SHOW_LIST) && urlParams.get(SHOW_LIST));
-    mkRepoData(updatedFilterValues);
+    const urlShowList = urlParams.has(SHOW_LIST) && (urlParams.get(SHOW_LIST).toLowerCase() === "true");
+    setShowList(urlShowList);
+    mkRepoData(updatedFilterValues, urlShowList);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const defaultFilterValues = {
-    "field_of_study": `Computer science${FIELD_DELIMITER}Artificial intelligence`,
+    "field_of_study": `Artificial intelligence`,
     "order_by": "relevance",
     "compare_graph": "push_dates",
     "language_group": "All",
@@ -152,7 +153,10 @@ const Dashboard = () => {
   const compareOptions = Object.entries(keyToTitle).map(e => ({"val": e[0], "text": e[1]}));
 
   const getSelectedRepos = (filters, ignoreFilter = null) => {
-    const field = cleanFieldKey(filters["field_of_study"]);
+    const field = filters["field_of_study"];
+    if(field === null){
+      return [];
+    }
     const relKeys = field_to_repos[field];
     const newRepoData = [];
     for(let key of relKeys){
@@ -230,20 +234,13 @@ const Dashboard = () => {
   };
 
   const getFOSOptions = () => {
-    const options = [{"header": <span>Display projects <em>related to</em></span>}].concat(customTopics);
-    options.push({"header": <span>Display projects <em>used for research into</em></span>});
-    const level0Fields = [...Object.keys(level0to1)];
-    level0Fields.sort();
-    for(let level0 of level0Fields){
-      options.push({"header": level0});
-      const level1Fields = level0to1[level0];
-      level1Fields.sort();
-      for(let level1 of level1Fields){
-        if(!isCuratedField(level1) && setFields.has(level1)){
-          options.push({"text": level1, "val": `${level0}${FIELD_DELIMITER}${level1}`})
-        }
+    const options = [...customTopics];
+    for(let field of fields){
+      if(!isCuratedField(field) && setFields.has(field)){
+        options.push({"text": field, "val": field})
       }
     }
+    options.sort((a, b) => a.text.localeCompare(b.text));
     return options;
   };
 
@@ -290,9 +287,15 @@ const Dashboard = () => {
       }
       suffix += licenseBlurb;
     }
-    return (<div>
-      <FilterAltIcon css={styles.filterIcon}/> Showing {repoData.length} repositories referenced in {cleanFieldName(filterValues["field_of_study"])} articles{suffix}.
-    </div>)
+    const cleanField = cleanFieldName(filterValues["field_of_study"]);
+    return (
+      <div>
+        <FilterAltIcon css={styles.filterIcon}/> Showing {repoData.length} repositories {
+          isCuratedField(filterValues["field_of_study"]) ? <span>related to {cleanField} according to {sources[filterValues["field_of_study"]]}.</span> :
+            <span>mentioned in {cleanField} articles in our dataset{suffix}.<HelpTooltip style={helpStyle} text={tooltips.number_of_mentions.replace("#SUBJECT", cleanField)}/></span>
+          }
+      </div>
+    )
   };
 
   return (
@@ -302,10 +305,12 @@ const Dashboard = () => {
           <div css={styles.filterContainer}>
             <div>
               <div css={[styles.dropdownContainer, styles.topicContainer]}>
-                <Dropdown
+                <Autocomplete
                   selected={filterValues["field_of_study"]}
                   setSelected={(val) => handleSingleSelectChange(val, "field_of_study")}
-                  inputLabel={"Application Topic"}
+                  id={"research-field"}
+                  inputLabel={<div>Research field<HelpTooltip iconStyle={helpStyle} text={tooltips.research_field}/></div>}
+                  tooltip={tooltips.application_topic}
                   options={getFOSOptions()}
                 />
               </div>
@@ -315,7 +320,7 @@ const Dashboard = () => {
               {showList &&
               <div css={styles.buttonContainer}>
                 <ButtonStyled css={styles.moreFilters} onClick={() => updateToggle(MORE_FILTERS)}>
-                  {moreFilters ? "Hide" : "Show"} Extra Filters
+                  {moreFilters ? "Hide" : "Show"} Filters
                 </ButtonStyled>
                 <ButtonStyled css={styles.moreFilters} onClick={() => handleFilterUpdate({...defaultFilterValues})}>
                   Reset
@@ -349,7 +354,7 @@ const Dashboard = () => {
                 <Dropdown
                   selected={filterValues["order_by"]}
                   setSelected={(val) => handleSingleSelectChange(val, "order_by")}
-                  inputLabel={"Order by"}
+                  inputLabel={"Sort by"}
                   options={sortOptions}
                 />
               </div>
@@ -357,7 +362,7 @@ const Dashboard = () => {
                 <Dropdown
                   selected={filterValues["compare_graph"]}
                   setSelected={(val) => handleSingleSelectChange(val, "compare_graph")}
-                  inputLabel={"Compare by"}
+                  inputLabel={"Show graphs for"}
                   options={compareOptions}
                 />
               </div>
@@ -375,7 +380,7 @@ const Dashboard = () => {
                             sortOptions={sortOptions}/> :
             <div>
               {repoData.slice((currPage-1)*PAGE_SIZE, currPage*PAGE_SIZE).map(repo => (
-                <ProjectCard key={getRepoName(repoData)}
+                <ProjectCard key={getRepoName(repo)}
                              data={repo}
                              field={filterValues["field_of_study"]}
                              graph_key={filterValues["compare_graph"]}

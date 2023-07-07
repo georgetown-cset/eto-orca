@@ -2395,7 +2395,7 @@
   {
     "mode": "NULLABLE",
     "name": "num_releases",
-    "type": "INTEGER"
+    "type": "STRING"
   },
   {
     "mode": "NULLABLE",

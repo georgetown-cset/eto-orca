@@ -5,7 +5,7 @@ distinct_curated AS (
   FROM
     staging_github_metrics.curated_repos
   LEFT JOIN
-    staging_github_metrics.repos_with_full_meta
+    staging_github_metrics.repos_with_full_meta_for_app
     ON
       LOWER(CONCAT(owner_name, "/", matched_name)) = LOWER(repo)
 ),
@@ -19,7 +19,7 @@ distinct_repo_papers AS (
   CROSS JOIN
     UNNEST(merged_ids) AS merged_id
   LEFT JOIN
-    staging_github_metrics.repos_with_full_meta
+    staging_github_metrics.repos_with_full_meta_for_app
     ON
       LOWER(CONCAT(owner_name, "/", matched_name)) = LOWER(repo)
 ),
@@ -180,6 +180,22 @@ org_year AS (
   GROUP BY repo_id
 ),
 
+canonical_pypi AS (
+  SELECT
+    id,
+    downloads,
+    summary,
+    ROW_NUMBER() OVER (PARTITION BY id) AS ranking
+  FROM
+    staging_github_metrics.repos_with_full_meta_for_app
+  INNER JOIN
+    staging_github_metrics.pypi_over_time
+    ON
+      CONCAT(
+        owner_name, "/", matched_name
+      ) = pypi_over_time.repo
+),
+
 canonical_meta AS (
   SELECT
     id,
@@ -202,7 +218,7 @@ canonical_meta AS (
       MAX(owner_name), "/", MAX(current_name)
     ) IN (SELECT name FROM `bigquery-public-data.deps_dev_v1.Projects`) AS has_deps_dev -- noqa: L057
   FROM
-    staging_github_metrics.repos_with_full_meta
+    staging_github_metrics.repos_with_full_meta_for_app
   GROUP BY
     id
 )
@@ -213,6 +229,7 @@ SELECT
   current_name,
   open_issues,
   primary_programming_language,
+  default_score AS criticality_score,
   SPLIT(topics, ",") AS topics,
   stargazers_count,
   subscribers_count,
@@ -221,6 +238,7 @@ SELECT
   updated_at,
   pushed_at,
   paper_meta,
+  articles AS top_articles,
   num_contributors,
   used_by,
   license,
@@ -230,7 +248,7 @@ SELECT
   country_year_contributions,
   org_year_contributions,
   downloads,
-  COALESCE(pypi_over_time.summary, description) AS description,
+  COALESCE(description, canonical_pypi.summary) AS description,
   CONCAT(
     owner_name, "/", current_name
   ) IN (SELECT name FROM `bigquery-public-data.deps_dev_v1.Projects`) AS has_deps_dev -- noqa: L057
@@ -260,16 +278,26 @@ LEFT JOIN
   ON
     id = org_year.repo_id
 LEFT JOIN
-  staging_github_metrics.pypi_over_time
+  `openssf.criticality_score_cron.criticality-score-v0-latest` AS openssf --noqa: L057, L031
   ON
-    CONCAT(
-      owner_name, "/", current_name
-    ) = pypi_over_time.repo
+    github_metrics.get_first_repo_slug( --noqa: L030
+      openssf.repo.url
+    ) = CONCAT(owner_name, "/", current_name)
+LEFT JOIN
+  staging_github_metrics.top_cited_repo_citers
+  USING (id)
+LEFT JOIN
+  canonical_pypi
+  USING (id)
 WHERE
   (
     stargazers_count >= 10
   ) AND (
     (
       ARRAY_LENGTH(paper_meta) > 1
-    ) OR CONCAT(owner_name, "/", current_name) IN (SELECT repo FROM staging_github_metrics.curated_repos)
-  )
+    ) OR CONCAT(
+      owner_name, "/", current_name
+    ) IN (
+      SELECT repo FROM staging_github_metrics.curated_repos
+    ) OR LOWER(CONCAT(owner_name, "/", current_name)) = "parsl/parsl"
+  ) AND ((ranking = 1) OR (ranking IS NULL))

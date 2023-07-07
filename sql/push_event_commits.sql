@@ -43,7 +43,7 @@ with all_events as (
 evt_ranks as (
   select
     *,
-    ROW_NUMBER() over(partition by commit_sha order by push_created_at desc) as evt_ranking
+    ROW_NUMBER() over(partition by commit_sha, repo_id order by push_created_at desc) as evt_ranking
   from all_events
 )
 

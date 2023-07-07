@@ -8,13 +8,13 @@ import "core-js/features/url-search-params";
 
 import id_to_repo from "../data/id_to_repo";
 import name_to_id from "../data/name_to_id";
-import {Accordion, ExternalLink} from "@eto/eto-ui-components";
+import {Accordion, ExternalLink, HelpTooltip} from "@eto/eto-ui-components";
 import {css} from "@emotion/react";
 import LaunchIcon from "@mui/icons-material/Launch";
 import {BarGraph, LineGraph} from "./graph";
 import ProjectMetadata from "./project_metadata";
 
-import {keyToTitle, getCountryTraces, getBarTraces, getX, getY, getRepoName} from "./utils";
+import {keyToTitle, getCountryTraces, getBarTraces, getX, getY, getRepoName, tooltips} from "./utils";
 import HighlightBox from "./highlight_box";
 import githubLogo from "../images/github-mark.png";
 
@@ -77,6 +77,12 @@ const styles = {
   depsIcon: css`
     height: 13px;
     vertical-align: bottom;
+  `,
+  article: css`
+    margin: 20px 40px;
+  `,
+  articleMeta: css`
+    font-style: italic;
   `
 };
 
@@ -95,6 +101,7 @@ const ProjectDetails = () => {
         updateAccordionDetails(newData);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [data, setData] = React.useState({});
@@ -116,9 +123,18 @@ const ProjectDetails = () => {
                       showLegend={true} title={`PyPI downloads over time in ${currName}`}/>;
   };
 
+  const getTopArticles = (articles) => {
+    return <div>
+      {articles.map(article => <div css={styles.article} key={article.title}>
+        <div><strong>{article.link ? <ExternalLink href={article.link}>{article.title}<LaunchIcon css={styles.depsIcon}/></ExternalLink> : <span>{article.title}</span>}</strong></div>
+        <div css={styles.articleMeta}>{article.year}{article.source ? `: ${article.source}`: ""}. {article.citations} citations.</div>
+      </div>)}
+    </div>
+  }
+
   const updateAccordionDetails = (currData) => {
     const graphConfig = [
-      ["push_dates", "line", <span>This graph shows the number of commits made to the main branch of the repository each year.</span>],
+      ["push_dates", "bar", <span>This graph shows the number of commits made to the main branch of the repository each year.</span>],
       ["downloads", "multi-line", <span>
         This graph shows the number of package downloads from PyPI per year, with country affiliations as reported in
         the BigQuery dataset bigquery-public-data.pypi.file_downloads. Note that automated downloads may inflate these counts.
@@ -132,20 +148,29 @@ const ProjectDetails = () => {
         the number of contributors that had made a commit in a previous year.
       </span>],
       ["contrib_counts", "bar", <span>This graph shows the percentage of commits authored by each of the top 20 contributors to the project.</span>],
-      ["star_dates", "line", <span>This graph shows the number of new stars added during each year we track.</span>],
+      ["star_dates", "bar", <span>This graph shows the number of new stars added during each year we track.</span>],
     ];
-    const newDetails = graphConfig.filter(cfg => (cfg[0] in currData) && (currData[cfg[0]].length > 0)).map(cfg => (
+    const newDetails = [];
+    if(("top_articles" in currData) && (currData["top_articles"].length > 0)){
+      newDetails.push({
+        "id": "top_articles",
+        "name": "Top-cited articles that mention this repository",
+        "content": getTopArticles(currData["top_articles"])
+      })
+    }
+    const metricDetails = graphConfig.filter(cfg => (cfg[0] in currData) && (currData[cfg[0]].length > 0)).map(cfg => (
       {
         "id": cfg[0],
         "name": keyToTitle[cfg[0]],
         "content" : <div>
-          <div css={styles.graphHeader}>{cfg[2]}</div>
+          <div css={styles.graphHeader} key={cfg[0]}>{cfg[2]}</div>
           {getGraphs(cfg, currData)}
         </div>
       }
     ));
+    newDetails.push(...metricDetails);
     setAccordionDetails(newDetails);
-    setExpanded([newDetails[0].id]);
+    setExpanded([newDetails[0].id, newDetails[1].id]);
   };
 
   return (
@@ -177,18 +202,18 @@ const ProjectDetails = () => {
               </div>
             </div>
             <div css={styles.introStats}>
-              <HighlightBox title={"Basic statistics"}>
+              <HighlightBox title={"Basic statistics"} isWide={true}>
                 <div css={styles.metadataWrapper}>
                   <ProjectMetadata data={data}/>
                 </div>
               </HighlightBox>
               {"num_references" in data &&
-              <HighlightBox title={"Most frequently citing fields"}>
+              <HighlightBox title={<span>Most frequently citing fields<HelpTooltip text={tooltips.field_references}/></span>} isWide={true}>
                 <ul css={styles.fieldList}>
                   {Object.keys(data["num_references"]).length > 0 ? Object.keys(data["num_references"]).sort((a, b) =>
                     data["num_references"][b] - data["num_references"][a]
-                  ).slice(0, 5).map(field => <li css={styles.fieldListElt}>
-                    {field} (<strong>{data["num_references"][field]}</strong> citation{data["num_references"][field] === 1 ? "" : "s"})
+                  ).slice(0, 5).map(field => <li css={styles.fieldListElt} key={field}>
+                    <a href={"/?show_list=true&field_of_study="+field}>{field}</a> (<strong>{data["num_references"][field]}</strong> citation{data["num_references"][field] === 1 ? "" : "s"})
                   </li>) : <span>No references found</span>}
                 </ul>
               </HighlightBox>

@@ -1,16 +1,43 @@
 /*
 Miscellaneous utilities and shared functionality
  */
+import React from "react";
+import {ExternalLink, HelpTooltip} from "@eto/eto-ui-components";
+
+export const tooltips = {
+  "relevance": "Sort projects by how relevant they are to the selected research field, according to our scoring method. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>",
+  "relevance_list": "An ETO-generated score for how relevant the project is to the selected research field. <ExternalLink href={'https://tktk'}>Read more >>",
+  "research_field": "Select a field to view related open-source software projects.",
+  "mentions": "Sort projects by how often they mention or are mentioned by articles in the selected research field. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>",
+  "criticality": "Sort projects by their OpenSSF scores, which measure overall influence and importance in the OSS ecosystem. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>",
+  "criticality_list": "OpenSSF criticality scores, which measure overall influence and importance in the OSS ecosystem. <ExternalLink href={\"https://tktk\"}>Read more >>",
+  "field_references": "Fields most often linked to this project. Based on direct citations in articles from the field and references in project README files. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>",
+  "number_of_mentions": "Each of the listed repositories is associated with at least one #SUBJECT article in ORCA's dataset. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>"
+};
+
+export const helpStyle = {height: "20px", verticalAlign: "middle"};
 export const sortMapping = {
   "stargazers_count": "Stars",
   "subscribers_count": "Watchers",
+  "criticality_score": "Criticality score",
   "num_contributors": "Contributors",
   "created_at": "Date created",
   "pushed_at": "Last commit date",
   "open_issues": "Open issues",
-  "num_references": "References in research",
-  "relevance": "Relevance"
+  "num_references": <span>Mentions in research<HelpTooltip iconStyle={helpStyle} text={tooltips.mentions}/></span>,
+  "relevance": <span>Relevance<HelpTooltip iconStyle={helpStyle} text={tooltips.relevance}/></span>
 };
+export const sortMappingBlurb = {
+  "stargazers_count": "Stars",
+  "subscribers_count": "Watchers",
+  "criticality_score": "Criticality score",
+  "num_contributors": "Contributors",
+  "created_at": "Date created",
+  "pushed_at": "Last commit date",
+  "open_issues": "Open issues"
+};
+sortMappingBlurb["num_references"] = "Mention in research";
+sortMappingBlurb["relevance"] = "Relevance";
 
 export const metaMapping = {...sortMapping};
 metaMapping["license"] = "License";
@@ -21,21 +48,18 @@ export const keyToTitle = {
   "push_dates": "Commits over time",
   "issue_dates": "Issues over time",
   "commit_dates": "New vs returning contributors over time",
-  "contrib_counts": "Contribution percentages by ranked contributor",
-  "downloads": "PyPI downloads over time"
+  "contrib_counts": "Contributor distribution",
+  "downloads": "PyPI downloads over time/by country"
 };
 
 export const customTopics = [
   {"val": "ai_safety", "text": "AI Safety"},
-  {"val": "asr", "text": "Speech Recognition"},
   {"val": "riscv", "text": "RISC-V"}
 ];
 const customTopicMap = {};
 for(let topic of customTopics){
   customTopicMap[topic["val"]] = topic["text"];
 }
-
-export const FIELD_DELIMITER = "---";
 
 export const FIELD_KEYS = ["num_references", "relevance"];
 
@@ -72,7 +96,9 @@ export const getCountryTraces = (graphData) => {
 const barTraceNames = {
   "issue_dates": ["Opened", "Closed"],
   "commit_dates": ["New", "Returning"],
-  "contrib_counts": ["Num Contributions"]
+  "contrib_counts": ["Num Contributions"],
+  "push_dates": ["Num Commits"],
+  "star_dates": ["Num Stars"]
 };
 
 // returns bar graph traces
@@ -108,8 +134,7 @@ export const getRepoName = (row) => {
 export const sortByKey = (toSort, key, field=null) => {
   const sorted = [...toSort];
   if(FIELD_KEYS.includes(key)){
-    const cleanField = cleanFieldKey(field);
-    sorted.sort((r1, r2) => r2[key][cleanField] - r1[key][cleanField]).filter(r => !r[key][cleanField]);
+    sorted.sort((r1, r2) => r2[key][field] - r1[key][field]).filter(r => !r[key][field]);
   } else if(["created_at", "pushed_at"].includes(key)){
     sorted.sort((r1, r2) => new Date(r2[key]) - new Date(r1[key]));
   } else {
@@ -119,6 +144,9 @@ export const sortByKey = (toSort, key, field=null) => {
 };
 
 export const cleanFieldName = (field) => {
+  if(field === null){
+    return null;
+  }
   let clean = field;
   if(field in customTopicMap){
     clean = customTopicMap[field];
@@ -127,9 +155,10 @@ export const cleanFieldName = (field) => {
   for(let [patt, capitalized] of [[/(\b)ai(\b)/, "$1AI$2"], [/risc-v/, "RISC-V"]]){
     clean = clean.replace(patt, capitalized);
   }
-  return cleanFieldKey(clean);
+  return clean;
 };
 
-export const cleanFieldKey = (rawField) => {
-  return rawField.includes(FIELD_DELIMITER) ? rawField.split(FIELD_DELIMITER)[1] : rawField;
+export const sources = {
+  "riscv": "CSET curation",
+  "ai_safety": "CSET curation"
 };

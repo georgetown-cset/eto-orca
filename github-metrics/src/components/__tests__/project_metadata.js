@@ -18,7 +18,7 @@ describe("Project metadata", () => {
       />
     );
     expect(card).toMatchSnapshot();
-    expect(card.queryAllByText("References")).toHaveLength(0);
+    expect(card.queryAllByText("Mentions")).toHaveLength(0);
   });
 
   it("renders correctly with references", () => {
@@ -40,7 +40,7 @@ describe("Project metadata", () => {
       />
     );
     expect(card).toMatchSnapshot();
-    expect(card.queryAllByText("references", {exact: false})).toHaveLength(1);
+    expect(card.queryAllByText("mentions", {exact: false})).toHaveLength(1);
   });
 
 });
