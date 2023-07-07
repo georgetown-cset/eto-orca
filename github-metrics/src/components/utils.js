@@ -55,7 +55,7 @@ export const keyToTitle = {
 export const customTopics = [
   {"val": "ai_safety", "text": "AI Safety"},
   {"val": "riscv", "text": "RISC-V"},
-  {"val": "weto", "text": "Wind Energy Technology Office"},
+  {"val": "weto", "text": "Wind Energy Technology Office software"},
   {"val": "Earth Systems: Atmosphere", "text": "Earth systems: Atmosphere"},
   {"val": "Energy Systems: Energy Distribution and Grids", "text": "Energy systems: Energy distribution and grids"},
   {"val": "Natural Resources: Agriculture and Nutrition", "text": "Natural resources: Agriculture and nutrition"},
@@ -188,7 +188,39 @@ export const cleanFieldName = (field) => {
   return clean;
 };
 
+const ostLink = <ExternalLink href={"https://github.com/protontypes/open-sustainable-technology"}>Open Sustainable Technology</ExternalLink>
+
 export const sources = {
   "riscv": "CSET curation",
-  "ai_safety": "CSET curation"
+  "ai_safety": "CSET curation",
+  "weto": <ExternalLink href={"http://www.rafmudaf.com/WETOStack/software_list.html#weto-software"}>WETOStack</ExternalLink>,
+  "Earth Systems: Atmosphere": ostLink,
+  "Energy Systems: Energy Distribution and Grids": ostLink,
+  "Natural Resources: Agriculture and Nutrition": ostLink,
+  "Natural Resources: Soil and Land": ostLink,
+  "Emissions: Emission Observation and Modeling": ostLink,
+  "Energy Systems: Datasets on Energy Systems": ostLink,
+  "Consumption of Energy and Resources: Computation and Communication": ostLink,
+  "Sustainable Development: Knowledge Platforms": ostLink,
+  "Earth Systems: Cryosphere": ostLink,
+  "Earth Systems: Biosphere": ostLink,
+  "Climate and Earth Science: Earth and Climate Modeling": ostLink,
+  "Energy Systems: Energy Modeling and Optimization": ostLink,
+  "Renewable Energy: Wind Energy": ostLink,
+  "Earth Systems: Hydrosphere": ostLink,
+  "Climate and Earth Science: Meteorological Observation and Forecast": ostLink,
+  "Natural Resources: Water Supply and Quality": ostLink,
+  "Climate and Earth Science: Radiative Transfer": ostLink,
+  "Industrial Ecology: Life Cycle Assessment": ostLink,
+  "Emissions: Carbon Intensity and Accounting": ostLink,
+  "Energy Storage: Battery": ostLink,
+  "Climate and Earth Science: Climate Data Processing and Access": ostLink,
+  "Renewable Energy: Photovoltaics and Solar Energy": ostLink,
+  "Consumption of Energy and Resources: Mobility and Transportation": ostLink,
+  "Sustainable Development: Sustainable Investment": ostLink,
+  "Natural Resources: Air Quality": ostLink,
+  "Climate and Earth Science: Natural Hazard and Storm": ostLink,
+  "Consumption of Energy and Resources: Buildings and Heating": ostLink,
+  "Industrial Ecology: Circular Economy and Waste": ostLink,
+  "Sustainable Development: Data Catalogs and Interfaces": ostLink,
 };
