@@ -251,14 +251,26 @@ curr_data AS (
     id,
     other
   FROM
-    `githubarchive.month.202306` )
+    `githubarchive.month.202306` ),
+
+-- needed to allow match to data for old repo names
+relevant_ids AS (
+  SELECT repo.id AS id
+  FROM
+    curr_data
+  WHERE
+    repo.name IN (
+      SELECT repo_name
+      FROM
+        relevant_repos)
+)
 
 SELECT
   *
 FROM
   curr_data
 WHERE
-  repo.name IN (
-    SELECT repo_name
+  repo.id IN (
+    SELECT id
     FROM
-      relevant_repos)
+      relevant_ids)
