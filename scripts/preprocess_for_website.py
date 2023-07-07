@@ -218,7 +218,7 @@ def get_curated_repos():
     """
     repo_to_field = {}
     for fi in os.listdir("repo_lists"):
-        if fi.startswith(".") or not fi.endswith(".txt"):
+        if (fi == "weto.txt") or fi.startswith(".") or not fi.endswith(".txt"):
             continue
         field = fi.replace(".txt", "")
         with open(os.path.join("repo_lists", fi)) as f:
@@ -237,11 +237,17 @@ def get_curated_repos():
                     "repo_lists", "open_sustainable_technology", category, sub_category
                 )
             ) as f:
-                field = f"{category}: {sub_category.replace('.txt', '')}"
                 for line in f:
                     line = line.strip()
                     if line:
-                        repo_to_field[line] = repo_to_field.get(line, []) + [field]
+                        repo_to_field[line] = repo_to_field.get(line, []) + [category]
+    with open(os.path.join("repo_lists", "weto.txt")) as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                repo_to_field[line] = repo_to_field.get(line, []) + ["weto"]
+                if "Renewable Energy" not in repo_to_field.get(line):
+                    repo_to_field[line].append("Renewable Energy")
     return repo_to_field
 
 

@@ -133,33 +133,14 @@ Zoology
 ai_safety
 asr
 riscv
-Earth Systems: Atmosphere
-Energy Systems: Energy Distribution and Grids
-Natural Resources: Agriculture and Nutrition
-Natural Resources: Soil and Land
-Emissions: Emission Observation and Modeling
-Energy Systems: Datasets on Energy Systems
-Consumption of Energy and Resources: Computation and Communication
-Sustainable Development: Knowledge Platforms
-Earth Systems: Cryosphere
-Earth Systems: Biosphere
-Climate and Earth Science: Earth and Climate Modeling
-Energy Systems: Energy Modeling and Optimization
-Renewable Energy: Wind Energy
-Earth Systems: Hydrosphere
-Climate and Earth Science: Meteorological Observation and Forecast
-Natural Resources: Water Supply and Quality
-Climate and Earth Science: Radiative Transfer
-Industrial Ecology: Life Cycle Assessment
 weto
-Emissions: Carbon Intensity and Accounting
-Energy Storage: Battery
-Climate and Earth Science: Climate Data Processing and Access
-Renewable Energy: Photovoltaics and Solar Energy
-Consumption of Energy and Resources: Mobility and Transportation
-Sustainable Development: Sustainable Investment
-Natural Resources: Air Quality
-Climate and Earth Science: Natural Hazard and Storm
-Consumption of Energy and Resources: Buildings and Heating
-Industrial Ecology: Circular Economy and Waste
-Sustainable Development: Data Catalogs and Interfaces
+Emissions
+Earth Systems
+Energy Storage
+Sustainable Development
+Climate and Earth Science
+Industrial Ecology
+Renewable Energy
+Natural Resources
+Consumption of Energy and Resources
+Energy Systems

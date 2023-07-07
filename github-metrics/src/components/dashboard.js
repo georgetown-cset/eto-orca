@@ -234,7 +234,7 @@ const Dashboard = () => {
   };
 
   const getFOSOptions = () => {
-    const options = [...customTopics];
+    const options = [...customTopics.filter(t => t.val !== "weto")];
     for(let field of fields){
       if(!isCuratedField(field) && setFields.has(field)){
         options.push({"text": field, "val": field})
