@@ -87,13 +87,11 @@ const styles = {
     width: 100%;
     display: block;
     margin-top: 10px;
-    text-align: left;
     @media (min-width: ${breakpointStops.tablet_small}px){
       display: inline-block;
       width: 40%;
       vertical-align: bottom;
       margin-top: 0px;
-      text-align: right;
     }
   `,
   filterDescription: css`
@@ -158,7 +156,7 @@ const Dashboard = () => {
 
   const contentContainer = React.createRef();
 
-  const compareOptions = Object.entries(keyToTitle).map(e => ({"val": e[0], "text": e[1]}));
+  const compareOptions = Object.entries(keyToTitle).filter(e => e[0] !== "downloads").map(e => ({"val": e[0], "text": e[1]}));
 
   const getSelectedRepos = (filters, ignoreFilter = null) => {
     const field = filters["field_of_study"];
