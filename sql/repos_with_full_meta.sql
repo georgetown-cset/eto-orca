@@ -1,3 +1,5 @@
+create or replace table staging_github_metrics.repos_with_full_meta as
+
 -- grab fields from repos_with_full_meta_raw, which comes from the scraper scripts, most likely to be relevant
 with contributor_counts as (
   select
@@ -44,7 +46,11 @@ select
   full_metadata.has_issues as has_issues,
   sources,
   num_releases,
-  contributor_counts.num_contributors,
+  case
+    when
+      repos_with_full_meta_raw_for_app.num_contributors like "%+" then contributor_counts.num_contributors
+    else cast(replace(repos_with_full_meta_raw_for_app.num_contributors, ",", "") as int64)
+  end as num_contributors,
   if(full_metadata.homepage = "", null, full_metadata.homepage) as homepage,
   struct(full_metadata.parent.owner.login as owner_name,
     full_metadata.parent.name as repo_name) as fork_of,
