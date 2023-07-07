@@ -163,7 +163,13 @@ const ProjectDetails = () => {
         "content": getTopArticles(currData["top_articles"])
       })
     }
-    const metricDetails = graphConfig.filter(cfg => (cfg[0] in currData) && (currData[cfg[0]].length > 0)).map(cfg => (
+    const metricDetails = graphConfig.filter(cfg =>
+      (cfg[0] in currData) &&
+      (currData[cfg[0]].length > 0) &&
+      // if we have pypi downloads but the primary programming language isn't python, it's probably a spuriously
+      // linked set of pypi downloads, exclude
+      ((cfg[0] !== "downloads") || (data["language"] === "Python"))
+    ).map(cfg => (
       {
         "id": cfg[0],
         "name": keyToTitle[cfg[0]],
