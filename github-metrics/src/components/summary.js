@@ -64,11 +64,13 @@ const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
       const numYears = repoStat.y.length;
       const change = (100*(repoStat.y[numYears - 1] - repoStat.y[numYears - 2]) / repoStat.y[numYears - 2]).toFixed(2);
       const prettyChange = `${change < 0 ? "" : "+"}${change}`;
+      const isBad = (repoStat.y[numYears - 2] === 0) || (!repoStat.x[numYears - 2]) || (!repoStat.x[numYears - 1]) || (repoStat.x[numYears - 2] === repoStat.x[numYears - 1]);
       yearlyRepoStats[repoStat.name] = {
         numYears: numYears,
         change: prettyChange,
         startYear: repoStat.x[numYears - 2],
-        endYear: repoStat.x[numYears - 1]
+        endYear: repoStat.x[numYears - 1],
+        isBad: isBad
       };
     }
   }
@@ -84,7 +86,7 @@ const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
             <span css={styles.statDetail}>
               {stat === "relevance" ?
                 <span><strong>{row["relevance"][field].toFixed(2)}</strong> {fmtStat} (<strong>{row["num_references"][field]}</strong> references)</span> :
-                <span><strong>{row[stat]}</strong> {fmtStat}{yearlyRepoStats[getRepoName(row)].startYear !== yearlyRepoStats[getRepoName(row)].endYear && <span> (<strong>{yearlyRepoStats[getRepoName(row)].change}</strong>%, {yearlyRepoStats[getRepoName(row)].startYear}-{yearlyRepoStats[getRepoName(row)].endYear})</span>}</span>}
+                <span><strong>{row[stat]}</strong> {fmtStat}{!yearlyRepoStats[getRepoName(row)].isBad && <span> (<strong>{yearlyRepoStats[getRepoName(row)].change}</strong>%, {yearlyRepoStats[getRepoName(row)].startYear}-{yearlyRepoStats[getRepoName(row)].endYear})</span>}</span>}
             </span>
           </li>
         )}
