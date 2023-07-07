@@ -1,7 +1,7 @@
 -- get repo's pypi summary and downloads by country over time
 WITH yearly_country_counts AS (
   SELECT
-    repo,
+    id,
     max(summary) AS summary,
     year,
     country_code,
@@ -14,14 +14,18 @@ WITH yearly_country_counts AS (
   LEFT JOIN
     staging_github_metrics.pypi_file_downloads
     USING (project)
-  GROUP BY repo, year, country_code
+  INNER JOIN
+    staging_github_metrics.repos_with_full_meta_for_app
+    ON
+      repo = concat(matched_owner, "/", matched_name)
+  GROUP BY id, year, country_code
 )
 
 SELECT
-  repo,
+  id,
   max(summary) AS summary,
   array_agg(STRUCT(year, country_code, num_downloads)) AS downloads
 FROM
   yearly_country_counts
 GROUP BY
-  repo
+  id

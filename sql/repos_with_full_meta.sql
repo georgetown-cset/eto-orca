@@ -9,8 +9,9 @@ with contributor_counts as (
 )
 
 select
-  owner_name,
+  owner_name as matched_owner,
   repo_name as matched_name,
+  full_metadata.owner.login as current_owner,
   full_metadata.name as current_name,
   used_by,
   num_commits,

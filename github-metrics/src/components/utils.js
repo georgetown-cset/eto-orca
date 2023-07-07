@@ -12,7 +12,7 @@ export const tooltips = {
   "criticality": "Sort projects by their OpenSSF scores, which measure overall influence and importance in the OSS ecosystem. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>",
   "criticality_list": "OpenSSF criticality scores, which measure overall influence and importance in the OSS ecosystem. <ExternalLink href={\"https://tktk\"}>Read more >>",
   "field_references": "Fields most often linked to this project. Based on direct citations in articles from the field and references in project README files. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>",
-  "number_of_mentions": "Each of the listed repositories is associated with at least one #SUBJECT article in ORCA's dataset. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>"
+  "number_of_mentions": "Each of the listed repositories is associated with at least one article in the selecte field in ORCA's dataset. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>"
 };
 
 export const helpStyle = {height: "20px", verticalAlign: "middle"};
@@ -54,7 +54,37 @@ export const keyToTitle = {
 
 export const customTopics = [
   {"val": "ai_safety", "text": "AI Safety"},
-  {"val": "riscv", "text": "RISC-V"}
+  {"val": "riscv", "text": "RISC-V"},
+  {"val": "weto", "text": "Wind Energy Technology Office"},
+  {"val": "Earth Systems: Atmosphere", "text": "Earth systems: Atmosphere"},
+  {"val": "Energy Systems: Energy Distribution and Grids", "text": "Energy systems: Energy distribution and grids"},
+  {"val": "Natural Resources: Agriculture and Nutrition", "text": "Natural resources: Agriculture and nutrition"},
+  {"val": "Natural Resources: Soil and Land", "text": "Natural resources: Soil and land"},
+  {"val": "Emissions: Emission Observation and Modeling", "text": "Emissions: Emission observation and modeling"},
+  {"val": "Energy Systems: Datasets on Energy Systems", "text": "Energy systems: Datasets on energy systems"},
+  {"val": "Consumption of Energy and Resources: Computation and Communication", "text": "Consumption of energy and resources: Computation and communication"},
+  {"val": "Sustainable Development: Knowledge Platforms", "text": "Sustainable development: Knowledge platforms"},
+  {"val": "Earth Systems: Cryosphere", "text": "Earth systems: Cryosphere"},
+  {"val": "Earth Systems: Biosphere", "text": "Earth systems: Biosphere"},
+  {"val": "Climate and Earth Science: Earth and Climate Modeling", "text": "Climate and earth science: Earth and climate modeling"},
+  {"val": "Energy Systems: Energy Modeling and Optimization", "text": "Energy systems: Energy modeling and optimization"},
+  {"val": "Renewable Energy: Wind Energy", "text": "Renewable energy: Wind energy"},
+  {"val": "Earth Systems: Hydrosphere", "text": "Earth systems: Hydrosphere"},
+  {"val": "Climate and Earth Science: Meteorological Observation and Forecast", "text": "Climate and earth science: Meteorological observation and forecast"},
+  {"val": "Natural Resources: Water Supply and Quality", "text": "Natural resources: Water supply and quality"},
+  {"val": "Climate and Earth Science: Radiative Transfer", "text": "Climate and earth science: Radiative transfer"},
+  {"val": "Industrial Ecology: Life Cycle Assessment", "text": "Industrial ecology: Life cycle assessment"},
+  {"val": "Emissions: Carbon Intensity and Accounting", "text": "Emissions: Carbon intensity and accounting"},
+  {"val": "Energy Storage: Battery", "text": "Energy storage: Battery"},
+  {"val": "Climate and Earth Science: Climate Data Processing and Access", "text": "Climate and earth science: Climate data processing and access"},
+  {"val": "Renewable Energy: Photovoltaics and Solar Energy", "text": "Renewable energy: Photovoltaics and solar energy"},
+  {"val": "Consumption of Energy and Resources: Mobility and Transportation", "text": "Consumption of energy and resources: Mobility and transportation"},
+  {"val": "Sustainable Development: Sustainable Investment", "text": "Sustainable development: Sustainable investment"},
+  {"val": "Natural Resources: Air Quality", "text": "Natural resources: Air quality"},
+  {"val": "Climate and Earth Science: Natural Hazard and Storm", "text": "Climate and earth science: Natural hazard and storm"},
+  {"val": "Consumption of Energy and Resources: Buildings and Heating", "text": "Consumption of energy and resources: Buildings and heating"},
+  {"val": "Industrial Ecology: Circular Economy and Waste", "text": "Industrial ecology: Circular economy and waste"},
+  {"val": "Sustainable Development: Data Catalogs and Interfaces", "text": "Sustainable development: Data catalogs and interfaces"},
 ];
 const customTopicMap = {};
 for(let topic of customTopics){
