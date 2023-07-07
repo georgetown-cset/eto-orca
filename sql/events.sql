@@ -4,11 +4,11 @@ WITH
 relevant_repos AS (
   SELECT DISTINCT repo_name
   FROM (
-    SELECT CONCAT(owner_name, "/", matched_name) AS repo_name
+    SELECT CONCAT(matched_owner, "/", matched_name) AS repo_name
     FROM
       staging_github_metrics.repos_with_full_meta_for_app
     UNION DISTINCT
-    SELECT CONCAT(owner_name, "/", current_name) AS repo_name
+    SELECT CONCAT(current_owner, "/", current_name) AS repo_name
     FROM
       staging_github_metrics.repos_with_full_meta_for_app
     WHERE
