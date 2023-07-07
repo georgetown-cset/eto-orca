@@ -12,7 +12,7 @@ export const tooltips = {
   "criticality": "Sort projects by their OpenSSF criticality scores, which measure overall influence and importance in the OSS ecosystem. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>",
   "criticality_list": "OpenSSF criticality score, which measures overall influence and importance in the OSS ecosystem. <ExternalLink href={\"https://tktk\"}>Read more >>",
   "field_references": "Fields most often linked to this project. Based on direct citations in articles from the field and references in project README files. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>",
-  "number_of_mentions": "Each of the listed repositories is associated with at least one article in the selecte field in ORCA's dataset. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>"
+  "number_of_mentions": "Each of the listed repositories is associated with at least one #SUBJECT article in ORCA's dataset. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>"
 };
 
 export const helpStyle = {verticalAlign: "middle", marginBottom: "2px"};

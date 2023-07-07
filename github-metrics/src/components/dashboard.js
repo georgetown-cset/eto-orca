@@ -307,7 +307,7 @@ const Dashboard = () => {
     return (
       <div>
         <FilterAltIcon css={styles.filterIcon}/> Showing {repoData.length} repositories {
-          isCuratedField(filterValues["field_of_study"]) ? <span>related to {cleanField} according to {sources[filterValues["field_of_study"]]}.</span> :
+        isCuratedField(filterValues["field_of_study"]) ? <span>related to {cleanField}.<HelpTooltip style={helpStyle} text={<span>This list is based on {sources[filterValues["field_of_study"]]}.</span>}/></span> :
             <span>mentioned in {cleanField} articles in our dataset{suffix}.<HelpTooltip style={helpStyle} text={tooltips.number_of_mentions.replace("#SUBJECT", cleanField)}/></span>
           }
       </div>
