@@ -32,6 +32,9 @@ const styles = {
   graphHeader: css`
     margin: 20px 20px 10px 20px;
   `,
+  pctGraph: css`
+    padding: 0px 10px 20px 10px;
+  `,
   statListElt: css`
     line-height: 1.5;
     list-style-type: none;
@@ -160,14 +163,14 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
     },
     {
       "id": "open_to_closed",
-      "name": "Ratio of issues or pull requests closed to opened over time",
+      "name": "Ratio of issues and pull requests closed to opened over time",
       "content": <div>
         <div css={styles.graphHeader}>
-          This graph shows the ratio of the number of issues or pull requests closed to opened each year in the displayed projects, as reported in GitHub Archive IssuesEvents. A high ratio of new
+          This graph shows the ratio of the number of issues and pull requests closed to opened each year in the displayed projects, as reported in GitHub Archive IssuesEvents. A high ratio of new
           issues opened to issues closed might indicate the project needs more maintenance capacity. For further discussion, see
           the CHAOSS metrics <ExternalLink href={"https://chaoss.community/kb/metric-issues-new/"}>Issues New</ExternalLink> and <ExternalLink href={"https://chaoss.community/kb/metric-issues-closed/"}>Issues Closed</ExternalLink>.
         </div>
-        <LineGraph title={"Ratio of issues or pull requests closed to opened over time"}
+        <LineGraph title={"Ratio of issues and pull requests closed to opened over time"}
                             showLegend={true} forceInteger={false}
                             traces={getTrace("issue_dates", val => val[1] === 0 ? 0 : val[2]/val[1])}/>
       </div>
@@ -189,17 +192,22 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
     },
     {
       "id": "pct_contribution",
-      "name": "Percentage of contributions by top 20 contributors",
+      "name": "Percentage of commits by top 20 contributors",
       "content": (
         <div>
           <div css={styles.graphHeader}>
-            This graph shows the cumulative percentage of contributions that are made by the top 20 contributors, as reported in GitHub Archive PushEvents. We currently only identify individual contributors based on their names, which may change over time.
+            This graph shows the cumulative percentage of commits that are made by the top 20 contributors across all years, as reported in GitHub Archive PushEvents. We currently only identify individual contributors based on their names, which may change over time.
             Repositories with fewer than 20 contributors will show a partial line. For related discussion, see the CHAOSS metric <ExternalLink href={"https://chaoss.community/kb/metric-bus-factor/"}>Bus Factor</ExternalLink>.
           </div>
-          <LineGraph title={"Cumulative percentage of contributions by top 20 contributors"}
+          <div css={styles.pctGraph}>
+          <LineGraph title={"Cumulative percentage of commits by top 20 contributors"}
                             showLegend={true}
                             traces={getContribTrace("contrib_counts")}
-                            normalizeTime={false}/>
+                            normalizeTime={false}
+                            xTitle={"Contributor ranking"}
+                            yTitle={"Percentage of commits"}
+          />
+          </div>
         </div>
       )
     },

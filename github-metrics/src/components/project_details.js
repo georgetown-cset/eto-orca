@@ -147,7 +147,7 @@ const ProjectDetails = () => {
         see the CHAOSS metric <ExternalLink href={"https://chaoss.community/kb/metric-number-of-downloads/"}>Number of Downloads</ExternalLink>.
       </span>],
       ["issue_dates", "bar", <span>
-        This graph compares the number of issues or pull requests opened per year to the number of issues or pull requests closed, as reported in GitHub Archive IssuesEvents. A high ratio of new
+        This graph compares the number of issues and pull requests opened per year to the number of issues and pull requests closed, as reported in GitHub Archive IssuesEvents. A high ratio of new
         issues opened to issues closed might indicate the project needs more maintenance capacity. For further discussion, see
         the CHAOSS metrics <ExternalLink href={"https://chaoss.community/kb/metric-issues-new/"}>Issues New</ExternalLink> and <ExternalLink href={"https://chaoss.community/kb/metric-issues-closed/"}>Issues Closed</ExternalLink>.
       </span>],
