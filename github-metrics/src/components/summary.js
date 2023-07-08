@@ -8,7 +8,7 @@ import {css} from "@emotion/react";
 
 import {keyToTitle, sortMappingBlurb, getRepoName, sortByKey, cleanFieldName, FIELD_KEYS, tooltips} from "./utils";
 import HighlightBox from "./highlight_box";
-import {Accordion, Dropdown, HelpTooltip} from "@eto/eto-ui-components";
+import {Accordion, Dropdown, ExternalLink, HelpTooltip} from "@eto/eto-ui-components";
 
 
 const styles = {
@@ -149,33 +149,54 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
     {
       "id": "push_dates",
       "name": keyToTitle["push_dates"],
-      "content": <LineGraph title={keyToTitle["push_dates"]} showLegend={true}
+      "content": <div>
+        <div css={styles.graphHeader}>
+          This graph shows the number of commits made to any branch of the displayed projects each year, as reported in GitHub Archive PushEvents. Within a project,
+          we deduplicate commits based on their hash.
+        </div>
+        <LineGraph title={keyToTitle["push_dates"]} showLegend={true}
                  traces={getTrace("push_dates")}/>
+      </div>
     },
     {
       "id": "open_to_closed",
-      "name": "Ratio of issues closed to opened over time",
-      "content": <LineGraph title={"Ratio of issues closed to opened over time"}
+      "name": "Ratio of issues or pull requests closed to opened over time",
+      "content": <div>
+        <div css={styles.graphHeader}>
+          This graph shows the ratio of the number of issues or pull requests closed to opened each year in the displayed projects, as reported in GitHub Archive IssuesEvents. A high ratio of new
+          issues opened to issues closed might indicate the project needs more maintenance capacity. For further discussion, see
+          the CHAOSS metrics <ExternalLink href={"https://chaoss.community/kb/metric-issues-new/"}>Issues New</ExternalLink> and <ExternalLink href={"https://chaoss.community/kb/metric-issues-closed/"}>Issues Closed</ExternalLink>.
+        </div>
+        <LineGraph title={"Ratio of issues or pull requests closed to opened over time"}
                             showLegend={true} forceInteger={false}
                             traces={getTrace("issue_dates", val => val[1] === 0 ? 0 : val[2]/val[1])}/>
+      </div>
     },
     {
       "id": "new_vs_returning",
       "name": "Ratio of new vs returning contributors over time",
-      "content": <LineGraph title={"Ratio of new vs returning contributors over time"}
+      "content": <div>
+        <div css={styles.graphHeader}>
+          This graph shows the number of contributors who made a commit for the first time in a given year divided by
+          the number of contributors that had made a commit in a previous year, as reported in GitHub Archive PushEvents.
+          We currently only identify individual contributors based on their names, which may change over time. For further discussion,
+          see the CHAOSS metrics <ExternalLink href={"https://chaoss.community/kb/metric-new-contributors/"}>New Contributors</ExternalLink> and <ExternalLink href={"https://chaoss.community/kb/metric-inactive-contributors/"}>Inactive Contributors</ExternalLink>.
+        </div>
+        <LineGraph title={"Ratio of new vs returning contributors over time"}
                             showLegend={true}
                             traces={getTrace("commit_dates", val => val[2] === 0 ? 0 : val[1]/val[2])}/>
+      </div>
     },
     {
       "id": "pct_contribution",
-      "name": "Cumulative percentage of contributions by number of contributors",
+      "name": "Percentage of contributions by top 20 contributors",
       "content": (
         <div>
           <div css={styles.graphHeader}>
-            This graph shows the percentage of contributions that are made by the top 20 contributors. Repositories
-            with fewer than 20 contributors will show a partial line.
+            This graph shows the cumulative percentage of contributions that are made by the top 20 contributors, as reported in GitHub Archive PushEvents. We currently only identify individual contributors based on their names, which may change over time.
+            Repositories with fewer than 20 contributors will show a partial line. For related discussion, see the CHAOSS metric <ExternalLink href={"https://chaoss.community/kb/metric-bus-factor/"}>Bus Factor</ExternalLink>.
           </div>
-          <LineGraph title={"Cumulative percentage of contributions by number of contributors"}
+          <LineGraph title={"Cumulative percentage of contributions by top 20 contributors"}
                             showLegend={true}
                             traces={getContribTrace("contrib_counts")}
                             normalizeTime={false}/>
@@ -185,9 +206,14 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
     {
       "id": "star_dates",
       "name": keyToTitle["star_dates"],
-      "content": <LineGraph title={keyToTitle["star_dates"]}
+      "content": <div>
+        <div css={styles.graphHeader}>
+          This graph shows the number of new stars added to each project during each year we track, as reported in GitHub Archive WatchEvents.
+        </div>
+        <LineGraph title={keyToTitle["star_dates"]}
                             showLegend={true}
                             traces={getTrace("star_dates")}/>
+      </div>
     }
   ];
 

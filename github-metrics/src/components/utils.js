@@ -23,7 +23,7 @@ export const sortMapping = {
   "num_contributors": "Contributors",
   "created_at": "Date created",
   "pushed_at": "Last commit date",
-  "open_issues": "Open issues",
+  "open_issues": "Open issues and PRs",
   "num_references": <span>Mentions in research<HelpTooltip iconStyle={helpStyle} text={tooltips.mentions}/></span>,
   "relevance": <span>Relevance<HelpTooltip iconStyle={helpStyle} text={tooltips.relevance}/></span>
 };
@@ -34,7 +34,7 @@ export const sortMappingBlurb = {
   "num_contributors": "Contributors",
   "created_at": "Date created",
   "pushed_at": "Last commit date",
-  "open_issues": "Open issues"
+  "open_issues": "Open issues and PRs"
 };
 sortMappingBlurb["num_references"] = "Mentions in research";
 sortMappingBlurb["relevance"] = "Relevance";
@@ -48,7 +48,7 @@ metaMapping["criticality_score"] = <span>Criticality score<HelpTooltip iconStyle
 export const keyToTitle = {
   "star_dates": "Stars over time",
   "push_dates": "Commits over time",
-  "issue_dates": "Issues over time",
+  "issue_dates": "Issues and pull requests over time",
   "commit_dates": "New vs returning contributors over time",
   "contrib_counts": "Contributor distribution",
   "downloads": "PyPI downloads over time/by country"

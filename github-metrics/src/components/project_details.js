@@ -139,21 +139,29 @@ const ProjectDetails = () => {
 
   const updateAccordionDetails = (currData) => {
     const graphConfig = [
-      ["push_dates", "bar", <span>This graph shows the number of commits made to the main branch of the repository each year.</span>],
+      ["push_dates", "bar", <span>This graph shows the number of commits made to the repository each year, as reported in GitHub Archive PushEvents. Within a project,
+          we deduplicate commits based on their hash.</span>],
       ["downloads", "multi-line", <span>
         This graph shows the number of package downloads from PyPI per year, with country affiliations as reported in
-        the BigQuery dataset bigquery-public-data.pypi.file_downloads. Note that automated downloads may inflate these counts.
+        the BigQuery dataset bigquery-public-data.pypi.file_downloads. Note that automated downloads may inflate these counts. For further discussion,
+        see the CHAOSS metric <ExternalLink href={"https://chaoss.community/kb/metric-number-of-downloads/"}>Number of Downloads</ExternalLink>.
       </span>],
       ["issue_dates", "bar", <span>
-        This graph compares the number of issues opened per year to the number of issues closed. A high ratio of new
-        issues opened to issues closed might indicate the project needs more maintenance capacity.
+        This graph compares the number of issues or pull requests opened per year to the number of issues or pull requests closed, as reported in GitHub Archive IssuesEvents. A high ratio of new
+        issues opened to issues closed might indicate the project needs more maintenance capacity. For further discussion, see
+        the CHAOSS metrics <ExternalLink href={"https://chaoss.community/kb/metric-issues-new/"}>Issues New</ExternalLink> and <ExternalLink href={"https://chaoss.community/kb/metric-issues-closed/"}>Issues Closed</ExternalLink>.
       </span>],
       ["commit_dates", "bar", <span>
         This graph compares the number of contributors who made a commit for the first time in a given year to
-        the number of contributors that had made a commit in a previous year.
+        the number of contributors that had made a commit in a previous year, as reported in GitHub Archive PushEvents.
+        We currently only identify individual contributors based on their names, which may change over time. For further discussion,
+        see the CHAOSS metrics <ExternalLink href={"https://chaoss.community/kb/metric-new-contributors/"}>New Contributors</ExternalLink> and <ExternalLink href={"https://chaoss.community/kb/metric-inactive-contributors/"}>Inactive Contributors</ExternalLink>.
       </span>],
-      ["contrib_counts", "bar", <span>This graph shows the percentage of commits authored by each of the top 20 contributors to the project.</span>],
-      ["star_dates", "bar", <span>This graph shows the number of new stars added during each year we track.</span>],
+      ["contrib_counts", "bar", <span>This graph shows the percentage of commits authored by each of the top 20 contributors to the project,
+        as reported in GitHub Archive PushEvents. We currently only identify individual contributors based on their names, which may change over time.
+        For related discussion, see the CHAOSS metric <ExternalLink href={"https://chaoss.community/kb/metric-bus-factor/"}>Bus Factor</ExternalLink>.
+    </span>],
+      ["star_dates", "bar", <span>This graph shows the number of new stars added during each year we track, as reported in GitHub Archive WatchEvents.</span>],
     ];
     const newDetails = [];
     if(("top_articles" in currData) && (currData["top_articles"].length > 0)){

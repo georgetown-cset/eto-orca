@@ -49,13 +49,6 @@ const ProjectMetadata = (props) => {
     ["language"]
   ];
 
-  const getTooltip = (key) => {
-    if(key !== "criticality_score"){
-      return "";
-    }
-    return <HelpTooltip style={helpStyle} text={tooltips.criticality_list}/>
-  };
-
   return (
     <div>
       {metaGroups.map((group, group_idx) => (
