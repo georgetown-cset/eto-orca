@@ -151,7 +151,7 @@ export const sortByKey = (toSort, key, field=null) => {
   } else if(["created_at", "pushed_at"].includes(key)){
     sorted.sort((r1, r2) => new Date(r2[key]) - new Date(r1[key]));
   } else {
-    sorted.sort((r1, r2) => r2[key] - r1[key]);
+    sorted.sort((r1, r2) => (key in r2 ? r2[key] : 0) - (key in r1 ? r1[key] : 0));
   }
   return sorted;
 };
@@ -172,18 +172,19 @@ export const cleanFieldName = (field) => {
 };
 
 const ostLink = <ExternalLink href={"https://github.com/protontypes/open-sustainable-technology"}>Open Sustainable Technology</ExternalLink>;
+const wetoLink = <ExternalLink href={"http://www.rafmudaf.com/WETOStack/software_list.html#weto-software"}>WETOStack</ExternalLink>;
 
 export const sources = {
   "riscv": "CSET curation",
   "ai_safety": "CSET curation",
-  "weto": <ExternalLink href={"http://www.rafmudaf.com/WETOStack/software_list.html#weto-software"}>WETOStack</ExternalLink>,
+  "weto": wetoLink,
   "Emissions": ostLink,
   "Earth Systems": ostLink,
   "Energy Storage": ostLink,
   "Sustainable Development": ostLink,
   "Climate and Earth Science": ostLink,
   "Industrial Ecology": ostLink,
-  "Renewable Energy": ostLink,
+  "Renewable Energy": <span>{ostLink} and {wetoLink}</span>,
   "Natural Resources": ostLink,
   "Consumption of Energy and Resources": ostLink,
   "Energy Systems": ostLink

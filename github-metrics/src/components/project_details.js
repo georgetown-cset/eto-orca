@@ -139,7 +139,7 @@ const ProjectDetails = () => {
 
   const updateAccordionDetails = (currData) => {
     const graphConfig = [
-      ["push_dates", "bar", <span>This graph shows the number of commits made to the repository each year, as reported in GitHub Archive PushEvents. Within a project,
+      ["push_dates", "bar", <span>This graph shows the number of commits made to any branch of the repository each year, as reported in GitHub Archive PushEvents. Within a project,
           we deduplicate commits based on their hash.</span>],
       ["downloads", "multi-line", <span>
         This graph shows the number of package downloads from PyPI per year, with country affiliations as reported in

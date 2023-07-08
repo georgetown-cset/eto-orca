@@ -15,7 +15,7 @@ const styles = {
 
 const Project = () => {
   useEffect(() => {
-    document.title = "Open-Source Software for Emerging Technology Metrics";
+    document.title = "ETO ORCA";
     document.documentElement.lang = "en";
   }, []);
 
