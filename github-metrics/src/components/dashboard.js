@@ -95,11 +95,16 @@ const styles = {
     }
   `,
   filterDescription: css`
-    float: right;
+    @media (min-width: ${breakpointStops.tablet_small}px){
+      float: right;
+    }
   `,
   buttonContainer: css`
     display: inline-block;
     vertical-align: bottom;
+  `,
+  nowrap: css`
+    white-space: nowrap;
   `
 };
 
@@ -309,7 +314,7 @@ const Dashboard = () => {
       <div css={styles.filterDescription}>
         <FilterAltIcon css={styles.filterIcon}/> Showing {repoData.length} repositories {
         isCuratedField(filterValues["field_of_study"]) ? <span>related to {cleanField}{suffix}.<HelpTooltip style={helpStyle} text={<span>This list is based on {sources[filterValues["field_of_study"]]}.</span>}/></span> :
-            <span>mentioned in {cleanField} articles in our dataset{suffix}.<HelpTooltip style={helpStyle} text={tooltips.number_of_mentions.replace("#SUBJECT", cleanField)}/></span>
+          <span>mentioned in {cleanField} articles in our dataset{suffix}<span style={styles.nowrap}>.<HelpTooltip style={helpStyle} text={tooltips.number_of_mentions.replace("#SUBJECT", cleanField)}/></span></span>
           }
       </div>
     )
