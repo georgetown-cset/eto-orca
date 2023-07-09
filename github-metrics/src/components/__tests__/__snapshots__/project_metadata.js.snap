@@ -421,17 +421,22 @@ exports[`Project metadata renders correctly with references 1`] = `
               </strong>
                articles (
               42.42
-               relevance
-              <span>
-                <img
-                  alt="Documentation"
-                  class="css-2bdo2t-HelpTooltip"
-                  data-mui-internal-clone-element="true"
-                  src=""
-                  style="height: 25px; vertical-align: middle; cursor: pointer; fill: var(--bright-blue); margin-bottom: 2px;"
-                />
+               
+              <span
+                class="css-11uz4v6-nowrap"
+              >
+                relevance
+                <span>
+                  <img
+                    alt="Documentation"
+                    class="css-2bdo2t-HelpTooltip"
+                    data-mui-internal-clone-element="true"
+                    src=""
+                    style="height: 25px; vertical-align: middle; cursor: pointer; fill: var(--bright-blue); margin-bottom: 2px;"
+                  />
+                </span>
+                )
               </span>
-              )
             </span>
           </span>
         </div>
@@ -592,17 +597,22 @@ exports[`Project metadata renders correctly with references 1`] = `
             </strong>
              articles (
             42.42
-             relevance
-            <span>
-              <img
-                alt="Documentation"
-                class="css-2bdo2t-HelpTooltip"
-                data-mui-internal-clone-element="true"
-                src=""
-                style="height: 25px; vertical-align: middle; cursor: pointer; fill: var(--bright-blue); margin-bottom: 2px;"
-              />
+             
+            <span
+              class="css-11uz4v6-nowrap"
+            >
+              relevance
+              <span>
+                <img
+                  alt="Documentation"
+                  class="css-2bdo2t-HelpTooltip"
+                  data-mui-internal-clone-element="true"
+                  src=""
+                  style="height: 25px; vertical-align: middle; cursor: pointer; fill: var(--bright-blue); margin-bottom: 2px;"
+                />
+              </span>
+              )
             </span>
-            )
           </span>
         </span>
       </div>
