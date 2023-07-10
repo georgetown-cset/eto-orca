@@ -4,28 +4,46 @@ Miscellaneous utilities and shared functionality
 import React from "react";
 import {ExternalLink, HelpTooltip} from "@eto/eto-ui-components";
 
-export const tooltips = {
-  "relevance": "Sort projects by how relevant they are to the selected research field, according to our scoring method. <ExternalLink href={'https://eto.tech/tool-docs/orca/#relevance-to-different-research-fields'}>Read more >></ExternalLink>",
-  "relevance_list": "An ETO-generated score for how relevant the project is to the selected research field. <ExternalLink href={'https://eto.tech/tool-docs/orca/#relevance-to-different-research-fields'}>Read more >></ExternalLink>",
+const tooltips = {
+  "relevance": "Sort projects by how relevant they are to the selected research field, according to our scoring method.",
+  "relevance_list": "An ETO-generated score for how relevant the project is to the selected research field.",
   "research_field": "Select a field to view related open-source software projects.",
-  "mentions": "Sort projects by how often they mention or are mentioned by articles in the selected research field. <ExternalLink href={'https://eto.tech/tool-docs/orca/#detecting-links-to-oss-projects'}>Read more >></ExternalLink>",
-  "criticality": "Sort projects by their OpenSSF scores, which measure overall influence and importance in the OSS ecosystem. <ExternalLink href={'https://eto.tech/tool-docs/orca/#openssf-criticality-scores'}>Read more >></ExternalLink>",
-  "criticality_list": "OpenSSF criticality scores, which measure overall influence and importance in the OSS ecosystem. <ExternalLink href={'https://eto.tech/tool-docs/orca/#openssf-criticality-scores'}>Read more >>",
-  "field_references": "Fields most often linked to this project. Based on direct citations in articles from the field and references in project README files. <ExternalLink href={'https://eto.tech/tool-docs/orca/#the-automated-process'}>Read more >></ExternalLink>",
-  "number_of_mentions": "Each of the listed repositories is associated with at least one #SUBJECT article in ORCA's dataset. <ExternalLink href={'https://eto.tech/tool-docs/orca/#detecting-links-to-oss-projects'}>Read more >></ExternalLink>"
+  "mentions": "Sort projects by how often they mention or are mentioned by articles in the selected research field.",
+  "criticality": "Sort projects by their OpenSSF criticality scores, which measure overall influence and importance in the OSS ecosystem.",
+  "criticality_list": "OpenSSF criticality scores, which measure overall influence and importance in the OSS ecosystem.",
+  "field_references": "Fields most often linked to this project. Based on mentions in articles from the field and references in project README files.",
+  "number_of_mentions": "Each of the listed repositories is associated with at least one #SUBJECT article in ORCA's dataset."
+};
+
+const tooltipLinks = {
+  "relevance": "https://eto.tech/tool-docs/orca/#relevance-to-different-research-fields",
+  "relevance_list": "https://eto.tech/tool-docs/orca/#relevance-to-different-research-fields",
+  "mentions": "https://eto.tech/tool-docs/orca/#detecting-links-to-oss-projects",
+  "criticality": "https://eto.tech/tool-docs/orca/#openssf-criticality-scores",
+  "criticality_list": "https://eto.tech/tool-docs/orca/#openssf-criticality-scores",
+  "field_references": "https://eto.tech/tool-docs/orca/#the-automated-process",
+  "number_of_mentions": "https://eto.tech/tool-docs/orca/#detecting-links-to-oss-projects"
+};
+
+export const getTooltip = (key, replFrom=null, replTo=null) => {
+  let ttText = tooltips[key];
+  if(replFrom !== null){
+    ttText = ttText.replace(replFrom, replTo);
+  }
+  return <span>{ttText}{key in tooltipLinks && <span> <ExternalLink href={tooltipLinks[key]}>Read more >></ExternalLink></span>}</span>;
 };
 
 export const helpStyle = {verticalAlign: "middle", marginBottom: "2px"};
 export const sortMapping = {
   "stargazers_count": "Stars",
   "subscribers_count": "Watchers",
-  "criticality_score": <span>Criticality score<HelpTooltip iconStyle={helpStyle} text={tooltips.criticality}/></span>,
+  "criticality_score": <span>Criticality score<HelpTooltip iconStyle={helpStyle} text={getTooltip("criticality")}/></span>,
   "num_contributors": "Contributors",
   "created_at": "Date created",
   "pushed_at": "Last commit date",
   "open_issues": "Open issues and PRs",
-  "num_references": <span>Mentions in research<HelpTooltip iconStyle={helpStyle} text={tooltips.mentions}/></span>,
-  "relevance": <span>Relevance<HelpTooltip iconStyle={helpStyle} text={tooltips.relevance}/></span>
+  "num_references": <span>Mentions in research<HelpTooltip iconStyle={helpStyle} text={getTooltip("mentions")}/></span>,
+  "relevance": <span>Relevance<HelpTooltip iconStyle={helpStyle} text={getTooltip("relevance")}/></span>
 };
 export const sortMappingBlurb = {
   "stargazers_count": "Stars",
@@ -43,7 +61,7 @@ sortMappingBlurb["criticality_score"] = "Criticality score";
 export const metaMapping = {...sortMapping};
 metaMapping["license"] = "License";
 metaMapping["language"] = "Top Programming Language";
-metaMapping["criticality_score"] = <span>Criticality score<HelpTooltip iconStyle={helpStyle} text={tooltips.criticality_list}/></span>;
+metaMapping["criticality_score"] = <span>Criticality score<HelpTooltip iconStyle={helpStyle} text={getTooltip("criticality_list")}/></span>;
 
 export const keyToTitle = {
   "star_dates": "Stars over time",

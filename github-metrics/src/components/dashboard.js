@@ -5,7 +5,7 @@ import React, {useEffect} from "react";
 import {css} from "@emotion/react";
 import Pagination from "@mui/material/Pagination";
 import {styled} from "@mui/material/styles";
-import { Autocomplete, ButtonStyled, Dropdown, HelpTooltip, breakpointStops } from "@eto/eto-ui-components";
+import { Autocomplete, ButtonStyled, Dropdown, ExternalLink, HelpTooltip, breakpointStops } from "@eto/eto-ui-components";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
 import "core-js/features/url";
@@ -27,7 +27,7 @@ import {
   FIELD_KEYS,
   sources,
   helpStyle,
-  tooltips
+  getTooltip
 } from "./utils";
 
 const setFields = new Set(fields);
@@ -314,7 +314,7 @@ const Dashboard = () => {
       <div css={styles.filterDescription}>
         <FilterAltIcon css={styles.filterIcon}/> Showing {repoData.length} repositories {
         isCuratedField(filterValues["field_of_study"]) ? <span>related to {cleanField}{suffix}.<HelpTooltip style={helpStyle} text={<span>This list is based on {sources[filterValues["field_of_study"]]}. <ExternalLink href={'https://eto.tech/tool-docs/orca/#manually-compiled-fields'}>Read more >></ExternalLink></span>}/></span> :
-          <span>mentioned in {cleanField} articles in our dataset{suffix}<span style={styles.nowrap}>.<HelpTooltip style={helpStyle} text={tooltips.number_of_mentions.replace("#SUBJECT", cleanField)}/></span></span>
+          <span>mentioned in {cleanField} articles in our dataset{suffix}<span style={styles.nowrap}>.<HelpTooltip style={helpStyle} text={getTooltip("number_of_mentions", "#SUBJECT", cleanField)}/></span></span>
           }
       </div>
     )
@@ -331,8 +331,7 @@ const Dashboard = () => {
                   selected={filterValues["field_of_study"]}
                   setSelected={(val) => handleSingleSelectChange(val, "field_of_study")}
                   id={"research-field"}
-                  inputLabel={<div>Research field<HelpTooltip iconStyle={helpStyle} text={tooltips.research_field}/></div>}
-                  tooltip={tooltips.application_topic}
+                  inputLabel={<div>Research field<HelpTooltip iconStyle={helpStyle} text={getTooltip("research_field")}/></div>}
                   options={getFOSOptions()}
                 />
               </div>
