@@ -5,7 +5,7 @@ import React, {useEffect} from "react";
 import {css} from "@emotion/react";
 import Pagination from "@mui/material/Pagination";
 import {styled} from "@mui/material/styles";
-import { Autocomplete, ButtonStyled, Dropdown, HelpTooltip, breakpointStops } from "@eto/eto-ui-components";
+import { Autocomplete, ButtonStyled, Dropdown, ExternalLink, HelpTooltip, breakpoints } from "@eto/eto-ui-components";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
 import "core-js/features/url";
@@ -27,7 +27,7 @@ import {
   FIELD_KEYS,
   sources,
   helpStyle,
-  tooltips
+  getTooltip
 } from "./utils";
 
 const setFields = new Set(fields);
@@ -40,7 +40,7 @@ const styles = {
     vertical-align: top;
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
     background-color: var(--bright-blue-lightest);
-    @media (min-width: ${breakpointStops.tablet_small}px){
+    ${breakpoints.tablet_small} {
       position: sticky;
       top: 0;
       z-index: 200;
@@ -54,7 +54,7 @@ const styles = {
   filterContainer: css`
     display: block;
     width: 100%;
-    @media (min-width: ${breakpointStops.tablet_small}px){
+    ${breakpoints.tablet_small} {
       display: inline-block;
       width: 58%;
     }
@@ -87,18 +87,24 @@ const styles = {
     width: 100%;
     display: block;
     margin-top: 10px;
-    text-align: left;
-    @media (min-width: ${breakpointStops.tablet_small}px){
+    ${breakpoints.tablet_small} {
       display: inline-block;
       width: 40%;
       vertical-align: bottom;
       margin-top: 0px;
-      text-align: right;
+    }
+  `,
+  filterDescription: css`
+    ${breakpoints.tablet_small} {
+      float: right;
     }
   `,
   buttonContainer: css`
     display: inline-block;
     vertical-align: bottom;
+  `,
+  nowrap: css`
+    white-space: nowrap;
   `
 };
 
@@ -118,6 +124,11 @@ const Dashboard = () => {
       }
     }
     setFilterValues(updatedFilterValues);
+    if (window.plausible) {
+      window.plausible("Set filters", {props: {
+        "filters": JSON.stringify(updatedFilterValues)
+      }});
+    }
     setMoreFilters(urlParams.has(MORE_FILTERS) && urlParams.get(MORE_FILTERS));
     const urlShowList = urlParams.has(SHOW_LIST) && (urlParams.get(SHOW_LIST).toLowerCase() === "true");
     setShowList(urlShowList);
@@ -150,7 +161,7 @@ const Dashboard = () => {
 
   const contentContainer = React.createRef();
 
-  const compareOptions = Object.entries(keyToTitle).map(e => ({"val": e[0], "text": e[1]}));
+  const compareOptions = Object.entries(keyToTitle).filter(e => e[0] !== "downloads").map(e => ({"val": e[0], "text": e[1]}));
 
   const getSelectedRepos = (filters, ignoreFilter = null) => {
     const field = filters["field_of_study"];
@@ -203,6 +214,11 @@ const Dashboard = () => {
     obj => (!isCuratedField(filterValues["field_of_study"]) || !FIELD_KEYS.includes(obj["val"])));
 
   const handleFilterUpdate = (updated) => {
+    if (window.plausible) {
+      window.plausible("Set filters", {props: {
+        "filters": JSON.stringify(updated)
+      }});
+    }
     setFilterValues(updated);
     mkRepoData(updated);
     setCurrPage(1);
@@ -256,6 +272,12 @@ const Dashboard = () => {
     const params = urlParams.toString().length > 0 ? "?" + urlParams.toString() : "";
     window.history.replaceState(null, null, window.location.pathname + params);
     setter(newState);
+    if (window.plausible) {
+      window.plausible("Toggle updated", {props: {
+        "toggle": name,
+        "value": newState
+      }});
+    }
     if(name === SHOW_LIST){
       mkRepoData({...filterValues}, newState);
     }
@@ -289,10 +311,10 @@ const Dashboard = () => {
     }
     const cleanField = cleanFieldName(filterValues["field_of_study"]);
     return (
-      <div>
+      <div css={styles.filterDescription}>
         <FilterAltIcon css={styles.filterIcon}/> Showing {repoData.length} repositories {
-          isCuratedField(filterValues["field_of_study"]) ? <span>related to {cleanField} according to {sources[filterValues["field_of_study"]]}.</span> :
-            <span>mentioned in {cleanField} articles in our dataset{suffix}.<HelpTooltip style={helpStyle} text={tooltips.number_of_mentions.replace("#SUBJECT", cleanField)}/></span>
+        isCuratedField(filterValues["field_of_study"]) ? <span>related to {cleanField}{suffix}.<HelpTooltip iconStyle={helpStyle} text={<span>This list is based on {sources[filterValues["field_of_study"]]}. <ExternalLink href={'https://eto.tech/tool-docs/orca/#manually-compiled-fields'}>Read more >></ExternalLink></span>}/></span> :
+          <span>mentioned in {cleanField} articles in our dataset{suffix}<span style={styles.nowrap}>.<HelpTooltip iconStyle={helpStyle} text={getTooltip("number_of_mentions", "#SUBJECT", cleanField)}/></span></span>
           }
       </div>
     )
@@ -309,8 +331,7 @@ const Dashboard = () => {
                   selected={filterValues["field_of_study"]}
                   setSelected={(val) => handleSingleSelectChange(val, "field_of_study")}
                   id={"research-field"}
-                  inputLabel={<div>Research field<HelpTooltip iconStyle={helpStyle} text={tooltips.research_field}/></div>}
-                  tooltip={tooltips.application_topic}
+                  inputLabel={<div>Research field<HelpTooltip iconStyle={helpStyle} text={getTooltip("research_field")}/></div>}
                   options={getFOSOptions()}
                 />
               </div>

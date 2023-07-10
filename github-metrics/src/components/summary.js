@@ -6,9 +6,9 @@ import React, {useEffect} from "react";
 import {LineGraph} from "./graph";
 import {css} from "@emotion/react";
 
-import {keyToTitle, sortMappingBlurb, getRepoName, sortByKey, cleanFieldName, FIELD_KEYS, tooltips} from "./utils";
+import {keyToTitle, sortMappingBlurb, getRepoName, sortByKey, cleanFieldName, FIELD_KEYS, getTooltip} from "./utils";
 import HighlightBox from "./highlight_box";
-import {Accordion, Dropdown, HelpTooltip} from "@eto/eto-ui-components";
+import {Accordion, Dropdown, ExternalLink, HelpTooltip} from "@eto/eto-ui-components";
 
 
 const styles = {
@@ -32,6 +32,9 @@ const styles = {
   graphHeader: css`
     margin: 20px 20px 10px 20px;
   `,
+  pctGraph: css`
+    padding: 0px 10px 20px 10px;
+  `,
   statListElt: css`
     line-height: 1.5;
     list-style-type: none;
@@ -45,6 +48,9 @@ const styles = {
   statWrapper: css`
     text-align: center;
   `,
+  statTitle: css`
+    font-weight: normal;
+  `,
   headerContainer: css`
     margin: 0 20px;
   `
@@ -52,8 +58,8 @@ const styles = {
 
 const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
   const fmtStat = sortMappingBlurb[stat].toLowerCase();
-  const title = <span>
-    Top repositories by <strong>{stat === "relevance" ? <span>relevance to {fieldName} research <HelpTooltip text={tooltips.relevance}/></span> : fmtStat}</strong>
+  const title = <span css={styles.statTitle}>
+    Top repositories by <strong>{stat === "relevance" ? <span>relevance to {fieldName} research <HelpTooltip text={getTooltip("relevance_list")}/></span> : fmtStat}</strong>
   </span>;
   const yearlyRepoStats = {};
   if(yearly !== null) {
@@ -61,11 +67,13 @@ const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
       const numYears = repoStat.y.length;
       const change = (100*(repoStat.y[numYears - 1] - repoStat.y[numYears - 2]) / repoStat.y[numYears - 2]).toFixed(2);
       const prettyChange = `${change < 0 ? "" : "+"}${change}`;
+      const isBad = (repoStat.y[numYears - 2] === 0) || (!repoStat.x[numYears - 2]) || (!repoStat.x[numYears - 1]) || (repoStat.x[numYears - 2] === repoStat.x[numYears - 1]);
       yearlyRepoStats[repoStat.name] = {
         numYears: numYears,
         change: prettyChange,
         startYear: repoStat.x[numYears - 2],
-        endYear: repoStat.x[numYears - 1]
+        endYear: repoStat.x[numYears - 1],
+        isBad: isBad
       };
     }
   }
@@ -81,7 +89,7 @@ const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
             <span css={styles.statDetail}>
               {stat === "relevance" ?
                 <span><strong>{row["relevance"][field].toFixed(2)}</strong> {fmtStat} (<strong>{row["num_references"][field]}</strong> references)</span> :
-                <span><strong>{row[stat]}</strong> {fmtStat}{yearlyRepoStats[getRepoName(row)].startYear !== yearlyRepoStats[getRepoName(row)].endYear && <span> (<strong>{yearlyRepoStats[getRepoName(row)].change}</strong>%, {yearlyRepoStats[getRepoName(row)].startYear}-{yearlyRepoStats[getRepoName(row)].endYear})</span>}</span>}
+                <span><strong>{row[stat]}</strong> {fmtStat}{!yearlyRepoStats[getRepoName(row)].isBad && <span> (<strong>{yearlyRepoStats[getRepoName(row)].change}</strong>%, {yearlyRepoStats[getRepoName(row)].startYear}-{yearlyRepoStats[getRepoName(row)].endYear})</span>}</span>}
             </span>
           </li>
         )}
@@ -144,45 +152,76 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
     {
       "id": "push_dates",
       "name": keyToTitle["push_dates"],
-      "content": <LineGraph title={keyToTitle["push_dates"]} showLegend={true}
+      "content": <div>
+        <div css={styles.graphHeader}>
+          This graph shows the number of commits made to any branch of the displayed projects each year, as reported in GitHub Archive PushEvents. Within a project,
+          we deduplicate commits based on their hash.
+        </div>
+        <LineGraph title={keyToTitle["push_dates"]} showLegend={true}
                  traces={getTrace("push_dates")}/>
+      </div>
     },
     {
       "id": "open_to_closed",
-      "name": "Ratio of issues closed to opened over time",
-      "content": <LineGraph title={"Ratio of issues closed to opened over time"}
+      "name": "Ratio of issues and pull requests closed to opened over time",
+      "content": <div>
+        <div css={styles.graphHeader}>
+          This graph shows the ratio of the number of issues and pull requests closed to opened each year in the displayed projects, as reported in GitHub Archive IssuesEvents. A high ratio of new
+          issues opened to issues closed might indicate the project needs more maintenance capacity. For further discussion, see
+          the CHAOSS metrics <ExternalLink href={"https://chaoss.community/kb/metric-issues-new/"}>Issues New</ExternalLink> and <ExternalLink href={"https://chaoss.community/kb/metric-issues-closed/"}>Issues Closed</ExternalLink>.
+        </div>
+        <LineGraph title={"Ratio of issues and pull requests closed to opened over time"}
                             showLegend={true} forceInteger={false}
                             traces={getTrace("issue_dates", val => val[1] === 0 ? 0 : val[2]/val[1])}/>
+      </div>
     },
     {
       "id": "new_vs_returning",
       "name": "Ratio of new vs returning contributors over time",
-      "content": <LineGraph title={"Ratio of new vs returning contributors over time"}
+      "content": <div>
+        <div css={styles.graphHeader}>
+          This graph shows the number of contributors who made a commit for the first time in a given year divided by
+          the number of contributors that had made a commit in a previous year, as reported in GitHub Archive PushEvents.
+          We currently only identify individual contributors based on their names, which may change over time. For further discussion,
+          see the CHAOSS metrics <ExternalLink href={"https://chaoss.community/kb/metric-new-contributors/"}>New Contributors</ExternalLink> and <ExternalLink href={"https://chaoss.community/kb/metric-inactive-contributors/"}>Inactive Contributors</ExternalLink>.
+        </div>
+        <LineGraph title={"Ratio of new vs returning contributors over time"}
                             showLegend={true}
                             traces={getTrace("commit_dates", val => val[2] === 0 ? 0 : val[1]/val[2])}/>
+      </div>
     },
     {
       "id": "pct_contribution",
-      "name": "Cumulative percentage of contributions by number of contributors",
+      "name": "Percentage of commits by top 20 contributors",
       "content": (
         <div>
           <div css={styles.graphHeader}>
-            This graph shows the percentage of contributions that are made by the top 20 contributors. Repositories
-            with fewer than 20 contributors will show a partial line.
+            This graph shows the cumulative percentage of commits to any branch that are made by the top 20 contributors across all years, as reported in GitHub Archive PushEvents. Within a project, we deduplicate commits based on their hash. We currently only identify individual contributors based on their names, which may change over time.
+            Repositories with fewer than 20 contributors will show a partial line. For related discussion, see the CHAOSS metric <ExternalLink href={"https://chaoss.community/kb/metric-bus-factor/"}>Bus Factor</ExternalLink>.
           </div>
-          <LineGraph title={"Cumulative percentage of contributions by number of contributors"}
+          <div css={styles.pctGraph}>
+          <LineGraph title={"Cumulative percentage of commits by top 20 contributors"}
                             showLegend={true}
                             traces={getContribTrace("contrib_counts")}
-                            normalizeTime={false}/>
+                            normalizeTime={false}
+                            xTitle={"Contributor ranking"}
+                            yTitle={"Percentage of commits"}
+          />
+          </div>
         </div>
       )
     },
     {
       "id": "star_dates",
       "name": keyToTitle["star_dates"],
-      "content": <LineGraph title={keyToTitle["star_dates"]}
+      "content": <div>
+        <div css={styles.graphHeader}>
+          This graph shows the number of new stars added to each project during each year we track, as reported in GitHub Archive WatchEvents.
+        </div>
+        <LineGraph title={keyToTitle["star_dates"]}
                             showLegend={true}
                             traces={getTrace("star_dates")}/>
+      </div>
     }
   ];
 
@@ -196,6 +235,20 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
     const params = urlParams.toString().length > 0 ? "?" + urlParams.toString() : "";
     window.history.replaceState(null, null, window.location.pathname + params);
     setOrderBy(newSort);
+    if (window.plausible) {
+      window.plausible("Set summary sort", {props: {
+        "sort_metric": newSort
+      }});
+    }
+  };
+
+  const setAndLogExpanded = (newExpanded) => {
+    if (window.plausible) {
+      window.plausible("Set summary accordion state", {props: {
+        "expanded": JSON.stringify(newExpanded)
+      }});
+    }
+    setExpanded(newExpanded)
   };
 
   return (
@@ -217,7 +270,7 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
             <Dropdown
               selected={orderBy}
               setSelected={(val) => updateOrderBy(val)}
-              inputLabel={"Order by"}
+              inputLabel={"Sort by"}
               options={sortOptions}
             />
           </div>
@@ -227,7 +280,7 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
         key={JSON.stringify(expanded)}
         panels={accordionDetails}
         expanded={expanded}
-        updateExpanded={(newExpanded) => setExpanded(newExpanded)} headingVariant={"h6"}
+        updateExpanded={(newExpanded) => setAndLogExpanded(newExpanded)} headingVariant={"h6"}
       />
     </div>
   );

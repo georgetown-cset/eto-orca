@@ -1,4 +1,6 @@
 import React, {useEffect} from "react";
+import {css} from "@emotion/react";
+
 import CircularProgress from "@mui/material/CircularProgress";
 import {AppWrapper, ExternalLink, InfoCard} from "@eto/eto-ui-components";
 import { useStaticQuery, graphql } from "gatsby";
@@ -8,6 +10,13 @@ import config from "../data/config.json";
 /* Set the body margin and padding to 0 here */
 import "../styles/styles.css";
 const Dashboard = React.lazy(() => import("../components/dashboard"));
+
+const styles = {
+  suspense: css`
+    text-align: center;
+    margin: 40px;
+  `
+};
 
 const IndexPage = () => {
   useEffect(() => {
@@ -26,7 +35,7 @@ const IndexPage = () => {
   return (
     <AppWrapper>
       <InfoCard
-        title={<div style={{fontFamily: "GTZirkonBold, sans-serif !important"}}>ORCA: Open-source software Research and Community Activity</div>}
+        title={<div style={{fontFamily: "GTZirkonBold, sans-serif !important"}}>🌊 ORCA: OSS Research and Community Activity</div>}
         description={<div>
           <div style={{marginBottom: "10px"}}>
           ORCA compiles data on open-source software (OSS) used in science and technology research. Drawing on Github Archive, ETO’s Merged Academic Corpus, and many other data sources, ORCA tracks OSS usage, health, development activity, and community engagement across a wide range of software projects and research subjects. Use ORCA to compare OSS projects in a particular research area, track trends over time, and sort and filter projects by different metrics. <ExternalLink href={"https://eto.tech/tool-docs/orca"}>Read the docs >></ExternalLink>
@@ -42,7 +51,7 @@ const IndexPage = () => {
         </div>}
       />
       {(typeof window !== "undefined") &&
-        <React.Suspense fallback={<div style={{textAlign: "center"}}><CircularProgress/></div>}>
+        <React.Suspense fallback={<div css={styles.suspense}><CircularProgress/></div>}>
           <Dashboard/>
         </React.Suspense>
       }

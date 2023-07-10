@@ -61,7 +61,7 @@ const cleanTraces = (x, y, displayAllYears=false) => {
 };
 
 const LineGraph = (props) => {
-  const {traces, title, height, showLegend=false, normalizeTime=true, forceInteger=true, displayAllYears=false} = props;
+  const {traces, title, height, showLegend=false, normalizeTime=true, forceInteger=true, displayAllYears=false, xTitle=null, yTitle=null} = props;
   const [screenWidth, setScreenWidth] = React.useState(window.innerWidth);
   const handleSize = () => {
     setScreenWidth(window.innerWidth);
@@ -100,6 +100,12 @@ const LineGraph = (props) => {
   layout.margin = {t: 10, r: 50, b: 50, l: 50, pad: 4};
   layout.xaxis.dtick = 1;
   layout.yaxis.rangemode = "tozero";
+  if(xTitle !== null){
+    layout.xaxis.title = xTitle;
+  }
+  if(yTitle !== null){
+    layout.yaxis.title = yTitle;
+  }
   if(!forceInteger){
     layout["yaxis"]["dtick"] = null;
   }
