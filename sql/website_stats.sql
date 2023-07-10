@@ -1,16 +1,16 @@
 -- aggregate data for the webapp
 WITH
-distinct_curated AS (
+distinct_curated AS ( -- noqa: L045
   SELECT DISTINCT id
   FROM
     staging_github_metrics.curated_repos
   LEFT JOIN
     staging_github_metrics.repos_with_full_meta_for_app
     ON
-      LOWER(CONCAT(owner_name, "/", matched_name)) = LOWER(repo)
+      LOWER(CONCAT(matched_owner, "/", matched_name)) = LOWER(repo)
 ),
 
-distinct_repo_papers AS (
+distinct_repo_papers AS ( -- noqa: L045
   SELECT DISTINCT
     id,
     merged_id
@@ -21,33 +21,33 @@ distinct_repo_papers AS (
   LEFT JOIN
     staging_github_metrics.repos_with_full_meta_for_app
     ON
-      LOWER(CONCAT(owner_name, "/", matched_name)) = LOWER(repo)
+      LOWER(CONCAT(matched_owner, "/", matched_name)) = LOWER(repo)
 ),
 
 repo_paper_meta AS (
-  SELECT
+  (SELECT
     id,
     ARRAY_AGG(STRUCT(merged_id,
         top_lvl1_fields AS fields)) AS paper_meta
-  FROM
-    distinct_repo_papers
-  LEFT JOIN
-    staging_github_metrics.top_level1_fields
-    USING
-      (merged_id)
-  GROUP BY
-    id
+    FROM
+      distinct_repo_papers
+    LEFT JOIN
+      staging_github_metrics.top_level1_fields
+      USING
+        (merged_id)
+    GROUP BY
+      id)
   UNION ALL
   -- hackily add in the curated repos along with fake fields
-  SELECT
+  (SELECT
     id,
-    [
-      STRUCT("p1" AS merged_id, [STRUCT("" AS name, 0.1 AS score)] AS fields), -- noqa: L029
-      STRUCT("p1" AS merged_id, [STRUCT("" AS name, 0.1 AS score)] AS fields)  -- noqa: L029
-    ] AS paper_meta
-  FROM
-    distinct_curated
-  WHERE id NOT IN (SELECT id FROM distinct_repo_papers)),
+    [] AS paper_meta
+    FROM
+      distinct_curated
+    LEFT JOIN
+      distinct_repo_papers
+      USING (id)
+    WHERE merged_id IS NULL)),
 
 repo_star_dates AS (
   SELECT
@@ -102,84 +102,6 @@ issues AS (
   GROUP BY
     repo_id),
 
-country_year_disagg AS (
-  SELECT
-    push_event_commits.repo_id AS repo_id,
-    COALESCE(country, "Unknown") AS country,
-    EXTRACT(YEAR FROM push_created_at) AS year,
-    COUNT(DISTINCT(commit_sha)) AS num_commits
-  FROM
-    staging_github_metrics.push_event_commits
-  LEFT JOIN
-    (SELECT * FROM staging_github_metrics.contributor_affiliations
-      CROSS JOIN UNNEST(contributed_repos) AS repo_id) AS contributor_affiliations
-    ON push_event_commits.contributor_name = contributor_affiliations.contributor
-      AND push_event_commits.repo_id = contributor_affiliations.repo_id
-  WHERE
-    -- associate contributions with the country affiliation the person had at the time
-    (
-      contributor_affiliations.endyear IS NULL OR EXTRACT(YEAR FROM push_created_at) <= contributor_affiliations.endyear
-    )
-    AND --noqa: L007
-    (
-      contributor_affiliations.startyear IS NULL OR EXTRACT(
-        YEAR FROM push_created_at
-      ) >= contributor_affiliations.startyear
-    )
-  GROUP BY
-    repo_id,
-    year,
-    country
-),
-
-country_year AS (
-  SELECT
-    repo_id,
-    ARRAY_AGG(STRUCT(year, country, num_commits)) AS country_year_contributions
-  FROM
-    country_year_disagg
-  GROUP BY repo_id
-),
-
-org_year_disagg AS (
-  SELECT
-    push_event_commits.repo_id AS repo_id,
-    COALESCE(company, "Unknown") AS org,
-    EXTRACT(YEAR FROM push_created_at) AS year,
-    COUNT(DISTINCT(commit_sha)) AS num_commits
-  FROM
-    staging_github_metrics.push_event_commits
-  LEFT JOIN
-    (SELECT * FROM staging_github_metrics.contributor_affiliations
-      CROSS JOIN UNNEST(contributed_repos) AS repo_id) AS contributor_affiliations
-    ON push_event_commits.contributor_name = contributor_affiliations.contributor
-      AND push_event_commits.repo_id = contributor_affiliations.repo_id
-  WHERE
-    -- associate contributions with the company affiliation the person had at the time
-    (
-      contributor_affiliations.endyear IS NULL OR EXTRACT(YEAR FROM push_created_at) <= contributor_affiliations.endyear
-    )
-    AND --noqa: L007
-    (
-      contributor_affiliations.startyear IS NULL OR EXTRACT(
-        YEAR FROM push_created_at
-      ) >= contributor_affiliations.startyear
-    )
-  GROUP BY
-    repo_id,
-    year,
-    company
-),
-
-org_year AS (
-  SELECT
-    repo_id,
-    ARRAY_AGG(STRUCT(year, org, num_commits)) AS org_year_contributions
-  FROM
-    org_year_disagg
-  GROUP BY repo_id
-),
-
 canonical_pypi AS (
   SELECT
     id,
@@ -190,16 +112,13 @@ canonical_pypi AS (
     staging_github_metrics.repos_with_full_meta_for_app
   INNER JOIN
     staging_github_metrics.pypi_over_time
-    ON
-      CONCAT(
-        owner_name, "/", matched_name
-      ) = pypi_over_time.repo
+    USING (id)
 ),
 
 canonical_meta AS (
   SELECT
     id,
-    MAX(owner_name) AS owner_name,
+    MAX(current_owner) AS owner_name,
     MAX(current_name) AS current_name,
     MAX(open_issues) AS open_issues,
     MAX(primary_programming_language) AS primary_programming_language,
@@ -215,7 +134,7 @@ canonical_meta AS (
     MAX(license.name) AS license,
     MAX(description) AS description,
     CONCAT(
-      MAX(owner_name), "/", MAX(current_name)
+      MAX(current_owner), "/", MAX(current_name)
     ) IN (SELECT name FROM `bigquery-public-data.deps_dev_v1.Projects`) AS has_deps_dev -- noqa: L057
   FROM
     staging_github_metrics.repos_with_full_meta_for_app
@@ -245,8 +164,6 @@ SELECT
   star_dates,
   repo_pushes.events AS push_events,
   issues.events AS issue_events,
-  country_year_contributions,
-  org_year_contributions,
   downloads,
   COALESCE(description, canonical_pypi.summary) AS description,
   CONCAT(
@@ -270,14 +187,6 @@ LEFT JOIN
   ON
     id = issues.repo_id
 LEFT JOIN
-  country_year
-  ON
-    id = country_year.repo_id
-LEFT JOIN
-  org_year
-  ON
-    id = org_year.repo_id
-LEFT JOIN
   `openssf.criticality_score_cron.criticality-score-v0-latest` AS openssf --noqa: L057, L031
   ON
     github_metrics.get_first_repo_slug( --noqa: L030
@@ -290,14 +199,14 @@ LEFT JOIN
   canonical_pypi
   USING (id)
 WHERE
-  (
-    stargazers_count >= 10
-  ) AND (
-    (
-      ARRAY_LENGTH(paper_meta) > 1
-    ) OR CONCAT(
+  (CONCAT(
       owner_name, "/", current_name
     ) IN (
       SELECT repo FROM staging_github_metrics.curated_repos
-    ) OR LOWER(CONCAT(owner_name, "/", current_name)) = "parsl/parsl"
-  ) AND ((ranking = 1) OR (ranking IS NULL))
+    )
+    OR (
+      (
+        stargazers_count >= 10
+      ) AND (
+        ARRAY_LENGTH(paper_meta) > 1
+      ))) AND ((ranking = 1) OR (ranking IS NULL))

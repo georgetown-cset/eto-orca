@@ -1,5 +1,4 @@
 import argparse
-import csv
 import json
 import math
 import os
@@ -18,7 +17,7 @@ from scripts.constants import (
 )
 
 NOW = datetime.now()
-END_YEAR = NOW.year if NOW.month > 6 else NOW.year - 1
+END_YEAR = NOW.year - 1  # if NOW.month > 6 else NOW.year - 1
 START_YEAR = END_YEAR - 6
 
 
@@ -218,8 +217,8 @@ def get_curated_repos():
         `repo_lists` directory where the repo appears
     """
     repo_to_field = {}
-    for fi in os.listdir(os.path.join("repo_lists")):
-        if fi.startswith("."):
+    for fi in os.listdir("repo_lists"):
+        if (fi == "weto.txt") or fi.startswith(".") or not fi.endswith(".txt"):
             continue
         field = fi.replace(".txt", "")
         with open(os.path.join("repo_lists", fi)) as f:
@@ -227,6 +226,28 @@ def get_curated_repos():
                 line = line.strip()
                 if line:
                     repo_to_field[line] = repo_to_field.get(line, []) + [field]
+    for category in os.listdir(
+        os.path.join("repo_lists", "open_sustainable_technology")
+    ):
+        for sub_category in os.listdir(
+            os.path.join("repo_lists", "open_sustainable_technology", category)
+        ):
+            with open(
+                os.path.join(
+                    "repo_lists", "open_sustainable_technology", category, sub_category
+                )
+            ) as f:
+                for line in f:
+                    line = line.strip()
+                    if line:
+                        repo_to_field[line] = repo_to_field.get(line, []) + [category]
+    with open(os.path.join("repo_lists", "weto.txt")) as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                repo_to_field[line] = repo_to_field.get(line, []) + ["weto"]
+                if "Renewable Energy" not in repo_to_field.get(line):
+                    repo_to_field[line].append("Renewable Energy")
     return repo_to_field
 
 

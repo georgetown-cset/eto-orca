@@ -12,7 +12,7 @@ export const tooltips = {
   "criticality": "Sort projects by their OpenSSF scores, which measure overall influence and importance in the OSS ecosystem. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>",
   "criticality_list": "OpenSSF criticality scores, which measure overall influence and importance in the OSS ecosystem. <ExternalLink href={\"https://tktk\"}>Read more >>",
   "field_references": "Fields most often linked to this project. Based on direct citations in articles from the field and references in project README files. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>",
-  "number_of_mentions": "Each of the listed repositories is associated with at least one #SUBJECT article in ORCA's dataset. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>"
+  "number_of_mentions": "Each of the listed repositories is associated with at least one article in the selecte field in ORCA's dataset. <ExternalLink href={'https://tktk'}>Read more >></ExternalLink>"
 };
 
 export const helpStyle = {height: "20px", verticalAlign: "middle"};
@@ -54,7 +54,18 @@ export const keyToTitle = {
 
 export const customTopics = [
   {"val": "ai_safety", "text": "AI Safety"},
-  {"val": "riscv", "text": "RISC-V"}
+  {"val": "riscv", "text": "RISC-V"},
+  {"val": "weto", "text": "Wind Energy Technology Office software"},
+  {"val": "Emissions", "text": "Emissions"},
+  {"val": "Earth Systems", "text": "Earth systems"},
+  {"val": "Energy Storage", "text": "Energy storage"},
+  {"val": "Sustainable Development", "text": "Sustainable development"},
+  {"val": "Climate and Earth Science", "text": "Climate and earth science"},
+  {"val": "Industrial Ecology", "text": "Industrial ecology"},
+  {"val": "Renewable Energy", "text": "Renewable energy"},
+  {"val": "Natural Resources", "text": "Natural resources"},
+  {"val": "Consumption of Energy and Resources", "text": "Energy and resource consumption"},
+  {"val": "Energy Systems", "text": "Energy systems"}
 ];
 const customTopicMap = {};
 for(let topic of customTopics){
@@ -158,7 +169,20 @@ export const cleanFieldName = (field) => {
   return clean;
 };
 
+const ostLink = <ExternalLink href={"https://github.com/protontypes/open-sustainable-technology"}>Open Sustainable Technology</ExternalLink>;
+
 export const sources = {
   "riscv": "CSET curation",
-  "ai_safety": "CSET curation"
+  "ai_safety": "CSET curation",
+  "weto": <ExternalLink href={"http://www.rafmudaf.com/WETOStack/software_list.html#weto-software"}>WETOStack</ExternalLink>,
+  "Emissions": ostLink,
+  "Earth Systems": ostLink,
+  "Energy Storage": ostLink,
+  "Sustainable Development": ostLink,
+  "Climate and Earth Science": ostLink,
+  "Industrial Ecology": ostLink,
+  "Renewable Energy": ostLink,
+  "Natural Resources": ostLink,
+  "Consumption of Energy and Resources": ostLink,
+  "Energy Systems": ostLink
 };

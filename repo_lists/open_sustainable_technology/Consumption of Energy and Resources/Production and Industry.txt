@@ -1,0 +1,4 @@
+NREL/Industry-Energy-Tool
+NREL/Industry-energy-data-book
+energy-market-methods/caltrack
+OpenModelica/OpenModelica

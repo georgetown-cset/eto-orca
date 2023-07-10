@@ -91,21 +91,23 @@ class RepoRetriever:
                     repo_record["sources"] = [dataset]
                     yield repo_record
 
-    def read_manually_collected_repos(self, links_path: str) -> Generator:
+    def read_manually_collected_repos(self) -> Generator:
         """
         Retrieves repos that were manually collected into a file at `links_path`
-        :param links_path: Location of manually collected repos
         :return: a generator of information from get_repo_record, plus the source name, for each repo
         """
-        with open(links_path) as f:
-            for line in f:
-                line = line.strip()
-                if not line:
-                    continue
-                repo_records = self.get_repo_record(line)
-                for repo_record in repo_records:
-                    repo_record["sources"] = ["manual-collection"]
-                    yield repo_record
+        for fi in os.listdir("input_data"):
+            if (not fi.endswith(".txt")) or (fi == "topics.txt"):
+                continue
+            with open(os.path.join("input_data", fi)) as f:
+                for line in f:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    repo_records = self.get_repo_record(line)
+                    for repo_record in repo_records:
+                        repo_record["sources"] = ["manual-collection"]
+                        yield repo_record
 
     @staticmethod
     def check_for_issue(topic: str, repo_resp_js: dict, num_retries: int) -> bool:
@@ -241,9 +243,6 @@ class RepoRetriever:
         :param query_topics: If true, will retrieve all repos that match a list of topics (takes MUCH longer)
         :return: a generator of dicts of repo information
         """
-        manually_collected_path = os.path.join(
-            "input_data", "manually_collected_links.txt"
-        )
         awesome_ml = self.read_awesome_repos(
             "https://raw.githubusercontent.com/josephmisiti/"
             "awesome-machine-learning/master/README.md",
@@ -258,7 +257,7 @@ class RepoRetriever:
         )
         bq_repos = [] if not query_bq else self.read_bq_repos()
         topic_repos = [] if not query_topics else self.read_topic_repos()
-        manually_collected = self.read_manually_collected_repos(manually_collected_path)
+        manually_collected = self.read_manually_collected_repos()
         return chain(
             bq_repos, topic_repos, manually_collected, awesome_ml, awesome_prod_ml
         )

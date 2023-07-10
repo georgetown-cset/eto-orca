@@ -1,0 +1,17 @@
+ClimateWatch-Vizzuality/climate-watch
+lf-energy/lfenergy-landscape
+ProjectDrawdown/solutions
+NOAAGov/NOAA-Affiliated-Projects
+EnvironmentOntology/envo
+petermr/climate
+YaleOpenLab/openclimate-demo
+EnviroDIY/ModularSensors
+climate-strike/license
+washingtonpost/data-2C-beyond-the-limit-usa
+regen-network/regen-ledger
+stripe/carbon-removal-source-materials
+usds/justice40-tool
+DPGAlliance/publicgoods-candidates
+ESIPFed/sweet
+ClimateMind/climatemind-backend
+chihacknight/decarbonize-my-state

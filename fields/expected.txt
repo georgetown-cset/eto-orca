@@ -133,3 +133,14 @@ Zoology
 ai_safety
 asr
 riscv
+weto
+Emissions
+Earth Systems
+Energy Storage
+Sustainable Development
+Climate and Earth Science
+Industrial Ecology
+Renewable Energy
+Natural Resources
+Consumption of Energy and Resources
+Energy Systems

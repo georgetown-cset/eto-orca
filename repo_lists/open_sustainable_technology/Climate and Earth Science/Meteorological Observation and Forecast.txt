@@ -1,0 +1,17 @@
+open-meteo/open-meteo
+rich-iannone/stationaRy
+ropensci/weathercan
+eliocamp/metR
+bczernecki/climate
+brry/rdwd
+Unidata/MetPy
+earthobservations/wetterdienst
+Unidata/awips2
+ecmwf/metview-python
+blaylockbk/Herbie
+sandialabs/MEWS
+openeemeter/eeweather
+ajwdewit/agera5tools
+meteoinfo/MeteoInfo
+bczernecki/thundeR
+atmoswing/atmoswing

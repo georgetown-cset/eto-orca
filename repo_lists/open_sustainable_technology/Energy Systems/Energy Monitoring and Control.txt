@@ -1,0 +1,10 @@
+OpenEnergyDashboard/OED
+OpenEMS/openems
+openeemeter/eemeter
+opfab/operatorfabric-core
+Energy-Sparks/energy-sparks
+openenergymonitor/emonpi
+openenergymonitor/EmonLib
+emoncms/emoncms
+SeitaBV/flexmeasures
+openenergymonitor/STM32

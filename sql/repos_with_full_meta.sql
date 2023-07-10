@@ -9,8 +9,9 @@ with contributor_counts as (
 )
 
 select
-  owner_name,
+  owner_name as matched_owner,
   repo_name as matched_name,
+  full_metadata.owner.login as current_owner,
   full_metadata.name as current_name,
   used_by,
   num_commits,
@@ -43,7 +44,7 @@ select
   full_metadata.has_issues as has_issues,
   sources,
   num_releases,
-  contributor_counts.num_contributors,
+  contributor_counts.num_contributors as num_contributors,
   if(full_metadata.homepage = "", null, full_metadata.homepage) as homepage,
   struct(full_metadata.parent.owner.login as owner_name,
     full_metadata.parent.name as repo_name) as fork_of,
