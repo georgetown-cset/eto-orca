@@ -94,7 +94,6 @@ class RepoRetriever:
     def read_manually_collected_repos(self) -> Generator:
         """
         Retrieves repos that were manually collected into a file at `links_path`
-        :param links_path: Location of manually collected repos
         :return: a generator of information from get_repo_record, plus the source name, for each repo
         """
         for fi in os.listdir("input_data"):
