@@ -313,7 +313,7 @@ const Dashboard = () => {
     return (
       <div css={styles.filterDescription}>
         <FilterAltIcon css={styles.filterIcon}/> Showing {repoData.length} repositories {
-        isCuratedField(filterValues["field_of_study"]) ? <span>related to {cleanField}{suffix}.<HelpTooltip style={helpStyle} text={<span>This list is based on {sources[filterValues["field_of_study"]]}.</span>}/></span> :
+        isCuratedField(filterValues["field_of_study"]) ? <span>related to {cleanField}{suffix}.<HelpTooltip style={helpStyle} text={<span>This list is based on {sources[filterValues["field_of_study"]]}. <ExternalLink href={'https://eto.tech/tool-docs/orca/#manually-compiled-fields'}>Read more >></ExternalLink></span>}/></span> :
           <span>mentioned in {cleanField} articles in our dataset{suffix}<span style={styles.nowrap}>.<HelpTooltip style={helpStyle} text={tooltips.number_of_mentions.replace("#SUBJECT", cleanField)}/></span></span>
           }
       </div>
