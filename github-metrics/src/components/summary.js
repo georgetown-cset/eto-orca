@@ -268,6 +268,7 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
           <span css={styles.dropdownIntro}>Trends over time for top repositories by</span>
           <div css={styles.dropdownContainer}>
             <Dropdown
+              alignSelectionWithLabel={false}
               selected={orderBy}
               setSelected={(val) => updateOrderBy(val)}
               inputLabel={"Sort by"}
