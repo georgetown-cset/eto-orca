@@ -139,7 +139,7 @@ class RepoRetriever:
         :param topic: topic to retrieve repos for
         :return: list of formatted size ranges
         """
-        size_ranges = [[0, 1000], [1001, None]]
+        size_ranges = [[5, 1000], [1001, None]]
         valid_intervals = []
         num_retries = 0
         while len(size_ranges) > 0:
