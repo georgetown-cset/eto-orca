@@ -42,12 +42,11 @@ def add_scraped_meta(repo_record: dict) -> None:
             for title, key, _ in link_title_key_default:
                 if title in link.text:
                     repo_record[key] = link.find("span")["title"]
-        default_branch = repo_record["full_metadata"]["default_branch"]
-        readme_resp = requests.get(
-            f"https://raw.githubusercontent.com/{owner_name}/{repo_name}/{default_branch}/README.md"
-        )
-        repo_record["readme_text"] = readme_resp.text
-        repo_record["homepage_text"] = repo_homepage.text
+        readme_container = soup.find("div", {"id": "readme"})
+        readme_text = None
+        if readme_container:
+            readme_text = readme_container.find(class_="Box-body").text
+        repo_record["readme_text"] = readme_text
     except Exception as e:
         print(e)
 
