@@ -22,4 +22,4 @@ SELECT
     bio) AS description,
   if(blog = "", NULL, blog) AS blog
 FROM
-  staging_github_metrics.repo_owners_raw
+  {{ staging_dataset }}.repo_owners_raw

@@ -5,7 +5,7 @@ ai_categories AS (
     repo_slug,
     CONCAT(Category, "-", Subcategory) AS category
   FROM
-    github_metrics.lf_ai_ml_landscape_extended
+    {{ production_dataset }}.lf_ai_ml_landscape_extended
   WHERE
     (Category = "Deep Learning"
       AND Subcategory = "Framework")
@@ -39,7 +39,7 @@ dep_categories AS (
   FROM
     ai_categories
   LEFT JOIN
-    github_metrics.lf_ai_ml_landscape_extended
+    {{ production_dataset }}.lf_ai_ml_landscape_extended
     USING
       (repo_slug)
   CROSS JOIN

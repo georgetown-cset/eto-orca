@@ -4,6 +4,6 @@ SELECT DISTINCT
   repo.id AS repo_id,
   created_at AS star_date
 FROM
-  staging_github_metrics.events
+  {{ staging_dataset }}.events
 WHERE
   type = "WatchEvent"

@@ -3,9 +3,9 @@ WITH
 distinct_curated AS ( -- noqa: L045
   SELECT DISTINCT id
   FROM
-    staging_github_metrics.curated_repos
+    {{ staging_dataset }}.curated_repos
   LEFT JOIN
-    staging_github_metrics.repos_with_full_meta_for_app
+    {{ staging_dataset }}.repos_with_full_meta_for_app
     ON
       LOWER(CONCAT(matched_owner, "/", matched_name)) = LOWER(repo)
 ),
@@ -15,11 +15,11 @@ distinct_repo_papers AS ( -- noqa: L045
     id,
     merged_id
   FROM
-    staging_github_metrics.repos_in_papers
+    {{ staging_dataset }}.repos_in_papers
   CROSS JOIN
     UNNEST(merged_ids) AS merged_id
   LEFT JOIN
-    staging_github_metrics.repos_with_full_meta_for_app
+    {{ staging_dataset }}.repos_with_full_meta_for_app
     ON
       LOWER(CONCAT(matched_owner, "/", matched_name)) = LOWER(repo)
 ),
@@ -32,7 +32,7 @@ repo_paper_meta AS (
     FROM
       distinct_repo_papers
     LEFT JOIN
-      staging_github_metrics.top_level1_fields
+      {{ staging_dataset }}.top_level1_fields
       USING
         (merged_id)
     GROUP BY
@@ -54,7 +54,7 @@ repo_star_dates AS (
     repo_id,
     ARRAY_AGG(star_date) AS star_dates
   FROM
-    staging_github_metrics.star_events
+    {{ staging_dataset }}.star_events
   GROUP BY
     repo_id),
 
@@ -64,7 +64,7 @@ first_commit AS (
     contributor_name AS contributor,
     MIN(push_created_at) AS first_contrib_date
   FROM
-    staging_github_metrics.push_event_commits
+    {{ staging_dataset }}.push_event_commits
   GROUP BY repo_id, contributor_name
 ),
 
@@ -77,7 +77,7 @@ repo_pushes AS (
         push_created_at = first_contrib_date AS is_first_time_contribution
     )) AS events
   FROM
-    staging_github_metrics.push_event_commits
+    {{ staging_dataset }}.push_event_commits
   LEFT JOIN
     first_commit
     ON
@@ -96,7 +96,7 @@ issues AS (
         action AS event_type
     )) AS events
   FROM
-    staging_github_metrics.issue_events
+    {{ staging_dataset }}.issue_events
   WHERE
     action IN ("opened", "closed")
   GROUP BY
@@ -109,9 +109,9 @@ canonical_pypi AS (
     summary,
     ROW_NUMBER() OVER (PARTITION BY id) AS ranking
   FROM
-    staging_github_metrics.repos_with_full_meta_for_app
+    {{ staging_dataset }}.repos_with_full_meta_for_app
   INNER JOIN
-    staging_github_metrics.pypi_over_time
+    {{ staging_dataset }}.pypi_over_time
     USING (id)
 ),
 
@@ -137,7 +137,7 @@ canonical_meta AS (
       MAX(current_owner), "/", MAX(current_name)
     ) IN (SELECT name FROM `bigquery-public-data.deps_dev_v1.Projects`) AS has_deps_dev -- noqa: L057
   FROM
-    staging_github_metrics.repos_with_full_meta_for_app
+    {{ staging_dataset }}.repos_with_full_meta_for_app
   GROUP BY
     id
 )
@@ -189,11 +189,11 @@ LEFT JOIN
 LEFT JOIN
   `openssf.criticality_score_cron.criticality-score-v0-latest` AS openssf --noqa: L057, L031
   ON
-    github_metrics.get_first_repo_slug( --noqa: L030
+    {{ staging_dataset }}.get_first_repo_slug( --noqa: L030
       openssf.repo.url
     ) = CONCAT(owner_name, "/", current_name)
 LEFT JOIN
-  staging_github_metrics.top_cited_repo_citers
+  {{ staging_dataset }}.top_cited_repo_citers
   USING (id)
 LEFT JOIN
   canonical_pypi
@@ -202,7 +202,7 @@ WHERE
   (CONCAT(
       owner_name, "/", current_name
     ) IN (
-      SELECT repo FROM staging_github_metrics.curated_repos
+      SELECT repo FROM {{ staging_dataset }}.curated_repos
     )
     OR (
       (

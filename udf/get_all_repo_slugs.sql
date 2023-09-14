@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION github_metrics.get_all_repo_slugs(text STRING)
+CREATE OR REPLACE FUNCTION staging_orca.get_all_repo_slugs(text STRING)
 RETURNS ARRAY<STRING>
 AS (
   (
