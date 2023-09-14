@@ -5,7 +5,7 @@ distinct_curated AS ( -- noqa: L045
   FROM
     {{ staging_dataset }}.curated_repos
   LEFT JOIN
-    {{ staging_dataset }}.repos_with_full_meta_for_app
+    {{ staging_dataset }}.repos_with_full_meta
     ON
       LOWER(CONCAT(matched_owner, "/", matched_name)) = LOWER(repo)
 ),
@@ -19,7 +19,7 @@ distinct_repo_papers AS ( -- noqa: L045
   CROSS JOIN
     UNNEST(merged_ids) AS merged_id
   LEFT JOIN
-    {{ staging_dataset }}.repos_with_full_meta_for_app
+    {{ staging_dataset }}.repos_with_full_meta
     ON
       LOWER(CONCAT(matched_owner, "/", matched_name)) = LOWER(repo)
 ),
@@ -109,7 +109,7 @@ canonical_pypi AS (
     summary,
     ROW_NUMBER() OVER (PARTITION BY id) AS ranking
   FROM
-    {{ staging_dataset }}.repos_with_full_meta_for_app
+    {{ staging_dataset }}.repos_with_full_meta
   INNER JOIN
     {{ staging_dataset }}.pypi_over_time
     USING (id)
@@ -137,7 +137,7 @@ canonical_meta AS (
       MAX(current_owner), "/", MAX(current_name)
     ) IN (SELECT name FROM `bigquery-public-data.deps_dev_v1.Projects`) AS has_deps_dev -- noqa: L057
   FROM
-    {{ staging_dataset }}.repos_with_full_meta_for_app
+    {{ staging_dataset }}.repos_with_full_meta
   GROUP BY
     id
 )
