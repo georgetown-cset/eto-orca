@@ -272,7 +272,7 @@ class RepoRetriever:
         """
         repos = self.get_repos(query_bq, query_topics)
         with open(output_fi, mode="w") as f:
-            repos = [r for r in repos if r and r["url"]][:5]
+            repos = [r for r in repos if r and r["url"]]
             repo_to_meta = {}
             for repo in repos:
                 url = repo["url"]

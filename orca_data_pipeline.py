@@ -22,7 +22,7 @@ from airflow.providers.google.cloud.transfers.gcs_to_bigquery import (
 )
 from dataloader.airflow_utils.defaults import (
     DAGS_DIR,
-    DEV_DATA_BUCKET,
+    DATA_BUCKET,
     GCP_ZONE,
     PROJECT_ID,
     get_default_args,
@@ -44,7 +44,6 @@ gce_resource_id = "orca-etl"
 vm_working_dir = "current_run"
 
 default_args = get_default_args()
-default_args["on_failure_callback"] = None
 
 dag = DAG(
     "orca_updater",
@@ -60,7 +59,7 @@ dag = DAG(
 
 with dag:
     clear_dl_dir = GCSDeleteObjectsOperator(
-        task_id="clear_dl_dir", bucket_name=DEV_DATA_BUCKET, prefix=tmp_dir
+        task_id="clear_dl_dir", bucket_name=DATA_BUCKET, prefix=tmp_dir
     )
 
     extract_repo_mentions = BigQueryInsertJobOperator(
@@ -92,9 +91,9 @@ with dag:
     retrieve_repos_sequence = [
         f"mkdir {vm_working_dir}",
         f"cd {vm_working_dir}",
-        f"gsutil cp -r gs://{DEV_DATA_BUCKET}/{production_dataset}/code/scripts .",
-        f"gsutil cp -r gs://{DEV_DATA_BUCKET}/{production_dataset}/code/input_data .",
-        f"gsutil cp -r gs://{DEV_DATA_BUCKET}/{production_dataset}/code/requirements.txt .",
+        f"gsutil cp -r gs://{DATA_BUCKET}/{production_dataset}/code/scripts .",
+        f"gsutil cp -r gs://{DATA_BUCKET}/{production_dataset}/code/input_data .",
+        f"gsutil cp -r gs://{DATA_BUCKET}/{production_dataset}/code/requirements.txt .",
         "python3 -m pip install -r requirements.txt",
         "PYTHONPATH='.' python3 scripts/retrieve_repos.py --query_bq",
     ]
@@ -121,7 +120,7 @@ with dag:
     scrape_gh_sequence = [
         f"cd {vm_working_dir}",
         "PYTHONPATH='.' python3 scripts/retrieve_repo_metadata.py curr_repos_filled.jsonl curr_repos_final.jsonl",
-        f"gsutil cp curr_repos_final.jsonl gs://{DEV_DATA_BUCKET}/{tmp_dir}/",
+        f"gsutil cp curr_repos_final.jsonl gs://{DATA_BUCKET}/{tmp_dir}/",
     ]
     vm_script = " && ".join(scrape_gh_sequence)
 
@@ -139,7 +138,7 @@ with dag:
 
     load_data_to_bq = GCSToBigQueryOperator(
         task_id="load_data_to_bq",
-        bucket=DEV_DATA_BUCKET,
+        bucket=DATA_BUCKET,
         source_objects=[f"{tmp_dir}/curr_repos_final.jsonl"],
         schema_object=f"{production_dataset}/schemas/repos_with_full_meta_raw.json",
         destination_project_dataset_table=f"{staging_dataset}.repos_with_full_meta_raw",
