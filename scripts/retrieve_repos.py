@@ -139,7 +139,7 @@ class RepoRetriever:
         :param topic: topic to retrieve repos for
         :return: list of formatted size ranges
         """
-        size_ranges = [[0, 1000], [1001, None]]
+        size_ranges = [[5, 1000], [1001, None]]
         valid_intervals = []
         num_retries = 0
         while len(size_ranges) > 0:
@@ -164,7 +164,7 @@ class RepoRetriever:
             else:
                 result_count = repo_resp_js.get("total_count", 0)
                 print(f"Found {result_count} repos in {fmt_size_range}")
-                if result_count > 1000:
+                if result_count >= 1000:
                     if size_range[0] == size_range[1]:
                         print(
                             f"ERROR: too many repos ({result_count}) for {topic} in {fmt_size_range}"
