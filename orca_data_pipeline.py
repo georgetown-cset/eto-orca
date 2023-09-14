@@ -159,9 +159,7 @@ with dag:
         >> load_data_to_bq
     )
 
-    ####
-
-    curr = gce_instance_stop
+    curr = load_data_to_bq
     downstream_seq_file = (
         f"{DAGS_DIR}/sequences/{production_dataset}/downstream_order.txt"
     )
@@ -199,7 +197,7 @@ with dag:
         ),
         BigQueryCheckOperator(
             task_id="check_distinct_repos_with_full_meta",
-            sql=f"select count(0) = count(distinct(concat(owner_name, '/', current_name))) from {staging_dataset}.repos_with_full_meta",
+            sql=f"select count(0) = count(distinct(concat(matched_owner, '/', matched_name))) from {staging_dataset}.repos_with_full_meta",
             use_legacy_sql=False,
         ),
         BigQueryCheckOperator(
@@ -225,14 +223,18 @@ with dag:
             write_disposition="WRITE_TRUNCATE",
         )
 
-        pop_descriptions = PythonOperator(
-            task_id=f"populate_column_documentation_for_{table}",
-            op_kwargs={
-                "input_schema": f"{DAGS_DIR}/schemas/{production_dataset}/{table}.json",
-                "table_name": f"{production_dataset}.{table}",
-                "table_description": table_desc[table],
-            },
-            python_callable=update_table_descriptions,
+        pop_descriptions = (
+            PythonOperator(
+                task_id=f"populate_column_documentation_for_{table}",
+                op_kwargs={
+                    "input_schema": f"{DAGS_DIR}/schemas/{production_dataset}/{table}.json",
+                    "table_name": f"{production_dataset}.{table}",
+                    "table_description": table_desc[table],
+                },
+                python_callable=update_table_descriptions,
+            )
+            if table != "website_stats"
+            else None
         )
 
         take_snapshot = BigQueryToBigQueryOperator(
@@ -242,10 +244,9 @@ with dag:
             create_disposition="CREATE_IF_NEEDED",
             write_disposition="WRITE_TRUNCATE",
         )
-        (
-            wait_for_checks
-            >> copy_to_prod
-            >> pop_descriptions
-            >> take_snapshot
-            >> msg_success
-        )
+        wait_for_checks >> copy_to_prod
+        if table != "website_stats":
+            copy_to_prod >> pop_descriptions >> take_snapshot
+        else:
+            copy_to_prod >> take_snapshot
+        take_snapshot >> msg_success
