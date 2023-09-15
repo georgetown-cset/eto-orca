@@ -6,17 +6,17 @@ relevant_repos AS (
   FROM (
     SELECT CONCAT(matched_owner, "/", matched_name) AS repo_name
     FROM
-      staging_github_metrics.repos_with_full_meta_for_app
+      {{ staging_dataset }}.repos_with_full_meta
     UNION DISTINCT
     SELECT CONCAT(current_owner, "/", current_name) AS repo_name
     FROM
-      staging_github_metrics.repos_with_full_meta_for_app
+      {{ staging_dataset }}.repos_with_full_meta
     WHERE
       current_name IS NOT NULL
     UNION DISTINCT
     SELECT repo AS repo_name
     FROM
-      staging_github_metrics.repos_in_papers) ),
+      {{ staging_dataset }}.repos_in_papers) ),
 
 curr_data AS (
   SELECT

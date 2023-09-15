@@ -10,10 +10,10 @@ with aggregated_li as (
       distinct repo_id
     ) as contributed_repos,
     array_agg(distinct user_li_url) as linkedin_urls
-  from staging_github_metrics.push_event_commits
+  from {{ staging_dataset }}.push_event_commits
   left join gcp_cset_revelio.user
     on lower(contributor_name) = lower(concat(firstname, " ", lastname))
-  left join staging_github_metrics.repos_with_full_meta
+  left join {{ staging_dataset }}.repos_with_full_meta
     on repo_id = id
   where user_li_url is not null
   group by contributor
@@ -36,7 +36,7 @@ contributor_mapping as (
   from
     aggregated_li
   left join
-    github_metrics.li_annotation_data_20230104
+    {{ production_dataset }}.li_annotation_data_20230104
     using (contributor)
   where contributor not in
     (select contributor from aggregated_li where array_length(linkedin_urls) = 1)

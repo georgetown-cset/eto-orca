@@ -12,7 +12,7 @@ with all_events as (
       '$.sha'),
       '$') as commit_sha
   from
-    staging_github_metrics.events
+    {{ staging_dataset }}.events
   cross join
     UNNEST(JSON_EXTRACT_ARRAY(payload,
         '$.commits')) as

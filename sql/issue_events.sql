@@ -7,6 +7,6 @@ SELECT DISTINCT
   TRIM(JSON_EXTRACT(payload,
     "$.action"), '"') AS action
 FROM
-  staging_github_metrics.events
+  {{ staging_dataset }}.events
 WHERE
   type = "IssuesEvent"

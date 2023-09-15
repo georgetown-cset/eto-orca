@@ -20,7 +20,7 @@ paper_relevance as (
     (select
       id,
       meta.merged_id as merged_id
-      from staging_github_metrics.website_stats cross join unnest(paper_meta) as meta)
+      from {{ staging_dataset }}.website_stats cross join unnest(paper_meta) as meta)
     using (merged_id)
   inner join citation_counts
     using (merged_id)

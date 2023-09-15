@@ -10,12 +10,12 @@ WITH yearly_country_counts AS (
     -- all correspond to the same overall project
     sum(num_downloads) AS num_downloads
   FROM
-    staging_github_metrics.pypi_repo_metadata
+    {{ staging_dataset }}.pypi_repo_metadata
   LEFT JOIN
-    staging_github_metrics.pypi_file_downloads
+    {{ staging_dataset }}.pypi_file_downloads
     USING (project)
   INNER JOIN
-    staging_github_metrics.repos_with_full_meta_for_app
+    {{ staging_dataset }}.repos_with_full_meta
     ON
       repo = concat(current_owner, "/", current_name)
   GROUP BY id, year, country_code

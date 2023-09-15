@@ -67,7 +67,7 @@ agg_repos AS (
   SELECT
     merged_id,
     dataset,
-    github_metrics.get_all_repo_slugs(full_text) AS repos --noqa: L030
+    {{ staging_dataset }}.get_all_repo_slugs(full_text) AS repos --noqa: L030
   FROM (
     SELECT
       merged_id,

@@ -7,7 +7,7 @@ with prs as (select distinct
   TRIM(JSON_EXTRACT(payload,
     "$.action"), '"') as action
   from
-    staging_github_metrics.events
+    {{ staging_dataset }}.events
   where
     (type = "PullRequestEvent"))
 

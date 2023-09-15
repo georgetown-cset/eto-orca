@@ -6,3 +6,7 @@ exclude_rules = L014,L018,L027,L032,L034,L042,L044
 [sqlfluff:rules]
 tab_space_size = 2
 max_line_length = 120
+
+[sqlfluff:templater:jinja:context]
+staging_dataset = staging_orca
+production_dataset = orca
