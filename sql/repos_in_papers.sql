@@ -1,13 +1,5 @@
 -- get repo mentions in arXiv fulltext, semantic scholar fulltext, Papers with Code, and paper titles/abstracts
 WITH
-valid_v2_ids AS (
-  SELECT DISTINCT merged_id_v2 AS merged_id
-  FROM
-    gcp_cset_links_v3.merged_id_crosswalk
-  WHERE
-    merged_id_v3 IS NOT NULL
-),
-
 arxiv_ft AS (
   SELECT
     id,
@@ -56,12 +48,9 @@ pwc_arxiv_s2 AS (
     FROM
       pwc) AS ft
   LEFT JOIN
-    gcp_cset_links_v2.article_links
+    literature.sources
     ON
-      ft.id = article_links.orig_id
-  INNER JOIN
-    valid_v2_ids
-    USING (merged_id)),
+      ft.id = sources.orig_id),
 
 agg_repos AS (
   SELECT
@@ -93,10 +82,7 @@ agg_repos AS (
         "-"
       ) AS full_text
     FROM
-      gcp_cset_links_v2.corpus_merged
-    INNER JOIN
-      valid_v2_ids
-      USING (merged_id))),
+      literature.papers)),
 
 stack_repo_dois AS (
   SELECT
@@ -113,13 +99,10 @@ stack_merged_ids AS (
     "stack" AS dataset,
     repo
   FROM stack_repo_dois
-  INNER JOIN gcp_cset_links_v2.all_metadata_with_cld2_lid
+  INNER JOIN staging_literature.all_metadata_with_cld2_lid
     ON doi = clean_doi
-  LEFT JOIN gcp_cset_links_v2.article_links
+  LEFT JOIN literature.sources
     ON id = orig_id
-  INNER JOIN
-    valid_v2_ids
-    USING (merged_id)
 ),
 
 merged_data AS (

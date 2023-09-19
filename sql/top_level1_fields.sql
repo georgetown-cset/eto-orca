@@ -37,7 +37,7 @@ WHERE
     merged_id IN (
       SELECT merged_id
       FROM
-        gcp_cset_links_v2.corpus_merged
+        literature.papers
       WHERE
         (
           title_english IS NOT NULL
