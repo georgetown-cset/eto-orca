@@ -15,9 +15,9 @@ WITH yearly_country_counts AS (
     {{ staging_dataset }}.pypi_file_downloads
     USING (project)
   INNER JOIN
-    {{ staging_dataset }}.repos_with_full_meta
+    {{ staging_dataset }}.repos_with_full_meta_raw
     ON
-      repo = concat(current_owner, "/", current_name)
+      repo = concat(full_metadata.owner.login, "/", full_metadata.name)
   GROUP BY id, year, country_code
 )
 
