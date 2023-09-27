@@ -1,7 +1,7 @@
 -- get repo's pypi summary and downloads by country over time
 WITH yearly_country_counts AS (
   SELECT
-    id,
+    full_metadata.id,
     max(summary) AS summary,
     year,
     country_code,
@@ -18,7 +18,7 @@ WITH yearly_country_counts AS (
     {{ staging_dataset }}.repos_with_full_meta_raw
     ON
       repo = concat(full_metadata.owner.login, "/", full_metadata.name)
-  GROUP BY id, year, country_code
+  GROUP BY full_metadata.id, year, country_code
 )
 
 SELECT
