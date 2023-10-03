@@ -20,6 +20,10 @@ const styles = {
     vertical-align: bottom;
     font-weight: bold;
     padding-bottom: 16px;
+
+    & .dropdown label {
+      font-weight: normal;
+    }
   `,
   dropdownContainer: css`
     display: inline-block;
