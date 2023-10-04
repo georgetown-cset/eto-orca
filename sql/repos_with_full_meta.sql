@@ -71,6 +71,7 @@ distinct_sources as (
   group by id
 ),
 
+-- in the case of multiple sets of metadata per id, we'll choose the one with the most recent `pushed_at`
 ranks as (
   select
     * except(sources),
