@@ -2,12 +2,12 @@ pypi_file_downloads
 pypi_repo_metadata
 pypi_over_time
 curated_repos
-repos_with_full_meta
 events
 push_event_commits
 pull_requests_opened
 star_events
 issue_events
+repos_with_full_meta
 top_level1_fields
 top_cited_repo_citers
 website_stats

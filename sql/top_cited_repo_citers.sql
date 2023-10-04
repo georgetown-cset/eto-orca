@@ -4,18 +4,18 @@ with citation_counts as (
   select
     ref_id as merged_id,
     count(distinct(merged_id)) as num_citations
-  from gcp_cset_links_v2.paper_references_merged group by ref_id
+  from literature.references group by ref_id
 ),
 
 paper_relevance as (
   select
-    corpus_merged.merged_id,
+    papers.merged_id,
     id,
-    corpus_merged.year,
+    papers.year,
     num_citations as citations,
-    coalesce(corpus_merged.title_english, corpus_merged.title_foreign) as title,
+    coalesce(papers.title_english, papers.title_foreign) as title,
     concat("https://doi.org/", doi) as link
-  from gcp_cset_links_v2.corpus_merged
+  from literature.papers
   inner join
     (select
       id,
@@ -29,16 +29,16 @@ paper_relevance as (
         merged_id,
         title,
         min(clean_doi) as doi
-      from gcp_cset_links_v2.all_metadata_with_cld2_lid
-      inner join gcp_cset_links_v2.article_links
-        on all_metadata_with_cld2_lid.id = article_links.orig_id
+      from staging_literature.all_metadata_with_cld2_lid
+      inner join literature.sources
+        on all_metadata_with_cld2_lid.id = sources.orig_id
       group by merged_id, title
     ) as dois_data
     on
       (
         (
-          (dois_data.title = corpus_merged.title_english) or (dois_data.title = corpus_merged.title_foreign)
-        ) and dois_data.merged_id = corpus_merged.merged_id
+          (dois_data.title = papers.title_english) or (dois_data.title = papers.title_foreign)
+        ) and dois_data.merged_id = papers.merged_id
       )
 ),
 
@@ -48,7 +48,7 @@ arxiv_links as (
     merged_id,
     concat("https://arxiv.org/abs/", orig_id) as arxiv_link
 
-  from paper_relevance inner join gcp_cset_links_v2.article_links_with_dataset using (merged_id) where dataset = "arxiv"
+  from paper_relevance inner join literature.sources using (merged_id) where dataset = "arxiv"
 ),
 
 -- hacky deduplication that will work until linkage updates
@@ -66,7 +66,7 @@ deduplicated_articles as (
     arxiv_links
     using (merged_id)
   left join
-    gcp_cset_links_v2.paper_sources_merged
+    literature.venues
     using (merged_id)
   group by title, id
 )

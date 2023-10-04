@@ -4,15 +4,15 @@ WITH
 relevant_repos AS (
   SELECT DISTINCT repo_name
   FROM (
-    SELECT CONCAT(matched_owner, "/", matched_name) AS repo_name
+    SELECT url AS repo_name
     FROM
-      {{ staging_dataset }}.repos_with_full_meta
+      {{ staging_dataset }}.repos_with_full_meta_raw
     UNION DISTINCT
-    SELECT CONCAT(current_owner, "/", current_name) AS repo_name
+    SELECT concat(full_metadata.owner.login, "/", full_metadata.name) AS repo_name
     FROM
-      {{ staging_dataset }}.repos_with_full_meta
+      {{ staging_dataset }}.repos_with_full_meta_raw
     WHERE
-      current_name IS NOT NULL
+      full_metadata.name IS NOT NULL
     UNION DISTINCT
     SELECT repo AS repo_name
     FROM
@@ -251,7 +251,47 @@ curr_data AS (
     id,
     other
   FROM
-    `githubarchive.month.202306` ),
+    `githubarchive.month.202306`
+  UNION ALL
+  SELECT
+    type,
+    public,
+    payload,
+    repo,
+    actor,
+    org,
+    created_at,
+    id,
+    other
+  FROM
+    `githubarchive.month.202307`
+  UNION ALL
+  SELECT
+    type,
+    public,
+    payload,
+    repo,
+    actor,
+    org,
+    created_at,
+    id,
+    other
+  FROM
+    `githubarchive.month.202308`
+  UNION ALL
+  SELECT
+    type,
+    public,
+    payload,
+    repo,
+    actor,
+    org,
+    created_at,
+    id,
+    other
+  FROM
+    `githubarchive.month.202309`
+),
 
 -- needed to allow match to data for old repo names
 relevant_ids AS (
