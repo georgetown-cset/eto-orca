@@ -31,8 +31,6 @@ Composite material
 Computational biology
 Computational chemistry
 Computational physics
-Computational science
-Computer architecture
 Computer engineering
 Computer graphics (images)
 Computer hardware
@@ -144,3 +142,23 @@ Renewable Energy
 Natural Resources
 Consumption of Energy and Resources
 Energy Systems
+Advertising
+Agronomy
+Biotechnology
+Botany
+Cardiology
+Chemical physics
+Classics
+Food science
+Geomorphology
+Hydrology
+Microbiology
+Molecular physics
+Oceanography
+Organic chemistry
+Pathology
+Physical chemistry
+Surgery
+Thermodynamics
+Transport engineering
+Water resource management

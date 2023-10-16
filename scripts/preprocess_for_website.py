@@ -17,7 +17,7 @@ from scripts.constants import (
 )
 
 NOW = datetime.now()
-END_YEAR = NOW.year - 1  # if NOW.month > 6 else NOW.year - 1
+END_YEAR = NOW.year if NOW.month > 6 else NOW.year - 1
 START_YEAR = END_YEAR - 6
 
 
