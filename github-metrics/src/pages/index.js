@@ -41,7 +41,7 @@ const IndexPage = () => {
           ORCA compiles data on open-source software (OSS) used in science and technology research. Drawing on Github Archive, ETO’s Merged Academic Corpus, and many other data sources, ORCA tracks OSS usage, health, development activity, and community engagement across a wide range of software projects and research subjects. Use ORCA to compare OSS projects in a particular research area, track trends over time, and sort and filter projects by different metrics. <ExternalLink href={"https://eto.tech/tool-docs/orca"}>Read the docs &gt;&gt;</ExternalLink>
           </div>
           <div>
-            Website last updated on {data.site.buildTime}. Data last updated on {config.last_updated}.
+            Website last updated on {data.site.buildTime}. Data last updated on {config.last_updated}. You may <a href={"/orca_download.jsonl"}>download the data</a>.
           </div>
         </div>}
         documentationLink={"https://eto.tech/tool-docs/orca"}
