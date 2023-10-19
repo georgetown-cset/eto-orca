@@ -372,6 +372,47 @@ def read_rows(input_dir: str) -> tuple:
     return field_to_repos, language_counts, id_to_repo
 
 
+def write_download_data(ids_to_repos: dict) -> None:
+    """
+    Write data to share in export
+    :param ids_to_repos: Mapping from repo ids to metadata
+    :return: None
+    """
+    parent_dir = os.path.join("github-metrics", "static")
+    os.makedirs(parent_dir, exist_ok=True)
+    with open(os.path.join(parent_dir, "orca_download.jsonl"), mode="w") as f:
+        for id, meta in ids_to_repos.items():
+            meta["github_id"] = id
+            meta.pop("top_articles")
+            meta["star_dates"] = [
+                {"year": year, "count": count} for year, count in meta["star_dates"]
+            ]
+            meta["push_dates"] = [
+                {"year": year, "count": count} for year, count in meta["push_dates"]
+            ]
+            meta["issue_dates"] = [
+                {"year": year, "opened_count": open_count, "closed_count": close_count}
+                for year, open_count, close_count in meta["issue_dates"]
+            ]
+            meta["contrib_counts"] = [
+                {"contributor_rank": rank, "num_contributions": num_contrib}
+                for rank, num_contrib in meta["contrib_counts"]
+            ]
+            meta["commit_dates"] = [
+                {
+                    "year": year,
+                    "first_time_contributor_contributions": first_time,
+                    "returning_contributor_contributions": returning,
+                }
+                for year, first_time, returning in meta["commit_dates"]
+            ]
+            meta["downloads"] = [
+                {"year": year, "country": country, "count": count}
+                for year, country, count in meta["downloads"]
+            ]
+            f.write(json.dumps(meta) + "\n")
+
+
 def write_data(input_dir: str, output_dir: str) -> None:
     """
     Reads repo metadata, cleans it up, writes it out for the webapp
@@ -439,6 +480,7 @@ def write_data(input_dir: str, output_dir: str) -> None:
     ]:
         with open(os.path.join(output_dir, out_fi + ".json"), mode="w") as f:
             f.write(json.dumps(data))
+    write_download_data(id_to_repo)
 
 
 def write_config(config_fi: str) -> None:
