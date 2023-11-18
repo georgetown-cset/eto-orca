@@ -8,7 +8,7 @@ with citation_counts as (
 ),
 
 paper_relevance as (
-  select
+  select distinct
     papers.merged_id,
     id,
     papers.year,
@@ -18,10 +18,17 @@ paper_relevance as (
   from literature.papers
   inner join
     (select
-      id,
-      meta.merged_id as merged_id
-      from {{ staging_dataset }}.website_stats cross join unnest(paper_meta) as meta)
+      repo,
+      merged_id
+      from {{ staging_dataset }}.repos_in_papers cross join unnest(merged_ids) as merged_id)
     using (merged_id)
+  inner join
+    (select
+      concat(owner_name, "/", repo_name) as repo,
+      full_metadata.id
+      from
+        {{ staging_dataset }}.repos_with_full_meta_raw)
+    using (repo)
   inner join citation_counts
     using (merged_id)
   left join (
