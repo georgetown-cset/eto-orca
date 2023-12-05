@@ -21,7 +21,9 @@ distinct_repo_papers AS ( -- noqa: L045
   LEFT JOIN
     {{ staging_dataset }}.repos_with_full_meta
     ON
-      LOWER(CONCAT(matched_owner, "/", matched_name)) = LOWER(repo)
+      (
+        LOWER(CONCAT(matched_owner, "/", matched_name)) = LOWER(repo)
+      ) OR (LOWER(CONCAT(current_owner, "/", current_name)) = LOWER(repo))
 ),
 
 repo_paper_meta AS (
