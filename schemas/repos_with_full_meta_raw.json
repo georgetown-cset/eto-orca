@@ -2388,6 +2388,18 @@
             "mode": "NULLABLE",
             "name": "dependabot_security_updates",
             "type": "RECORD"
+          },
+          {
+            "fields": [
+              {
+                "mode": "NULLABLE",
+                "name": "status",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "secret_scanning_validity_checks",
+            "type": "RECORD"
           }
         ],
         "mode": "NULLABLE",
