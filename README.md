@@ -1,41 +1,57 @@
-# github-metrics
+# ORCA: Open-source Software Research and Community Activity
 
-This repository contains code that aggregates metadata related to GitHub repositories of interest. It is under
-active development and subject to change.
+This repository contains code related to the ORCA project.
 
-Eventually this will all be wrapped up into a pipeline, but at the moment the sequence of scripts is as follows:
+## Running the ORCA web application locally
 
-* Run `sql/repos_in_papers.sql` to aggregate github references that appear in papers
-* `export GITHUB_ACCESS_TOKEN=your access token`
-* `export GITHUB_USER=your username`
-* Run `PYTHONPATH='.' python3 scripts/retrieve_repos.py --query_bq --query_topics`
+Navigate to the `github-metrics` subdirectory. If you have not installed
+[Gatsby](https://www.gatsbyjs.com/docs/tutorial/getting-started/part-0/), do so, and then run
 
-At this point, we will have full metadata for repos we retrieved using the github API (i.e. repos retrieved
+```
+npm install
+gatsby clean
+gatsby develop
+```
+
+## Running data retrieval scripts
+
+To manually run data retrieval scripts, you can:
+
+* Run `sql/repos_in_papers.sql` to aggregate GitHub references that appear in papers. If you do not want to update
+the software extrated from scholarly literature, skip this step.
+
+* Prepare your development environment:
+
+```bash
+virtualenv venv
+. venv/bin/activate
+pip install -r requirements.txt
+export GITHUB_ACCESS_TOKEN=your access token
+export GITHUB_USER=your username
+```
+
+* Run `PYTHONPATH='.' python3 scripts/retrieve_repos.py` to retrieve a clean list of software to pull metadata from. You
+can run with the `--query_bq` flag to retrieve software that appears in the scholarly literature (if you are a CSET
+employee with BigQuery access) `--query_topics` to retrieve software that matches the GitHub topics that appear in
+`input_data/topics.txt`.
+
+* At this point, we will have full metadata for repos we retrieved using the github API (i.e. repos retrieved
 by topic, at the moment), but not for repos that only appear in papers or other sources. The next script
-grabs the default metadata retrieved from the github API for repos that don't already have it
+grabs the default metadata retrieved from the github API for repos that don't already have it:
+`PYTHONPATH='.' python3 scripts/backfill_top_level_repo_data.py`
 
-* Run `PYTHONPATH='.' python3 scripts/backfill_top_level_repo_data.py`
-
-Now, we are going to scrape some additional metadata from GitHub itself, including text of README.md files
+* Now, we can scrape some additional metadata from GitHub itself, including text of README.md files
 which we can use to do further analysis.
+Run `PYTHONPATH='.' python3 scripts/retrieve_repo_metadata.py curr_repos_filled.jsonl curr_repos_final.jsonl`
 
-* Run `PYTHONPATH='.' python3 scripts/retrieve_repo_metadata.py curr_repos_filled.jsonl curr_repos_final.jsonl`
+* To prepare data for the web application, load `curr_repos_final.jsonl` in the previous step into BigQuery and run
+the sequence of queries in `sequences/downstream_order.txt`. Assuming your dataset in BigQuery is called `orca`, download
+the data from
+`orca.website_stats` in BigQuery as JSONL,
+then run `PYTHONPATH='.' python3 scripts/preprocess_for_website.py --input_dir <path to your downloaded data>`.
 
-In parallel, we will retrieve metadata about the repo "owner"s - github urls are in the form
-`github.com/<owner name>/<repo name>` . An owner may be an organization or a user account.
-
-* Run `PYTHONPATH='.' python3 scripts/get_owners.py curr_repos_filled.jsonl repo_owners.jsonl`
-
-Now, it's time to load everything into BigQuery and clean up the table structure:
-
-* `bq load --replace --source_format NEWLINE_DELIMITED_JSON staging_github_metrics.repos_with_full_meta_raw curr_repos_final.jsonl schemas/repos_with_full_meta_raw.json`
-* `bq load --replace --source_format NEWLINE_DELIMITED_JSON staging_github_metrics.repo_owners_raw repo_owners.jsonl schemas/repo_owners_raw.json`
-* Run the remaining queries in the `sql` directory in the order they appear in `downstream_order.txt`, writing the output to `staging_github_metrics.<query_name>`
-
-Optionally, also run `sql/lexisnexis_repos.sql` to get Lexis-Nexis repository references.
-
-Finally, copy any queries into `github_metrics` and `github_metrics_backups` that already appear there
-(or are new and useful to analysts) and use `dataloader/populate_documentation.py` to update table and column descriptions.
+These steps are automated and run on a monthly basis on the scholarly literature data using the `orca_data_pipeline.py`
+Airflow pipeline.
 
 ### Data provenance
 
@@ -65,21 +81,3 @@ then calculate the percentage of commits written by each contributor. See combin
 Contribution percentages above, and `github-metrics/src/components/summary_panel.js:getContribTrace`
 * The deps.dev links are added if the repo is present in `bigquery-public-data.deps_dev_v1`
 * The pypi downloads over time come from `bigquery-public-data.pypi`
-
-### Notes on lf_ai_ml_repo_and_dependent_categories.sql
-
-The Linux Foundation maintains a list of projects they feel are relevant to AI/ML. Some of these are unlikely to be relevant according to our own sensibilities (for example, they include workflow tools, databases, etc in their list), but nevertheless, it was a starting point for an analysis I wanted to try.
-
-I imported their data into BQ, and then wrote lf_ai_ml_repo_and_dependent_categories.sql to aggregate all the dependent projects based on the dependencies extracted by deps.dev. This is imperfect and incomplete in multiple dimensions:
-
-1.) I was only able to link projects that were in pypi because pypi links repo names to package names. For other distribution models, I could try linking using the repo name as the package name, but I decided to go with unambiguous links for now and come back to non-pypi projects later
-2.) The dependencies extracted by deps.dev are also incomplete.
-
-Nevertheless, I think this is a potentially interesting method of helping to identify AI-related repos. You can see the 3110 AI-related repos I identified using this data, either because they were in a relevant category or because they depended on a project in a relevant category, here: github_metrics.lf_ai_ml_repo_and_dependent_categories. `repo_slug` gives the name of the repo on github, `category` gives the LF AI/ML category of the base repo (the ultimate dependent of `repo_slug`), and `depth` gives the minimum depth at which the dependency appears, with -1 used to note the LF repos themselves.
-
-### Web application
-
-To prepare data for the web application, download the data from `staging_github_metrics.website_stats` in BigQuery as JSONL,
-then run `PYTHONPATH='.' python3 scripts/preprocess_for_website.py --input_dir <path to your downloaded data>`.
-
-To run the web application, change directories to `github-metrics`, then run `npm install` and `gatsby develop`.
