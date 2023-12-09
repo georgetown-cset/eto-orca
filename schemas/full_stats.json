@@ -1,0 +1,261 @@
+[
+  {
+    "description": "GitHub id",
+    "name": "id",
+    "type": "INTEGER"
+  },
+  {
+    "description": "GitHub owner name (i.e. apache in apache/airflow)",
+    "name": "owner_name",
+    "type": "STRING"
+  },
+  {
+    "description": "Current name of the repo on GitHub (i.e. airflow in apache/airflow)",
+    "name": "current_name",
+    "type": "STRING"
+  },
+  {
+    "description": "Number of open issues",
+    "name": "open_issues",
+    "type": "INTEGER"
+  },
+  {
+    "description": "Primary programming language",
+    "name": "primary_programming_language",
+    "type": "STRING"
+  },
+  {
+    "description": "OpenSSF criticality score",
+    "name": "criticality_score",
+    "type": "FLOAT"
+  },
+  {
+    "description": "GitHub topics",
+    "mode": "REPEATED",
+    "name": "topics",
+    "type": "STRING"
+  },
+  {
+    "description": "Number of stars",
+    "name": "stargazers_count",
+    "type": "INTEGER"
+  },
+  {
+    "description": "Number of watchers",
+    "name": "subscribers_count",
+    "type": "INTEGER"
+  },
+  {
+    "description": "Number of releases",
+    "name": "num_releases",
+    "type": "STRING"
+  },
+  {
+    "description": "Date created",
+    "name": "created_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "Date repository was last changed",
+    "name": "updated_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "Date last commit was pushed to any branch",
+    "name": "pushed_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "Paper fields of study",
+    "fields": [
+      {
+        "description": "CSET paper ID",
+        "name": "merged_id",
+        "type": "STRING"
+      },
+      {
+        "description": "Field record",
+        "fields": [
+          {
+            "description": "Field name",
+            "name": "name",
+            "type": "STRING"
+          },
+          {
+            "description": "Relevance score",
+            "name": "score",
+            "type": "FLOAT"
+          }
+        ],
+        "mode": "REPEATED",
+        "name": "fields",
+        "type": "RECORD"
+      }
+    ],
+    "mode": "REPEATED",
+    "name": "paper_meta",
+    "type": "RECORD"
+  },
+  {
+    "description": "Number of code contributors",
+    "name": "num_contributors",
+    "type": "INTEGER"
+  },
+  {
+    "description": "Number of other projects that use this project, as reported by the GitHub used by metric",
+    "name": "used_by",
+    "type": "INTEGER"
+  },
+  {
+    "description": "Code license",
+    "name": "license",
+    "type": "STRING"
+  },
+  {
+    "description": "Dates new stars were added to the repository",
+    "mode": "REPEATED",
+    "name": "star_dates",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "Push event metadata",
+    "fields": [
+      {
+        "description": "Contributor identifier",
+        "name": "contributor",
+        "type": "STRING"
+      },
+      {
+        "description": "Date of contribution",
+        "name": "contrib_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "description": "True if this was the contributor's first contribution",
+        "name": "is_first_time_contribution",
+        "type": "BOOLEAN"
+      }
+    ],
+    "mode": "REPEATED",
+    "name": "push_events",
+    "type": "RECORD"
+  },
+  {
+    "description": "Issue event metadata",
+    "fields": [
+      {
+        "description": "Issue contributor",
+        "name": "contributor",
+        "type": "INTEGER"
+      },
+      {
+        "description": "Issue creation date",
+        "name": "event_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "description": "Action taken on the issue",
+        "name": "event_type",
+        "type": "STRING"
+      }
+    ],
+    "mode": "REPEATED",
+    "name": "issue_events",
+    "type": "RECORD"
+  },
+  {
+    "description": "Downloads from PyPI",
+    "fields": [
+      {
+        "description": "Year download happened",
+        "name": "year",
+        "type": "INTEGER"
+      },
+      {
+        "description": "Country of downloader",
+        "name": "country_code",
+        "type": "STRING"
+      },
+      {
+        "description": "Number of downloads in this country-year pair",
+        "name": "num_downloads",
+        "type": "INTEGER"
+      }
+    ],
+    "mode": "REPEATED",
+    "name": "downloads",
+    "type": "RECORD"
+  },
+  {
+    "description": "Repository description",
+    "name": "description",
+    "type": "STRING"
+  },
+  {
+    "description": "True if there is a deps.dev page for this repository",
+    "name": "has_deps_dev",
+    "type": "BOOLEAN"
+  },
+  {
+    "description": "Article metadata",
+    "fields": [
+      {
+        "description": "CSET article id",
+        "name": "cset_id",
+        "type": "STRING"
+      },
+      {
+        "description": "arXiv ids we merged to this article",
+        "mode": "REPEATED",
+        "name": "arxiv_ids",
+        "type": "STRING"
+      },
+      {
+        "description": "Papers with Code ids we merged to this article",
+        "mode": "REPEATED",
+        "name": "papers_with_code_ids",
+        "type": "STRING"
+      },
+      {
+        "description": "OpenAlex ids we merged to this article",
+        "mode": "REPEATED",
+        "name": "openalex_ids",
+        "type": "STRING"
+      },
+      {
+        "description": "Semantic Scholar ids we merged to this article",
+        "mode": "REPEATED",
+        "name": "semantic_scholar_ids",
+        "type": "STRING"
+      },
+      {
+        "description": "Article title",
+        "name": "title",
+        "type": "STRING"
+      },
+      {
+        "description": "Link to article on arXiv, if available",
+        "name": "link",
+        "type": "STRING"
+      },
+      {
+        "description": "Publication year",
+        "name": "year",
+        "type": "INTEGER"
+      },
+      {
+        "description": "Number of (article) in-citations",
+        "name": "citations",
+        "type": "INTEGER"
+      },
+      {
+        "description": "Venue where article was published",
+        "name": "source",
+        "type": "STRING"
+      }
+    ],
+    "mode": "REPEATED",
+    "name": "articles",
+    "type": "RECORD"
+  }
+]
