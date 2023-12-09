@@ -32,7 +32,7 @@ export GITHUB_USER=your username
 
 * Run `PYTHONPATH='.' python3 scripts/retrieve_repos.py` to retrieve a clean list of software to pull metadata from. You
 can run with the `--query_bq` flag to retrieve software that appears in the scholarly literature (if you are a CSET
-employee with BigQuery access) `--query_topics` to retrieve software that matches the GitHub topics that appear in
+employee with BigQuery access) or `--query_topics` to retrieve software that matches the GitHub topics that appear in
 `input_data/topics.txt`.
 
 * At this point, we will have full metadata for repos we retrieved using the github API (i.e. repos retrieved
