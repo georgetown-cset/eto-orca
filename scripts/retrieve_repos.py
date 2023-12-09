@@ -18,7 +18,7 @@ Retrieves repos from:
 - awesome-production-machine-learning
 - papers with code
 - arxiv fulltext
-- cnki fulltext
+- semantic scholar fulltext
 - merged corpus titles+abstracts
 - manually collected list of repos
 - manually collected list of topics
