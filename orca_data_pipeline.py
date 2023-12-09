@@ -213,7 +213,7 @@ with dag:
     with open(f"{DAGS_DIR}/schemas/{production_dataset}/table_info.json") as f:
         table_desc = json.loads(f.read())
 
-    for table in ["website_stats", "repos_with_full_meta"]:
+    for table in ["website_stats", "full_stats", "repos_with_full_meta"]:
         copy_to_prod = BigQueryToBigQueryOperator(
             task_id=f"copy_{table}_to_prod",
             source_project_dataset_tables=[f"{staging_dataset}.{table}"],

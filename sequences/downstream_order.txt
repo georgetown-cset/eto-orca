@@ -10,4 +10,6 @@ issue_events
 repos_with_full_meta
 top_level1_fields
 top_cited_repo_citers
+stats_unfilt
+full_stats
 website_stats

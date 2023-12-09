@@ -58,11 +58,68 @@ arxiv_links as (
   from paper_relevance inner join literature.sources using (merged_id) where dataset = "arxiv"
 ),
 
+arxiv_id_links as (
+  select
+    merged_id,
+    array_agg(distinct orig_id) as arxiv_ids
+  from
+    literature.sources
+  inner join
+    paper_relevance
+    using (merged_id)
+  where
+    dataset = "arxiv"
+  group by merged_id
+),
+
+s2_id_links as (
+  select
+    merged_id,
+    array_agg(distinct orig_id) as semantic_scholar_ids
+  from
+    literature.sources
+  inner join
+    paper_relevance
+    using (merged_id)
+  where
+    dataset = "s2"
+  group by merged_id
+),
+
+oa_id_links as (
+  select
+    merged_id,
+    array_agg(distinct replace(orig_id, "https://openalex.org/", "https://openalex.org/works/")) as openalex_ids
+  from
+    literature.sources
+  inner join
+    paper_relevance
+    using (merged_id)
+  where
+    dataset = "openalex"
+  group by merged_id
+),
+
+pwc_id_links as (
+  select
+    merged_id,
+    array_agg(distinct orig_id) as papers_with_code_ids
+  from
+    literature.sources
+  inner join
+    paper_relevance
+    using (merged_id)
+  where
+    dataset = "pwc"
+  group by merged_id
+),
+
 -- hacky deduplication that will work until linkage updates
 deduplicated_articles as (
   select
     title,
     id,
+    max(merged_id) as cset_id,
     max(coalesce(link, arxiv_link)) as link,
     min(year) as year,
     max(citations) as citations,
@@ -75,13 +132,26 @@ deduplicated_articles as (
   left join
     literature.venues
     using (merged_id)
+  where title is not null and year >= 2010
   group by title, id
 )
 
 select
-  id,
-  array_agg(struct(title, link, year, citations, source) order by citations desc limit 10) as articles
-from
-  deduplicated_articles
-where year >= 2010
-group by id
+  deduplicated_articles.*,
+  arxiv_ids,
+  papers_with_code_ids,
+  semantic_scholar_ids,
+  openalex_ids
+from deduplicated_articles
+left join
+  arxiv_id_links
+  on cset_id = merged_id
+left join
+  pwc_id_links
+  on cset_id = pwc_id_links.merged_id
+left join
+  s2_id_links
+  on cset_id = s2_id_links.merged_id
+left join
+  oa_id_links
+  on cset_id = oa_id_links.merged_id
