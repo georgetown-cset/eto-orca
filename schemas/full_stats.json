@@ -197,6 +197,11 @@
     "type": "BOOLEAN"
   },
   {
+    "description": "True if this repository appears in orca",
+    "name": "in_orca",
+    "type": "BOOLEAN"
+  },
+  {
     "description": "Article metadata",
     "fields": [
       {
