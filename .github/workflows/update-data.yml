@@ -27,11 +27,9 @@ jobs:
           token_format: 'access_token'
       - name: Update data
         run: |
-          python -m pip install --upgrade pip
+          python3 -m pip install --upgrade pip
           pip install -r requirements.txt
           PYTHONPATH='.' python3 scripts/preprocess_for_website.py
-          pre-commit install
-          pre-commit run end-of-file-fixer
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v4

@@ -383,6 +383,7 @@ def write_download_data(ids_to_repos: dict) -> None:
     parent_dir = os.path.join("github-metrics", "static")
     os.makedirs(parent_dir, exist_ok=True)
     with open(os.path.join(parent_dir, "orca_download.jsonl"), mode="w") as f:
+        first_line = True
         for id, meta in ids_to_repos.items():
             meta["github_id"] = id
             meta.pop("top_articles")
@@ -412,7 +413,8 @@ def write_download_data(ids_to_repos: dict) -> None:
                 {"year": year, "country": country, "count": count}
                 for year, country, count in meta["downloads"]
             ]
-            f.write(json.dumps(meta) + "\n")
+            f.write(("" if first_line else "\n") + json.dumps(meta))
+            first_line = False
 
 
 def write_data(input_dir: str, output_dir: str) -> None:
