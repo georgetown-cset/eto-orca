@@ -522,7 +522,6 @@ if __name__ == "__main__":
     for blob in client.list_blobs(
         "airflow-data-exchange", prefix="orca/tmp/website_stats"
     ):
-        print(blob.name)
         blob.download_to_filename(
             os.path.join(input_dir, blob.name.strip("/").split("/")[-1])
         )
