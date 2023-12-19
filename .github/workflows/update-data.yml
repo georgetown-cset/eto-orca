@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: "0 0 15 * *"
   push:
-    - branch: 292-automate-data-prs
+    branches: "292-automate-data-prs"
 
 jobs:
   scheduled-job:
