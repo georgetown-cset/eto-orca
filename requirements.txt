@@ -10,4 +10,5 @@ pycountry
 tqdm
 coverage
 google-cloud-secret-manager
+google-cloud-storage
 linkchecker
