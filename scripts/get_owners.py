@@ -3,8 +3,8 @@ import json
 import time
 
 import requests
-
 from geolocation.geolocation_base import get_country_from_location
+
 from scripts.github_config import RATE_LIMIT_INTERVAL, mk_auth
 
 AUTH = mk_auth()

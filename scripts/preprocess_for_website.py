@@ -2,10 +2,12 @@ import argparse
 import json
 import math
 import os
+import shutil
 from datetime import datetime
 from typing import Tuple
 
 import pycountry
+from google.cloud import storage
 from tqdm import tqdm
 
 from scripts.constants import (
@@ -381,6 +383,7 @@ def write_download_data(ids_to_repos: dict) -> None:
     parent_dir = os.path.join("github-metrics", "static")
     os.makedirs(parent_dir, exist_ok=True)
     with open(os.path.join(parent_dir, "orca_download.jsonl"), mode="w") as f:
+        first_line = True
         for id, meta in ids_to_repos.items():
             meta["github_id"] = id
             meta.pop("top_articles")
@@ -410,7 +413,8 @@ def write_download_data(ids_to_repos: dict) -> None:
                 {"year": year, "country": country, "count": count}
                 for year, country, count in meta["downloads"]
             ]
-            f.write(json.dumps(meta) + "\n")
+            f.write(("" if first_line else "\n") + json.dumps(meta))
+            first_line = False
 
 
 def write_data(input_dir: str, output_dir: str) -> None:
@@ -504,9 +508,22 @@ def write_config(config_fi: str) -> None:
 if __name__ == "__main__":
     default_data_dir = os.path.join("github-metrics", "src", "data")
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input_dir", default="gh_website_stats")
     parser.add_argument("--data_dir", default=default_data_dir)
     args = parser.parse_args()
 
-    write_data(args.input_dir, args.data_dir)
+    # we have to pull the data down from gcs like this rather than reading directly from BigQuery because
+    # the latter is prohibitively slow
+    input_dir = "website_stats"
+    if os.path.exists(input_dir):
+        shutil.rmtree(input_dir)
+    os.makedirs(input_dir)
+    client = storage.Client()
+    bucket = client.get_bucket("airflow-data-exchange")
+    for blob in client.list_blobs(
+        "airflow-data-exchange", prefix="orca/tmp/website_stats"
+    ):
+        blob.download_to_filename(
+            os.path.join(input_dir, blob.name.strip("/").split("/")[-1])
+        )
+    write_data(input_dir, args.data_dir)
     write_config(os.path.join(args.data_dir, "config.json"))

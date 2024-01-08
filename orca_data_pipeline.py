@@ -17,6 +17,9 @@ from airflow.providers.google.cloud.operators.gcs import GCSDeleteObjectsOperato
 from airflow.providers.google.cloud.transfers.bigquery_to_bigquery import (
     BigQueryToBigQueryOperator,
 )
+from airflow.providers.google.cloud.transfers.bigquery_to_gcs import (
+    BigQueryToGCSOperator,
+)
 from airflow.providers.google.cloud.transfers.gcs_to_bigquery import (
     GCSToBigQueryOperator,
 )
@@ -186,7 +189,12 @@ with dag:
         curr >> last
         curr = last
 
-    wait_for_checks = DummyOperator(task_id="wait_for_checks")
+    export_website_stats = BigQueryToGCSOperator(
+        task_id="export_website_stats",
+        source_project_dataset_table=f"{staging_dataset}.website_stats",
+        destination_cloud_storage_uris=f"gs://{DATA_BUCKET}/{tmp_dir}/website_stats/data*",
+        export_format="NEWLINE_DELIMITED_JSON",
+    )
 
     checks = [
         BigQueryCheckOperator(
@@ -206,7 +214,7 @@ with dag:
         ),
     ]
 
-    last >> checks >> wait_for_checks
+    last >> checks >> export_website_stats
 
     msg_success = get_post_success("ORCA data updated!", dag)
     curr_time = datetime.strftime(datetime.now(), "%Y_%m_%d")
@@ -232,7 +240,7 @@ with dag:
                 },
                 python_callable=update_table_descriptions,
             )
-            if table != "website_stats"
+            if table == "repos_with_full_meta"
             else None
         )
 
@@ -243,8 +251,8 @@ with dag:
             create_disposition="CREATE_IF_NEEDED",
             write_disposition="WRITE_TRUNCATE",
         )
-        wait_for_checks >> copy_to_prod
-        if table != "website_stats":
+        export_website_stats >> copy_to_prod
+        if table == "repos_with_full_meta":
             copy_to_prod >> pop_descriptions >> take_snapshot
         else:
             copy_to_prod >> take_snapshot

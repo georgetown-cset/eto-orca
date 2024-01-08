@@ -1,0 +1,41 @@
+name: Update Data
+
+on:
+  schedule:
+    - cron: "0 0 15 * *"
+
+jobs:
+  scheduled-job:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'write'
+      id-token: 'write'
+      pull-requests: 'write'
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: 'Authenticate to Google Cloud'
+        id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          workload_identity_provider: 'projects/855475113448/locations/global/workloadIdentityPools/eto-github/providers/eto-github'
+          service_account: 'eto-cd-github@gcp-cset-projects.iam.gserviceaccount.com'
+          create_credentials_file: 'true'
+          token_format: 'access_token'
+      - name: Update data
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install -r requirements.txt
+          PYTHONPATH='.' python3 scripts/preprocess_for_website.py
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: Update datasets
+          add-paths: |
+            github-metrics/src/data/*
+            github-metrics/static/*
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: Data update
+          reviewers: jmelot
