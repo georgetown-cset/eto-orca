@@ -40,6 +40,8 @@ def backfill_meta(input_data: str, output_data: str) -> None:
             if not js.get("full_metadata"):
                 js["full_metadata"] = get_meta(js["owner_name"], js["repo_name"])
                 time.sleep(RATE_LIMIT_INTERVAL)
+            # Get rid of the custom_properties field which doesn't have a consistent schema
+            js.get("full_metadata", {}).pop("custom_properties", None)
             out.write(json.dumps(js) + "\n")
     out.close()
 
