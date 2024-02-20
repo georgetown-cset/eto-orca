@@ -63,7 +63,7 @@ const ProjectMetadata = (props) => {
           {group.map(option => ((showNumReferences) || (option !== "num_references")) && (
             <span css={styles.metaSection} key={option}>
               {option === "num_references" ?
-                <span>{getValue(option)} mentions in <strong>{cleanFieldName(field)}</strong> articles ({getValue("relevance").toFixed(2)} <span css={styles.nowrap}>relevance<HelpTooltip style={helpStyle} text={getTooltip("relevance_list")}/>)</span></span>
+                <span>{getValue(option)} mentions in <strong>{cleanFieldName(field)}</strong> articles ({getValue("relevance").toFixed(2)} <span css={styles.nowrap}>relevance<HelpTooltip iconStyle={helpStyle} text={getTooltip("relevance_list")}/>)</span></span>
               :
                 <span><strong>{metaMapping[option]}</strong>: {getValue(option)}</span>
               }
