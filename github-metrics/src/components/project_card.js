@@ -92,7 +92,7 @@ const ProjectCard = (props) => {
   };
 
   return (
-    <div css={styles.card}>
+    <div css={styles.card} data-testid="project-card">
       <div css={styles.metadataContainer}>
         <div css={styles.leftPanel}>
           <span>
