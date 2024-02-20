@@ -30,7 +30,7 @@ export const getTooltip = (key, replFrom=null, replTo=null) => {
   if(replFrom !== null){
     ttText = ttText.replace(replFrom, replTo);
   }
-  return <span>{ttText}{key in tooltipLinks && <span> <ExternalLink href={tooltipLinks[key]}>Read more >></ExternalLink></span>}</span>;
+  return <span>{ttText}{key in tooltipLinks && <span> <ExternalLink href={tooltipLinks[key]}>Read more &gt;&gt;</ExternalLink></span>}</span>;
 };
 
 export const helpStyle = {verticalAlign: "middle", marginBottom: "2px"};

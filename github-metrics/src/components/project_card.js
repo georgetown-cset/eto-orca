@@ -11,9 +11,8 @@ import "core-js/features/url-search-params";
 
 import {LineGraph, BarGraph} from "./graph";
 import ProjectMetadata from "./project_metadata";
-
-import {getCountryTraces, getBarTraces, getX, getY, getRepoName} from "./utils";
 import githubLogo from "../images/github-mark.png";
+import {getCountryTraces, getBarTraces, getX, getY, getRepoName} from "../util";
 
 
 const styles = {

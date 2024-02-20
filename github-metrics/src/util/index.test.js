@@ -1,5 +1,5 @@
 import React from "react"
-import {getCountryTraces, getBarTraces} from "../utils"
+import {getCountryTraces, getBarTraces} from "./index"
 
 describe("getCountryTraces", () => {
   it("has expected output", () => {

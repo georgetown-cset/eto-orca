@@ -28,7 +28,7 @@ import {
   sources,
   helpStyle,
   getTooltip
-} from "./utils";
+} from "../util";
 
 const setFields = new Set(fields);
 

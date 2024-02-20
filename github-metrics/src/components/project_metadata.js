@@ -5,12 +5,16 @@ import React from "react";
 import { css } from "@emotion/react";
 
 import {HelpTooltip} from "@eto/eto-ui-components";
-import {helpStyle, getTooltip} from "./utils";
+import {
+  FIELD_KEYS,
+  cleanFieldName,
+  helpStyle,
+  getTooltip,
+  metaMapping,
+} from "../util";
 
 import "core-js/features/url";
 import "core-js/features/url-search-params";
-
-import {cleanFieldName, FIELD_KEYS, metaMapping} from "./utils";
 
 
 const styles = {
