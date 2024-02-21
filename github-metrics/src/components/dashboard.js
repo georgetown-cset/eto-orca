@@ -323,10 +323,10 @@ const Dashboard = () => {
   return (
     <div style={{backgroundColor: "white"}} id={"dashboard"} ref={contentContainer}>
       <div>
-        <div css={styles.topPanel}>
+        <div css={styles.topPanel} data-testid="top-panel">
           <div css={styles.filterContainer}>
             <div>
-              <div css={[styles.dropdownContainer, styles.topicContainer]}>
+              <div css={[styles.dropdownContainer, styles.topicContainer]} data-testid="research-field-wrapper">
                 <Autocomplete
                   selected={filterValues["field_of_study"]}
                   setSelected={(val) => handleSingleSelectChange(val, "field_of_study")}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, act, getAllByRole, getByRole } from '@testing-library/react';
+import { screen, act, getAllByRole, getByRole, getByText } from '@testing-library/react';
 
 import Dashboard from './dashboard';
 import { userEventSetup } from '../util/testing';
@@ -56,8 +56,121 @@ describe("filter panel", () => {
     expect(getByRole(cards[0], "heading", { name: "hannorein/rebound" })).toBeVisible();
     expect(cards[0].textContent).toContain("Stars: 570");
     expect(cards[0].textContent).toContain("Top Programming Language: C");
+    expect(cards[0].textContent).toContain("Commits over time");
     expect(getByRole(cards[1], "heading", { name: "jlillo/tpfplotter" })).toBeVisible();
     expect(cards[1].textContent).toContain("Date created: 2020-02-02");
     expect(cards[1].textContent).toContain("License: MIT License");
+  });
+
+
+  it("switches the sort criteria", async () => {
+    const { user } = userEventSetup(
+      <Dashboard />
+    );
+
+    let cards = screen.getAllByTestId("project-card");
+    expect(getByRole(cards[0], "heading", { name: "hannorein/rebound" })).toBeVisible();
+
+    await user.click(screen.getByRole('button', { name: "Sort by Relevance Documentation" }));
+
+    const dropdownList = screen.getByRole('listbox');
+    expect(getByRole(dropdownList, 'option', { name: "Open issues and PRs" })).toBeVisible();
+    await user.click(getByRole(dropdownList, 'option', { name: "Open issues and PRs" }));
+
+    cards = screen.getAllByTestId("project-card");
+    expect(getByRole(cards[0], "heading", { name: "astropy/astropy" })).toBeVisible();
+
+  });
+
+
+  it("switches the displayed graphs", async () => {
+    const { user } = userEventSetup(
+      <Dashboard />
+    );
+
+    let cards = screen.getAllByTestId("project-card");
+    expect(getByRole(cards[0], "heading", { name: "astropy/astropy" })).toBeVisible();
+    expect(cards[0].textContent).toContain("Commits over time");
+
+    await user.click(screen.getByRole('button', { name: "Show graphs for Commits over time" }));
+    const dropdownList = screen.getByRole('listbox');
+    expect(getByRole(dropdownList, 'option', { name: "Contributor distribution" })).toBeVisible();
+    await user.click(getByRole(dropdownList, 'option', { name: "Contributor distribution" }));
+
+    cards = screen.getAllByTestId("project-card");
+    expect(cards[0].textContent).not.toContain("Commits over time");
+    expect(cards[0].textContent).toContain("Contributor distribution");
+  });
+
+
+  it("applies filters as expected", async () => {
+    const { user } = userEventSetup(
+      <Dashboard />
+    );
+
+    // Filters are currently hidden
+    expect(screen.getByRole('button', { name: "Show Filters" })).toBeVisible();
+    expect(screen.queryByRole('button', { name: "Hide Filters" })).not.toBeInTheDocument();
+    expect(screen.queryByText("Filter by top programming language")).not.toBeInTheDocument();
+    expect(screen.queryByText("Filter by license")).not.toBeInTheDocument();
+
+    // Enable filters
+    await user.click(screen.getByRole('button', { name: "Show Filters" }));
+    expect(screen.queryByRole('button', { name: "Show Filters" })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: "Hide Filters" })).toBeVisible();
+    expect(screen.getByText("Filter by top programming language")).toBeVisible();
+    expect(screen.getByText("Filter by license")).toBeVisible();
+
+    // Check prior state
+    let topPanel = screen.getByTestId('top-panel');
+    expect(getByText(topPanel, "Showing 59 repositories", { exact: false })).toBeVisible();
+    let cards = screen.getAllByTestId("project-card");
+    expect(cards.length).toEqual(10); // Pagination shows only 10 per page
+    expect(getByRole(cards[0], "heading", { name: "astropy/astropy" })).toBeVisible();
+
+    // Filter by language
+    await user.click(screen.getByRole('button', { name: "Filter by top programming language All" }));
+    const languageDropdownList = screen.getByRole('listbox');
+    expect(getByRole(languageDropdownList, 'option', { name: "C++" })).toBeVisible();
+    await user.click(getByRole(languageDropdownList, 'option', { name: "C++" }));
+
+    topPanel = screen.getByTestId('top-panel');
+    expect(getByText(topPanel, "Showing 2 repositories", { exact: false })).toBeVisible();
+    cards = screen.getAllByTestId("project-card");
+    expect(cards.length).toEqual(2);
+    expect(getByRole(cards[0], "heading", { name: "exoplanet-dev/celerite2" })).toBeVisible();
+
+    // Filter by license
+    await user.click(screen.getByRole('button', { name: "Filter by license All" }));
+    const licenseDropdownList = screen.getByRole('listbox');
+    expect(getByRole(licenseDropdownList, 'option', { name: "GNU" })).toBeVisible();
+    await user.click(getByRole(licenseDropdownList, 'option', { name: "GNU" }));
+
+    topPanel = screen.getByTestId('top-panel');
+    expect(getByText(topPanel, "Showing 1 repositories", { exact: false })).toBeVisible();
+    cards = screen.getAllByTestId("project-card");
+    expect(cards.length).toEqual(1);
+    expect(getByRole(cards[0], "heading", { name: "exoclime/FastChem" })).toBeVisible();
+  });
+
+
+  it("resets filters as expected", async () => {
+    const { user } = userEventSetup(
+      <Dashboard />
+    );
+
+    expect(screen.getByRole('combobox')).toHaveValue("Astrobiology");
+    expect(screen.getByRole('button', { name: "Filter by top programming language C++" })).toBeVisible();
+    expect(screen.getByRole('button', { name: "Filter by license GNU" })).toBeVisible();
+    expect(screen.getByRole('button', { name: "Sort by Open issues and PRs" })).toBeVisible();
+    expect(screen.getByRole('button', { name: "Show graphs for Contributor distribution" })).toBeVisible();
+
+    await user.click(screen.getByRole('button', { name: "Reset" }));
+
+    expect(screen.getByRole('combobox')).toHaveValue("Artificial intelligence");
+    expect(screen.getByRole('button', { name: "Filter by top programming language All" })).toBeVisible();
+    expect(screen.getByRole('button', { name: "Filter by license All" })).toBeVisible();
+    expect(screen.getByRole('button', { name: "Sort by Relevance Documentation" })).toBeVisible();
+    expect(screen.getByRole('button', { name: "Show graphs for Commits over time" })).toBeVisible();
   });
 });
