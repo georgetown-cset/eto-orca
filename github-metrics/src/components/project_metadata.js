@@ -5,12 +5,16 @@ import React from "react";
 import { css } from "@emotion/react";
 
 import {HelpTooltip} from "@eto/eto-ui-components";
-import {helpStyle, getTooltip} from "./utils";
+import {
+  FIELD_KEYS,
+  cleanFieldName,
+  helpStyle,
+  getTooltip,
+  metaMapping,
+} from "../util";
 
 import "core-js/features/url";
 import "core-js/features/url-search-params";
-
-import {cleanFieldName, FIELD_KEYS, metaMapping} from "./utils";
 
 
 const styles = {
@@ -59,7 +63,7 @@ const ProjectMetadata = (props) => {
           {group.map(option => ((showNumReferences) || (option !== "num_references")) && (
             <span css={styles.metaSection} key={option}>
               {option === "num_references" ?
-                <span>{getValue(option)} mentions in <strong>{cleanFieldName(field)}</strong> articles ({getValue("relevance").toFixed(2)} <span css={styles.nowrap}>relevance<HelpTooltip style={helpStyle} text={getTooltip("relevance_list")}/>)</span></span>
+                <span>{getValue(option)} mentions in <strong>{cleanFieldName(field)}</strong> articles ({getValue("relevance").toFixed(2)} <span css={styles.nowrap}>relevance<HelpTooltip iconStyle={helpStyle} text={getTooltip("relevance_list")}/>)</span></span>
               :
                 <span><strong>{metaMapping[option]}</strong>: {getValue(option)}</span>
               }

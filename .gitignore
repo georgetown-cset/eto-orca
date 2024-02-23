@@ -39,6 +39,7 @@ ENV/
 
 # Frontend
 .cache/
+coverage/
 node_modules/
 public/
 

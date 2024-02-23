@@ -2,13 +2,21 @@
 Summary metrics for top five repositories within current selection
  */
 import React, {useEffect} from "react";
-
-import {LineGraph} from "./graph";
 import {css} from "@emotion/react";
 
-import {keyToTitle, sortMappingBlurb, getRepoName, sortByKey, cleanFieldName, FIELD_KEYS, getTooltip} from "./utils";
-import HighlightBox from "./highlight_box";
 import {Accordion, Dropdown, ExternalLink, HelpTooltip} from "@eto/eto-ui-components";
+
+import { LineGraph } from "./graph";
+import HighlightBox from "./highlight_box";
+import {
+  FIELD_KEYS,
+  cleanFieldName,
+  getRepoName,
+  getTooltip,
+  keyToTitle,
+  sortByKey,
+  sortMappingBlurb,
+} from "../util";
 
 
 const styles = {

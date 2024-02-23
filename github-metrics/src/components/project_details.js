@@ -2,21 +2,29 @@
 Component containing repo detail view
  */
 import React, {useEffect} from "react";
+import {css} from "@emotion/react";
+import LaunchIcon from "@mui/icons-material/Launch";
 
 import "core-js/features/url";
 import "core-js/features/url-search-params";
 
+import {Accordion, ExternalLink, HelpTooltip} from "@eto/eto-ui-components";
+
+import {BarGraph, LineGraph} from "./graph";
+import HighlightBox from "./highlight_box";
+import ProjectMetadata from "./project_metadata";
 import id_to_repo from "../data/id_to_repo";
 import name_to_id from "../data/name_to_id";
-import {Accordion, ExternalLink, HelpTooltip} from "@eto/eto-ui-components";
-import {css} from "@emotion/react";
-import LaunchIcon from "@mui/icons-material/Launch";
-import {BarGraph, LineGraph} from "./graph";
-import ProjectMetadata from "./project_metadata";
-
-import {keyToTitle, getCountryTraces, getBarTraces, getX, getY, getRepoName, getTooltip} from "./utils";
-import HighlightBox from "./highlight_box";
 import githubLogo from "../images/github-mark.png";
+import {
+  getBarTraces,
+  getCountryTraces,
+  getX,
+  getY,
+  getRepoName,
+  getTooltip,
+  keyToTitle,
+} from "../util";
 
 const styles = {
   dashboardContainer: css`
