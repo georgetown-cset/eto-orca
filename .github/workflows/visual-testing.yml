@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       app-dir: ./github-metrics
+    if: github.triggering_actor != 'dependabot[bot]'
 
     permissions:
       contents: 'read'
