@@ -13,6 +13,7 @@ const MetaTagsWrapper = ({
   return (
     <>
       <title>{fullTitle}</title>
+      <html lang="en" />
       <MetaTags
         title={fullTitle}
         description={description}
