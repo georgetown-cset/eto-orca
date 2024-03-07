@@ -37,3 +37,9 @@ const Project = () => {
 };
 
 export default Project;
+
+export function Head() {
+  return (
+    <MetaTagsWrapper />
+  );
+}

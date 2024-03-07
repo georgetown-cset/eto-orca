@@ -1,10 +1,11 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {css} from "@emotion/react";
 
 import CircularProgress from "@mui/material/CircularProgress";
 import {AppWrapper, ExternalLink, InfoCard} from "@eto/eto-ui-components";
 import { useStaticQuery, graphql } from "gatsby";
 
+import MetaTagsWrapper from "../components/MetaTagsWrapper";
 import config from "../data/config.json";
 
 /* Set the body margin and padding to 0 here */
@@ -19,11 +20,6 @@ const styles = {
 };
 
 const IndexPage = () => {
-  useEffect(() => {
-    document.title = "ETO ORCA";
-    document.documentElement.lang = "en";
-  }, []);
-
   const data = useStaticQuery(graphql`
     query {
       site {
@@ -60,3 +56,9 @@ const IndexPage = () => {
 };
 
 export default IndexPage;
+
+export function Head() {
+  return (
+    <MetaTagsWrapper />
+  );
+}
