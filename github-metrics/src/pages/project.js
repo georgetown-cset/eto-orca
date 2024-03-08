@@ -63,7 +63,7 @@ const Project = () => {
 export default Project;
 
 export function Head() {
-  const urlParams = new URLSearchParams(window.location.search);
+  const urlParams = new URLSearchParams((typeof window !== "undefined") ? window.location.search : "");
   const projectName = urlParams.get("name") ?? undefined;
 
   return (
