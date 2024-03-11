@@ -40,7 +40,6 @@ This DAG retrieves data from GitHub and updates the tables in the `orca` BigQuer
 
 args = get_default_args(pocs=["Jennifer"])
 args["retries"] = 1
-args["on_failure_callback"] = None
 
 production_dataset = "orca"
 staging_dataset = f"staging_{production_dataset}"
