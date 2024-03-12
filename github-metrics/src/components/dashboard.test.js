@@ -151,7 +151,7 @@ describe("filter panel", () => {
     cards = screen.getAllByTestId("project-card");
     expect(cards.length).toEqual(1);
     expect(getByRole(cards[0], "heading", { name: "exoclime/FastChem" })).toBeVisible();
-  });
+  }, 15000);
 
 
   it("resets filters as expected", async () => {

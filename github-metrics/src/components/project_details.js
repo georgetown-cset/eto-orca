@@ -13,15 +13,12 @@ import {Accordion, ExternalLink, HelpTooltip} from "@eto/eto-ui-components";
 import {BarGraph, LineGraph} from "./graph";
 import HighlightBox from "./highlight_box";
 import ProjectMetadata from "./project_metadata";
-import id_to_repo from "../data/id_to_repo";
-import name_to_id from "../data/name_to_id";
 import githubLogo from "../images/github-mark.png";
 import {
   getBarTraces,
   getCountryTraces,
   getX,
   getY,
-  getRepoName,
   getTooltip,
   keyToTitle,
 } from "../util";
@@ -94,37 +91,19 @@ const styles = {
   `
 };
 
-const ProjectDetails = () => {
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if(urlParams.get("name") !== null){
-      const project_name = urlParams.get("name");
-      if (window.plausible) {
-        window.plausible("Loaded project detail", {props: {
-          "project_name": project_name
-        }});
-      }
-      if(!(project_name in name_to_id)){
-        setData([])
-      } else {
-        const project_id = name_to_id[project_name];
-        const newData = id_to_repo[project_id];
-        setRepoName(getRepoName(newData));
-        setData(newData);
-        updateAccordionDetails(newData);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const [data, setData] = React.useState({});
+const ProjectDetails = ({
+  data,
+  repoName,
+}) => {
   const [expanded, setExpanded] = React.useState(null);
   const [accordionDetails, setAccordionDetails] = React.useState([]);
-  const [repoName, setRepoName] = React.useState(null);
+
+  useEffect(() => {
+    updateAccordionDetails(data);
+  }, []);
 
   const getGraphs = (meta, currData) => {
-    const currName = getRepoName(currData);
-    const graphTitle = `${keyToTitle[meta[0]]} in ${currName}`;
+    const graphTitle = `${keyToTitle[meta[0]]} in ${repoName}`;
     if(meta[1] === "bar"){
       return <BarGraph traces={getBarTraces(meta[0], currData)} title={graphTitle}
                                         normalizeTime={meta[0] !== "contrib_counts"}/>
@@ -133,7 +112,7 @@ const ProjectDetails = () => {
                  title={graphTitle} />
     }
     return <LineGraph traces={getCountryTraces(currData[meta[0]])}
-                      showLegend={true} title={`PyPI downloads over time in ${currName}`}/>;
+                      showLegend={true} title={`PyPI downloads over time in ${repoName}`}/>;
   };
 
   const getTopArticles = (articles) => {
@@ -226,10 +205,10 @@ const ProjectDetails = () => {
           </h2>
           {data["has_deps_dev"] &&
           <span css={styles.depsLink}>
-        <ExternalLink href={"https://deps.dev/project/github/" + data["owner_name"] + "%2F" + data["current_name"]}>
-          deps.dev<LaunchIcon css={styles.depsIcon}/>
-        </ExternalLink>
-      </span>
+            <ExternalLink href={"https://deps.dev/project/github/" + data["owner_name"] + "%2F" + data["current_name"]}>
+              deps.dev<LaunchIcon css={styles.depsIcon}/>
+            </ExternalLink>
+          </span>
           }
           <div>
             <div css={styles.description}>
