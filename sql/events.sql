@@ -1,5 +1,5 @@
 -- todo, update so we don't have to edit this query every time the month changes.
--- This queries over 13 TB of data as of 2022-04-20, so run it judiciously
+-- This queries over 23 TB of data as of 2024-03-25, so run it judiciously
 WITH
 relevant_repos AS (
   SELECT DISTINCT repo_name
@@ -186,7 +186,7 @@ curr_data AS (
     id,
     other
   FROM
-    `githubarchive.month.202301`
+    `githubarchive.year.2023`
   UNION ALL
   SELECT
     type,
@@ -199,7 +199,7 @@ curr_data AS (
     id,
     other
   FROM
-    `githubarchive.month.202302`
+    `githubarchive.month.202401`
   UNION ALL
   SELECT
     type,
@@ -212,7 +212,7 @@ curr_data AS (
     id,
     other
   FROM
-    `githubarchive.month.202303`
+    `githubarchive.month.202402`
   UNION ALL
   SELECT
     type,
@@ -225,72 +225,7 @@ curr_data AS (
     id,
     other
   FROM
-    `githubarchive.month.202304`
-  UNION ALL
-  SELECT
-    type,
-    public,
-    payload,
-    repo,
-    actor,
-    org,
-    created_at,
-    id,
-    other
-  FROM
-    `githubarchive.month.202305`
-  UNION ALL
-  SELECT
-    type,
-    public,
-    payload,
-    repo,
-    actor,
-    org,
-    created_at,
-    id,
-    other
-  FROM
-    `githubarchive.month.202306`
-  UNION ALL
-  SELECT
-    type,
-    public,
-    payload,
-    repo,
-    actor,
-    org,
-    created_at,
-    id,
-    other
-  FROM
-    `githubarchive.month.202307`
-  UNION ALL
-  SELECT
-    type,
-    public,
-    payload,
-    repo,
-    actor,
-    org,
-    created_at,
-    id,
-    other
-  FROM
-    `githubarchive.month.202308`
-  UNION ALL
-  SELECT
-    type,
-    public,
-    payload,
-    repo,
-    actor,
-    org,
-    created_at,
-    id,
-    other
-  FROM
-    `githubarchive.month.202309`
+    `githubarchive.month.202403`
 ),
 
 -- needed to allow match to data for old repo names
