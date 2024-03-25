@@ -149,7 +149,7 @@ with DAG(
             f"{production_dataset} {tmp_dir} &> scrape_additional_metadata_log &"
         ),
     )
-    wait_for_scrape_additional_metadataa = GCSObjectExistenceSensor(
+    wait_for_scrape_additional_metadata = GCSObjectExistenceSensor(
         task_id="wait_for_scrape_additional_metadata",
         bucket=DATA_BUCKET,
         object=f"{production_dataset}/done_files/scrape_additional_metadata",
@@ -184,7 +184,7 @@ with DAG(
         >> get_full_metadata
         >> wait_for_get_full_metadata
         >> scrape_additional_metadata
-        >> wait_for_scrape_additional_metadataa
+        >> wait_for_scrape_additional_metadata
         >> gce_instance_stop
         >> load_data_to_bq
     )
