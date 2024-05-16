@@ -1,4 +1,7 @@
 Acoustics
+Advertising
+Agroforestry
+Agronomy
 Algebra
 Algorithm
 Analytical chemistry
@@ -15,11 +18,18 @@ Automotive engineering
 Biochemistry
 Bioinformatics
 Biomedical engineering
+Biotechnology
+Botany
 Calculus
 Cancer research
+Cardiology
 Cartography
 Cell biology
+Ceramic materials
+Chemical physics
 Classical mechanics
+Classics
+Climate and Earth Science
 Climatology
 Clinical psychology
 Cognitive psychology
@@ -38,6 +48,7 @@ Computer network
 Computer security
 Computer vision
 Condensed matter physics
+Consumption of Energy and Resources
 Control engineering
 Control theory
 Data mining
@@ -47,31 +58,40 @@ Development economics
 Developmental psychology
 Discrete mathematics
 Distributed computing
+Earth Systems
 Ecology
 Econometrics
 Economic policy
 Electrical engineering
 Embedded system
+Emissions
+Energy Storage
+Energy Systems
 Environmental planning
 Epistemology
 Evolutionary biology
 Finance
 Financial economics
 Financial system
+Food science
 Forensic engineering
 Gender studies
 Genetics
 Geochemistry
 Geometry
+Geomorphology
 Geophysics
 Human\u2013computer interaction
+Hydrology
 Immunology
+Industrial Ecology
 Information retrieval
 International economics
 Internet privacy
 Keynesian economics
 Knowledge management
 Law
+Law and economics
 Library science
 Linguistics
 Literature
@@ -83,22 +103,31 @@ Mechanics
 Media studies
 Medical education
 Meteorology
+Microbiology
 Microeconomics
 Mining engineering
 Molecular biology
+Molecular physics
 Multimedia
+Natural Resources
 Natural language processing
 Neuroscience
 Nuclear magnetic resonance
 Nuclear physics
+Oceanography
+Oncology
 Operating system
 Operations management
 Optics
+Organic chemistry
 Parallel computing
 Particle physics
+Pathology
 Pattern recognition
 Pedagogy
 Pharmacology
+Physical chemistry
+Political economy
 Process management
 Programming language
 Psychiatry
@@ -109,6 +138,7 @@ Radiology
 Real-time computing
 Reliability engineering
 Remote sensing
+Renewable Energy
 Risk analysis (engineering)
 Seismology
 Simulation
@@ -119,46 +149,21 @@ Software engineering
 Speech recognition
 Statistics
 Structural engineering
+Surgery
+Sustainable Development
 Systems engineering
 Telecommunications
 Theoretical computer science
 Theoretical physics
+Thermodynamics
 Topology
+Transport engineering
 Virology
 Visual arts
+Water resource management
 World Wide Web
 Zoology
 ai_safety
 asr
 riscv
 weto
-Emissions
-Earth Systems
-Energy Storage
-Sustainable Development
-Climate and Earth Science
-Industrial Ecology
-Renewable Energy
-Natural Resources
-Consumption of Energy and Resources
-Energy Systems
-Advertising
-Agronomy
-Biotechnology
-Botany
-Cardiology
-Chemical physics
-Classics
-Food science
-Geomorphology
-Hydrology
-Microbiology
-Molecular physics
-Oceanography
-Organic chemistry
-Pathology
-Physical chemistry
-Surgery
-Thermodynamics
-Transport engineering
-Water resource management

@@ -1,10 +1,13 @@
+Aesthetics
 Algorithm
 Analytical chemistry
+Ancient history
 Arithmetic
 Art history
 Atomic physics
 Biochemistry
 Biomedical engineering
+Biotechnology
 Cartography
 Classical mechanics
 Climatology
@@ -14,64 +17,65 @@ Combinatorial chemistry
 Combinatorics
 Communication
 Composite material
+Computational science
+Computer architecture
 Computer network
 Control engineering
+Crystallography
 Data mining
 Database
+Demography
 Development economics
 Developmental psychology
 Discrete mathematics
+Economic geography
+Economic growth
+Economic history
 Economic policy
 Electrical engineering
+Endocrinology
+Environmental engineering
+Environmental ethics
+Environmental health
 Environmental planning
+Environmental protection
+Environmental resource management
 Forensic engineering
+Forestry
 Geochemistry
+Geotechnical engineering
+Gerontology
+Humanities
 Human–computer interaction
+Intensive care medicine
 Internet privacy
 Keynesian economics
 Law
 Library science
 Literature
+Management
+Marine engineering
+Market economy
 Mathematical economics
 Mechanics
 Microeconomics
 Mining engineering
+Obstetrics
 Operations management
+Paleontology
 Pedagogy
+Pediatrics
 Process management
 Programming language
 Psychiatry
+Public administration
 Public relations
 Real-time computing
 Risk analysis (engineering)
 Socioeconomics
+Soil science
+Statistical physics
 Statistics
 Structural engineering
 Systems engineering
 Telecommunications
-Public administration
-Soil science
-Statistical physics
-Pediatrics
-Obstetrics
-Intensive care medicine
-Management
-Marine engineering
-Market economy
-Gerontology
-Humanities
-Forestry
-Economic growth
-Environmental engineering
-Environmental ethics
-Environmental health
-Environmental protection
-Environmental resource management
-Crystallography
-Ancient history
-Aesthetics
-Biotechnology
-Computational science
-Computer architecture
-Demography
-Geotechnical engineering
