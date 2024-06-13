@@ -48,7 +48,7 @@ Run `PYTHONPATH='.' python3 scripts/retrieve_repo_metadata.py curr_repos_filled.
 the sequence of queries in `sequences/downstream_order.txt`. Assuming your dataset in BigQuery is called `orca`, download
 the data from
 `orca.website_stats` in BigQuery as JSONL,
-then run `PYTHONPATH='.' python3 scripts/preprocess_for_website.py --input_dir <path to your downloaded data>`.
+then run `PYTHONPATH='.' python3 scripts/preprocess_for_website.py`.
 
 These steps are automated and run on a monthly basis on the scholarly literature data using the `orca_data_pipeline.py`
 Airflow pipeline.

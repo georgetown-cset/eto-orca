@@ -3,11 +3,12 @@ import json
 import math
 import os
 import shutil
+import tempfile
 from datetime import datetime
 from typing import Tuple
 
 import pycountry
-from google.cloud import storage
+from google.cloud import bigquery, storage
 from tqdm import tqdm
 
 from scripts.constants import (
@@ -417,6 +418,41 @@ def write_download_data(ids_to_repos: dict) -> None:
             first_line = False
 
 
+def write_included_to_bq(id_to_repo: dict) -> None:
+    """
+    Write the set of repos that will appear in ORCA to BigQuery
+    :param id_to_repo: dict mapping repo id to repo metadata
+    :return: None
+    """
+    client = bigquery.Client()
+    production_table = "gcp-cset-projects.orca.displayed_repos"
+    backups_table = f"gcp-cset-projects.orca_backups.displayed_repos_{datetime.today().strftime('%Y%m%d')}"
+
+    job_config = bigquery.LoadJobConfig(
+        source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
+        autodetect=True,
+    )
+
+    with tempfile.TemporaryDirectory() as td:
+        tmp_data = os.path.join(td, "repos.jsonl")
+        with open(tmp_data, "w") as f:
+            for id in id_to_repo:
+                f.write(
+                    json.dumps(
+                        {
+                            "repo": f"{id_to_repo[id]['owner_name']}/{id_to_repo[id]['current_name']}"
+                        }
+                    )
+                    + "\n"
+                )
+        for table in [production_table, backups_table]:
+            with open(tmp_data, "rb") as source_file:
+                job = client.load_table_from_file(
+                    source_file, table, job_config=job_config
+                )
+                job.result()
+
+
 def write_data(input_dir: str, output_dir: str) -> None:
     """
     Reads repo metadata, cleans it up, writes it out for the webapp
@@ -485,6 +521,7 @@ def write_data(input_dir: str, output_dir: str) -> None:
         with open(os.path.join(output_dir, out_fi + ".json"), mode="w") as f:
             f.write(json.dumps(data))
     write_download_data(id_to_repo)
+    write_included_to_bq(id_to_repo)
 
 
 def write_config(config_fi: str) -> None:
