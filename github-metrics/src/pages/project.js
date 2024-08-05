@@ -21,6 +21,7 @@ const styles = {
 const Project = () => {
   const [data, setData] = useState({});
   const [repoName, setRepoName] = useState(null);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -39,23 +40,26 @@ const Project = () => {
         setRepoName(getRepoName(newData));
         setData(newData);
       }
+      setLoaded(true);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
       <AppWrapper>
-      <div style={{
-        backgroundColor: "white"
-      }}>
-        {(typeof window !== "undefined") &&
-          <React.Suspense fallback={<div css={styles.suspense}><CircularProgress/></div>}>
-            <ErrorBoundary>
-              <ProjectDetails data={data} repoName={repoName} />
-            </ErrorBoundary>
-          </React.Suspense>
-        }
-      </div>
+        <div style={{
+          backgroundColor: "white"
+        }}>
+          {!loaded && <div css={styles.suspense}><CircularProgress/></div>}
+          {(typeof window !== "undefined") &&
+            <React.Suspense fallback={<div css={styles.suspense}><CircularProgress/></div>}>
+              <ErrorBoundary>
+                <ProjectDetails data={data} repoName={repoName}/>
+              </ErrorBoundary>
+            </React.Suspense>
+          }
+        </div>
       </AppWrapper>
   )
 };
