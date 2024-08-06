@@ -19,11 +19,11 @@ describe("filter panel", () => {
     let topReposHeading;
     let topEntries
 
-    expect(screen.getByRole("heading", { name: currentlyTrackingHeading(413, "artificial intelligence") })).toBeVisible();
+    expect(screen.getByRole("heading", { name: currentlyTrackingHeading(703, "artificial intelligence") })).toBeVisible();
     topReposHeading = screen.getByRole("heading", { name: "Top repositories by stars" });
     topEntries = getAllByRole(topReposHeading.parentElement, "listitem");
-    expect(topEntries[0].textContent).toEqual("facebook/react215865 stars (-32.65%, 2022-2023)");
-    expect(topEntries[1].textContent).toEqual("tensorflow/tensorflow179194 stars (-11.62%, 2022-2023)");
+    expect(topEntries[0].textContent).toEqual("facebook/react222142 stars (-16.49%, 2022-2023)");
+    expect(topEntries[1].textContent).toEqual("tensorflow/tensorflow182621 stars (+11.70%, 2022-2023)");
 
     await user.click(screen.getByRole('combobox'));
     expect(screen.getByText("Astrobiology")).toBeVisible();
@@ -32,11 +32,11 @@ describe("filter panel", () => {
     });
     await new Promise(res => setTimeout(res, 500));
 
-    expect(screen.getByRole("heading", { name: currentlyTrackingHeading(59, "astrobiology") })).toBeVisible();
+    expect(screen.getByRole("heading", { name: currentlyTrackingHeading(113, "astrobiology") })).toBeVisible();
     topReposHeading = screen.getByRole("heading", { name: "Top repositories by stars" });
     topEntries = getAllByRole(topReposHeading.parentElement, "listitem");
-    expect(topEntries[0].textContent).toEqual("astropy/astropy4028 stars (-46.90%, 2022-2023)");
-    expect(topEntries[1].textContent).toEqual("dfm/emcee1384 stars (-16.50%, 2022-2023)");
+    expect(topEntries[0].textContent).toEqual("google/jax28045 stars (-11.73%, 2022-2023)");
+    expect(topEntries[1].textContent).toEqual("astropy/astropy4220 stars (-28.72%, 2022-2023)");
   });
 
 
@@ -45,7 +45,7 @@ describe("filter panel", () => {
       <Dashboard />
     );
 
-    expect(screen.getByRole("heading", { name: currentlyTrackingHeading(59, "astrobiology") })).toBeVisible();
+    expect(screen.getByRole("heading", { name: currentlyTrackingHeading(113, "astrobiology") })).toBeVisible();
 
     await user.click(screen.getByRole('checkbox'));
     await new Promise(res => setTimeout(res, 500));
@@ -54,7 +54,7 @@ describe("filter panel", () => {
 
     const cards = screen.getAllByTestId("project-card");
     expect(getByRole(cards[0], "heading", { name: "hannorein/rebound" })).toBeVisible();
-    expect(cards[0].textContent).toContain("Stars: 570");
+    expect(cards[0].textContent).toContain("Stars: 768");
     expect(cards[0].textContent).toContain("Top Programming Language: C");
     expect(cards[0].textContent).toContain("Commits over time");
     expect(getByRole(cards[1], "heading", { name: "jlillo/tpfplotter" })).toBeVisible();
@@ -78,7 +78,7 @@ describe("filter panel", () => {
     await user.click(getByRole(dropdownList, 'option', { name: "Open issues and PRs" }));
 
     cards = screen.getAllByTestId("project-card");
-    expect(getByRole(cards[0], "heading", { name: "astropy/astropy" })).toBeVisible();
+    expect(getByRole(cards[0], "heading", { name: "google/jax" })).toBeVisible();
 
   });
 
@@ -89,7 +89,7 @@ describe("filter panel", () => {
     );
 
     let cards = screen.getAllByTestId("project-card");
-    expect(getByRole(cards[0], "heading", { name: "astropy/astropy" })).toBeVisible();
+    expect(getByRole(cards[0], "heading", { name: "google/jax" })).toBeVisible();
     expect(cards[0].textContent).toContain("Commits over time");
 
     await user.click(screen.getByRole('button', { name: "Show graphs for Commits over time" }));
@@ -123,10 +123,10 @@ describe("filter panel", () => {
 
     // Check prior state
     let topPanel = screen.getByTestId('top-panel');
-    expect(getByText(topPanel, "Showing 59 repositories", { exact: false })).toBeVisible();
+    expect(getByText(topPanel, "Showing 113 repositories", { exact: false })).toBeVisible();
     let cards = screen.getAllByTestId("project-card");
     expect(cards.length).toEqual(10); // Pagination shows only 10 per page
-    expect(getByRole(cards[0], "heading", { name: "astropy/astropy" })).toBeVisible();
+    expect(getByRole(cards[0], "heading", { name: "google/jax" })).toBeVisible();
 
     // Filter by language
     await user.click(screen.getByRole('button', { name: "Filter by top programming language All" }));
@@ -135,10 +135,10 @@ describe("filter panel", () => {
     await user.click(getByRole(languageDropdownList, 'option', { name: "C++" }));
 
     topPanel = screen.getByTestId('top-panel');
-    expect(getByText(topPanel, "Showing 2 repositories", { exact: false })).toBeVisible();
+    expect(getByText(topPanel, "Showing 7 repositories", { exact: false })).toBeVisible();
     cards = screen.getAllByTestId("project-card");
-    expect(cards.length).toEqual(2);
-    expect(getByRole(cards[0], "heading", { name: "exoplanet-dev/celerite2" })).toBeVisible();
+    expect(cards.length).toEqual(7);
+    expect(getByRole(cards[0], "heading", { name: "dfm/george" })).toBeVisible();
 
     // Filter by license
     await user.click(screen.getByRole('button', { name: "Filter by license All" }));
