@@ -2400,6 +2400,18 @@
             "mode": "NULLABLE",
             "name": "secret_scanning_validity_checks",
             "type": "RECORD"
+          },
+          {
+            "fields": [
+              {
+                "mode": "NULLABLE",
+                "name": "status",
+                "type": "STRING"
+              }
+            ],
+            "name": "secret_scanning_non_provider_patterns",
+            "mode": "NULLABLE",
+            "type": "RECORD"
           }
         ],
         "mode": "NULLABLE",

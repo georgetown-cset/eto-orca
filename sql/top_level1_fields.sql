@@ -3,7 +3,7 @@ WITH
 field_name_scores AS (
   SELECT
     merged_id,
-    name,
+    field.name,
     field.score AS score
   FROM
     fields_of_study_v2.field_scores
@@ -12,7 +12,7 @@ field_name_scores AS (
   LEFT JOIN
     fields_of_study_v2.field_meta
     ON
-      field_id = field.id
+      field_meta.name = field.name
   WHERE
     (level = 1)),
 
