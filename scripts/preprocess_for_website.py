@@ -16,6 +16,7 @@ from scripts.constants import (
     LICENSE_TO_GROUP,
     MANUAL_COUNTRY_MAPPING,
     MIN_FIELD_REFERENCES,
+    OTHER_LICENSE,
     UNUSED_KEYS,
 )
 
@@ -261,8 +262,8 @@ def get_grouped_license(raw_license: str) -> str:
     :return: Grouped license
     """
     if raw_license not in LICENSE_TO_GROUP:
-        raise ValueError(f"Unknown license: {raw_license}")
-    return LICENSE_TO_GROUP[raw_license]
+        print(f"Warning, mapping unknown license {raw_license} to {OTHER_LICENSE}")
+    return LICENSE_TO_GROUP.get(raw_license, OTHER_LICENSE)
 
 
 def clean_row(raw_row: dict) -> dict:

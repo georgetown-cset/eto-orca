@@ -52,6 +52,7 @@ LICENSE_TO_GROUP = {
     "Open Data Commons Open Database License v1.0": OTHER_LICENSE,
     "Other": OTHER_LICENSE,
     "PostgreSQL License": OTHER_LICENSE,
+    "SIL Open Font License 1.1": OTHER_LICENSE,
     "The Unlicense": OTHER_LICENSE,
     "Universal Permissive License v1.0": OTHER_LICENSE,
     "University of Illinois/NCSA Open Source License": OTHER_LICENSE,
