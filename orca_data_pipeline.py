@@ -172,6 +172,7 @@ with DAG(
         source_format="NEWLINE_DELIMITED_JSON",
         create_disposition="CREATE_IF_NEEDED",
         write_disposition="WRITE_TRUNCATE",
+        ignore_unknown_values=True,
     )
 
     (

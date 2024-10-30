@@ -282,6 +282,11 @@
                 "mode": "NULLABLE",
                 "name": "node_id",
                 "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "user_view_type",
+                "type": "STRING"
               }
             ],
             "mode": "NULLABLE",
@@ -1977,6 +1982,11 @@
               {
                 "mode": "NULLABLE",
                 "name": "node_id",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "user_view_type",
                 "type": "STRING"
               }
             ],
