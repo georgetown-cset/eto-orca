@@ -19,11 +19,11 @@ describe("filter panel", () => {
     let topReposHeading;
     let topEntries
 
-    expect(screen.getByRole("heading", { name: currentlyTrackingHeading(8541, "artificial intelligence") })).toBeVisible();
+    expect(screen.getByRole("heading", { name: currentlyTrackingHeading(8051, "artificial intelligence") })).toBeVisible();
     topReposHeading = screen.getByRole("heading", { name: "Top repositories by stars" });
     topEntries = getAllByRole(topReposHeading.parentElement, "listitem");
-    expect(topEntries[0].textContent).toEqual("public-apis/public-apis311473 stars (-70.86%, 2023-2024)");
-    expect(topEntries[1].textContent).toEqual("facebook/react226953 stars (-75.51%, 2023-2024)");
+    expect(topEntries[0].textContent).toEqual("public-apis/public-apis315581 stars (-70.86%, 2023-2024)");
+    expect(topEntries[1].textContent).toEqual("facebook/react228410 stars (-75.51%, 2023-2024)");
 
     await user.click(screen.getByRole('combobox'));
     expect(screen.getByText("Astrobiology")).toBeVisible();
@@ -32,11 +32,11 @@ describe("filter panel", () => {
     });
     await new Promise(res => setTimeout(res, 500));
 
-    expect(screen.getByRole("heading", { name: currentlyTrackingHeading(100, "astrobiology") })).toBeVisible();
+    expect(screen.getByRole("heading", { name: currentlyTrackingHeading(97, "astrobiology") })).toBeVisible();
     topReposHeading = screen.getByRole("heading", { name: "Top repositories by stars" });
     topEntries = getAllByRole(topReposHeading.parentElement, "listitem");
-    expect(topEntries[0].textContent).toEqual("keras-team/keras61559 stars (-75.75%, 2023-2024)");
-    expect(topEntries[1].textContent).toEqual("google/jax29746 stars (-69.67%, 2023-2024)");
+    expect(topEntries[0].textContent).toEqual("keras-team/keras61897 stars (-75.75%, 2023-2024)");
+    expect(topEntries[1].textContent).toEqual("jax-ml/jax30264 stars (-69.67%, 2023-2024)");
   });
 
 
@@ -45,7 +45,7 @@ describe("filter panel", () => {
       <Dashboard />
     );
 
-    expect(screen.getByRole("heading", { name: currentlyTrackingHeading(100, "astrobiology") })).toBeVisible();
+    expect(screen.getByRole("heading", { name: currentlyTrackingHeading(97, "astrobiology") })).toBeVisible();
 
     await user.click(screen.getByRole('checkbox'));
     await new Promise(res => setTimeout(res, 500));
@@ -78,7 +78,7 @@ describe("filter panel", () => {
     await user.click(getByRole(dropdownList, 'option', { name: "Open issues and PRs" }));
 
     cards = screen.getAllByTestId("project-card");
-    expect(getByRole(cards[0], "heading", { name: "google/jax" })).toBeVisible();
+    expect(getByRole(cards[0], "heading", { name: "jax-ml/jax" })).toBeVisible();
 
   });
 
@@ -89,7 +89,7 @@ describe("filter panel", () => {
     );
 
     let cards = screen.getAllByTestId("project-card");
-    expect(getByRole(cards[0], "heading", { name: "google/jax" })).toBeVisible();
+    expect(getByRole(cards[0], "heading", { name: "jax-ml/jax" })).toBeVisible();
     expect(cards[0].textContent).toContain("Commits over time");
 
     await user.click(screen.getByRole('button', { name: "Show graphs for Commits over time" }));
@@ -123,10 +123,10 @@ describe("filter panel", () => {
 
     // Check prior state
     let topPanel = screen.getByTestId('top-panel');
-    expect(getByText(topPanel, "Showing 100 repositories", { exact: false })).toBeVisible();
+    expect(getByText(topPanel, "Showing 97 repositories", { exact: false })).toBeVisible();
     let cards = screen.getAllByTestId("project-card");
     expect(cards.length).toEqual(10); // Pagination shows only 10 per page
-    expect(getByRole(cards[0], "heading", { name: "google/jax" })).toBeVisible();
+    expect(getByRole(cards[0], "heading", { name: "jax-ml/jax" })).toBeVisible();
 
     // Filter by language
     await user.click(screen.getByRole('button', { name: "Filter by top programming language All" }));
