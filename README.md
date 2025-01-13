@@ -4,7 +4,7 @@ This repository contains code related to the ORCA project.
 
 ## Running the ORCA web application locally
 
-Navigate to the `github-metrics` subdirectory. If you have not installed
+Navigate to the [github-metrics](/github-metrics) subdirectory. If you have not installed
 [Gatsby](https://www.gatsbyjs.com/docs/tutorial/getting-started/part-0/), do so, and then run
 
 ```
@@ -15,10 +15,12 @@ gatsby develop
 
 ## Running data retrieval scripts
 
+Data updates are automated via `orca_data_pipeline.py`. Additionally, a GitHub action runs once a month to open a PR that updates the data. You can merge this PR and update the production site after reviewing the changes.
+
 To manually run data retrieval scripts, you can:
 
 * Run `sql/repos_in_papers.sql` to aggregate GitHub references that appear in papers. If you do not want to update
-the software extrated from scholarly literature, skip this step.
+the software extracted from scholarly literature, skip this step.
 
 * Prepare your development environment:
 
