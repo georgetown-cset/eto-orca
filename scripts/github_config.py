@@ -8,7 +8,7 @@ RATE_LIMIT_INTERVAL = 60 * 60 / 5000 + 0.2
 def mk_auth() -> tuple:
     """
     Checks the environment for GITHUB_ACCESS_TOKEN and GITHUB_USER env variables and returns these as a
-    tuple if set, otherwise complains
+    tuple if set, otherwise pulls from secret manager, otherwise complains
     :return: Tuple of values of (GITHUB_ACCESS_TOKEN, GITHUB_USER)
     """
     client = secretmanager.SecretManagerServiceClient()

@@ -432,6 +432,7 @@ def write_included_to_bq(id_to_repo: dict) -> None:
     job_config = bigquery.LoadJobConfig(
         source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
         autodetect=True,
+        write_disposition=bigquery.WriteDisposition.WRITE_TRUNCATE,
     )
 
     with tempfile.TemporaryDirectory() as td:

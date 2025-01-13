@@ -7,8 +7,14 @@ import requests
 from scripts.github_config import RATE_LIMIT_INTERVAL, mk_auth
 
 
-def get_meta(owner: str, repo: str) -> dict:
-    auth = mk_auth()
+def get_meta(owner: str, repo: str, auth) -> dict:
+    """
+    Retrieves repo metadata from GitHub API
+    :param owner: Repo owner
+    :param repo: Repo name
+    :param auth: Authorization tuple
+    :return: JSON of repo metadata
+    """
     try:
         repo_resp = requests.get(
             f"https://api.github.com/repos/{owner}/{repo}",
@@ -28,8 +34,15 @@ def get_meta(owner: str, repo: str) -> dict:
 
 
 def backfill_meta(input_data: str, output_data: str) -> None:
+    """
+    Adds GitHub metadata to each repo, where not already present
+    :param input_data: A JSONL of input data
+    :param output_data: A JSONL of output data
+    :return: None
+    """
     out = open(output_data, mode="w")
     seen_repos = set()
+    auth = mk_auth()
     with open(input_data) as f:
         for line in f:
             js = json.loads(line)
@@ -38,7 +51,7 @@ def backfill_meta(input_data: str, output_data: str) -> None:
                 continue
             seen_repos.add(repo_fullname)
             if not js.get("full_metadata"):
-                js["full_metadata"] = get_meta(js["owner_name"], js["repo_name"])
+                js["full_metadata"] = get_meta(js["owner_name"], js["repo_name"], auth)
                 time.sleep(RATE_LIMIT_INTERVAL)
             # Get rid of the custom_properties field which doesn't have a consistent schema
             js.get("full_metadata", {}).pop("custom_properties", None)
