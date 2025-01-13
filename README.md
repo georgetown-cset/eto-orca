@@ -13,11 +13,19 @@ gatsby clean
 gatsby develop
 ```
 
+To update the production website, run `bash push_to_production.sh`.
+
 ## Running data retrieval scripts
 
-Data updates are automated via `orca_data_pipeline.py`. Additionally, a GitHub action runs once a month to open a PR that updates the data. You can merge this PR and update the production site after reviewing the changes.
+Data updates are automated via `orca_data_pipeline.py`. Additionally, a GitHub action runs once a month to open a PR that updates the data. You can merge this PR and update the production site after reviewing the changes. In short, you shouldn't have to run the steps below manually - these instructions are included in case of some special circumstance.
 
-To manually run data retrieval scripts, you can:
+### Manually running data preprocessing
+
+To manually run data preprocessing, ensure that the current data in `orca.website_stats` in BigQuery has been exported to GCS in `gs://airflow-data-exchange/orca/tmp/website_stats`. Then, run `PYTHONPATH='.' python3 scripts/preprocess_for_website.py`.
+
+### Manually running data updates
+
+The Airflow pipeline outlines the sequence of commands to run in more detail, but a quick summary:
 
 * Run `sql/repos_in_papers.sql` to aggregate GitHub references that appear in papers. If you do not want to update
 the software extracted from scholarly literature, skip this step.
@@ -47,10 +55,7 @@ which we can use to do further analysis.
 Run `PYTHONPATH='.' python3 scripts/retrieve_repo_metadata.py curr_repos_filled.jsonl curr_repos_final.jsonl`
 
 * To prepare data for the web application, load `curr_repos_final.jsonl` in the previous step into BigQuery and run
-the sequence of queries in `sequences/downstream_order.txt`. Assuming your dataset in BigQuery is called `orca`, download
-the data from
-`orca.website_stats` in BigQuery as JSONL,
-then run `PYTHONPATH='.' python3 scripts/preprocess_for_website.py`.
+the sequence of queries in `sequences/downstream_order.txt`.
 
 These steps are automated and run on a monthly basis on the scholarly literature data using the `orca_data_pipeline.py`
 Airflow pipeline.
