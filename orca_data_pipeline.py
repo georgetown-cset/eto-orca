@@ -38,7 +38,7 @@ from dataloader.scripts.populate_documentation import update_table_descriptions
 This DAG retrieves data from GitHub and updates the tables in the `orca` BigQuery dataset
 """
 
-args = get_default_args(pocs=["Jennifer"])
+args = get_default_args(pocs=["James"])
 args["retries"] = 1
 
 production_dataset = "orca"
@@ -60,7 +60,7 @@ with DAG(
     sql_dir = f"sql/{production_dataset}"
     gce_resource_id = "orca-etl"
     ssh_command = (
-        f"gcloud compute ssh jm3312@{gce_resource_id} --zone {GCP_ZONE} --command "
+        f"gcloud compute ssh jd1881@{gce_resource_id} --zone {GCP_ZONE} --command "
         + '"{}"'
     )
 
