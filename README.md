@@ -13,7 +13,7 @@ gatsby clean
 gatsby develop
 ```
 
-To update the production website, run `bash push_to_production.sh`.
+To update the production website, run `gatsby clean; gatsby build` and then `bash push_to_production.sh`.
 
 ## Running data retrieval scripts
 
