@@ -60,7 +60,7 @@ with DAG(
     sql_dir = f"sql/{production_dataset}"
     gce_resource_id = "orca-etl"
     ssh_command = (
-        f"gcloud compute ssh jd1881@{gce_resource_id} --zone {GCP_ZONE} --command "
+        f"gcloud compute ssh airflow@{gce_resource_id} --zone {GCP_ZONE} --command "
         + '"{}"'
     )
 
