@@ -199,33 +199,7 @@ curr_data AS (
     id,
     other
   FROM
-    `githubarchive.month.202401`
-  UNION ALL
-  SELECT
-    type,
-    public,
-    payload,
-    repo,
-    actor,
-    org,
-    created_at,
-    id,
-    other
-  FROM
-    `githubarchive.month.202402`
-  UNION ALL
-  SELECT
-    type,
-    public,
-    payload,
-    repo,
-    actor,
-    org,
-    created_at,
-    id,
-    other
-  FROM
-    `githubarchive.month.202403`
+    `githubarchive.year.2024`
 ),
 
 -- needed to allow match to data for old repo names
