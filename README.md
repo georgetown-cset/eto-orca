@@ -19,6 +19,8 @@ To update the production website, run `gatsby clean; gatsby build` and then `bas
 
 Data updates are automated via `orca_data_pipeline.py`. Additionally, a GitHub action runs once a month to open a PR that updates the data. You can merge this PR and update the production site after reviewing the changes. In short, you shouldn't have to run the steps below manually - these instructions are included in case of some special circumstance.
 
+If the pipeline takes an unusually long time to run or the sensors are timing out, check the log files in the `airflow` user's home directory on `orca-etl`.
+
 ### Manually running data preprocessing
 
 To manually run data preprocessing, ensure that the current data in `orca.website_stats` in BigQuery has been exported to GCS in `gs://airflow-data-exchange/orca/tmp/website_stats`. Then, run `PYTHONPATH='.' python3 scripts/preprocess_for_website.py`.
