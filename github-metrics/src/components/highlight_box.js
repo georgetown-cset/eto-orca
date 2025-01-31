@@ -24,13 +24,13 @@ const styles = {
   `,
   wideBox: css`
     width: 400px;
-    @media (max-width: ${breakpointStops.phone_regular}px {
+    @media (max-width: ${breakpointStops.phone_regular}px ) {
       width: 100%;
     }
   `,
   narrowBox: css`
     width: 350px;
-    @media (max-width: ${breakpointStops.phone_regular}px {
+    @media (max-width: ${breakpointStops.phone_regular}px ) {
       width: 100%;
     }
   `

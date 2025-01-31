@@ -395,27 +395,36 @@ const Dashboard = () => {
         <div css={styles.bottomPanel}>
           {(repoData.length > 0) && (
             !showList ?
-              <Summary key={`summary-${filterValues["field_of_study"]}`} data={repoData}
-                            field={filterValues["field_of_study"]}
-                            isCurated={isCuratedField(filterValues["field_of_study"])}
-                            sortOptions={sortOptions}/> :
-            <div>
-              {repoData.slice((currPage-1)*PAGE_SIZE, currPage*PAGE_SIZE).map(repo => (
-                <ProjectCard key={getRepoName(repo)}
-                             data={repo}
-                             field={filterValues["field_of_study"]}
-                             graph_key={filterValues["compare_graph"]}
-                             graph_title={keyToTitle[filterValues["compare_graph"]]}
-                             isCurated={isCuratedField(filterValues["field_of_study"])}/>
-              ))}
+              <Summary
+                data={repoData}
+                field={filterValues["field_of_study"]}
+                isCurated={isCuratedField(filterValues["field_of_study"])}
+                key={`summary-${filterValues["field_of_study"]}`}
+                sortOptions={sortOptions}
+              />
+            :
               <div>
-              <div css={styles.paginationContainer}>
-                <StyledPagination page={currPage}
-                                  onChange={(_, page) => {setCurrPage(page);contentContainer.current.scrollIntoView()}}
-                                  count={Math.ceil(repoData.length/PAGE_SIZE)}/>
+                {repoData.slice((currPage-1)*PAGE_SIZE, currPage*PAGE_SIZE).map(repo => (
+                  <ProjectCard
+                    data={repo}
+                    field={filterValues["field_of_study"]}
+                    graph_key={filterValues["compare_graph"]}
+                    graph_title={keyToTitle[filterValues["compare_graph"]]}
+                    isCurated={isCuratedField(filterValues["field_of_study"])}
+                    key={getRepoName(repo)}
+                  />
+                ))}
+                <div css={styles.paginationContainer}>
+                  <StyledPagination
+                    count={Math.ceil(repoData.length/PAGE_SIZE)}
+                    onChange={(_, page) => {
+                      setCurrPage(page);
+                      contentContainer.current.scrollIntoView();
+                    }}
+                    page={currPage}
+                  />
+                </div>
               </div>
-              </div>
-            </div>
           )}
         </div>
       </div>

@@ -100,6 +100,7 @@ const ProjectDetails = ({
 
   useEffect(() => {
     updateAccordionDetails(data);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getGraphs = (meta, currData) => {
@@ -200,7 +201,7 @@ const ProjectDetails = ({
           </div>
           <h2 css={styles.ghLink}>
             <ExternalLink href={"https://github.com/" + repoName}>
-              <img src={githubLogo} css={styles.githubLogo}/>{repoName}<LaunchIcon css={styles.repoIcon}/>
+              <img alt="" src={githubLogo} css={styles.githubLogo}/>{repoName}<LaunchIcon css={styles.repoIcon}/>
             </ExternalLink>
           </h2>
           {data["has_deps_dev"] &&
