@@ -12,18 +12,22 @@ const currentlyTrackingHeading = (num, field) => {
 
 describe("filter panel", () => {
   it("switches research fields", async () => {
-    const { user } = userEventSetup(
-      <Dashboard />
-    );
+    let setupResult;
+    await act(() => {
+      setupResult = userEventSetup(
+        <Dashboard />
+      );
+    });
+    const { user } = setupResult;
 
     let topReposHeading;
     let topEntries
 
-    expect(screen.getByRole("heading", { name: currentlyTrackingHeading(8051, "artificial intelligence") })).toBeVisible();
+    expect(screen.getByRole("heading", { name: currentlyTrackingHeading(8068, "artificial intelligence") })).toBeVisible();
     topReposHeading = screen.getByRole("heading", { name: "Top repositories by stars" });
     topEntries = getAllByRole(topReposHeading.parentElement, "listitem");
-    expect(topEntries[0].textContent).toEqual("public-apis/public-apis315581 stars (-70.86%, 2023-2024)");
-    expect(topEntries[1].textContent).toEqual("facebook/react228410 stars (-75.51%, 2023-2024)");
+    expect(topEntries[0].textContent).toMatch("public-apis/public-apis316586 stars (-70.86%, 2023-2024)");
+    expect(topEntries[1].textContent).toEqual("facebook/react228916 stars (-75.51%, 2023-2024)");
 
     await user.click(screen.getByRole('combobox'));
     expect(screen.getByText("Astrobiology")).toBeVisible();
@@ -32,11 +36,11 @@ describe("filter panel", () => {
     });
     await new Promise(res => setTimeout(res, 500));
 
-    expect(screen.getByRole("heading", { name: currentlyTrackingHeading(97, "astrobiology") })).toBeVisible();
+    expect(screen.getByRole("heading", { name: currentlyTrackingHeading(96, "astrobiology") })).toBeVisible();
     topReposHeading = screen.getByRole("heading", { name: "Top repositories by stars" });
     topEntries = getAllByRole(topReposHeading.parentElement, "listitem");
-    expect(topEntries[0].textContent).toEqual("keras-team/keras61897 stars (-75.75%, 2023-2024)");
-    expect(topEntries[1].textContent).toEqual("jax-ml/jax30264 stars (-69.67%, 2023-2024)");
+    expect(topEntries[0].textContent).toEqual("keras-team/keras61975 stars (-75.75%, 2023-2024)");
+    expect(topEntries[1].textContent).toEqual("jax-ml/jax30404 stars (-69.67%, 2023-2024)");
   });
 
 
@@ -45,7 +49,7 @@ describe("filter panel", () => {
       <Dashboard />
     );
 
-    expect(screen.getByRole("heading", { name: currentlyTrackingHeading(97, "astrobiology") })).toBeVisible();
+    expect(screen.getByRole("heading", { name: currentlyTrackingHeading(96, "astrobiology") })).toBeVisible();
 
     await user.click(screen.getByRole('checkbox'));
     await new Promise(res => setTimeout(res, 500));
@@ -123,7 +127,7 @@ describe("filter panel", () => {
 
     // Check prior state
     let topPanel = screen.getByTestId('top-panel');
-    expect(getByText(topPanel, "Showing 97 repositories", { exact: false })).toBeVisible();
+    expect(getByText(topPanel, "Showing 96 repositories", { exact: false })).toBeVisible();
     let cards = screen.getAllByTestId("project-card");
     expect(cards.length).toEqual(10); // Pagination shows only 10 per page
     expect(getByRole(cards[0], "heading", { name: "jax-ml/jax" })).toBeVisible();

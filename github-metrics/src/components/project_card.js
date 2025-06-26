@@ -79,16 +79,38 @@ const ProjectCard = (props) => {
 
   const getGraph = () => {
     if((graph_key === "downloads") && (data[graph_key].length === 0)){
-      return <div css={styles.noPyPi}>No PyPi data available.</div>
+      return (
+        <div css={styles.noPyPi}>
+          No PyPi data available.
+        </div>
+      );
     }
     if(["issue_dates", "commit_dates", "contrib_counts"].includes(graph_key)){
-      return <BarGraph traces={getBarTraces(graph_key, data)} title={graph_title} height={"300px"}
-                       normalizeTime={graph_key !== "contrib_counts"}/>;
+      return (
+        <BarGraph
+          height="300px"
+          normalizeTime={graph_key !== "contrib_counts"}
+          title={graph_title}
+          traces={getBarTraces(graph_key, data)}
+        />
+      );
     } else if(["country_contributions", "org_contributions", "downloads"].includes(graph_key)){
-      return <LineGraph traces={getCountryTraces(data[graph_key])} title={graph_title} height={"300px"} showLegend={true}/>;
+      return (
+        <LineGraph
+          height="300px"
+          title={graph_title}
+          traces={getCountryTraces(data[graph_key])}
+          showLegend={true}
+        />
+      );
     }
-    return <BarGraph traces={[{x: getX(data[graph_key]), y: getY(data[graph_key])}]}
-                       title={graph_title} height={"300px"}/>;
+    return (
+      <BarGraph
+        height="300px"
+        title={graph_title}
+        traces={[{x: getX(data[graph_key]), y: getY(data[graph_key])}]}
+      />
+    );
   };
 
   return (
@@ -96,10 +118,12 @@ const ProjectCard = (props) => {
       <div css={styles.metadataContainer}>
         <div css={styles.leftPanel}>
           <span>
-            <h4 css={styles.ghLink}><ExternalLink href={`/project?name=${repo_name}`}>{repo_name}</ExternalLink></h4>
+            <h4 css={styles.ghLink}>
+              <ExternalLink href={`/project?name=${repo_name}`}>{repo_name}</ExternalLink>
+            </h4>
             <span css={styles.depsLink}>
               <ExternalLink href={"https://github.com/"+repo_name}>
-                <img src={githubLogo} css={styles.githubLogo}/>GitHub<LaunchIcon css={styles.depsIcon}/>
+                <img alt="" src={githubLogo} css={styles.githubLogo}/>GitHub<LaunchIcon css={styles.depsIcon}/>
               </ExternalLink>
             </span>
             {data["has_deps_dev"] &&
@@ -120,7 +144,14 @@ const ProjectCard = (props) => {
         </div>
       </div>
       <div css={styles.buttonContainer}>
-        <ButtonStyled style={{width: "100%", color: "white"}} href={`/project?name=${repo_name}`} target={"_blank"} rel={"noopener"}>Full profile &gt;&gt;</ButtonStyled>
+        <ButtonStyled
+          href={`/project?name=${repo_name}`}
+          rel="noopener"
+          style={{width: "100%", color: "white"}}
+          target="_blank"
+        >
+          Full profile &gt;&gt;
+        </ButtonStyled>
       </div>
     </div>
   )

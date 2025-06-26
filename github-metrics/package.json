@@ -7,7 +7,7 @@
     "gatsby"
   ],
   "scripts": {
-    "develop": "gatsby develop -p 8560",
+    "develop": "NODE_OPTIONS=\"--max-old-space-size=8192\" gatsby develop -p 8560",
     "start": "gatsby develop",
     "build": "NODE_OPTIONS=--max-old-space-size=8192 gatsby build",
     "serve": "NODE_OPTIONS=--max-old-space-size=8192 gatsby serve",

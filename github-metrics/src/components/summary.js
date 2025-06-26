@@ -4,20 +4,17 @@ Summary metrics for top five repositories within current selection
 import React, {useEffect} from "react";
 import {css} from "@emotion/react";
 
-import {Accordion, Dropdown, ExternalLink, HelpTooltip} from "@eto/eto-ui-components";
+import { Accordion, Dropdown, ExternalLink } from "@eto/eto-ui-components";
 
 import { LineGraph } from "./graph";
-import HighlightBox from "./highlight_box";
+import StatBox from "./StatBox";
 import {
   FIELD_KEYS,
   cleanFieldName,
   getRepoName,
-  getTooltip,
   keyToTitle,
   sortByKey,
-  sortMappingBlurb,
 } from "../util";
-
 
 const styles = {
   card: css`
@@ -47,67 +44,21 @@ const styles = {
   pctGraph: css`
     padding: 0px 10px 20px 10px;
   `,
-  statListElt: css`
-    line-height: 1.5;
-    list-style-type: none;
-  `,
-  statList: css`
-    padding-left: 0px;
-  `,
-  statDetail: css`
-    padding-left: 10px;
-  `,
   statWrapper: css`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
     text-align: center;
-  `,
-  statTitle: css`
-    font-weight: normal;
+    width: 100%;
+
+    & > .stat-box {
+      margin: 0;
+    }
   `,
   headerContainer: css`
     margin: 0 20px;
   `
-};
-
-const StatBox = ({stat, data, yearly=null, field=null, fieldName=null}) => {
-  const fmtStat = sortMappingBlurb[stat].toLowerCase();
-  const title = <span css={styles.statTitle}>
-    Top repositories by <strong>{stat === "relevance" ? <span>relevance to {fieldName} research <HelpTooltip text={getTooltip("relevance_list")}/></span> : fmtStat}</strong>
-  </span>;
-  const yearlyRepoStats = {};
-  if(yearly !== null) {
-    for (let repoStat of yearly) {
-      const numYears = repoStat.y.length;
-      const change = (100*(repoStat.y[numYears - 1] - repoStat.y[numYears - 2]) / repoStat.y[numYears - 2]).toFixed(2);
-      const prettyChange = `${change < 0 ? "" : "+"}${change}`;
-      const isBad = (repoStat.y[numYears - 2] === 0) || (!repoStat.x[numYears - 2]) || (!repoStat.x[numYears - 1]) || (repoStat.x[numYears - 2] === repoStat.x[numYears - 1]);
-      yearlyRepoStats[repoStat.name] = {
-        numYears: numYears,
-        change: prettyChange,
-        startYear: repoStat.x[numYears - 2],
-        endYear: repoStat.x[numYears - 1],
-        isBad: isBad
-      };
-    }
-  }
-
-  return (
-    <HighlightBox title={title} isTall={true}>
-      <ul css={styles.statList}>
-        {!!data.length && sortByKey(data, stat, field).slice(0, 5).map((row) =>
-          <li css={styles.statListElt} key={getRepoName(row)}>
-            <a href={`/project?name=${getRepoName(row)}`}>
-              {getRepoName(row)}
-            </a><br/>
-            <span css={styles.statDetail}>
-              {stat === "relevance" ?
-                <span><strong>{row["relevance"][field].toFixed(2)}</strong> {fmtStat} (<strong>{row["num_references"][field]}</strong> references)</span> :
-                <span><strong>{row[stat]}</strong> {fmtStat}{!yearlyRepoStats[getRepoName(row)].isBad && <span> (<strong>{yearlyRepoStats[getRepoName(row)].change}</strong>%, {yearlyRepoStats[getRepoName(row)].startYear}-{yearlyRepoStats[getRepoName(row)].endYear})</span>}</span>}
-            </span>
-          </li>
-        )}
-      </ul>
-    </HighlightBox>
-  )
 };
 
 const Summary = ({data, sortOptions, field, isCurated}) => {
@@ -169,8 +120,11 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
           This graph shows the number of commits made to any branch of the displayed projects each year, as reported in GitHub Archive PushEvents. Within a project,
           we deduplicate commits based on their hash.
         </div>
-        <LineGraph title={keyToTitle["push_dates"]} showLegend={true}
-                 traces={getTrace("push_dates")}/>
+        <LineGraph
+          showLegend={true}
+          title={keyToTitle["push_dates"]}
+          traces={getTrace("push_dates")}
+        />
       </div>
     },
     {
@@ -182,9 +136,12 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
           issues opened to issues closed might indicate the project needs more maintenance capacity. For further discussion, see
           the CHAOSS metrics <ExternalLink href={"https://chaoss.community/kb/metric-issues-new/"}>Issues New</ExternalLink> and <ExternalLink href={"https://chaoss.community/kb/metric-issues-closed/"}>Issues Closed</ExternalLink>.
         </div>
-        <LineGraph title={"Ratio of issues and pull requests closed to opened over time"}
-                            showLegend={true} forceInteger={false}
-                            traces={getTrace("issue_dates", val => val[1] === 0 ? 0 : val[2]/val[1])}/>
+        <LineGraph
+          forceInteger={false}
+          showLegend={true}
+          title="Ratio of issues and pull requests closed to opened over time"
+          traces={getTrace("issue_dates", val => val[1] === 0 ? 0 : val[2]/val[1])}
+        />
       </div>
     },
     {
@@ -197,9 +154,11 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
           We currently only identify individual contributors based on their names, which may change over time. For further discussion,
           see the CHAOSS metrics <ExternalLink href={"https://chaoss.community/kb/metric-new-contributors/"}>New Contributors</ExternalLink> and <ExternalLink href={"https://chaoss.community/kb/metric-inactive-contributors/"}>Inactive Contributors</ExternalLink>.
         </div>
-        <LineGraph title={"Ratio of new vs returning contributors over time"}
-                            showLegend={true}
-                            traces={getTrace("commit_dates", val => val[2] === 0 ? 0 : val[1]/val[2])}/>
+        <LineGraph
+          showLegend={true}
+          title="Ratio of new vs returning contributors over time"
+          traces={getTrace("commit_dates", val => val[2] === 0 ? 0 : val[1]/val[2])}
+        />
       </div>
     },
     {
@@ -212,12 +171,13 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
             Repositories with fewer than 20 contributors will show a partial line. For related discussion, see the CHAOSS metric <ExternalLink href={"https://chaoss.community/kb/metric-bus-factor/"}>Bus Factor</ExternalLink>.
           </div>
           <div css={styles.pctGraph}>
-          <LineGraph title={"Cumulative percentage of commits by top 20 contributors"}
-                            showLegend={true}
-                            traces={getContribTrace("contrib_counts")}
-                            normalizeTime={false}
-                            xTitle={"Contributor ranking"}
-                            yTitle={"Percentage of commits"}
+          <LineGraph
+            normalizeTime={false}
+            showLegend={true}
+            title="Cumulative percentage of commits by top 20 contributors"
+            traces={getContribTrace("contrib_counts")}
+            xTitle={"Contributor ranking"}
+            yTitle={"Percentage of commits"}
           />
           </div>
         </div>
@@ -230,9 +190,11 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
         <div css={styles.graphHeader}>
           This graph shows the number of new stars added to each project during each year we track, as reported in GitHub Archive WatchEvents.
         </div>
-        <LineGraph title={keyToTitle["star_dates"]}
-                            showLegend={true}
-                            traces={getTrace("star_dates")}/>
+        <LineGraph
+          showLegend={true}
+          title={keyToTitle["star_dates"]}
+          traces={getTrace("star_dates")}
+        />
       </div>
     }
   ];
@@ -267,14 +229,41 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
     <div css={styles.card}>
       <div css={styles.headerContainer}>
         <h1 css={styles.summaryContainerLabel}>
-          Currently tracking <a href={window.location.href.includes("?") ? window.location.href+"&show_list=true" : window.location.href.replace(/\/.*/, "")+"/?show_list=true"}><strong>{data.length}</strong> software repositories</a> {isCurated ? "related to" : "mentioned in research into"} <strong>{fieldName}</strong>.
+          Currently tracking {
+            <a href={window.location.href.includes("?") ? window.location.href+"&show_list=true" : window.location.href.replace(/\/.*/, "")+"/?show_list=true"}>
+              <strong>{data.length}</strong> software repositories
+            </a>
+          } {isCurated ? "related to" : "mentioned in research into"} <strong>{fieldName}</strong>.
         </h1>
         <div css={styles.statWrapper}>
           {isCurated ?
-            <StatBox key={"open_issues"} stat={"open_issues"} yearly={getTrace("issue_dates", val => val[2], "open_issues")} data={data}/> :
-            <StatBox key={"relevance"} stat={"relevance"} data={data} field={field} fieldName={fieldName}/>}
-          <StatBox key={"stargazers_count"} stat={"stargazers_count"} yearly={getTrace("star_dates", val => val[1], "stargazers_count")} data={data}/>
-          <StatBox key={"num_contributors"} stat={"num_contributors"} yearly={getTrace("commit_dates", val => val[1]+val[2], "num_contributors")} data={data}/>
+            <StatBox
+              data={data}
+              key="open_issues"
+              stat="open_issues"
+              yearly={getTrace("issue_dates", val => val[2], "open_issues")}
+            />
+          :
+            <StatBox
+              data={data}
+              field={field}
+              fieldName={fieldName}
+              key="relevance"
+              stat="relevance"
+            />
+          }
+          <StatBox
+            data={data}
+            key="stargazers_count"
+            stat="stargazers_count"
+            yearly={getTrace("star_dates", val => val[1], "stargazers_count")}
+          />
+          <StatBox
+            data={data}
+            key="num_contributors"
+            stat="num_contributors"
+            yearly={getTrace("commit_dates", val => val[1]+val[2], "num_contributors")}
+          />
         </div>
         <h2 css={styles.summaryContainerLabel}>
           <span css={styles.dropdownIntro}>Trends over time for top repositories by</span>

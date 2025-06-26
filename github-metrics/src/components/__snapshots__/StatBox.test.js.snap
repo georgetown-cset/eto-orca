@@ -1,0 +1,155 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StatBox renders relevance as expected 1`] = `
+<DocumentFragment>
+  <div
+    class="stat-box css-458u9z-wrapper-tallBox-narrowBox-HighlightBox"
+  >
+    <h3>
+      <span
+        class="css-6q6okq-statTitle"
+      >
+        Top repositories by 
+        <strong>
+          <span>
+            relevance to artificial intelligence research 
+            <span>
+              <img
+                alt="Documentation"
+                class="css-2bdo2t-HelpTooltip"
+                data-mui-internal-clone-element="true"
+                src=""
+                style="height: 25px; vertical-align: top; cursor: pointer; fill: var(--bright-blue);"
+              />
+            </span>
+          </span>
+        </strong>
+      </span>
+    </h3>
+    <ul
+      class="css-1e4pw1g-statList"
+    >
+      <li
+        class="css-3u698m-statListElt"
+      >
+        <a
+          href="/project?name=facebookresearch/fairseq"
+        >
+          facebookresearch/fairseq
+        </a>
+        <br />
+        <span
+          class="css-ebdczx-statDetail"
+        >
+          <span>
+            <strong>
+              726.32
+            </strong>
+             relevance (
+            <strong>
+              779
+            </strong>
+             references)
+          </span>
+        </span>
+      </li>
+      <li
+        class="css-3u698m-statListElt"
+      >
+        <a
+          href="/project?name=huggingface/transformers"
+        >
+          huggingface/transformers
+        </a>
+        <br />
+        <span
+          class="css-ebdczx-statDetail"
+        >
+          <span>
+            <strong>
+              656.34
+            </strong>
+             relevance (
+            <strong>
+              891
+            </strong>
+             references)
+          </span>
+        </span>
+      </li>
+      <li
+        class="css-3u698m-statListElt"
+      >
+        <a
+          href="/project?name=tatsu-lab/stanford_alpaca"
+        >
+          tatsu-lab/stanford_alpaca
+        </a>
+        <br />
+        <span
+          class="css-ebdczx-statDetail"
+        >
+          <span>
+            <strong>
+              579.70
+            </strong>
+             relevance (
+            <strong>
+              604
+            </strong>
+             references)
+          </span>
+        </span>
+      </li>
+      <li
+        class="css-3u698m-statListElt"
+      >
+        <a
+          href="/project?name=google-research/bert"
+        >
+          google-research/bert
+        </a>
+        <br />
+        <span
+          class="css-ebdczx-statDetail"
+        >
+          <span>
+            <strong>
+              384.99
+            </strong>
+             relevance (
+            <strong>
+              464
+            </strong>
+             references)
+          </span>
+        </span>
+      </li>
+      <li
+        class="css-3u698m-statListElt"
+      >
+        <a
+          href="/project?name=mjpost/sacrebleu"
+        >
+          mjpost/sacrebleu
+        </a>
+        <br />
+        <span
+          class="css-ebdczx-statDetail"
+        >
+          <span>
+            <strong>
+              340.46
+            </strong>
+             relevance (
+            <strong>
+              220
+            </strong>
+             references)
+          </span>
+        </span>
+      </li>
+    </ul>
+  </div>
+</DocumentFragment>
+`;
