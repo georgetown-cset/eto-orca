@@ -45,7 +45,16 @@ const styles = {
     padding: 0px 10px 20px 10px;
   `,
   statWrapper: css`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
     text-align: center;
+    width: 100%;
+
+    & > .stat-box {
+      margin: 0;
+    }
   `,
   headerContainer: css`
     margin: 0 20px;
