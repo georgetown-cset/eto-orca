@@ -36,9 +36,18 @@ const styles = {
   `
 };
 
-const HighlightBox = ({title, isTall=false, isWide=false, children}) => {
+const HighlightBox = ({
+  children,
+  className=undefined,
+  isTall=false,
+  isWide=false,
+  title,
+}) => {
   return (
-    <div css={[styles.wrapper, isTall ? styles.tallBox : styles.shortBox, isWide ? styles.wideBox : styles.narrowBox]}>
+    <div
+      className={className}
+      css={[styles.wrapper, isTall ? styles.tallBox : styles.shortBox, isWide ? styles.wideBox : styles.narrowBox]}
+    >
       <h3>{title}</h3>
       {children}
     </div>

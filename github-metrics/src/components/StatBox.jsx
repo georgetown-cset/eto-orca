@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { css } from '@emotion/react';
 
 import { HelpTooltip } from '@eto/eto-ui-components';
@@ -36,8 +36,17 @@ const StatBox = ({
 }) => {
   const fmtStat = sortMappingBlurb[stat].toLowerCase();
   const title = <span css={styles.statTitle}>
-    Top repositories by <strong>{stat === "relevance" ? <span>relevance to {fieldName} research <HelpTooltip text={getTooltip("relevance_list")}/></span> : fmtStat}</strong>
+    Top repositories by {
+      <strong>
+        {stat === "relevance" ?
+          <span>relevance to {fieldName} research <HelpTooltip text={getTooltip("relevance_list")}/></span>
+        :
+          fmtStat
+        }
+      </strong>
+    }
   </span>;
+
   const yearlyRepoStats = {};
   if(yearly !== null) {
     for (let repoStat of yearly) {
@@ -55,18 +64,35 @@ const StatBox = ({
     }
   }
 
+  const dataToDisplay = useMemo(() => {
+    if ( data.length > 0 ) {
+      return sortByKey(data, stat, field).slice(0, 5);
+    } else {
+      return [];
+    }
+  }, [data, stat, field]);
+
   return (
-    <HighlightBox title={title} isTall={true}>
+    <HighlightBox className="stat-box" title={title} isTall={true}>
       <ul css={styles.statList}>
-        {!!data.length && sortByKey(data, stat, field).slice(0, 5).map((row) =>
+        {dataToDisplay.map((row) =>
           <li css={styles.statListElt} key={getRepoName(row)}>
             <a href={`/project?name=${getRepoName(row)}`}>
               {getRepoName(row)}
             </a><br/>
             <span css={styles.statDetail}>
               {stat === "relevance" ?
-                <span><strong>{row["relevance"][field].toFixed(2)}</strong> {fmtStat} (<strong>{row["num_references"][field]}</strong> references)</span> :
-                <span><strong>{row[stat]}</strong> {fmtStat}{!yearlyRepoStats[getRepoName(row)].isBad && <span> (<strong>{yearlyRepoStats[getRepoName(row)].change}</strong>%, {yearlyRepoStats[getRepoName(row)].startYear}-{yearlyRepoStats[getRepoName(row)].endYear})</span>}</span>}
+                <span>
+                  <strong>{row["relevance"][field].toFixed(2)}</strong> {fmtStat} (<strong>{row["num_references"][field]}</strong> references)
+                </span>
+              :
+                <span>
+                  <strong>{row[stat]}</strong> {fmtStat} {
+                    !yearlyRepoStats[getRepoName(row)].isBad &&
+                    <span>(<strong>{yearlyRepoStats[getRepoName(row)].change}</strong>%, {yearlyRepoStats[getRepoName(row)].startYear}-{yearlyRepoStats[getRepoName(row)].endYear})</span>
+                  }
+                </span>
+              }
             </span>
           </li>
         )}
