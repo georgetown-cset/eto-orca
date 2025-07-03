@@ -17,22 +17,23 @@
     "artifactregistry-login": "npx google-artifactregistry-auth",
     "arlogin": "npm run artifactregistry-login"
   },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "dependencies": {
-    "@emotion/react": "^11.10.5",
-    "@emotion/styled": "^11.10.5",
+    "@emotion/react": "^11.14.0",
     "@eto/eto-ui-components": "^1.10.7",
     "@eto/social-cards": "^1.0.0",
     "@mdx-js/react": "^2.1.5",
     "@mui/icons-material": "^5.15.12",
     "@mui/material": "^5.11.9",
-    "gatsby": "^5.13.3",
-    "gatsby-plugin-emotion": "^8.13.1",
-    "gatsby-plugin-manifest": "^5.13.1",
-    "gatsby-plugin-mdx": "^5.13.1",
+    "gatsby": "^5.14.5",
+    "gatsby-plugin-emotion": "^8.14.0",
+    "gatsby-plugin-manifest": "^5.14.0",
+    "gatsby-plugin-mdx": "^5.14.1",
     "gatsby-plugin-percy": "^1.1.0",
     "gatsby-plugin-plausible": "^0.0.7",
-    "package.json": "^2.0.1",
-    "plotly.js": "^2.18.1",
+    "plotly.js": "^2.35.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-plotly.js": "^2.6.0"
