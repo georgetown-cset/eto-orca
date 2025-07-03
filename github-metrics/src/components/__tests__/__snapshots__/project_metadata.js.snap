@@ -48,7 +48,7 @@ exports[`Project metadata renders correctly with no references 1`] = `
                     <svg
                       alt="Documentation"
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-dl97ro-MuiSvgIcon-root-iconDefaults-HelpTooltip-muiTooltip-HelpTooltip"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-k1i2bl-MuiSvgIcon-root-iconDefaults-HelpTooltip-muiTooltip-HelpTooltip"
                       data-mui-internal-clone-element="true"
                       data-testid="HelpIcon"
                       focusable="false"
@@ -202,7 +202,7 @@ exports[`Project metadata renders correctly with no references 1`] = `
                   <svg
                     alt="Documentation"
                     aria-hidden="true"
-                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-dl97ro-MuiSvgIcon-root-iconDefaults-HelpTooltip-muiTooltip-HelpTooltip"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-k1i2bl-MuiSvgIcon-root-iconDefaults-HelpTooltip-muiTooltip-HelpTooltip"
                     data-mui-internal-clone-element="true"
                     data-testid="HelpIcon"
                     focusable="false"
@@ -413,7 +413,7 @@ exports[`Project metadata renders correctly with references 1`] = `
                     <svg
                       alt="Documentation"
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-dl97ro-MuiSvgIcon-root-iconDefaults-HelpTooltip-muiTooltip-HelpTooltip"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-k1i2bl-MuiSvgIcon-root-iconDefaults-HelpTooltip-muiTooltip-HelpTooltip"
                       data-mui-internal-clone-element="true"
                       data-testid="HelpIcon"
                       focusable="false"
@@ -456,7 +456,7 @@ exports[`Project metadata renders correctly with references 1`] = `
                   <svg
                     alt="Documentation"
                     aria-hidden="true"
-                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-dl97ro-MuiSvgIcon-root-iconDefaults-HelpTooltip-muiTooltip-HelpTooltip"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-k1i2bl-MuiSvgIcon-root-iconDefaults-HelpTooltip-muiTooltip-HelpTooltip"
                     data-mui-internal-clone-element="true"
                     data-testid="HelpIcon"
                     focusable="false"
@@ -605,7 +605,7 @@ exports[`Project metadata renders correctly with references 1`] = `
                   <svg
                     alt="Documentation"
                     aria-hidden="true"
-                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-dl97ro-MuiSvgIcon-root-iconDefaults-HelpTooltip-muiTooltip-HelpTooltip"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-k1i2bl-MuiSvgIcon-root-iconDefaults-HelpTooltip-muiTooltip-HelpTooltip"
                     data-mui-internal-clone-element="true"
                     data-testid="HelpIcon"
                     focusable="false"
@@ -648,7 +648,7 @@ exports[`Project metadata renders correctly with references 1`] = `
                 <svg
                   alt="Documentation"
                   aria-hidden="true"
-                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-dl97ro-MuiSvgIcon-root-iconDefaults-HelpTooltip-muiTooltip-HelpTooltip"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-k1i2bl-MuiSvgIcon-root-iconDefaults-HelpTooltip-muiTooltip-HelpTooltip"
                   data-mui-internal-clone-element="true"
                   data-testid="HelpIcon"
                   focusable="false"
