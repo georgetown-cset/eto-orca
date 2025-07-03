@@ -33,17 +33,16 @@ export const getTooltip = (key, replFrom=null, replTo=null) => {
   return <span>{ttText}{key in tooltipLinks && <span> <ExternalLink href={tooltipLinks[key]}>Read more &gt;&gt;</ExternalLink></span>}</span>;
 };
 
-export const helpStyle = {verticalAlign: "middle", marginBottom: "2px"};
 export const sortMapping = {
   "stargazers_count": "Stars",
   "subscribers_count": "Watchers",
-  "criticality_score": <span>Criticality score<HelpTooltip iconStyle={helpStyle} text={getTooltip("criticality")}/></span>,
+  "criticality_score": <span>Criticality score<HelpTooltip text={getTooltip("criticality")}/></span>,
   "num_contributors": "Contributors",
   "created_at": "Date created",
   "pushed_at": "Last commit date",
   "open_issues": "Open issues and PRs",
-  "num_references": <span>Mentions in research<HelpTooltip iconStyle={helpStyle} text={getTooltip("mentions")}/></span>,
-  "relevance": <span>Relevance<HelpTooltip iconStyle={helpStyle} text={getTooltip("relevance")}/></span>
+  "num_references": <span>Mentions in research<HelpTooltip text={getTooltip("mentions")}/></span>,
+  "relevance": <span>Relevance<HelpTooltip text={getTooltip("relevance")}/></span>
 };
 export const sortMappingBlurb = {
   "stargazers_count": "Stars",
@@ -61,7 +60,7 @@ sortMappingBlurb["criticality_score"] = "Criticality score";
 export const metaMapping = {...sortMapping};
 metaMapping["license"] = "License";
 metaMapping["language"] = "Top Programming Language";
-metaMapping["criticality_score"] = <span>Criticality score<HelpTooltip iconStyle={helpStyle} text={getTooltip("criticality_list")}/></span>;
+metaMapping["criticality_score"] = <span>Criticality score<HelpTooltip text={getTooltip("criticality_list")}/></span>;
 
 export const keyToTitle = {
   "star_dates": "Stars over time",

@@ -26,7 +26,6 @@ import {
   cleanFieldName,
   FIELD_KEYS,
   sources,
-  helpStyle,
   getTooltip
 } from "../util";
 
@@ -313,8 +312,8 @@ const Dashboard = () => {
     return (
       <div css={styles.filterDescription}>
         <FilterAltIcon css={styles.filterIcon}/> Showing {repoData.length} repositories {
-        isCuratedField(filterValues["field_of_study"]) ? <span>related to {cleanField}{suffix}.<HelpTooltip iconStyle={helpStyle} text={<span>This list is based on {sources[filterValues["field_of_study"]]}. <ExternalLink href={'https://eto.tech/tool-docs/orca/#manually-compiled-fields'}>Read more &gt;&gt;</ExternalLink></span>}/></span> :
-          <span>mentioned in {cleanField} articles in our dataset{suffix}<span css={styles.nowrap}>.<HelpTooltip iconStyle={helpStyle} text={getTooltip("number_of_mentions", "#SUBJECT", cleanField)}/></span></span>
+        isCuratedField(filterValues["field_of_study"]) ? <span>related to {cleanField}{suffix}.<HelpTooltip text={<span>This list is based on {sources[filterValues["field_of_study"]]}. <ExternalLink href={'https://eto.tech/tool-docs/orca/#manually-compiled-fields'}>Read more &gt;&gt;</ExternalLink></span>}/></span> :
+          <span>mentioned in {cleanField} articles in our dataset{suffix}<span css={styles.nowrap}>.<HelpTooltip text={getTooltip("number_of_mentions", "#SUBJECT", cleanField)}/></span></span>
           }
       </div>
     )
@@ -331,7 +330,7 @@ const Dashboard = () => {
                   selected={filterValues["field_of_study"]}
                   setSelected={(val) => handleSingleSelectChange(val, "field_of_study")}
                   id={"research-field"}
-                  inputLabel={<div>Research field<HelpTooltip iconStyle={helpStyle} text={getTooltip("research_field")}/></div>}
+                  inputLabel={<div>Research field<HelpTooltip text={getTooltip("research_field")}/></div>}
                   options={getFOSOptions()}
                 />
               </div>
