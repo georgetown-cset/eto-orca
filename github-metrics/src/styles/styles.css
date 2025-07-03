@@ -23,3 +23,8 @@ body{
 .footnote{
   font-size: 90% !important;
 }
+
+.helptooltip {
+  margin-left: 0.25rem;
+  vertical-align: text-bottom;
+}
