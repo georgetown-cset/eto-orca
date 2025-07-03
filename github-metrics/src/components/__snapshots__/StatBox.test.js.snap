@@ -3,7 +3,7 @@
 exports[`StatBox renders relevance as expected 1`] = `
 <DocumentFragment>
   <div
-    class="stat-box css-9ebyhh-wrapper-tallBox-narrowBox-HighlightBox"
+    class="stat-box css-h2f8zx-wrapper-tallBox-narrowBox-HighlightBox"
   >
     <h3>
       <span
