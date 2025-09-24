@@ -200,7 +200,7 @@ curr_data AS (
     other
   FROM
     `githubarchive.year.2024`
-UNION ALL
+  UNION ALL
   SELECT
     type,
     public,
