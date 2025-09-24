@@ -136,7 +136,7 @@ const Dashboard = () => {
   }, []);
 
   const defaultFilterValues = {
-    "field_of_study": `Artificial intelligence`,
+    "field_of_study": `Artificial Intelligence`,
     "order_by": "relevance",
     "compare_graph": "push_dates",
     "language_group": "All",
