@@ -200,6 +200,19 @@ curr_data AS (
     other
   FROM
     `githubarchive.year.2024`
+UNION ALL
+  SELECT
+    type,
+    public,
+    payload,
+    repo,
+    actor,
+    org,
+    created_at,
+    id,
+    other
+  FROM
+    `githubarchive.year.2025`
 ),
 
 -- needed to allow match to data for old repo names
