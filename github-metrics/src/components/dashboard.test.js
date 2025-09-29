@@ -21,11 +21,11 @@ describe("filter panel", () => {
     let cards;
     let dropdownList;
 
-    expect(screen.getByRole("heading", { name: currentlyTrackingHeading(8068, "artificial intelligence") })).toBeVisible();
+    expect(screen.getByRole("heading", { name: currentlyTrackingHeading(9781, "artificial intelligence") })).toBeVisible();
     topReposHeading = screen.getByRole("heading", { name: "Top repositories by stars" });
     topEntries = getAllByRole(topReposHeading.parentElement, "listitem");
-    expect(topEntries[0].textContent).toMatch("public-apis/public-apis316586 stars (-70.86%, 2023-2024)");
-    expect(topEntries[1].textContent).toEqual("facebook/react228916 stars (-75.51%, 2023-2024)");
+    expect(topEntries[0].textContent).toMatch("public-apis/public-apis364420 stars (-99.91%, 2024-2025)");
+    expect(topEntries[1].textContent).toEqual("facebook/react238519 stars (-99.99%, 2024-2025)");
 
     // Switch research fields
     await user.click(screen.getByRole('combobox'));
@@ -34,11 +34,11 @@ describe("filter panel", () => {
       user.click(screen.getByText("Astrobiology"));
     });
     await new Promise(res => setTimeout(res, 500));
-    expect(screen.getByRole("heading", { name: currentlyTrackingHeading(96, "astrobiology") })).toBeVisible();
+    expect(screen.getByRole("heading", { name: currentlyTrackingHeading(102, "astrobiology") })).toBeVisible();
     topReposHeading = screen.getByRole("heading", { name: "Top repositories by stars" });
     topEntries = getAllByRole(topReposHeading.parentElement, "listitem");
-    expect(topEntries[0].textContent).toEqual("keras-team/keras61975 stars (-75.75%, 2023-2024)");
-    expect(topEntries[1].textContent).toEqual("jax-ml/jax30404 stars (-69.67%, 2023-2024)");
+    expect(topEntries[0].textContent).toEqual("jax-ml/jax33360 stars (+3.60%, 2023-2024)");
+    expect(topEntries[1].textContent).toEqual("astropy/astropy4815 stars (-99.80%, 2024-2025)");
 
 
     // Toggle between summary and list view
@@ -47,7 +47,7 @@ describe("filter panel", () => {
     expect(screen.getByRole("button", { name: "Show Filters" })).toBeVisible();
     cards = screen.getAllByTestId("project-card");
     expect(getByRole(cards[0], "heading", { name: "jlillo/tpfplotter" })).toBeVisible();
-    expect(cards[0].textContent).toContain("Stars: 32");
+    expect(cards[0].textContent).toContain("Stars: 36");
     expect(cards[0].textContent).toContain("Top Programming Language: Python");
     expect(cards[0].textContent).toContain("Commits over time");
     expect(getByRole(cards[1], "heading", { name: "hannorein/rebound" })).toBeVisible();
@@ -83,7 +83,7 @@ describe("filter panel", () => {
     expect(screen.getByRole('button', { name: "Sort by Open issues and PRs" })).toBeVisible();
     expect(screen.getByRole('button', { name: "Show graphs for Contributor distribution" })).toBeVisible();
     await user.click(screen.getByRole('button', { name: "Reset" }));
-    expect(screen.getByRole('combobox')).toHaveValue("Artificial intelligence");
+    expect(screen.getByRole('combobox')).toHaveValue("Artificial Intelligence");
     expect(screen.getByRole('button', { name: "Sort by Relevance" })).toBeVisible();
     expect(screen.getByRole('button', { name: "Show graphs for Commits over time" })).toBeVisible();
   }, 15000);
@@ -109,10 +109,11 @@ describe("filter panel", () => {
 
     // Check prior state
     let topPanel = screen.getByTestId('top-panel');
-    expect(getByText(topPanel, "Showing 8068 repositories", { exact: false })).toBeVisible();
+    expect(getByText(topPanel, "Showing 9781 repositories", { exact: false })).toBeVisible();
     let cards = screen.getAllByTestId("project-card");
     expect(cards.length).toEqual(10); // Pagination shows only 10 per page
-    expect(getByRole(cards[0], "heading", { name: "facebookresearch/fairseq" })).toBeVisible();
+    expect(getByRole(cards[0], "heading", { name: "huggingface/transformers" })).toBeVisible();
+    expect(getByRole(cards[1], "heading", { name: "facebookresearch/fairseq" })).toBeVisible();
 
     // Filter by language
     await user.click(screen.getByRole('button', { name: "Filter by top programming language All" }));
@@ -121,7 +122,7 @@ describe("filter panel", () => {
     await user.click(getByRole(languageDropdownList, 'option', { name: "C++" }));
 
     topPanel = screen.getByTestId('top-panel');
-    expect(getByText(topPanel, "Showing 333 repositories", { exact: false })).toBeVisible();
+    expect(getByText(topPanel, "Showing 373 repositories", { exact: false })).toBeVisible();
     cards = screen.getAllByTestId("project-card");
     expect(cards.length).toEqual(10);
     expect(getByRole(cards[0], "heading", { name: "google/sentencepiece" })).toBeVisible();
@@ -133,18 +134,19 @@ describe("filter panel", () => {
     await user.click(getByRole(licenseDropdownList, 'option', { name: "GNU" }));
 
     topPanel = screen.getByTestId('top-panel');
-    expect(getByText(topPanel, "Showing 30 repositories", { exact: false })).toBeVisible();
+    expect(getByText(topPanel, "Showing 33 repositories", { exact: false })).toBeVisible();
     cards = screen.getAllByTestId("project-card");
     expect(cards.length).toEqual(10);
-    expect(getByRole(cards[0], "heading", { name: "neubig/lamtram" })).toBeVisible();
+    expect(getByRole(cards[0], "heading", { name: "argotorg/solidity" })).toBeVisible();
+    expect(getByRole(cards[1], "heading", { name: "neubig/lamtram" })).toBeVisible();
 
 
     // Reset filters as expected
-    expect(screen.getByRole('combobox')).toHaveValue("Artificial intelligence");
+    expect(screen.getByRole('combobox')).toHaveValue("Artificial Intelligence");
     expect(screen.getByRole('button', { name: "Filter by top programming language C++" })).toBeVisible();
     expect(screen.getByRole('button', { name: "Filter by license GNU" })).toBeVisible();
     await user.click(screen.getByRole('button', { name: "Reset" }));
-    expect(screen.getByRole('combobox')).toHaveValue("Artificial intelligence");
+    expect(screen.getByRole('combobox')).toHaveValue("Artificial Intelligence");
     expect(screen.getByRole('button', { name: "Filter by top programming language All" })).toBeVisible();
     expect(screen.getByRole('button', { name: "Filter by license All" })).toBeVisible();
   }, 10000);

@@ -1,167 +1,313 @@
+Accounting
 Acoustics
+Actuarial Science
 Advertising
+Aeronautics
+Aerospace Engineering
+Aesthetics
+Agricultural Economics
+Agricultural Engineering
+Agricultural Science
 Agroforestry
-Agronomy
 Algebra
-Algorithm
-Analytical chemistry
+Algorithms
+Analytical Chemistry
 Anatomy
+Ancient History
+Andrology
+Anesthesia
+Anthropology
+Applied Mathematics
+Applied Psychology
+Archaeology
+Architectural Engineering
 Arithmetic
-Art history
-Artificial intelligence
+Art
+Art History
+Artificial Intelligence
 Astrobiology
 Astronomy
 Astrophysics
-Atmospheric sciences
-Atomic physics
-Automotive engineering
+Atmospheric Sciences
+Atomic Physics
+Audiology
+Automotive Engineering
+Biochemical Engineering
 Biochemistry
 Bioinformatics
-Biomedical engineering
+Biology
+Biophysics
 Biotechnology
 Botany
+Business
+Business Administration
 Calculus
-Cancer research
+Cancer Research
 Cardiology
 Cartography
-Cell biology
-Chemical physics
-Classical mechanics
+Cell Biology
+Ceramic Materials
+Chemical Engineering
+Chemical Physics
+Chemistry
+Chromatography
+Civil Engineering
+Classical Economics
+Classical Mechanics
 Classics
 Climate and Earth Science
 Climatology
-Clinical psychology
-Cognitive psychology
-Cognitive science
-Combinatorial chemistry
+Clinical Psychology
+Cognitive Psychology
+Cognitive Science
+Combinatorial Chemistry
 Combinatorics
+Commerce
 Communication
-Composite material
-Computational biology
-Computational chemistry
-Computational physics
-Computer engineering
-Computer graphics (images)
-Computer hardware
-Computer network
-Computer security
-Computer vision
-Condensed matter physics
+Composite Material
+Computational Biology
+Computational Chemistry
+Computational Physics
+Computational Science
+Computer Architecture
+Computer Engineering
+Computer Graphics
+Computer Hardware
+Computer Networks
+Computer Science
+Computer Security
+Computer Simulation
+Condensed Matter Physics
+Construction Engineering
 Consumption of Energy and Resources
-Control engineering
-Control theory
-Data mining
-Data science
-Database
-Development economics
-Developmental psychology
-Discrete mathematics
-Distributed computing
+Control Engineering
+Control Theory
+Criminology
+Cryobiology
+Crystallography
+Databases
+Demographic Economics
+Demography
+Dentistry
+Dermatology
+Development Economics
+Developmental Biology
+Developmental Psychology
+Discrete Mathematics
+Earth Science
 Earth Systems
 Ecology
 Econometrics
-Economic policy
-Electrical engineering
-Embedded system
+Economic Geography
+Economic Growth
+Economic History
+Economic Policy
+Economic System
+Economics
+Economy
+Electrical Engineering
+Electronic Engineering
+Embedded System
+Emergency Medicine
 Emissions
+Endocrinology
 Energy Storage
 Energy Systems
-Environmental planning
+Engineering
+Engineering Drawing
+Engineering Ethics
+Engineering Management
+Engineering Physics
+Environmental Chemistry
+Environmental Economics
+Environmental Engineering
+Environmental Ethics
+Environmental Health
+Environmental Planning
+Environmental Protection
+Environmental Resource Management
+Environmental Science
 Epistemology
-Evolutionary biology
+Ethnology
+Evolutionary Biology
+Family Medicine
 Finance
-Financial economics
-Financial system
-Food science
-Forensic engineering
-Gender studies
+Financial Economics
+Financial System
+Food Science
+Forensic Engineering
+Forestry
+Gastroenterology
+Gender Studies
+Genealogy
+General Surgery
 Genetics
 Geochemistry
+Geodesy
+Geography
+Geology
 Geometry
 Geomorphology
 Geophysics
-Human\u2013computer interaction
+Geotechnical Engineering
+Gerontology
+Gynecology
+High-Performance Computing
+History
+Humanities
 Hydrology
 Immunology
 Industrial Ecology
-Information retrieval
-International economics
-Internet privacy
-Keynesian economics
-Knowledge management
+Industrial Engineering
+Industrial Organization
+Inorganic Chemistry
+Intensive Care Medicine
+Internal Medicine
+International Economics
+International Trade
+Keynesian Economics
+Labour Economics
 Law
-Library science
+Law and Economics
+Library Science
 Linguistics
 Literature
-Machine learning
-Mathematical analysis
-Mathematical economics
-Mathematical optimization
+Macroeconomics
+Management
+Management Science
+Manufacturing Engineering
+Marine Engineering
+Market Economy
+Marketing
+Materials Science
+Mathematical Analysis
+Mathematical Economics
+Mathematical Physics
+Mathematics
+Mathematics Education
+Mechanical Engineering
 Mechanics
-Media studies
-Medical education
+Media Studies
+Medical Education
+Medical Emergency
+Medical Physics
+Medicinal Chemistry
+Medicine
+Metallurgy
 Meteorology
 Microbiology
 Microeconomics
-Mining engineering
-Molecular biology
-Molecular physics
-Multimedia
+Mineralogy
+Mining Engineering
+Molecular Biology
+Molecular Physics
+Monetary Economics
+Nanotechnology
+Natural History
+Natural Resource Economics
 Natural Resources
-Natural language processing
+Neoclassical Economics
 Neuroscience
-Nuclear magnetic resonance
-Nuclear physics
+Nuclear Chemistry
+Nuclear Engineering
+Nuclear Magnetic Resonance
+Nuclear Medicine
+Nuclear Physics
+Nursing
+Obstetrics
 Oceanography
-Operating system
-Operations management
+Oncology
+Operating Systems
+Operations Management
+Operations Research
+Ophthalmology
 Optics
-Organic chemistry
-Parallel computing
-Particle physics
+Optoelectronics
+Optometry
+Organic Chemistry
+Orthodontics
+Paleontology
+Parasitology
+Particle Physics
 Pathology
-Pattern recognition
 Pedagogy
+Pediatrics
+Petroleum Engineering
+Petrology
 Pharmacology
-Physical chemistry
-Process management
-Programming language
+Philosophy
+Photobiology
+Photochemistry
+Physical Chemistry
+Physical Geography
+Physical Medicine and Rehabilitation
+Physical Therapy
+Physics
+Physiology
+Political Economy
+Political Science
+Polymer Chemistry
+Polymer Science
+Positive Economics
+Process Engineering
+Process Management
+Programming Languages
 Psychiatry
-Public relations
-Quantum computing
-Quantum electrodynamics
-Quantum mechanics
+Psychoanalysis
+Psychology
+Psychotherapist
+Public Administration
+Public Economics
+Public Relations
+Pulp and Paper Industry
+Pure Mathematics
+Quantum Computing
+Quantum Electrodynamics
+Quantum Mechanics
+Radiobiology
+Radiochemistry
 Radiology
-Real-time computing
-Reliability engineering
-Remote sensing
+Regional Science
+Reliability Engineering
+Religious Studies
+Remote Sensing
 Renewable Energy
-Risk analysis (engineering)
+Risk Analysis (Engineering)
 Seismology
 Semiconductors
-Simulation
-Social psychology
-Social science
+Social Psychology
+Social Science
+Sociobiology
 Socioeconomics
-Software engineering
-Speech recognition
+Sociology
+Software Engineering
+Soil Science
+Statistical Physics
 Statistics
-Structural engineering
+Stereochemistry
+Structural Engineering
 Surgery
 Sustainable Development
-Systems engineering
+Synthetic Biology
+Systems Biology
+Systems Engineering
 Telecommunications
-Theoretical computer science
-Theoretical physics
+Theology
+Theoretical Computer Science
+Theoretical Physics
 Thermodynamics
 Topology
-Transport engineering
+Toxicology
+Traditional Medicine
+Transport Engineering
+Urology
+Veterinary Medicine
 Virology
-Visual arts
-Water resource management
-World Wide Web
+Visual Arts
+Waste Management
+Water Resource Management
+Welfare Economics
 Zoology
 ai_safety
-asr
 riscv
 weto

@@ -1,106 +1,97 @@
 Aesthetics
-Algorithm
 Algorithms
-Analytical chemistry
-Ancient history
+Analytical Chemistry
+Ancient History
 Anesthesia
 Arithmetic
-Art history
-Atomic physics
+Art History
+Atomic Physics
 Biochemistry
-Biomedical engineering
 Biotechnology
 Cartography
-Ceramic materials
-Classical mechanics
+Ceramic Materials
+Classical Mechanics
 Climatology
-Clinical psychology
-Cognitive psychology
-Combinatorial chemistry
+Clinical Psychology
+Cognitive Psychology
+Combinatorial Chemistry
 Combinatorics
 Communication
-Composite material
-Computational science
-Computer architecture
-Computer graphics
-Computer network
-Computer networks
-Computer simulation
-Control engineering
+Composite Material
+Computational Science
+Computer Architecture
+Computer Graphics
+Computer Networks
+Computer Simulation
+Control Engineering
 Cryobiology
 Crystallography
-Data mining
-Database
 Databases
 Demography
-Development economics
-Developmental psychology
-Discrete mathematics
-Economic growth
-Economic policy
-Electrical engineering
+Development Economics
+Developmental Psychology
+Discrete Mathematics
+Economic Growth
+Economic Policy
+Electrical Engineering
 Endocrinology
-Engineering drawing
-Environmental engineering
-Environmental ethics
-Environmental health
-Environmental planning
-Environmental protection
-Environmental resource management
-Forensic engineering
+Engineering Drawing
+Environmental Engineering
+Environmental Ethics
+Environmental Health
+Environmental Planning
+Environmental Protection
+Environmental Resource Management
+Forensic Engineering
 Forestry
 Gastroenterology
 Genealogy
 Geochemistry
 Geodesy
-Geotechnical engineering
+Geotechnical Engineering
 Gerontology
-High-performance computing
+High-Performance Computing
 Humanities
-Human–computer interaction
-Intensive care medicine
-Internet privacy
-Keynesian economics
+Intensive Care Medicine
+Keynesian Economics
 Law
-Library science
+Library Science
 Literature
 Macroeconomics
 Management
-Management science
-Marine engineering
-Market economy
-Mathematical economics
+Management Science
+Marine Engineering
+Market Economy
+Mathematical Economics
 Mechanics
-Medical physics
+Medical Physics
 Microeconomics
-Mining engineering
-Natural resource economics
-Nuclear medicine
+Mining Engineering
+Natural Resource Economics
+Nuclear Medicine
 Obstetrics
 Oncology
-Operating systems
-Operations management
-Operations research
+Operating Systems
+Operations Management
+Operations Research
 Paleontology
 Parasitology
 Pedagogy
 Pediatrics
 Photobiology
-Process management
-Programming language
-Programming languages
+Process Management
+Programming Languages
 Psychiatry
-Public administration
-Public economics
-Public relations
+Public Administration
+Public Economics
+Public Relations
 Radiobiology
-Real-time computing
-Risk analysis (engineering)
+Risk Analysis (Engineering)
 Socioeconomics
-Soil science
-Statistical physics
+Soil Science
+Statistical Physics
 Statistics
-Structural engineering
-Systems engineering
+Structural Engineering
+Systems Engineering
 Telecommunications
-Welfare economics
+Welfare Economics
