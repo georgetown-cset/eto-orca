@@ -14,9 +14,9 @@ jobs:
       pull-requests: 'write'
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up Python 3.9
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v5
       with:
         python-version: 3.9
     - name: Install dependencies
@@ -35,7 +35,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
     - name: 'Authenticate to Google Cloud'
       id: 'auth'
-      uses: 'google-github-actions/auth@v0'
+      uses: 'google-github-actions/auth@v2'
       with:
         workload_identity_provider: 'projects/855475113448/locations/global/workloadIdentityPools/eto-github/providers/eto-github'
         service_account: 'eto-artifact-registry-github@gcp-cset-projects.iam.gserviceaccount.com'
@@ -47,7 +47,7 @@ jobs:
         username: 'oauth2accesstoken'
         password: '${{ steps.auth.outputs.access_token }}'
     - name: Setup node
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '22'
     - name: Test with jest
@@ -58,7 +58,7 @@ jobs:
         npm install
         npm test -- --coverage --coverageReporters="json-summary" --coverageReporters="text" | tee ./coverage.txt
     - name: Report javascript coverage
-      uses: MishaKav/jest-coverage-comment@v1.0.20
+      uses: MishaKav/jest-coverage-comment@v1
       with:
         title: "JavaScript Coverage"
         summary-title: "Summary"
