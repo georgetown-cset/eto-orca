@@ -38,7 +38,7 @@ from dataloader.scripts.populate_documentation import update_table_descriptions
 This DAG retrieves data from GitHub and updates the tables in the `orca` BigQuery dataset
 """
 
-args = get_default_args(pocs=["James"])
+args = get_default_args(pocs=["Brian"])
 args["retries"] = 1
 
 production_dataset = "orca"
