@@ -19,10 +19,10 @@ jobs:
       id-token: 'write'
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: 'Authenticate to Google Cloud'
       id: 'auth'
-      uses: 'google-github-actions/auth@v1'
+      uses: 'google-github-actions/auth@v2'
       with:
         workload_identity_provider: 'projects/855475113448/locations/global/workloadIdentityPools/eto-github/providers/eto-github'
         service_account: 'eto-artifact-registry-github@gcp-cset-projects.iam.gserviceaccount.com'
@@ -34,7 +34,7 @@ jobs:
         username: 'oauth2accesstoken'
         password: '${{ steps.auth.outputs.access_token }}'
     - name: Setup node
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '22'
     - name: Install dependencies
