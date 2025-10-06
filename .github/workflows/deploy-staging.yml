@@ -71,7 +71,7 @@ jobs:
       id: 'gcloud'
       working-directory: github-metrics
       run: |
-        gsutil -m cp -r dist/ gs://eto-cd/oss-tracker/${{ steps.date.outputs.today }}
+        gsutil -m cp -r public/ gs://eto-cd/oss-tracker/${{ steps.date.outputs.today }}
     - name: 'Copy built assets to compute engine'
       id: 'compute-ssh'
       uses: 'google-github-actions/ssh-compute@v1'
