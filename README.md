@@ -2,7 +2,9 @@
 
 This repository contains code related to the ORCA project.
 
-## Running the ORCA web application locally
+## Running the ORCA web application
+
+### Running locally
 
 Navigate to the [github-metrics](/github-metrics) subdirectory. If you have not installed
 [Gatsby](https://www.gatsbyjs.com/docs/tutorial/getting-started/part-0/), do so, and then run
@@ -13,7 +15,10 @@ gatsby clean
 gatsby develop
 ```
 
-To update the production website, run `gatsby clean; gatsby build` and then `bash push_to_production.sh`.
+### Deploying to production
+
+To update the production website, run `bash push_to_production.sh` to build the
+site, push it to the production bucket, and update tags in the repository.
 
 ## Running data retrieval scripts
 
