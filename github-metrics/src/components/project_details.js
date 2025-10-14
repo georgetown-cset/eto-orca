@@ -147,7 +147,7 @@ const ProjectDetails = ({
       </span>],
       ["contrib_counts", "bar", <span>This graph shows the percentage of commits authored by each of the top 20 contributors to the project,
         as reported in GitHub Archive PushEvents. We currently only identify individual contributors based on their names, which may change over time.
-        For related discussion, see the CHAOSS metric <ExternalLink href={"https://chaoss.community/kb/metric-contributor-absence-factor/"}>Contributor Absence Factor</ExternalLink>.
+        For related discussion, see the CHAOSS metric <ExternalLink href={"https://chaoss.community/kb/metric-contributor-absence-factor/"}>Contributor Absence Factor</ExternalLink> (aka "bus factor").
     </span>],
       ["star_dates", "bar", <span>This graph shows the number of new stars added during each year we track, as reported in GitHub Archive WatchEvents.</span>],
     ];

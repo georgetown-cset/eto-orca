@@ -168,7 +168,7 @@ const Summary = ({data, sortOptions, field, isCurated}) => {
         <div>
           <div css={styles.graphHeader}>
             This graph shows the cumulative percentage of commits to any branch that are made by the top 20 contributors across all years, as reported in GitHub Archive PushEvents. Within a project, we deduplicate commits based on their hash. We currently only identify individual contributors based on their names, which may change over time.
-            Repositories with fewer than 20 contributors will show a partial line. For related discussion, see the CHAOSS metric <ExternalLink href={"https://chaoss.community/kb/metric-contributor-absence-factor/"}>Contributor Absence Factor</ExternalLink>.
+            Repositories with fewer than 20 contributors will show a partial line. For related discussion, see the CHAOSS metric <ExternalLink href={"https://chaoss.community/kb/metric-contributor-absence-factor/"}>Contributor Absence Factor</ExternalLink> (aka "bus factor").
           </div>
           <div css={styles.pctGraph}>
           <LineGraph
