@@ -40,25 +40,29 @@ const IndexPage = () => {
   return (
     <AppWrapper>
       <InfoCard
-        title={<div style={{fontFamily: "GTZirkonBold, sans-serif !important"}}>🌊 ORCA: OSS Research and Community Activity</div>}
-        description={<div>
-          <div style={{marginBottom: "10px"}}>
-            CSET ETO's ORCA compiles data on open-source software (OSS) used in
-            science and technology research. Drawing on Github Archive, ETO’s
-            Merged Academic Corpus, and many other data sources, ORCA tracks OSS
-            usage, health, development activity, and community engagement across
-            a wide range of software projects and research subjects. Use ORCA to
-            compare OSS projects in a particular research area, track trends
-            over time, and sort and filter projects by different metrics. {
-              <ExternalLink href={"https://eto.tech/tool-docs/orca"}>Read the docs &gt;&gt;</ExternalLink>
-            }
-          </div>
-          <div css={styles.lastUpdated}>
-            Website last updated on {data.site.buildTime}. Data last updated on {config.last_updated}. You may <a href={"/orca_download.jsonl"}>download the data</a>.
-          </div>
-        </div>}
-        documentationLink={"https://eto.tech/tool-docs/orca"}
-        sidebarTitle={"Quick guide"}
+        title="🌊 ORCA"
+        description={
+          <>
+            <p>
+              ETO's ORCA (OSS Research and Community Activity) compiles data on open-source
+              software used in science and technology research and tracks usage, health,
+              development activity, and community engagement. Use ORCA to compare open-source
+              software projects across a wide range of research areas, explore trends over
+              time, and sort and filter projects by different metrics.
+            </p>
+            <p>
+              ETO is a project of the {
+                <ExternalLink href="https://cset.georgetown.edu/">Center for Security and Emerging Technology</ExternalLink>
+              } at <ExternalLink href="https://www.georgetown.edu/">Georgetown University</ExternalLink>. ORCA is maintained
+              by CSET’s <ExternalLink href="https://cset.georgetown.edu/research-topic/data/">data team</ExternalLink>.
+            </p>
+            <div css={styles.lastUpdated}>
+              Website last updated on {data.site.buildTime}. Data last updated on {config.last_updated}. You may <a href={"/orca_download.jsonl"}>download the data</a>.
+            </div>
+          </>
+        }
+        documentationLink="https://eto.tech/tool-docs/orca"
+        sidebarTitle="Quick guide"
         sidebarContent={<div>
           Use the "Research Field" dropdown to pick a field to browse. ORCA defaults to <strong>summary view</strong>, a condensed view that presents key facts and figures for the top OSS projects associated with the research field you selected. Click the view toggle in the toolbar to switch to <strong>list view</strong>, which includes information on every OSS project associated with the research field you selected. Click on a project's "full profile" buttons to open in-depth data and graphs in <strong>detail view</strong>.
         </div>}
