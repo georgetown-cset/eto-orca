@@ -17,6 +17,9 @@ const styles = {
     text-align: center;
     margin: 40px;
   `,
+  etoParagraph: css`
+    font-size: 1rem;
+  `,
   lastUpdated: css`
     color: var(--grey);
     font-size: 1rem;
@@ -50,7 +53,7 @@ const IndexPage = () => {
               software projects across a wide range of research areas, explore trends over
               time, and sort and filter projects by different metrics.
             </p>
-            <p>
+            <p css={styles.etoParagraph}>
               ETO is a project of the {
                 <ExternalLink href="https://cset.georgetown.edu/">Center for Security and Emerging Technology</ExternalLink>
               } at <ExternalLink href="https://www.georgetown.edu/">Georgetown University</ExternalLink>. ORCA is maintained
