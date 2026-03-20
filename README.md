@@ -1,6 +1,8 @@
+####**Note**: The [ORCA](https://orca.eto.tech) tool will be removed from the ETO website in early May. For more details, see [our ETO blog post](link here).
+
 # ORCA: Open-source Software Research and Community Activity
 
-This repository contains code related to the ORCA project.
+This repository contains code related to the ORCA project. As this tool will no longer be available on the web soon, we also provide examples of the tool's interface and use below.
 
 ## Running the ORCA web application
 
@@ -95,3 +97,49 @@ then calculate the percentage of commits written by each contributor. See combin
 Contribution percentages above, and `github-metrics/src/components/summary_panel.js:getContribTrace`
 * The deps.dev links are added if the repo is present in `bigquery-public-data.deps_dev_v1`
 * The pypi downloads over time come from `bigquery-public-data.pypi`
+
+## Interface and Use
+
+The primary interface of ORCA begins with an introduction to the tool, including a Quick Guide:
+
+![intro.png](assets/intro.png)
+
+The initial view provides a summary of repositories in a selected research field:
+
+![ai_summary.png](assets/ai_summary.png)
+
+An array of different potential fields can be chosen:
+
+![field_options.png](assets/field_options.png)
+
+And the method of selecting the most relevant repositories can also be adjusted:
+
+![repo_ordering.png](assets/repo_ordering.png)
+
+A number of other analyses of repositories by field are done, including commits over time:
+
+![ai_commits_over_time.png](assets/ai_commits_over_time.png)
+
+Ratio of issues and pull requests closed to opened over time:
+
+![ratio_pull.png](assets/ratio_pull.png)
+
+Ratio of new vs. returning contributors over time:
+
+![ratio_contributors.png](assets/ratio_contributors.png)
+
+Percentage of commits by the top 20 contributors:
+
+![percentage.png](assets/percentage.png)
+
+And stars over time:
+
+![stars.png](assets/stars.png)
+
+In addition to being able to view the initial analysis of repositories by field as a summary, you can also view it in list form:
+
+![list_view.png](assets/list_view.png)
+
+Individual repositories also let you view their full profile. This takes you to a separate page. That page looks like this:
+
+![transformers.png](assets/transformers.png)
