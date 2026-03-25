@@ -7,6 +7,7 @@ import { useStaticQuery, graphql } from "gatsby";
 
 import MetaTagsWrapper from "../components/MetaTagsWrapper";
 import config from "../data/config.json";
+import SunsetBanner from "../components/SunsetBanner";
 
 /* Set the body margin and padding to 0 here */
 import "../styles/styles.css";
@@ -42,6 +43,7 @@ const IndexPage = () => {
 
   return (
     <AppWrapper>
+      <SunsetBanner />
       <InfoCard
         title="🌊 ORCA"
         description={
