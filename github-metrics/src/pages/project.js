@@ -8,6 +8,7 @@ import MetaTagsWrapper from "../components/MetaTagsWrapper";
 import id_to_repo from "../data/id_to_repo";
 import name_to_id from "../data/name_to_id";
 import { getRepoName } from "../util";
+import SunsetBanner from "../components/SunsetBanner";
 
 const ProjectDetails = React.lazy(() => import("../components/project_details"));
 
@@ -51,6 +52,7 @@ const Project = () => {
         <div style={{
           backgroundColor: "white"
         }}>
+          <SunsetBanner />
           {!loaded && <div css={styles.suspense}><CircularProgress/></div>}
           {(typeof window !== "undefined") &&
             <React.Suspense fallback={<div css={styles.suspense}><CircularProgress/></div>}>
