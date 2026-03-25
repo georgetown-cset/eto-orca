@@ -1,6 +1,55 @@
+####**Note**: The [ORCA](https://orca.eto.tech) tool was released in July 2023. It updated monthly and the interface included the following functionality. It will be removed from the ETO website in early May. For more details, see [our ETO blog post](https://eto.tech/blog/saying-goodbye-to-orca-and-parat/).
+
 # ORCA: Open-source Software Research and Community Activity
 
-This repository contains code related to the ORCA project.
+This repository contains code related to the ORCA project. As this tool will no longer be available on the web soon, we also provide examples of the tool's interface and use below.
+
+## Interface and Use
+
+The primary interface of ORCA begins with an introduction to the tool, including a Quick Guide:
+
+![intro.png](assets/intro.png)
+
+The initial view provides a summary of repositories in a selected research field:
+
+![ai_summary.png](assets/ai_summary.png)
+
+An array of different potential fields can be chosen:
+
+![field_options.png](assets/field_options.png)
+
+And the method of selecting the most relevant repositories can also be adjusted:
+
+![repo_ordering.png](assets/repo_ordering.png)
+
+A number of other analyses of repositories by field are done, including commits over time:
+
+![ai_commits_over_time.png](assets/ai_commits_over_time.png)
+
+Ratio of issues and pull requests closed to opened over time:
+
+![ratio_pull.png](assets/ratio_pull.png)
+
+Ratio of new vs. returning contributors over time:
+
+![ratio_contributors.png](assets/ratio_contributors.png)
+
+Percentage of commits by the top 20 contributors:
+
+![percentage.png](assets/percentage.png)
+
+And stars over time:
+
+![stars.png](assets/stars.png)
+
+In addition to being able to view the initial analysis of repositories by field as a summary, you can also view it in list form:
+
+![list_view.png](assets/list_view.png)
+
+Individual repositories also let you view their full profile. This takes you to a separate page. That page looks like this:
+
+![transformers.png](assets/transformers.png)
+
 
 ## Running the ORCA web application
 
@@ -22,7 +71,7 @@ site, push it to the production bucket, and update tags in the repository.
 
 ## Running data retrieval scripts
 
-Data updates are automated via `orca_data_pipeline.py`. Additionally, a GitHub action runs once a month to open a PR that updates the data. You can merge this PR and update the production site after reviewing the changes. In short, you shouldn't have to run the steps below manually - these instructions are included in case of some special circumstance.
+At this time, data updates have been turned off. However, automation of data updates is enabled by the `orca_data_pipeline.py` and a GitHub action is designed (but currently not set) to run once a month and open a PR to update the data. You can merge this PR and update the production site after reviewing the changes. If you restart these processes, you shouldn't have to run the steps below manually.
 
 If the pipeline takes an unusually long time to run or the sensors are timing out, check the log files in the `airflow` user's home directory on `orca-etl`.
 
