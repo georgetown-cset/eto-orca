@@ -1,4 +1,4 @@
-####**Note**: The [ORCA](https://orca.eto.tech) tool was released in July 2023. It updated monthly and the interface included the following functionality. It was removed from the ETO website in May 2026. For more details, see [our ETO blog post](https://eto.tech/blog/saying-goodbye-to-orca-and-parat/).
+#### **Note**: The [ORCA](https://orca.eto.tech) tool was released in July 2023. It updated monthly and the interface included the following functionality. It was removed from the ETO website in May 2026. For more details, see [our ETO blog post](https://eto.tech/blog/saying-goodbye-to-orca-and-parat/).
 
 # ORCA: Open-source Software Research and Community Activity
 
